@@ -1,4 +1,5 @@
 import type { SchemaTypeDefinition } from "sanity";
+import { documentTypes } from "./documents";
+import { objectTypes } from "./objects";
 
-//TODO: Replace this empty schema list during Milestone 3 schema foundation work.
-export const schemaTypes: SchemaTypeDefinition[] = [];
+export const schemaTypes: SchemaTypeDefinition[] = [...documentTypes, ...objectTypes];
