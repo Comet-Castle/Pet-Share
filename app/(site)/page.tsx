@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { PawPrint, Sparkles } from "lucide-react";
-import { SectionPlaceholders } from "@/components/features/sections/section-placeholders";
+import { PageSections } from "@/components/features/sections/page-sections";
 import { Button } from "@/components/ui/button";
 import { logger } from "@/lib/diagnostics/logger";
 import { metadataFromSeo } from "@/lib/content/metadata";
@@ -108,12 +108,14 @@ export default async function HomePage() {
             ))}
           </div>
         ) : (
-          <SectionPlaceholders
-            sections={page?.contentSections}
-            emptyLabel="Featured pets and homepage sections will appear after seed content is published."
-          />
+          <div className="rounded-[2rem] bg-white/65 p-6 text-sm font-bold text-pet-muted shadow-soft backdrop-blur">
+            Featured pets will appear after seed content is published.
+          </div>
         )}
       </section>
+
+      {page?.heroCarousel?.length ? <PageSections sections={page.heroCarousel} /> : null}
+      {page?.contentSections?.length ? <PageSections sections={page.contentSections} /> : null}
     </>
   );
 }

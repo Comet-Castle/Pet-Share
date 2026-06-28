@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { SlidersHorizontal } from "lucide-react";
 import { PetCard } from "@/components/features/pets/pet-card";
-import { SectionPlaceholders } from "@/components/features/sections/section-placeholders";
+import { PageSections } from "@/components/features/sections/page-sections";
 import { SystemMessage } from "@/components/features/system/system-message";
 import { Button } from "@/components/ui/button";
 import { logger } from "@/lib/diagnostics/logger";
@@ -164,9 +164,7 @@ export default async function PetsPage({ searchParams }: PetsPageProps) {
         </section>
       </div>
 
-      <section className="mt-12">
-        <SectionPlaceholders sections={page?.contentSections} />
-      </section>
+      <PageSections sections={page?.contentSections} />
     </div>
   );
 }

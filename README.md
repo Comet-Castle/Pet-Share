@@ -4,7 +4,7 @@ Pet Share is a demo website built with a Next.js frontend and Sanity CMS for str
 
 ## Project Status
 
-The project has a scaffolded Next.js App Router application with embedded Sanity Studio routing, TypeScript, Tailwind CSS, ESLint, and Vitest. Public route skeletons are wired for the homepage, pet index, pet detail pages, direct owner pages, marketing pages, and friendly system states.
+The project has a scaffolded Next.js App Router application with embedded Sanity Studio routing, TypeScript, Tailwind CSS, ESLint, and Vitest. Public route skeletons are wired for the homepage, pet index, pet detail pages, direct owner pages, marketing pages, and friendly system states. Initial page-builder section rendering is underway for CMS-authored marketing content.
 
 Implementation work should follow `docs/milestones.md` as the controlling scope. Supporting docs define standards and constraints, but they should not expand a milestone beyond its stated goal.
 

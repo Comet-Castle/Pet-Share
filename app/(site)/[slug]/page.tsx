@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { SectionPlaceholders } from "@/components/features/sections/section-placeholders";
+import { PageSections } from "@/components/features/sections/page-sections";
 import { SystemMessage } from "@/components/features/system/system-message";
 import { metadataFromSeo } from "@/lib/content/metadata";
 import { loadMarketingPageBySlug, loadMarketingPageSlugs } from "@/sanity/lib/loaders";
@@ -58,7 +58,7 @@ export default async function MarketingSlugPage({ params }: MarketingSlugPagePro
         </p>
       </section>
 
-      <SectionPlaceholders sections={page.sections} />
+      <PageSections sections={page.sections} />
 
       {page.showContactForm ? (
         <section className="mt-8">
