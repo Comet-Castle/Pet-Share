@@ -147,6 +147,7 @@ This structure should be adjusted once real product needs are clearer, but avoid
 - Consult the `sanity-best-practices` skill before implementing Sanity schemas, GROQ queries, Studio structure, preview, TypeGen, Visual Editing, image handling, Portable Text, or page-builder behavior.
 - Keep GROQ queries in `sanity/queries/`.
 - Keep Sanity client setup, image URL helpers, live preview helpers, and fetch wrappers in `sanity/lib/`.
+- Wrap GROQ queries with `defineQuery` and regenerate `sanity.types.ts` with `pnpm typegen` when schemas or queries change.
 - Use Sanity image helpers to build Sanity CDN asset URLs, then render those URLs with Next.js `next/image` where practical.
 - Configure `next.config` image `remotePatterns` for the Sanity image CDN domain before rendering Sanity-hosted images through `next/image`.
 - Keep desk structure customization in `sanity/structure/`.
@@ -160,6 +161,7 @@ This structure should be adjusted once real product needs are clearer, but avoid
 
 - Public pages should query published Sanity content by default.
 - Draft and preview queries should use separate helpers from published-content queries.
+- Public query helpers must not require private tokens. Preview helpers may use the server-only Sanity read token.
 - Query functions should return typed data and normalize only where it improves route/component simplicity.
 - Keep GROQ projections close to the query file that owns them.
 - Avoid exposing tokens or private dataset access in Client Components.

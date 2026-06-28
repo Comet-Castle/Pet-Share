@@ -57,6 +57,7 @@ pnpm dev
 pnpm lint
 pnpm typecheck
 pnpm test
+pnpm typegen
 pnpm build
 pnpm studio
 ```
@@ -100,6 +101,18 @@ Keep `.env.example` updated whenever environment variables change. Real secrets 
 Start local setup by copying `.env.example` to `.env.local` and filling in project-specific values.
 
 The current Studio scaffold uses placeholder Sanity configuration until `NEXT_PUBLIC_SANITY_PROJECT_ID` and related values are set locally or in Vercel.
+
+## Sanity Types And Queries
+
+GROQ queries live under `sanity/queries/` and should be wrapped in `defineQuery` so Sanity TypeGen can generate result types.
+
+When schemas or queries change, run:
+
+```bash
+pnpm typegen
+```
+
+This regenerates `sanity.types.ts`. The intermediate `schema.json` extraction file is ignored by Git.
 
 ## Attribution
 

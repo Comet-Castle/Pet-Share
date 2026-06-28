@@ -1,0 +1,246 @@
+import type { QueryParams } from "@sanity/client";
+import type {
+  FEATURED_TESTIMONIALS_QUERY_RESULT,
+  FORM_DEFINITION_BY_SLUG_QUERY_RESULT,
+  HOME_PAGE_QUERY_RESULT,
+  MARKETING_PAGE_BY_SLUG_QUERY_RESULT,
+  MARKETING_PAGE_SLUGS_QUERY_RESULT,
+  OWNER_BY_SLUG_QUERY_RESULT,
+  OWNER_SLUGS_QUERY_RESULT,
+  PET_BY_SLUG_QUERY_RESULT,
+  PET_INDEX_PAGE_QUERY_RESULT,
+  PET_SLUGS_QUERY_RESULT,
+  PET_TYPES_QUERY_RESULT,
+  PETS_INDEX_COUNT_QUERY_RESULT,
+  PETS_INDEX_QUERY_RESULT,
+  SITE_SETTINGS_QUERY_RESULT,
+  SYSTEM_PAGE_BY_TYPE_QUERY_RESULT
+} from "@/sanity.types";
+import {
+  FEATURED_TESTIMONIALS_QUERY,
+  FORM_DEFINITION_BY_SLUG_QUERY,
+  HOME_PAGE_QUERY,
+  MARKETING_PAGE_BY_SLUG_QUERY,
+  MARKETING_PAGE_SLUGS_QUERY,
+  OWNER_BY_SLUG_QUERY,
+  OWNER_SLUGS_QUERY,
+  PET_BY_SLUG_QUERY,
+  PET_INDEX_PAGE_QUERY,
+  PET_SLUGS_QUERY,
+  PET_TYPES_QUERY,
+  PETS_INDEX_COUNT_QUERY,
+  PETS_INDEX_QUERY,
+  SITE_SETTINGS_QUERY,
+  SYSTEM_PAGE_BY_TYPE_QUERY
+} from "@/sanity/queries";
+import { previewSanityFetch, sanityFetch } from "./fetch";
+import { sanityTags } from "./tags";
+
+type LoadOptions = Readonly<{
+  preview?: boolean;
+}>;
+
+type QueryLoadOptions = LoadOptions &
+  Readonly<{
+    query: string;
+    params?: QueryParams;
+    tags?: string[];
+    useCdn?: boolean;
+  }>;
+
+const defaultPageSize = 24;
+
+async function loadQuery<Result>({
+  preview = false,
+  query,
+  params,
+  tags,
+  useCdn
+}: QueryLoadOptions): Promise<Result> {
+  if (preview) {
+    return previewSanityFetch<Result>({ query, params, tags });
+  }
+
+  return sanityFetch<Result>({ query, params, tags, useCdn });
+}
+
+/**
+ * Loads global site settings for layout-level rendering.
+ */
+export function loadSiteSettings(options: LoadOptions = {}) {
+  return loadQuery<SITE_SETTINGS_QUERY_RESULT>({
+    ...options,
+    query: SITE_SETTINGS_QUERY,
+    tags: [sanityTags.siteSettings]
+  });
+}
+
+/**
+ * Loads the CMS-authored homepage singleton.
+ */
+export function loadHomePage(options: LoadOptions = {}) {
+  return loadQuery<HOME_PAGE_QUERY_RESULT>({
+    ...options,
+    query: HOME_PAGE_QUERY,
+    tags: [sanityTags.homePage]
+  });
+}
+
+/**
+ * Loads the CMS-authored pet index singleton.
+ */
+export function loadPetIndexPage(options: LoadOptions = {}) {
+  return loadQuery<PET_INDEX_PAGE_QUERY_RESULT>({
+    ...options,
+    query: PET_INDEX_PAGE_QUERY,
+    tags: [sanityTags.petIndex]
+  });
+}
+
+/**
+ * Loads one marketing page by route slug.
+ */
+export function loadMarketingPageBySlug(slug: string, options: LoadOptions = {}) {
+  return loadQuery<MARKETING_PAGE_BY_SLUG_QUERY_RESULT>({
+    ...options,
+    query: MARKETING_PAGE_BY_SLUG_QUERY,
+    params: { slug },
+    tags: [sanityTags.marketingPage(slug)]
+  });
+}
+
+/**
+ * Loads marketing page slugs for static route generation.
+ */
+export function loadMarketingPageSlugs(options: LoadOptions = {}) {
+  return loadQuery<MARKETING_PAGE_SLUGS_QUERY_RESULT>({
+    ...options,
+    query: MARKETING_PAGE_SLUGS_QUERY,
+    tags: ["marketing-pages"],
+    useCdn: false
+  });
+}
+
+/**
+ * Loads CMS copy for one system state, such as 404 or generic error.
+ */
+export function loadSystemPageByType(pageType: string, options: LoadOptions = {}) {
+  return loadQuery<SYSTEM_PAGE_BY_TYPE_QUERY_RESULT>({
+    ...options,
+    query: SYSTEM_PAGE_BY_TYPE_QUERY,
+    params: { pageType },
+    tags: [sanityTags.systemPage(pageType)]
+  });
+}
+
+/**
+ * Loads paginated approved pets for the pet index page.
+ */
+export function loadPetsIndex(
+  page = 1,
+  pageSize = defaultPageSize,
+  options: LoadOptions = {}
+) {
+  const start = Math.max(page - 1, 0) * pageSize;
+  const end = start + pageSize;
+
+  return loadQuery<PETS_INDEX_QUERY_RESULT>({
+    ...options,
+    query: PETS_INDEX_QUERY,
+    params: { start, end },
+    tags: [sanityTags.petIndex]
+  });
+}
+
+/**
+ * Loads the total count of approved public pets.
+ */
+export function loadPetsIndexCount(options: LoadOptions = {}) {
+  return loadQuery<PETS_INDEX_COUNT_QUERY_RESULT>({
+    ...options,
+    query: PETS_INDEX_COUNT_QUERY,
+    tags: [sanityTags.petIndex]
+  });
+}
+
+/**
+ * Loads one approved public pet by slug.
+ */
+export function loadPetBySlug(slug: string, options: LoadOptions = {}) {
+  return loadQuery<PET_BY_SLUG_QUERY_RESULT>({
+    ...options,
+    query: PET_BY_SLUG_QUERY,
+    params: { slug },
+    tags: [sanityTags.pet(slug)]
+  });
+}
+
+/**
+ * Loads approved public pet slugs for static route generation.
+ */
+export function loadPetSlugs(options: LoadOptions = {}) {
+  return loadQuery<PET_SLUGS_QUERY_RESULT>({
+    ...options,
+    query: PET_SLUGS_QUERY,
+    tags: [sanityTags.petIndex],
+    useCdn: false
+  });
+}
+
+/**
+ * Loads one owner by direct URL slug, including approved pets owned by that owner.
+ */
+export function loadOwnerBySlug(slug: string, options: LoadOptions = {}) {
+  return loadQuery<OWNER_BY_SLUG_QUERY_RESULT>({
+    ...options,
+    query: OWNER_BY_SLUG_QUERY,
+    params: { slug },
+    tags: [sanityTags.owner(slug)]
+  });
+}
+
+/**
+ * Loads owner slugs for direct owner detail routes.
+ */
+export function loadOwnerSlugs(options: LoadOptions = {}) {
+  return loadQuery<OWNER_SLUGS_QUERY_RESULT>({
+    ...options,
+    query: OWNER_SLUGS_QUERY,
+    tags: ["owners"],
+    useCdn: false
+  });
+}
+
+/**
+ * Loads pet types for listing filters and labels.
+ */
+export function loadPetTypes(options: LoadOptions = {}) {
+  return loadQuery<PET_TYPES_QUERY_RESULT>({
+    ...options,
+    query: PET_TYPES_QUERY,
+    tags: [sanityTags.petTypes]
+  });
+}
+
+/**
+ * Loads featured testimonials for reusable homepage and marketing sections.
+ */
+export function loadFeaturedTestimonials(options: LoadOptions = {}) {
+  return loadQuery<FEATURED_TESTIMONIALS_QUERY_RESULT>({
+    ...options,
+    query: FEATURED_TESTIMONIALS_QUERY,
+    tags: [sanityTags.testimonials]
+  });
+}
+
+/**
+ * Loads a CMS-authored form definition by slug.
+ */
+export function loadFormDefinitionBySlug(slug: string, options: LoadOptions = {}) {
+  return loadQuery<FORM_DEFINITION_BY_SLUG_QUERY_RESULT>({
+    ...options,
+    query: FORM_DEFINITION_BY_SLUG_QUERY,
+    params: { slug },
+    tags: [sanityTags.form(slug)]
+  });
+}

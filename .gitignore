@@ -14,6 +14,7 @@ dist/
 
 # Sanity
 .sanity/
+schema.json
 sanity/seed/generated/
 
 # Environment files
