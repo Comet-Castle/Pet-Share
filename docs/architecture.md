@@ -27,7 +27,7 @@ This document captures the intended technical shape for Pet Share before the app
 - Styling: Tailwind CSS.
 - Fonts: `Nunito Sans` and `Quicksand` from Google Fonts via `next/font/google`.
 - Icons: use `lucide-react` as the default app UI icon set; use React Icons only when a needed brand or specialty icon is not available in Lucide.
-- Animation: Tailwind-compatible animation utilities are expected for day-one motion. Framer Motion can be added later if scroll-triggered or more choreographed animation needs exceed what Tailwind/CSS can handle cleanly.
+- Animation: start with Tailwind CSS utilities and small custom CSS. Framer Motion can be added later if scroll-triggered or more choreographed animation needs exceed what Tailwind/CSS can handle cleanly.
 - Sanity Studio: embedded at `/studio`.
 - Deployment: Vercel free tier for the Next.js app, with Sanity CMS as the content backend.
 - Preview: basic Draft Mode first from Sanity Studio preview links only; Sanity Visual Editing is a strong post-launch goal.
@@ -256,7 +256,7 @@ Slugged published preview links can target their eventual public route when the 
 - Preview/live content strategy has not been implemented.
 - Sanity webhook validation and revalidation have not been implemented.
 - Mailgun form delivery has not been implemented.
-- Exact day-one Tailwind animation add-on has not been selected. Framer Motion is deferred as the preferred future solution if Tailwind/CSS becomes awkward for scroll-triggered or choreographed animation.
+- No Tailwind animation add-on is installed in the scaffold. Framer Motion remains deferred as the preferred future solution if Tailwind/CSS becomes awkward for scroll-triggered or choreographed animation.
 - Exact design token values have not been selected.
 - Any supplemental React Icons usage has not been selected.
 - Exact Vitest and optional Playwright setup has not been implemented.

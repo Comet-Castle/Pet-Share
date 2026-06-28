@@ -4,7 +4,7 @@ Pet Share is a demo website built with a Next.js frontend and Sanity CMS for str
 
 ## Project Status
 
-The project is in initial setup. The application has not been scaffolded yet.
+The project has a scaffolded Next.js App Router application with embedded Sanity Studio routing, TypeScript, Tailwind CSS, ESLint, and Vitest.
 
 Implementation work should follow `docs/milestones.md` as the controlling scope. Supporting docs define standards and constraints, but they should not expand a milestone beyond its stated goal.
 
@@ -42,24 +42,26 @@ Implementation work should follow `docs/milestones.md` as the controlling scope.
 
 ## Local Setup
 
-After the app is scaffolded:
-
 1. Install dependencies with `pnpm`.
 2. Copy `.env.example` to `.env.local`.
 3. Fill in the Sanity project configuration and any required secrets.
-4. Run the local development server using the scripts in `package.json`.
+4. Run the local development server with `pnpm dev`.
+
+This repo uses the package manager declared in `package.json`. If `pnpm` is not available locally, enable it through Corepack or install pnpm before running project scripts.
 
 ## Common Commands
 
-Commands will be finalized after the app is scaffolded. Expected commands:
-
-```text
+```bash
+pnpm install
 pnpm dev
 pnpm lint
 pnpm typecheck
 pnpm test
 pnpm build
+pnpm studio
 ```
+
+The public scaffold is available at `http://localhost:3000/` during development. Sanity Studio is mounted at `http://localhost:3000/studio`.
 
 ## Seed Data
 
@@ -96,6 +98,8 @@ Generated review files should be written to `sanity/seed/generated/`, which is i
 Keep `.env.example` updated whenever environment variables change. Real secrets belong in local or deployment environment configuration, not in Git.
 
 Start local setup by copying `.env.example` to `.env.local` and filling in project-specific values.
+
+The current Studio scaffold uses placeholder Sanity configuration until `NEXT_PUBLIC_SANITY_PROJECT_ID` and related values are set locally or in Vercel.
 
 ## Attribution
 

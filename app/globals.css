@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-nunito-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-quicksand), var(--font-nunito-sans), ui-sans-serif,
+    system-ui, sans-serif;
+  --color-pet-cream: #fff8ef;
+  --color-pet-mint: #a8e6cf;
+  --color-pet-coral: #ff8f70;
+  --color-pet-blue: #82c7f5;
+  --color-pet-ink: #263238;
+  --color-pet-muted: #5f6f73;
+  --shadow-soft: 0 24px 80px rgb(38 50 56 / 12%);
+}
+
+:root {
+  color-scheme: light;
+  background: var(--color-pet-cream);
+  color: var(--color-pet-ink);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  font-family: var(--font-sans);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+::selection {
+  background: var(--color-pet-mint);
+  color: var(--color-pet-ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
