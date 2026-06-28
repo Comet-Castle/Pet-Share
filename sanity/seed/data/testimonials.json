@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "items": [
+    {
+      "seedId": "testimonial-sir-nibbles-neighbor",
+      "type": "testimonial",
+      "quote": "A very quiet visitor, except for the part where everyone in the room began negotiating with a rabbit.",
+      "authorName": "Gwen From Next Door",
+      "authorRole": "Borrower with surviving slippers",
+      "authorImage": null,
+      "relatedPetSeedId": "pet-sir-nibbles",
+      "relatedOwnerSeedId": "owner-brother-maynard",
+      "rating": 4.5,
+      "tone": "playful",
+      "featured": true
+    },
+    {
+      "seedId": "testimonial-muffin-weekend",
+      "type": "testimonial",
+      "quote": "Muffin arrived with one chew toy and left with a full neighborhood fan club. My bed, however, has filed a complaint.",
+      "authorName": "Harold Who Owns Towels",
+      "authorRole": "Weekend borrower and sheet-washing realist",
+      "authorImage": null,
+      "relatedPetSeedId": "pet-muffin",
+      "relatedOwnerSeedId": "owner-dana-muffins",
+      "rating": 4,
+      "tone": "playful",
+      "featured": true
+    }
+  ]
+}

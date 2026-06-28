@@ -80,7 +80,9 @@ Reference rule:
 
 ### `imageRef`
 
-Image references point to approved local media through `assetKey`. The matching file and Sanity upload state live in `media-manifest.json`.
+Image references point to media through `assetKey`. The matching file, generation status, and Sanity upload state live in `media-manifest.json`.
+
+During Milestone 1, manifest entries may use `status: "planned"` before the actual local image files exist. Final seed replay should use approved local media files under `sanity/seed/media/`.
 
 ```json
 {
@@ -128,7 +130,7 @@ Top-level shape:
       "filterLabel": "Rabbit",
       "category": "commonHouseholdPets",
       "icon": "rabbit",
-      "customIconAssetKey": null,
+      "customIconAssetKey": "petType-rabbit-icon",
       "summary": "Compact, judgmental, and faster than your lease agreement.",
       "sortOrder": 30,
       "featured": true
@@ -140,8 +142,8 @@ Top-level shape:
 Notes:
 
 - `category` should use a controlled value from the content model grouping.
-- `icon` should prefer a Lucide-compatible icon name when available.
-- `customIconAssetKey` is only for project-owned SVG fallbacks.
+- `icon` should prefer a Lucide-compatible icon name for app UI fallbacks and editor-friendly selection.
+- `customIconAssetKey` should reference a project-owned SVG icon for the seeded pet type. These SVGs should visually match Lucide's outline style.
 
 ## `owners.json`
 
@@ -203,7 +205,7 @@ Top-level shape:
       "slug": { "current": "sir-nibbles" },
       "petTypeSeedId": "petType-rabbit",
       "breed": "Tiny white rabbit of disputed temperament",
-      "age": "3 years, emotionally ancient",
+      "ageYears": 3,
       "ownerSeedId": "owner-brother-maynard",
       "submittedByOwnerSeedId": "owner-brother-maynard",
       "submissionStatus": "approved",
@@ -581,7 +583,7 @@ Use `pages.json` for singletons and marketing pages so the page-builder seed sha
 
 ## `media-manifest.json`
 
-The manifest maps approved local media files to seed records and, after upload, to Sanity asset IDs.
+The manifest maps planned or approved local media files to seed records and, after upload, to Sanity asset IDs.
 
 ```json
 {
@@ -622,9 +624,10 @@ The manifest maps approved local media files to seed records and, after upload, 
 Rules:
 
 - `assetKey` is the stable link between seed JSON and manifest entries.
-- `localPath` must point to an approved committed file under `sanity/seed/media/`.
+- `localPath` points to the intended approved file under `sanity/seed/media/`. For `planned` entries the file may not exist yet; for `approved` entries it must exist and be committed.
 - `sourceGeneratedPath` is optional and must point only to the gitignored `sanity/seed/generated/` review workspace.
 - `sanityAssetId` and `sanityAssetRef` are filled after upload.
+- `status` can be `planned`, `generated`, `approved`, `rejected`, or `deferred`.
 - Only `approved` assets should be committed or uploaded.
 
 ## Validation Before Seeding
@@ -634,8 +637,9 @@ Before writing to Sanity:
 - Every `seedId` is unique within its file.
 - Every reference by `seedId` resolves.
 - Every singleton has the expected explicit `sanityId`.
+- Every pet uses a numeric `ageYears` value or an exact `dateOfBirth`, not a prose age string.
 - Every pet has `imageTargetCount` between `5` and `10`.
-- Every approved image reference has a matching `assetKey` in `media-manifest.json`.
+- Every image reference has a matching `assetKey` in `media-manifest.json`.
 - Every meaningful image has alt text.
 - Every planned video has a fallback image.
 - Every marketing page slug avoids reserved route segments.

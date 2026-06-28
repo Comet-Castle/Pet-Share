@@ -1,0 +1,79 @@
+{
+  "version": 1,
+  "items": [
+    {
+      "seedId": "form-contact",
+      "type": "formDefinition",
+      "title": "Contact Pet Share",
+      "slug": { "current": "contact" },
+      "description": "Send a general question to the master inbox.",
+      "formType": "contact",
+      "submitLabel": "Send message",
+      "successMessage": {
+        "headline": "Message sent",
+        "message": "Your message made it through the chew-proof tunnel.",
+        "cta": null
+      },
+      "errorMessage": {
+        "headline": "The dog ate the email",
+        "message": "Something went wrong while sending. Please try again."
+      },
+      "fields": [
+        { "name": "name", "label": "Your name", "type": "text", "required": true, "helpText": null, "options": [] },
+        { "name": "email", "label": "Email", "type": "email", "required": true, "helpText": "We will only use this to reply about your fictional inquiry.", "options": [] },
+        { "name": "message", "label": "Message", "type": "textarea", "required": true, "helpText": null, "options": [] }
+      ]
+    },
+    {
+      "seedId": "form-owner-contact",
+      "type": "formDefinition",
+      "title": "Request Temporary Custody",
+      "slug": { "current": "owner-contact" },
+      "description": "Tell us why you are prepared for this very specific responsibility.",
+      "formType": "ownerContact",
+      "submitLabel": "Send request",
+      "successMessage": {
+        "headline": "Request sent",
+        "message": "Your message made it through the chew-proof tunnel.",
+        "cta": null
+      },
+      "errorMessage": {
+        "headline": "The dog ate the email",
+        "message": "Your request did not make it to the master inbox. Please try again."
+      },
+      "fields": [
+        { "name": "name", "label": "Your name", "type": "text", "required": true, "helpText": null, "options": [] },
+        { "name": "email", "label": "Email", "type": "email", "required": true, "helpText": "We will only use this to reply about your fictional pet inquiry.", "options": [] },
+        { "name": "message", "label": "Message", "type": "textarea", "required": true, "helpText": "Mention any relevant slipper insurance.", "options": [] }
+      ]
+    },
+    {
+      "seedId": "form-warranty",
+      "type": "formDefinition",
+      "title": "Pet Warranty Claim",
+      "slug": { "current": "warranty" },
+      "description": "Report a fictional pet incident with the seriousness it absolutely does not deserve.",
+      "formType": "warranty",
+      "submitLabel": "File claim",
+      "successMessage": {
+        "headline": "Claim filed",
+        "message": "Your warranty claim has entered the tiny clipboard system.",
+        "cta": { "label": "Browse pets", "link": { "type": "internalPath", "path": "/pets" }, "style": "secondary" }
+      },
+      "errorMessage": {
+        "headline": "The claim form escaped",
+        "message": "We could not file the claim. Please try again before the evidence gets fluffier."
+      },
+      "fields": [
+        { "name": "name", "label": "Your name", "type": "text", "required": true, "helpText": null, "options": [] },
+        { "name": "email", "label": "Email", "type": "email", "required": true, "helpText": null, "options": [] },
+        { "name": "incidentType", "label": "Incident type", "type": "select", "required": true, "helpText": null, "options": [
+          { "label": "Bed event", "value": "bedEvent" },
+          { "label": "Snack dispute", "value": "snackDispute" },
+          { "label": "Emotional manipulation", "value": "emotionalManipulation" }
+        ] },
+        { "name": "message", "label": "Incident summary", "type": "textarea", "required": true, "helpText": "Please avoid legal terminology unless the pet started it.", "options": [] }
+      ]
+    }
+  ]
+}

@@ -61,6 +61,10 @@ pnpm test
 pnpm build
 ```
 
+## Seed Data
+
+Representative Milestone 1 seed data lives under `sanity/seed/`. These files define the sample JSON shape for future Sanity schemas and seed scripts; they are not the final 50-pet demo seed set.
+
 ## Seed Media Generation
 
 Seed media generation is planned as a human-approved workflow. AI agents may help prepare prompts, review configuration, and inspect generated files after they exist, but AI agents must not run commands that call paid or metered AI generation providers.

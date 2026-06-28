@@ -1,0 +1,408 @@
+{
+  "version": 1,
+  "items": [
+    {
+      "seedId": "pet-sir-nibbles",
+      "type": "pet",
+      "name": "Sir Nibbles",
+      "slug": { "current": "sir-nibbles" },
+      "petTypeSeedId": "petType-rabbit",
+      "breed": "Tiny white rabbit of disputed temperament",
+      "ageYears": 3,
+      "ownerSeedId": "owner-brother-maynard",
+      "submittedByOwnerSeedId": "owner-brother-maynard",
+      "submissionStatus": "approved",
+      "source": "demoSeed",
+      "listingHeadline": "Small rabbit. Large waiver.",
+      "listingSummary": "Ideal for borrowers who want a quiet weekend and have already made peace with their slippers.",
+      "availabilityStatus": "available",
+      "temperament": "regal",
+      "pickupUrgency": "withinSevenDays",
+      "cuddlePolicy": "consentRequired",
+      "messRisk": 2.5,
+      "chaosLevel": 4.5,
+      "energyLevel": 3,
+      "imageTargetCount": 8,
+      "mediaPrompt": {
+        "basePrompt": "A tiny white rabbit with suspiciously regal confidence, bright friendly modern marketplace photography, airy pastel interior, soft daylight, playful satirical danger cues, not scary, not violent.",
+        "globalNegativePrompt": "No blood, no weapons, no fear, no animal distress, no official movie stills, no exact copyrighted character likeness.",
+        "imagePrompts": [
+          {
+            "assetKey": "pet-sir-nibbles-card-01",
+            "role": "card",
+            "shotPrompt": "Front-facing seated portrait, full body visible, clean background, strong eye contact, centered composition."
+          },
+          {
+            "assetKey": "pet-sir-nibbles-gallery-01",
+            "role": "gallery",
+            "shotPrompt": "Three-quarter angle on a rounded sofa, one slipper nearby, cozy home setting, playful expression."
+          },
+          {
+            "assetKey": "pet-sir-nibbles-gallery-02",
+            "role": "gallery",
+            "shotPrompt": "Wide bright room scene with the rabbit beside a tiny warning placard and soft pastel props."
+          }
+        ],
+        "plannedVideos": [
+          {
+            "id": "pet-sir-nibbles-card-loop",
+            "status": "planned",
+            "placement": "petCard",
+            "sourceImageAssetKey": "pet-sir-nibbles-card-01",
+            "fallbackImageAssetKey": "pet-sir-nibbles-card-01",
+            "motionPrompt": "A subtle low-frame-rate loop where the rabbit blinks once and the nearby warning tag shifts slightly in soft daylight.",
+            "negativePrompt": "No violence, no fear, no sharp teeth, no dark horror tone, no official movie likeness.",
+            "durationSeconds": 3,
+            "aspectRatio": "1:1",
+            "resolution": "1024x1024",
+            "loop": true
+          }
+        ]
+      },
+      "cardMedia": {
+        "image": {
+          "assetKey": "pet-sir-nibbles-card-01",
+          "alt": "Sir Nibbles sitting in a sunny room with a politely alarming expression.",
+          "role": "card"
+        },
+        "plannedVideoId": "pet-sir-nibbles-card-loop"
+      },
+      "heroImages": [
+        {
+          "assetKey": "pet-sir-nibbles-gallery-01",
+          "alt": "Sir Nibbles on a rounded sofa beside one unattended slipper.",
+          "role": "gallery"
+        },
+        {
+          "assetKey": "pet-sir-nibbles-gallery-02",
+          "alt": "Sir Nibbles beside a tiny warning placard in a bright living room.",
+          "role": "gallery"
+        }
+      ],
+      "summary": "A compact guest with excellent posture and a strict interpretation of personal space.",
+      "description": [
+        {
+          "_type": "block",
+          "style": "normal",
+          "children": [
+            {
+              "_type": "span",
+              "text": "Sir Nibbles is a bright-eyed rabbit with soft fur, ceremonial confidence, and a surprising ability to make adults whisper near furniture. He looks harmless in direct sunlight, which is part of the scheduling strategy."
+            }
+          ]
+        },
+        {
+          "_type": "block",
+          "style": "normal",
+          "children": [
+            {
+              "_type": "span",
+              "text": "He is best suited for borrowers who appreciate quiet companionship, firm boundaries, and pets who arrive with both a snack preference and a legal department. Do not be fooled by the compact packaging."
+            }
+          ]
+        }
+      ],
+      "personalityTraits": [
+        { "label": "Regal", "value": "regal", "icon": "crown", "tone": "friendly" },
+        { "label": "Suspicious", "value": "suspicious", "icon": "eye", "tone": "warning" }
+      ],
+      "careNotes": [
+        {
+          "title": "Compliments before breakfast",
+          "description": "Begin the morning with one sincere compliment and one neutral vegetable.",
+          "severity": "low"
+        }
+      ],
+      "borrowTerms": [
+        {
+          "title": "Return with the same number of opinions",
+          "description": "Additional opinions may incur a fictional processing fee.",
+          "icon": "clipboardCheck"
+        }
+      ],
+      "warnings": [
+        {
+          "title": "Do not underestimate due to size",
+          "description": "Several slippers have made this mistake.",
+          "severity": "medium",
+          "icon": "triangleAlert"
+        }
+      ],
+      "testimonialSeedId": "testimonial-sir-nibbles-neighbor",
+      "contactOwnerCta": {
+        "label": "Request temporary custody",
+        "link": { "type": "action", "action": "openOwnerContactDrawer" },
+        "style": "primary",
+        "icon": "send"
+      },
+      "seo": {
+        "title": "Sir Nibbles | Pet Share",
+        "description": "Borrow a tiny rabbit with large opinions and a suspiciously medieval warning label.",
+        "openGraphImageAssetKey": "pet-sir-nibbles-card-01",
+        "noIndex": false
+      }
+    },
+    {
+      "seedId": "pet-muffin",
+      "type": "pet",
+      "name": "Muffin",
+      "slug": { "current": "muffin" },
+      "petTypeSeedId": "petType-dog",
+      "breed": "Optimistic medium dog with upholstery opinions",
+      "ageYears": 5,
+      "ownerSeedId": "owner-dana-muffins",
+      "submittedByOwnerSeedId": "owner-dana-muffins",
+      "submissionStatus": "approved",
+      "source": "demoSeed",
+      "listingHeadline": "Recently washed. Emotionally available.",
+      "listingSummary": "A cheerful dog for anyone whose bed has not recently experienced enough plot.",
+      "availabilityStatus": "available",
+      "temperament": "enthusiastic",
+      "pickupUrgency": "flexible",
+      "cuddlePolicy": "aggressivelyAvailable",
+      "messRisk": 3.5,
+      "chaosLevel": 3,
+      "energyLevel": 4,
+      "imageTargetCount": 6,
+      "mediaPrompt": {
+        "basePrompt": "A cheerful medium dog with bright friendly eyes, modern airy apartment, clean rounded design vibe, sunny white space, playful satirical marketplace pet portrait, no distress.",
+        "globalNegativePrompt": "No mess shown, no animal distress, no dark lighting, no medical scene, no gross imagery.",
+        "imagePrompts": [
+          {
+            "assetKey": "pet-muffin-card-01",
+            "role": "card",
+            "shotPrompt": "Happy seated dog portrait on a washable rug, bright apartment, soft matte color palette."
+          },
+          {
+            "assetKey": "pet-muffin-gallery-01",
+            "role": "gallery",
+            "shotPrompt": "Dog beside a neatly folded blanket and a very serious lint roller, friendly editorial composition."
+          }
+        ],
+        "plannedVideos": [
+          {
+            "id": "pet-muffin-card-loop",
+            "status": "planned",
+            "placement": "petCard",
+            "sourceImageAssetKey": "pet-muffin-card-01",
+            "fallbackImageAssetKey": "pet-muffin-card-01",
+            "motionPrompt": "A subtle loop where Muffin tilts his head and the lint roller in the background stays heroically still.",
+            "negativePrompt": "No mess, no distress, no frantic motion.",
+            "durationSeconds": 3,
+            "aspectRatio": "1:1",
+            "resolution": "1024x1024",
+            "loop": true
+          }
+        ]
+      },
+      "cardMedia": {
+        "image": {
+          "assetKey": "pet-muffin-card-01",
+          "alt": "Muffin the dog sitting proudly on a washable rug in a bright apartment.",
+          "role": "card"
+        },
+        "plannedVideoId": "pet-muffin-card-loop"
+      },
+      "heroImages": [
+        {
+          "assetKey": "pet-muffin-gallery-01",
+          "alt": "Muffin beside a folded blanket and lint roller in a sunny room.",
+          "role": "gallery"
+        }
+      ],
+      "summary": "A sunny dog with a generous heart and several textile-related disclaimers.",
+      "description": [
+        {
+          "_type": "block",
+          "style": "normal",
+          "children": [
+            {
+              "_type": "span",
+              "text": "Muffin is the kind of dog who enters a room like he has been invited to an awards show for blankets. He is affectionate, eager, and convinced that every visitor is here to admire his latest emotional breakthrough."
+            }
+          ]
+        },
+        {
+          "_type": "block",
+          "style": "normal",
+          "children": [
+            {
+              "_type": "span",
+              "text": "Borrowers should enjoy walks, soft ears, and the possibility of laundering something earlier than planned. In exchange, Muffin provides world-class morale support and a face that makes refunds feel rude."
+            }
+          ]
+        }
+      ],
+      "personalityTraits": [
+        { "label": "Affectionate", "value": "affectionate", "icon": "heart", "tone": "friendly" },
+        { "label": "Textile curious", "value": "textileCurious", "icon": "shirt", "tone": "warning" }
+      ],
+      "careNotes": [
+        {
+          "title": "Praise all rugs equally",
+          "description": "Muffin can tell when one rug is receiving more emotional support than another.",
+          "severity": "low"
+        }
+      ],
+      "borrowTerms": [
+        {
+          "title": "Bring backup towels",
+          "description": "This is not a warning. It is a lifestyle alignment exercise.",
+          "icon": "badgeAlert"
+        }
+      ],
+      "warnings": [
+        {
+          "title": "Bed incident disclosure",
+          "description": "Muffin has moved on emotionally. The sheets have not.",
+          "severity": "medium",
+          "icon": "triangleAlert"
+        }
+      ],
+      "testimonialSeedId": "testimonial-muffin-weekend",
+      "contactOwnerCta": {
+        "label": "Borrow this optimism",
+        "link": { "type": "action", "action": "openOwnerContactDrawer" },
+        "style": "primary",
+        "icon": "send"
+      },
+      "seo": {
+        "title": "Muffin | Pet Share",
+        "description": "Borrow a cheerful dog with washable-rug energy and extremely persuasive eyebrows.",
+        "openGraphImageAssetKey": "pet-muffin-card-01",
+        "noIndex": false
+      }
+    },
+    {
+      "seedId": "pet-pip-after-midnight",
+      "type": "pet",
+      "name": "Pip After Midnight",
+      "slug": { "current": "pip-after-midnight" },
+      "petTypeSeedId": "petType-cat",
+      "breed": "Wide-eyed house cat with strict snack bylaws",
+      "ageYears": 2,
+      "ownerSeedId": "owner-dana-muffins",
+      "submittedByOwnerSeedId": "owner-dana-muffins",
+      "submissionStatus": "approved",
+      "source": "demoSeed",
+      "listingHeadline": "Cute. Rule-bound. Do not improvise.",
+      "listingSummary": "A soft little cat for borrowers who can follow a snack policy with courtroom precision.",
+      "availabilityStatus": "limited",
+      "temperament": "sweetUntilProcedural",
+      "pickupUrgency": "scheduledOnly",
+      "cuddlePolicy": "byAppointment",
+      "messRisk": 2,
+      "chaosLevel": 5,
+      "energyLevel": 2.5,
+      "imageTargetCount": 7,
+      "mediaPrompt": {
+        "basePrompt": "A cute wide-eyed house cat in a bright modern kitchen, friendly satirical tone, soft white space, rounded design mood, tiny snack schedule card nearby, no official character likeness.",
+        "globalNegativePrompt": "No horror, no transformation, no official movie likeness, no dark wet scene, no animal distress.",
+        "imagePrompts": [
+          {
+            "assetKey": "pet-pip-card-01",
+            "role": "card",
+            "shotPrompt": "Cute cat sitting by a tiny snack schedule card, bright modern interior, direct friendly eye contact."
+          },
+          {
+            "assetKey": "pet-pip-gallery-01",
+            "role": "gallery",
+            "shotPrompt": "Cat sitting beside a closed pantry door with a playful checklist, airy pastel kitchen."
+          }
+        ],
+        "plannedVideos": [
+          {
+            "id": "pet-pip-card-loop",
+            "status": "planned",
+            "placement": "petCard",
+            "sourceImageAssetKey": "pet-pip-card-01",
+            "fallbackImageAssetKey": "pet-pip-card-01",
+            "motionPrompt": "A gentle loop where Pip blinks and the tiny snack schedule card shifts slightly as if noticed.",
+            "negativePrompt": "No horror, no transformation, no distress, no official movie likeness.",
+            "durationSeconds": 3,
+            "aspectRatio": "1:1",
+            "resolution": "1024x1024",
+            "loop": true
+          }
+        ]
+      },
+      "cardMedia": {
+        "image": {
+          "assetKey": "pet-pip-card-01",
+          "alt": "Pip After Midnight sitting beside a tiny snack schedule card in a bright kitchen.",
+          "role": "card"
+        },
+        "plannedVideoId": "pet-pip-card-loop"
+      },
+      "heroImages": [
+        {
+          "assetKey": "pet-pip-gallery-01",
+          "alt": "Pip After Midnight beside a pantry checklist in an airy kitchen.",
+          "role": "gallery"
+        }
+      ],
+      "summary": "A soft, adorable cat with snack rules that should be read before signing anything.",
+      "description": [
+        {
+          "_type": "block",
+          "style": "normal",
+          "children": [
+            {
+              "_type": "span",
+              "text": "Pip is sweet, tiny, and almost aggressively charming, with round eyes that make every rule feel optional until it is very much not optional. The snack schedule is laminated for reasons Dana will only describe as historical."
+            }
+          ]
+        },
+        {
+          "_type": "block",
+          "style": "normal",
+          "children": [
+            {
+              "_type": "span",
+              "text": "Best for borrowers who enjoy quiet companionship, tidy kitchens, and following printed instructions. Pip rewards compliance with gentle head bumps and punishes improvisation with prolonged eye contact from a shelf."
+            }
+          ]
+        }
+      ],
+      "personalityTraits": [
+        { "label": "Charming", "value": "charming", "icon": "sparkles", "tone": "friendly" },
+        { "label": "Rule-bound", "value": "ruleBound", "icon": "listChecks", "tone": "warning" }
+      ],
+      "careNotes": [
+        {
+          "title": "Read the snack card twice",
+          "description": "If the card says no snacks after midnight, treat that as architecture, not advice.",
+          "severity": "high"
+        }
+      ],
+      "borrowTerms": [
+        {
+          "title": "No improvisational feeding",
+          "description": "All snacks must pass through the printed policy and a tiny emotional review board.",
+          "icon": "clipboardList"
+        }
+      ],
+      "warnings": [
+        {
+          "title": "Schedule-sensitive",
+          "description": "Pip is extremely cute until procedure is ignored.",
+          "severity": "high",
+          "icon": "alarmClock"
+        }
+      ],
+      "testimonialSeedId": null,
+      "contactOwnerCta": {
+        "label": "Request the snack rules",
+        "link": { "type": "action", "action": "openOwnerContactDrawer" },
+        "style": "primary",
+        "icon": "send"
+      },
+      "seo": {
+        "title": "Pip After Midnight | Pet Share",
+        "description": "Borrow a cute cat with strict snack timing and laminated care notes.",
+        "openGraphImageAssetKey": "pet-pip-card-01",
+        "noIndex": false
+      }
+    }
+  ]
+}

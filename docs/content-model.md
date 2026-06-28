@@ -307,7 +307,7 @@ Suggested Sanity fields:
 - `slug`: public pet detail slug.
 - `petType`: reference to a `petType` document.
 - `breed`: breed or satirical breed text.
-- `age`: age value or display text.
+- `ageYears`: numeric age value for display and future filtering, or `dateOfBirth` if the project later needs exact age calculation. Do not store pet age as a prose string.
 - `owner`: reference to the primary `owner` document.
 - `submittedBy`: reference to `owner`, initially useful for editor-created content and later useful for authenticated user submissions.
 - `submissionStatus`: status selector such as draft, pending, approved, rejected, or archived.
@@ -388,8 +388,8 @@ Suggested Sanity fields:
 - `name`: pet type display name.
 - `slug`: pet type slug for filtering and stable references.
 - `pluralName`: plural display label.
-- `icon`: Lucide icon name or controlled icon selector.
-- `customIcon`: optional project-owned SVG fallback for pet types that do not have a suitable Lucide icon.
+- `icon`: Lucide icon name or controlled icon selector for app UI fallbacks and editor-friendly selection.
+- `customIcon`: project-owned SVG icon for the pet type, visually matched to Lucide's outline style.
 - `summary`: short type description.
 - `description`: richer type description.
 - `defaultImage`: reusable `imageWithAlt` object.
@@ -456,7 +456,7 @@ Notes:
 
 - Keep pet types real and recognizable. Satire should come from individual pet copy, warnings, testimonials, and campaign content rather than fake pet type names.
 - Pet type entries should power filtering and display labels on pet listing pages.
-- Every seeded pet type should have a matching icon. Prefer Lucide icons, and use custom SVGs that match Lucide's outline style only when a suitable Lucide icon does not exist.
+- Every seeded pet type should have a matching project-owned SVG icon that visually matches Lucide's outline style, plus a Lucide-compatible `icon` value for fallback and editor selection.
 - A type should not replace pet-specific fields. Individual pets still own their own traits, warnings, images, and copy.
 
 Revalidation:

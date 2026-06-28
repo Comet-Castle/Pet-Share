@@ -1,0 +1,319 @@
+{
+  "version": 1,
+  "singletons": {
+    "siteSettings": {
+      "sanityId": "siteSettings",
+      "type": "siteSettings",
+      "title": "Pet Share",
+      "description": "A satirical pet-sharing marketplace for people who need a very temporary break.",
+      "defaultSeo": {
+        "title": "Pet Share",
+        "description": "Borrowable pets, questionable peace of mind.",
+        "openGraphImageAssetKey": "page-default-og",
+        "noIndex": false
+      },
+      "primaryNavigation": [
+        { "label": "Pets", "link": { "type": "internalPath", "path": "/pets" } },
+        { "label": "Process", "link": { "type": "internalPath", "path": "/process" } },
+        { "label": "Pricing", "link": { "type": "internalPath", "path": "/pricing" } },
+        { "label": "Warranty", "link": { "type": "internalPath", "path": "/contact" } }
+      ],
+      "footerNavigation": [
+        { "label": "About", "link": { "type": "internalPath", "path": "/about" } },
+        { "label": "Process", "link": { "type": "internalPath", "path": "/process" } },
+        { "label": "Pricing", "link": { "type": "internalPath", "path": "/pricing" } }
+      ],
+      "contactEmail": "hello@example.com"
+    },
+    "homePage": {
+      "sanityId": "homePage",
+      "type": "homePage",
+      "seo": {
+        "title": "Pet Share | Borrowable Pets",
+        "description": "A bright, friendly, deeply unserious marketplace for temporary pet relief.",
+        "openGraphImageAssetKey": "home-og",
+        "noIndex": false
+      },
+      "heroCarousel": [
+        {
+          "_key": "home-hero-bed-event",
+          "_type": "heroSlide",
+          "headline": "Has your dog thrown up in the bed recently?",
+          "body": "Lend him out for a couple days. Someone else deserves character development.",
+          "imageAssetKey": "home-hero-dog-01",
+          "cta": { "label": "Browse available chaos", "link": { "type": "internalPath", "path": "/pets" }, "style": "primary" }
+        },
+        {
+          "_key": "home-hero-snack-policy",
+          "_type": "heroSlide",
+          "headline": "Need a weekend away from snack enforcement?",
+          "body": "Pet Share connects fictional owners with brave temporary admirers.",
+          "imageAssetKey": "home-hero-cat-01",
+          "cta": { "label": "Meet the rule followers", "link": { "type": "internalPath", "path": "/pets?petType=cat" }, "style": "primary" }
+        }
+      ],
+      "featuredPetSeedIds": ["pet-sir-nibbles", "pet-muffin", "pet-pip-after-midnight"],
+      "featuredOwnerSeedIds": ["owner-brother-maynard", "owner-dana-muffins"],
+      "testimonialSeedIds": ["testimonial-sir-nibbles-neighbor", "testimonial-muffin-weekend"],
+      "contentSections": [
+        {
+          "_key": "home-process-summary",
+          "_type": "processStep",
+          "title": "Browse pets with warning labels",
+          "description": "Filter by species, mess risk, cuddle policy, and other important signs of temporary responsibility.",
+          "icon": "search",
+          "order": 1
+        },
+        {
+          "_key": "home-trust-callout",
+          "_type": "calloutBlock",
+          "headline": "Real CMS flexibility. Deeply fictional pets.",
+          "body": "This demo content is structured, reusable, and intentionally ridiculous.",
+          "tone": "playful"
+        }
+      ]
+    },
+    "petIndexPage": {
+      "sanityId": "petIndexPage",
+      "type": "petIndexPage",
+      "seo": {
+        "title": "Available Pets | Pet Share",
+        "description": "Browse temporary companions with permanent opinions.",
+        "openGraphImageAssetKey": "pet-index-og",
+        "noIndex": false
+      },
+      "hero": {
+        "_type": "hero",
+        "headline": "Browse available chaos.",
+        "body": "Find a temporary roommate with strong opinions.",
+        "imageAssetKey": "pet-index-hero",
+        "ctaGroup": {
+          "primary": { "label": "Start browsing", "link": { "type": "internalPath", "path": "/pets" }, "style": "primary" },
+          "secondary": null
+        }
+      },
+      "filterIntro": "Narrow the field by species, mess risk, cuddle policy, and other warning signs.",
+      "emptyState": {
+        "_type": "calloutBlock",
+        "headline": "No pets match those filters.",
+        "body": "They may be hiding.",
+        "tone": "playful"
+      },
+      "featuredPetSeedIds": ["pet-sir-nibbles", "pet-muffin"],
+      "contentSections": [
+        {
+          "_key": "pet-index-final-cta",
+          "_type": "calloutBlock",
+          "headline": "Still deciding?",
+          "body": "That is reasonable. Some of these pets come with instructions.",
+          "tone": "friendly"
+        }
+      ]
+    },
+    "systemPageNotFound": {
+      "sanityId": "systemPage-notFound",
+      "type": "systemPage",
+      "pageType": "notFound",
+      "seo": {
+        "title": "Page Not Found | Pet Share",
+        "description": "The requested Pet Share page could not be found.",
+        "openGraphImageAssetKey": "system-not-found-og",
+        "noIndex": true
+      },
+      "eyebrow": "404",
+      "headline": "This pet has slipped its collar.",
+      "message": "The page you are looking for wandered off before we could attach the tiny bell. Try the available pets or head home.",
+      "imageAssetKey": "system-not-found",
+      "primaryCta": { "label": "Browse available pets", "link": { "type": "internalPath", "path": "/pets" }, "style": "primary" },
+      "secondaryCta": { "label": "Go home", "link": { "type": "internalPath", "path": "/" }, "style": "secondary" },
+      "supportCopy": null,
+      "contentSections": []
+    },
+    "systemPageServerError": {
+      "sanityId": "systemPage-serverError",
+      "type": "systemPage",
+      "pageType": "serverError",
+      "seo": {
+        "title": "Server Error | Pet Share",
+        "description": "Pet Share hit a temporary problem.",
+        "openGraphImageAssetKey": "system-server-error-og",
+        "noIndex": true
+      },
+      "eyebrow": "500",
+      "headline": "Something chewed through the server cable.",
+      "message": "Pet Share hit a problem while fetching the good stuff. Try again in a moment or browse pets that are behaving for now.",
+      "imageAssetKey": "system-server-error",
+      "primaryCta": { "label": "Try the pet listings", "link": { "type": "internalPath", "path": "/pets" }, "style": "primary" },
+      "secondaryCta": { "label": "Go home", "link": { "type": "internalPath", "path": "/" }, "style": "secondary" },
+      "supportCopy": "If this keeps happening, the master inbox can receive a polite report.",
+      "contentSections": []
+    },
+    "systemPageGenericError": {
+      "sanityId": "systemPage-genericError",
+      "type": "systemPage",
+      "pageType": "genericError",
+      "seo": {
+        "title": "Something Went Wrong | Pet Share",
+        "description": "Pet Share hit a temporary problem.",
+        "openGraphImageAssetKey": "system-generic-error-og",
+        "noIndex": true
+      },
+      "eyebrow": "Error",
+      "headline": "The pets knocked something over.",
+      "message": "Something went wrong, but the site is still trying to look innocent. Try again or head back to the available pets.",
+      "imageAssetKey": "system-generic-error",
+      "primaryCta": { "label": "Browse pets", "link": { "type": "internalPath", "path": "/pets" }, "style": "primary" },
+      "secondaryCta": { "label": "Go home", "link": { "type": "internalPath", "path": "/" }, "style": "secondary" },
+      "supportCopy": null,
+      "contentSections": []
+    }
+  },
+  "marketingPages": [
+    {
+      "seedId": "marketingPage-about",
+      "type": "marketingPage",
+      "title": "About",
+      "slug": { "current": "about" },
+      "summary": "The fictional history of sharing pets with people who have not read the fine print.",
+      "seo": {
+        "title": "About | Pet Share",
+        "description": "Learn about the fake marketplace behind temporary pet relief.",
+        "openGraphImageAssetKey": "about-og",
+        "noIndex": false
+      },
+      "hero": {
+        "_type": "hero",
+        "headline": "Built for owners who need one quiet afternoon.",
+        "body": "Pet Share is a satirical demo marketplace with reusable content, structured relationships, and highly specific disclaimers.",
+        "imageAssetKey": "about-hero",
+        "ctaGroup": null
+      },
+      "sections": [
+        {
+          "_key": "about-history",
+          "_type": "contentSection",
+          "headline": "Our deeply fictional origin",
+          "body": "The idea began when one overwhelmed owner asked whether anyone else wanted to borrow a dog with excellent eyebrows and questionable timing.",
+          "imageAssetKey": "about-section-history"
+        },
+        {
+          "_key": "about-stats",
+          "_type": "statBlock",
+          "label": "Fictional towels deployed",
+          "value": "342",
+          "supportingText": "None of them asked for this."
+        }
+      ],
+      "primaryCta": { "label": "Browse pets", "link": { "type": "internalPath", "path": "/pets" }, "style": "primary" },
+      "showContactForm": false
+    },
+    {
+      "seedId": "marketingPage-process",
+      "type": "marketingPage",
+      "title": "Process",
+      "slug": { "current": "process" },
+      "summary": "How temporary pet relief becomes somebody else's short-term problem.",
+      "seo": {
+        "title": "Process | Pet Share",
+        "description": "Learn how Pet Share's fictional pet borrowing process works.",
+        "openGraphImageAssetKey": "process-og",
+        "noIndex": false
+      },
+      "hero": {
+        "_type": "hero",
+        "headline": "A simple process with several disclaimers.",
+        "body": "Submit interest, await a highly fictional approval, and pick up the pet within seven days.",
+        "imageAssetKey": "process-hero",
+        "ctaGroup": null
+      },
+      "sections": [
+        {
+          "_key": "process-step-choose-a-pet",
+          "_type": "processStep",
+          "title": "Choose a pet",
+          "description": "Find the listing that best matches your tolerance for noise, fur, and eye contact.",
+          "icon": "search",
+          "order": 1
+        },
+        {
+          "_key": "process-step-read-the-label",
+          "_type": "processStep",
+          "title": "Read the warning label",
+          "description": "Every good borrowing relationship begins with informed consent and a lint roller.",
+          "icon": "clipboardCheck",
+          "order": 2
+        }
+      ],
+      "primaryCta": { "label": "Browse pets", "link": { "type": "internalPath", "path": "/pets" }, "style": "primary" },
+      "showContactForm": false
+    },
+    {
+      "seedId": "marketingPage-pricing",
+      "type": "marketingPage",
+      "title": "Pricing",
+      "slug": { "current": "pricing" },
+      "summary": "Plans for every level of fictional pet responsibility.",
+      "seo": {
+        "title": "Pricing | Pet Share",
+        "description": "Explore fictional pricing tiers for the Pet Share demo.",
+        "openGraphImageAssetKey": "pricing-og",
+        "noIndex": false
+      },
+      "hero": {
+        "_type": "hero",
+        "headline": "Transparent pricing. Opaque pet motives.",
+        "body": "Choose the level of temporary responsibility that best matches your furniture insurance.",
+        "imageAssetKey": "pricing-hero",
+        "ctaGroup": null
+      },
+      "sections": [
+        {
+          "_key": "pricing-weekend-problem",
+          "_type": "pricingTier",
+          "name": "Weekend Problem",
+          "price": "$19",
+          "description": "For borrowers with two free days and one washable blanket.",
+          "features": [
+            { "_key": "pricing-weekend-feature-1", "_type": "pricingFeature", "label": "One fictional pet inquiry", "included": true },
+            { "_key": "pricing-weekend-feature-2", "_type": "pricingFeature", "label": "Complimentary warning label", "included": true }
+          ],
+          "cta": { "label": "Browse pets", "link": { "type": "internalPath", "path": "/pets" }, "style": "primary" }
+        }
+      ],
+      "primaryCta": { "label": "Find your temporary roommate", "link": { "type": "internalPath", "path": "/pets" }, "style": "primary" },
+      "showContactForm": false
+    },
+    {
+      "seedId": "marketingPage-contact",
+      "type": "marketingPage",
+      "title": "Warranty",
+      "slug": { "current": "contact" },
+      "summary": "A serious-looking form for deeply unserious pet-related claims.",
+      "seo": {
+        "title": "Warranty | Pet Share",
+        "description": "Contact Pet Share or file a fictional pet warranty claim.",
+        "openGraphImageAssetKey": "contact-og",
+        "noIndex": false
+      },
+      "hero": {
+        "_type": "hero",
+        "headline": "Did a pet breach the implied snack covenant?",
+        "body": "Tell the master inbox what happened. We will respond with the seriousness your rug deserves.",
+        "imageAssetKey": "contact-hero",
+        "ctaGroup": null
+      },
+      "sections": [
+        {
+          "_key": "contact-alert",
+          "_type": "alertBlock",
+          "headline": "Please do not mail us the evidence",
+          "body": "Photos and clear descriptions are enough for this fictional support process.",
+          "tone": "warning"
+        }
+      ],
+      "primaryCta": { "label": "File a claim", "link": { "type": "internalPath", "path": "/contact" }, "style": "primary" },
+      "showContactForm": true,
+      "formSeedId": "form-warranty"
+    }
+  ]
+}

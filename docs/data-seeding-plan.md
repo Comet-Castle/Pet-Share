@@ -150,7 +150,8 @@ Every seeded pet type should include:
 - Filter label.
 - Sort order.
 - Icon.
-- Custom SVG icon fallback only when a suitable icon library match does not exist.
+- Project-owned SVG icon asset that visually matches Lucide's outline style.
+- Lucide-compatible icon name for fallback and editor-friendly selection.
 
 Every seeded page should include:
 

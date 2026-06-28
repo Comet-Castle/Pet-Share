@@ -1,0 +1,71 @@
+{
+  "version": 1,
+  "items": [
+    {
+      "seedId": "owner-brother-maynard",
+      "type": "owner",
+      "name": "Brother Maynard",
+      "slug": { "current": "brother-maynard" },
+      "portrait": {
+        "assetKey": "owner-brother-maynard-portrait",
+        "alt": "A fictional medieval-adjacent caretaker holding a clipboard and looking concerned.",
+        "role": "ownerPortrait"
+      },
+      "tagline": "Caretaker of small problems with large warning labels.",
+      "bio": [
+        {
+          "_type": "block",
+          "style": "normal",
+          "children": [
+            {
+              "_type": "span",
+              "text": "Brother Maynard has spent years cataloging tiny household risks, most of which fit in a picnic basket. His preferred management style is calm documentation, soft lighting, and a waiver printed on unusually heavy paper."
+            }
+          ]
+        }
+      ],
+      "location": "A very drafty stone-adjacent townhouse",
+      "ownerSince": "Several incidents ago",
+      "testimonialSeedId": null,
+      "seo": {
+        "title": "Brother Maynard | Pet Share",
+        "description": "Meet the fictional caretaker behind one of Pet Share's most compact liabilities.",
+        "openGraphImageAssetKey": "owner-brother-maynard-portrait",
+        "noIndex": false
+      }
+    },
+    {
+      "seedId": "owner-dana-muffins",
+      "type": "owner",
+      "name": "Dana Muffins",
+      "slug": { "current": "dana-muffins" },
+      "portrait": {
+        "assetKey": "owner-dana-muffins-portrait",
+        "alt": "A fictional tired but friendly pet owner holding a lint roller and a travel mug.",
+        "role": "ownerPortrait"
+      },
+      "tagline": "Professional lint roller user and part-time couch negotiator.",
+      "bio": [
+        {
+          "_type": "block",
+          "style": "normal",
+          "children": [
+            {
+              "_type": "span",
+              "text": "Dana joined Pet Share after realizing the household pets had formed a rotating committee for snacks, opinions, and decorative chaos. She is reliable, responsive, and usually carrying treats that were not meant for humans."
+            }
+          ]
+        }
+      ],
+      "location": "A sunny apartment with suspiciously washable rugs",
+      "ownerSince": "The Great Blanket Incident",
+      "testimonialSeedId": "testimonial-muffin-weekend",
+      "seo": {
+        "title": "Dana Muffins | Pet Share",
+        "description": "Meet Dana, a fictional Pet Share owner with several washable rugs and a practical outlook.",
+        "openGraphImageAssetKey": "owner-dana-muffins-portrait",
+        "noIndex": false
+      }
+    }
+  ]
+}
