@@ -192,13 +192,14 @@ Scope:
 - Include the approved starter pet type list.
 - Use the saved seed data and approved local media workflow from `docs/data-seeding-plan.md`.
 - Keep content fictional, satirical, and animal-safe.
-- Document how to run the seed process.
+- Document the wizard-first seed process for the full demo dataset, with direct commands available only as manual/debug alternatives.
 
 Exit criteria:
 
 - A fresh dataset can be populated enough to browse the site.
 - Seed data covers the major schema relationships and section renderers.
 - Seed content is easy to revise later.
+- The recommended seed command is `pnpm seed:wizard`, and it is documented as covering the full demo dataset rather than only pet listings.
 - Normal seed replay does not call AI generation providers.
 
 ## Milestone 8: Forms And Mailgun

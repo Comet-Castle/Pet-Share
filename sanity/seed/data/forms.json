@@ -20,7 +20,7 @@
       },
       "fields": [
         { "name": "name", "label": "Your name", "type": "text", "required": true, "helpText": null, "options": [] },
-        { "name": "email", "label": "Email", "type": "email", "required": true, "helpText": "We will only use this to reply about your fictional inquiry.", "options": [] },
+        { "name": "email", "label": "Email", "type": "email", "required": true, "helpText": "We will only use this to reply about your inquiry.", "options": [] },
         { "name": "message", "label": "Message", "type": "textarea", "required": true, "helpText": null, "options": [] }
       ]
     },
@@ -43,7 +43,7 @@
       },
       "fields": [
         { "name": "name", "label": "Your name", "type": "text", "required": true, "helpText": null, "options": [] },
-        { "name": "email", "label": "Email", "type": "email", "required": true, "helpText": "We will only use this to reply about your fictional pet inquiry.", "options": [] },
+        { "name": "email", "label": "Email", "type": "email", "required": true, "helpText": "We will only use this to reply about your pet inquiry.", "options": [] },
         { "name": "message", "label": "Message", "type": "textarea", "required": true, "helpText": "Mention any relevant slipper insurance.", "options": [] }
       ]
     },
@@ -52,13 +52,13 @@
       "type": "formDefinition",
       "title": "Pet Warranty Claim",
       "slug": { "current": "warranty" },
-      "description": "Report a fictional pet incident with the seriousness it absolutely does not deserve.",
+      "description": "Report a pet incident with the seriousness it absolutely does not deserve.",
       "formType": "warranty",
       "submitLabel": "File claim",
       "successMessage": {
         "headline": "Claim filed",
         "message": "Your warranty claim has entered the tiny clipboard system.",
-        "cta": { "label": "Browse pets", "link": { "type": "internalPath", "path": "/pets" }, "style": "secondary" }
+        "cta": { "label": "Find a temporary pet", "link": { "type": "internalPath", "path": "/pets" }, "style": "secondary" }
       },
       "errorMessage": {
         "headline": "The claim form escaped",

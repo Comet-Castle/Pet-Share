@@ -7,7 +7,7 @@ type RichTextProps = Readonly<{
 
 const richTextComponents: PortableTextComponents = {
   block: {
-    normal: ({ children }) => <p className="leading-8 text-pet-muted">{children}</p>,
+    normal: ({ children }) => <p className="leading-7 text-pet-muted">{children}</p>,
     h2: ({ children }) => <h2 className="font-display text-3xl font-bold text-pet-ink">{children}</h2>,
     h3: ({ children }) => <h3 className="font-display text-2xl font-bold text-pet-ink">{children}</h3>,
     blockquote: ({ children }) => (
@@ -21,8 +21,8 @@ const richTextComponents: PortableTextComponents = {
     number: ({ children }) => <ol className="list-decimal space-y-2 pl-5 text-pet-muted">{children}</ol>
   },
   listItem: {
-    bullet: ({ children }) => <li className="pl-1 leading-7">{children}</li>,
-    number: ({ children }) => <li className="pl-1 leading-7">{children}</li>
+    bullet: ({ children }) => <li className="pl-1 leading-6">{children}</li>,
+    number: ({ children }) => <li className="pl-1 leading-6">{children}</li>
   },
   marks: {
     textLink: ({ children, value }) => {
@@ -52,7 +52,7 @@ export function RichText({ value }: RichTextProps) {
   }
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-4">
       <PortableText value={value as PortableTextBlock[]} components={richTextComponents} />
     </div>
   );

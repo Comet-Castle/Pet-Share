@@ -26,6 +26,7 @@ export const sectionMembers = [
   defineArrayMember({ type: "featureList" }),
   defineArrayMember({ type: "accordion" }),
   defineArrayMember({ type: "pricingTier" }),
+  defineArrayMember({ type: "pricingComparisonTable" }),
   defineArrayMember({ type: "processStep" }),
   defineArrayMember({ type: "videoEmbed" }),
   defineArrayMember({ type: "ctaGroup" })
@@ -532,6 +533,96 @@ export const pricingTier = defineType({
   }
 });
 
+export const pricingComparisonTable = defineType({
+  name: "pricingComparisonTable",
+  title: "Pricing comparison table",
+  type: "object",
+  icon: Rows3,
+  fields: [
+    defineField({ name: "header", title: "Header", type: "sectionHeader" }),
+    defineField({
+      name: "plans",
+      title: "Plans",
+      type: "array",
+      of: [
+        defineArrayMember({
+          name: "comparisonPlan",
+          title: "Comparison plan",
+          type: "object",
+          fields: [
+            defineField({ name: "name", title: "Name", type: "string", validation: (rule) => rule.required() }),
+            defineField({ name: "price", title: "Price", type: "string" }),
+            defineField({ name: "note", title: "Note", type: "string" }),
+            defineField({ name: "highlighted", title: "Highlighted", type: "boolean", initialValue: false })
+          ],
+          preview: {
+            select: { title: "name", subtitle: "price" },
+            prepare({ title, subtitle }) {
+              return { title: title || "Plan", subtitle, media: ClipboardList };
+            }
+          }
+        })
+      ],
+      validation: (rule) => rule.min(2)
+    }),
+    defineField({
+      name: "rows",
+      title: "Rows",
+      type: "array",
+      of: [
+        defineArrayMember({
+          name: "comparisonRow",
+          title: "Comparison row",
+          type: "object",
+          fields: [
+            defineField({ name: "feature", title: "Feature", type: "string", validation: (rule) => rule.required() }),
+            defineField({ name: "description", title: "Description", type: "text", rows: 2 }),
+            defineField({
+              name: "values",
+              title: "Values",
+              type: "array",
+              of: [
+                defineArrayMember({
+                  name: "comparisonValue",
+                  title: "Comparison value",
+                  type: "object",
+                  fields: [
+                    defineField({ name: "planKey", title: "Plan key", type: "string", validation: (rule) => rule.required() }),
+                    defineField({ name: "included", title: "Included", type: "boolean", initialValue: true }),
+                    defineField({ name: "note", title: "Note", type: "string" })
+                  ],
+                  preview: {
+                    select: { title: "planKey", included: "included", subtitle: "note" },
+                    prepare({ title, included, subtitle }) {
+                      return { title: title || "Value", subtitle: subtitle || (included ? "Included" : "Not included") };
+                    }
+                  }
+                })
+              ],
+              validation: (rule) => rule.min(1)
+            })
+          ],
+          preview: {
+            select: { title: "feature", subtitle: "description" },
+            prepare({ title, subtitle }) {
+              return { title: title || "Feature row", subtitle, media: ListChecks };
+            }
+          }
+        })
+      ],
+      validation: (rule) => rule.min(1)
+    }),
+    defineField({ name: "cta", title: "CTA", type: "cta" })
+  ],
+  preview: {
+    select: { title: "header.headline", rows: "rows" },
+    prepare({ title, rows }) {
+      const count = Array.isArray(rows) ? rows.length : 0;
+      return { title: title || "Pricing comparison", subtitle: `${count} rows`, media: Rows3 };
+    }
+  }
+});
+
 export const processStep = defineType({
   name: "processStep",
   title: "Process step",
@@ -580,5 +671,6 @@ export const sectionObjects = [
   accordionItem,
   pricingTier,
   pricingFeature,
+  pricingComparisonTable,
   processStep
 ];

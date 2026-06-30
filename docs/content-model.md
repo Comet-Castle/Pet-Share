@@ -22,10 +22,11 @@ This document is a first-pass planning model for Pet Share's Sanity content. It 
 /pets/[slug]
 /owners/[slug]
 /contact
+/warranty
 /studio
 ```
 
-Route names can change, but these routes cover the main demo surfaces: generic marketing pages, marketplace-style pet listing pages, relationship-heavy detail pages, and a form-driven contact flow.
+Route names can change, but these routes cover the main demo surfaces: generic marketing pages, marketplace-style pet listing pages, relationship-heavy detail pages, and form-driven contact and warranty flows.
 
 There should not be a public owner directory. Owner detail pages can exist at direct URLs, but users should primarily reach them from pet listings or pet detail pages.
 
@@ -278,8 +279,8 @@ Suggested Sanity fields:
 - `portrait`: reusable `imageWithAlt` object.
 - `tagline`: short satirical owner summary.
 - `bio`: portable text or constrained rich text.
-- `location`: location text or reusable location object if needed later.
-- `ownerSince`: date or text field for satirical tenure.
+- `location`: public owner location in `City, Province` format.
+- `memberSince`: date field for when the owner joined Pet Share.
 - `pets`: optional manual references to `pet` documents; prefer querying inverse relationship from `pet.owner` if possible.
 - `testimonial`: optional reference to `testimonial`.
 - `contactCta`: reusable `cta` object.
@@ -289,7 +290,7 @@ Notes:
 
 - Owners should have a visible relationship to their pets.
 - Owner pages should include a section of associated pets.
-- Owner content should stay satirical but believable.
+- Owner content should feel like user-generated profile content: casual, specific, and lightly satirical rather than polished marketing copy.
 
 Revalidation:
 
@@ -306,7 +307,8 @@ Suggested Sanity fields:
 - `name`: pet display name.
 - `slug`: public pet detail slug.
 - `petType`: reference to a `petType` document.
-- `breed`: breed or satirical breed text.
+- `breed`: open plain-English breed, species, or variety label. Use realistic values such as "Golden Retriever", "Holland Lop", "Ball python", or "Cherry shrimp"; do not use fake content-type-like labels here.
+- `visualIdentity`: stable media-generation details for primary color, secondary color/detail, distinctive markings, and eye color. Use this to keep generated images of the same pet visually consistent across card, gallery, and future video prompts.
 - `ageYears`: numeric age value for display and future filtering, or `dateOfBirth` if the project later needs exact age calculation. Do not store pet age as a prose string.
 - `owner`: reference to the primary `owner` document.
 - `submittedBy`: reference to `owner`, initially useful for editor-created content and later useful for authenticated user submissions.
@@ -341,7 +343,8 @@ Notes:
 - Pet detail pages should lead with images and a right-side "About this pet" information panel on desktop.
 - Use icons for key facts such as age, species, temperament, chaos level, nap reliability, snack requirements, and pickup expectations.
 - Below the hero area, include a richer one- or two-paragraph description and a separate owner information block.
-- Seeded pet descriptions should include enough visual and personality detail to support AI-generated pet images during the seed operation.
+- Seeded pet descriptions and media prompts should include enough visual and personality detail to support AI-generated pet images during the seed operation.
+- Pet image and video prompts must account for the `breed` value and `visualIdentity` so generated media visually matches the selected breed, species, variety, color, and markings.
 - Pet pages should support embedded videos where useful, especially for playful pet-specific media.
 - The contact owner action should open a drawer form in the frontend.
 - Submission metadata should exist from day one so future user-submitted pet flows can extend the model without reshaping public pet pages.
@@ -401,7 +404,9 @@ Suggested Sanity fields:
 - `featured`: toggle for featured type groups.
 - `seo`: reusable `seo` object only if type landing pages are added in a later phase.
 
-Starter pet type categories:
+Starter pet type categories should be broad enough to demonstrate filtering across common, unusual, indoor, outdoor, aquatic, reptile/amphibian, and invertebrate companion animals. Category labels are for organization; individual pet type documents should still use real, recognizable pet types.
+
+Starter pet type examples:
 
 - Common household pets:
   - Dog

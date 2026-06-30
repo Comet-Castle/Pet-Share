@@ -2,20 +2,23 @@ import Image from "next/image";
 import Link from "next/link";
 import { Circle, Gauge, PawPrint, Sparkles } from "lucide-react";
 import type { PETS_INDEX_QUERY_RESULT } from "@/sanity.types";
-import { availabilityLabels, temperamentLabels } from "./status";
+import { availabilityLabels } from "./status";
 
 type PetCardData = PETS_INDEX_QUERY_RESULT[number];
 
 type PetCardProps = Readonly<{
   pet: PetCardData;
+  showSummary?: boolean;
 }>;
 
 /**
  * Renders a responsive pet listing card from the shared pet card query shape.
  */
-export function PetCard({ pet }: PetCardProps) {
-  const imageUrl = pet.cardMedia.image.image.asset?.url;
+export function PetCard({ pet, showSummary = true }: PetCardProps) {
+  const cardImage = pet.cardMedia?.image;
+  const imageUrl = cardImage?.image?.asset?.url;
   const availabilityLabel = availabilityLabels[pet.availabilityStatus];
+  const petTypeLabel = pet.petType?.filterLabel ?? "Pet";
 
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-[2rem] bg-white/70 shadow-soft backdrop-blur transition duration-200 hover:-translate-y-1">
@@ -24,7 +27,7 @@ export function PetCard({ pet }: PetCardProps) {
           {imageUrl ? (
             <Image
               src={imageUrl}
-              alt={pet.cardMedia.image.alt}
+              alt={cardImage?.alt ?? ""}
               fill
               sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 100vw"
               className="object-cover transition duration-300 group-hover:scale-[1.03]"
@@ -34,13 +37,19 @@ export function PetCard({ pet }: PetCardProps) {
               <PawPrint aria-hidden="true" size={44} />
             </div>
           )}
-          <div className="absolute left-4 top-4 inline-flex items-center gap-2 rounded-full bg-white/85 px-3 py-2 text-xs font-bold text-pet-ink shadow-soft backdrop-blur">
+          <div
+            className="group/status absolute left-4 top-4 inline-flex h-7 max-w-7 items-center justify-center overflow-hidden rounded-full bg-white px-[9px] text-xs font-bold text-pet-ink shadow-soft backdrop-blur transition-[max-width,padding] duration-200 ease-out hover:max-w-40 hover:justify-start hover:gap-2 hover:px-3"
+            aria-label={availabilityLabel}
+            title={availabilityLabel}
+          >
             <Circle
               aria-hidden="true"
               size={10}
-              className={pet.availabilityStatus === "available" ? "fill-pet-mint text-pet-mint" : "fill-pet-coral text-pet-coral"}
+              className={pet.availabilityStatus === "available" ? "shrink-0 fill-pet-mint text-pet-mint" : "shrink-0 fill-pet-coral text-pet-coral"}
             />
-            {availabilityLabel}
+            <span className="max-w-0 overflow-hidden whitespace-nowrap opacity-0 transition-[max-width,opacity] duration-200 ease-out group-hover/status:max-w-32 group-hover/status:opacity-100">
+              {availabilityLabel}
+            </span>
           </div>
         </div>
       </Link>
@@ -48,7 +57,7 @@ export function PetCard({ pet }: PetCardProps) {
         <div className="flex flex-wrap gap-2">
           <span className="inline-flex items-center gap-1 rounded-full bg-pet-blue/25 px-3 py-1 text-xs font-bold text-pet-ink">
             <Sparkles aria-hidden="true" size={14} />
-            {pet.petType.filterLabel}
+            {petTypeLabel}
           </span>
           <span className="inline-flex items-center gap-1 rounded-full bg-pet-mint/30 px-3 py-1 text-xs font-bold text-pet-ink">
             <Gauge aria-hidden="true" size={14} />
@@ -61,10 +70,7 @@ export function PetCard({ pet }: PetCardProps) {
           </Link>
         </h2>
         <p className="mt-2 text-sm font-bold text-pet-muted">{pet.listingHeadline}</p>
-        <p className="mt-3 flex-1 text-sm leading-6 text-pet-muted">{pet.listingSummary}</p>
-        <p className="mt-5 text-xs font-bold uppercase tracking-[0.14em] text-pet-muted">
-          {temperamentLabels[pet.temperament]} with {pet.owner.name}
-        </p>
+        {showSummary ? <p className="mt-3 flex-1 text-sm leading-6 text-pet-muted">{pet.listingSummary}</p> : null}
       </div>
     </article>
   );

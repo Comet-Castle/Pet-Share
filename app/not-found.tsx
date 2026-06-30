@@ -27,7 +27,7 @@ export default async function NotFoundPage() {
         primaryHref={page.primaryCta?.link.path ?? "/"}
         primaryLabel={page.primaryCta?.label ?? "Go home"}
         secondaryHref={page.secondaryCta?.link.path ?? "/pets"}
-        secondaryLabel={page.secondaryCta?.label ?? "Browse pets"}
+        secondaryLabel={page.secondaryCta?.label ?? "Find a temporary pet"}
       />
     );
   }
@@ -36,12 +36,12 @@ export default async function NotFoundPage() {
     <SystemMessage
       variant="notFound"
       eyebrow="404"
-      title="This page has been borrowed already."
+      title="This page wandered off during handoff."
       message="We checked under the couch and behind the treat jar. Nothing."
       primaryHref="/"
       primaryLabel="Go home"
       secondaryHref="/pets"
-      secondaryLabel="Browse pets"
+      secondaryLabel="Find a temporary pet"
     />
   );
 }

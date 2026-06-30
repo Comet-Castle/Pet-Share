@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     template: "%s | Pet Share"
   },
   description:
-    "A satirical Sanity and Next.js demo for temporarily sharing pets with extremely questionable references."
+    "A satirical marketplace for temporarily sharing pets with extremely questionable references."
 };
 
 type RootLayoutProps = Readonly<{

@@ -48,9 +48,36 @@ select {
   font: inherit;
 }
 
+a[href],
+button:not(:disabled),
+select:not(:disabled),
+summary,
+[role="button"]:not([aria-disabled="true"]),
+[role="link"]:not([aria-disabled="true"]),
+input[type="button"]:not(:disabled),
+input[type="checkbox"]:not(:disabled),
+input[type="file"]:not(:disabled),
+input[type="radio"]:not(:disabled),
+input[type="reset"]:not(:disabled),
+input[type="submit"]:not(:disabled) {
+  cursor: pointer;
+}
+
 ::selection {
   background: var(--color-pet-mint);
   color: var(--color-pet-ink);
+}
+
+@keyframes pet-gallery-image-enter {
+  from {
+    opacity: 0.72;
+    transform: scale(1.003);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

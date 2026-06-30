@@ -1,5 +1,5 @@
 import { defineQuery } from "next-sanity";
-import { ctaFields, imageWithAltFields, sectionFields, seoFields } from "./fragments";
+import { ctaFields, imageWithAltFields, petCardFields, sectionFields, seoFields } from "./fragments";
 
 export const HOME_PAGE_QUERY = defineQuery(/* groq */ `
   *[_id == "homePage"][0]{
@@ -35,18 +35,7 @@ export const HOME_PAGE_QUERY = defineQuery(/* groq */ `
       ${sectionFields}
     },
     featuredPets[]->{
-      _id,
-      name,
-      "slug": slug.current,
-      listingHeadline,
-      listingSummary,
-      availabilityStatus,
-      cardMedia{
-        image{
-          ${imageWithAltFields}
-        }
-      },
-      petType->{name, "slug": slug.current, icon, filterLabel}
+      ${petCardFields}
     },
     featuredOwners[]->{
       _id,
@@ -109,18 +98,7 @@ export const PET_INDEX_PAGE_QUERY = defineQuery(/* groq */ `
       ${sectionFields}
     },
     featuredPets[]->{
-      _id,
-      name,
-      "slug": slug.current,
-      listingHeadline,
-      listingSummary,
-      availabilityStatus,
-      cardMedia{
-        image{
-          ${imageWithAltFields}
-        }
-      },
-      petType->{name, "slug": slug.current, icon, filterLabel}
+      ${petCardFields}
     },
     contentSections[]{
       ${sectionFields}

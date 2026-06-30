@@ -201,6 +201,30 @@ export const sectionFields = /* groq */ `
       ${ctaFields}
     }
   },
+  _type == "pricingComparisonTable" => {
+    header,
+    plans[]{
+      _key,
+      name,
+      price,
+      note,
+      highlighted
+    },
+    rows[]{
+      _key,
+      feature,
+      description,
+      values[]{
+        _key,
+        planKey,
+        included,
+        note
+      }
+    },
+    cta{
+      ${ctaFields}
+    }
+  },
   _type == "processStep" => {
     title,
     description,
@@ -222,6 +246,7 @@ export const petCardFields = /* groq */ `
   _id,
   name,
   "slug": slug.current,
+  breed,
   listingHeadline,
   listingSummary,
   availabilityStatus,

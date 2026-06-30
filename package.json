@@ -13,6 +13,9 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "typegen": "sanity schema extract --enforce-required-fields && sanity typegen generate",
+    "seed:media": "node scripts/seed-media.mjs",
+    "seed:sanity": "node scripts/seed-sanity.mjs",
+    "seed:wizard": "node scripts/seed-wizard.mjs",
     "studio": "sanity dev",
     "studio:build": "sanity build"
   },

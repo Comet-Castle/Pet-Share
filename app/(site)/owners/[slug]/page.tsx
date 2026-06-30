@@ -20,9 +20,27 @@ export async function generateStaticParams() {
   return owners.map((owner) => ({ slug: owner.slug }));
 }
 
+function formatMemberSince(value: string | null | undefined) {
+  if (!value) return null;
+
+  const date = new Date(`${value}T00:00:00`);
+  if (Number.isNaN(date.getTime())) return value;
+
+  return new Intl.DateTimeFormat("en", { month: "long", year: "numeric" }).format(date);
+}
+
 export async function generateMetadata({ params }: OwnerSlugPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const owner = await loadOwnerBySlug(slug);
+  let owner: Awaited<ReturnType<typeof loadOwnerBySlug>> | null = null;
+
+  try {
+    owner = await loadOwnerBySlug(slug);
+  } catch {
+    return metadataFromSeo({
+      fallbackTitle: "Owner profile",
+      fallbackDescription: "This owner page is temporarily unavailable."
+    });
+  }
 
   if (!owner) {
     return metadataFromSeo({
@@ -43,14 +61,30 @@ export async function generateMetadata({ params }: OwnerSlugPageProps): Promise<
  */
 export default async function OwnerSlugPage({ params }: OwnerSlugPageProps) {
   const { slug } = await params;
-  const owner = await loadOwnerBySlug(slug);
+  let owner: Awaited<ReturnType<typeof loadOwnerBySlug>> | null = null;
+
+  try {
+    owner = await loadOwnerBySlug(slug);
+  } catch {
+    return (
+      <SystemMessage
+        variant="error"
+        eyebrow="Owner unavailable"
+        title="This owner stepped away from the handoff desk."
+        message="The owner profile could not be loaded right now. Try again after the handoff desk gets its papers sorted."
+        primaryHref="/pets"
+        primaryLabel="Find a temporary pet"
+      />
+    );
+  }
 
   if (!owner) {
     notFound();
   }
 
-  const portraitUrl = owner.portrait.image.asset?.url;
+  const portraitUrl = owner.portrait?.image?.asset?.url;
   const bio = portableTextToPlainText(owner.bio);
+  const memberSince = formatMemberSince(owner.memberSince);
 
   return (
     <article className="mx-auto w-full max-w-[1280px] px-5 py-12 sm:px-8 lg:px-10">
@@ -59,7 +93,7 @@ export default async function OwnerSlugPage({ params }: OwnerSlugPageProps) {
           {portraitUrl ? (
             <Image
               src={portraitUrl}
-              alt={owner.portrait.alt}
+              alt={owner.portrait?.alt ?? ""}
               fill
               priority
               sizes="(min-width: 1024px) 320px, 100vw"
@@ -79,7 +113,7 @@ export default async function OwnerSlugPage({ params }: OwnerSlugPageProps) {
           </h1>
           <p className="mt-4 text-xl font-bold text-pet-muted">{owner.tagline}</p>
           <p className="mt-6 max-w-3xl whitespace-pre-line leading-8 text-pet-muted">
-            {bio || "Owner biography will appear once seed content is published."}
+            {bio || "This owner has not finished filling out their profile yet."}
           </p>
           <div className="mt-6 flex flex-wrap gap-3 text-sm font-bold text-pet-muted">
             {owner.location ? (
@@ -88,10 +122,10 @@ export default async function OwnerSlugPage({ params }: OwnerSlugPageProps) {
                 {owner.location}
               </span>
             ) : null}
-            {owner.ownerSince ? (
+            {memberSince ? (
               <span className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2">
                 <CalendarDays aria-hidden="true" size={16} />
-                Owner since {owner.ownerSince}
+                Member since {memberSince}
               </span>
             ) : null}
           </div>
@@ -114,9 +148,9 @@ export default async function OwnerSlugPage({ params }: OwnerSlugPageProps) {
             variant="empty"
             eyebrow="No pets listed"
             title="This owner has temporarily reclaimed all chaos."
-            message="Owner pages are direct-link only, and this one is ready for pet relationships once seed content exists."
+            message="This owner does not have any pets available right now."
             primaryHref="/pets"
-            primaryLabel="Browse pets"
+            primaryLabel="Find a temporary pet"
           />
         )}
       </section>

@@ -51,8 +51,13 @@ export const owner = defineType({
       type: "portableText",
       validation: (rule) => rule.required()
     }),
-    defineField({ name: "location", title: "Location", type: "string" }),
-    defineField({ name: "ownerSince", title: "Owner since", type: "string" }),
+    defineField({
+      name: "location",
+      title: "Location",
+      type: "string",
+      description: "Public owner location in City, Province format."
+    }),
+    defineField({ name: "memberSince", title: "Member since", type: "date" }),
     defineField({
       name: "pets",
       title: "Manually featured pets",

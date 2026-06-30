@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CalendarDays, Gauge, HeartHandshake, MapPin, PawPrint, ShieldAlert } from "lucide-react";
+import { PetImageGallery } from "@/components/features/pets/pet-image-gallery";
+import { SystemMessage } from "@/components/features/system/system-message";
 import { Button } from "@/components/ui/button";
-import { portableTextToPlainText } from "@/lib/content/plain-text";
+import { RichText } from "@/components/ui/portable-text";
+import { SanityImage } from "@/components/ui/sanity-image";
 import { metadataFromSeo } from "@/lib/content/metadata";
 import { loadPetBySlug, loadPetSlugs } from "@/sanity/lib/loaders";
 import { availabilityLabels, cuddlePolicyLabels, temperamentLabels, urgencyLabels } from "@/components/features/pets/status";
@@ -23,7 +25,16 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: PetSlugPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const pet = await loadPetBySlug(slug);
+  let pet: Awaited<ReturnType<typeof loadPetBySlug>> | null = null;
+
+  try {
+    pet = await loadPetBySlug(slug);
+  } catch {
+    return metadataFromSeo({
+      fallbackTitle: "Pet listing",
+      fallbackDescription: "This pet listing is temporarily unavailable."
+    });
+  }
 
   if (!pet) {
     return metadataFromSeo({
@@ -44,47 +55,44 @@ export async function generateMetadata({ params }: PetSlugPageProps): Promise<Me
  */
 export default async function PetSlugPage({ params }: PetSlugPageProps) {
   const { slug } = await params;
-  const pet = await loadPetBySlug(slug);
+  let pet: Awaited<ReturnType<typeof loadPetBySlug>> | null = null;
+
+  try {
+    pet = await loadPetBySlug(slug);
+  } catch {
+    return (
+      <SystemMessage
+        variant="error"
+        eyebrow="Pet unavailable"
+        title="This pet is refusing to leave its blanket."
+        message="The listing could not be loaded right now. Try again after the household negotiations settle."
+        primaryHref="/pets"
+        primaryLabel="Back to pets"
+      />
+    );
+  }
 
   if (!pet) {
     notFound();
   }
 
-  const heroImage = pet.heroImages[0] ?? pet.cardMedia.image;
-  const heroImageUrl = heroImage.image.asset?.url;
-  const description = portableTextToPlainText(pet.description);
+  const galleryImages = [pet.cardMedia?.image, ...(pet.heroImages ?? [])].filter((image) => image?.image?.asset?.url);
+  const petTypeLabel = pet.petType?.filterLabel ?? "Pet";
+  const ownerName = pet.owner?.name ?? "A very tired owner";
 
   return (
     <article className="mx-auto w-full max-w-[1280px] px-5 py-12 sm:px-8 lg:px-10">
-      <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
-        <section className="overflow-hidden rounded-[2rem] bg-white/65 shadow-soft backdrop-blur">
-          <div className="relative aspect-[4/3] bg-pet-mint/25">
-            {heroImageUrl ? (
-              <Image
-                src={heroImageUrl}
-                alt={heroImage.alt}
-                fill
-                priority
-                sizes="(min-width: 1024px) 55vw, 100vw"
-                className="object-cover"
-              />
-            ) : (
-              <div className="flex h-full items-center justify-center text-pet-muted">
-                <PawPrint aria-hidden="true" size={64} />
-              </div>
-            )}
-          </div>
-        </section>
+      <div className="grid min-w-0 gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
+        <PetImageGallery images={galleryImages} petName={pet.name} />
 
-        <section className="rounded-[2rem] bg-white/75 p-6 shadow-soft backdrop-blur sm:p-8">
+        <section className="min-w-0 rounded-[2rem] bg-white/75 p-6 shadow-soft backdrop-blur sm:p-8">
           <p className="text-sm font-bold uppercase tracking-[0.18em] text-pet-muted">
-            {pet.petType.filterLabel}
+            {petTypeLabel}
           </p>
           <h1 className="mt-3 font-display text-4xl font-bold leading-tight text-pet-ink sm:text-5xl">
             {pet.name}
           </h1>
           <p className="mt-3 text-xl font-bold text-pet-muted">{pet.listingHeadline}</p>
-          <p className="mt-5 leading-7 text-pet-muted">{pet.listingSummary}</p>
 
           <dl className="mt-8 grid gap-3 sm:grid-cols-2">
             <div className="rounded-3xl bg-pet-mint/25 p-4">
@@ -126,33 +134,57 @@ export default async function PetSlugPage({ params }: PetSlugPageProps) {
         </section>
       </div>
 
-      <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_360px]">
+      <div className="mt-8 space-y-8">
         <section className="rounded-[2rem] bg-white/70 p-6 shadow-soft backdrop-blur sm:p-8">
           <h2 className="font-display text-3xl font-bold text-pet-ink">About {pet.name}</h2>
-          <p className="mt-4 whitespace-pre-line leading-8 text-pet-muted">
-            {description || pet.summary || "Full pet biography will render here when seeded Portable Text content exists."}
-          </p>
+          <div className="mt-4">
+            {pet.description?.length ? (
+              <RichText value={pet.description} />
+            ) : (
+              <p className="leading-7 text-pet-muted">
+                {pet.summary || "The owner has not finished explaining this pet yet."}
+              </p>
+            )}
+          </div>
         </section>
 
-        <aside className="space-y-5">
-          <section className="rounded-[2rem] bg-white/70 p-6 shadow-soft backdrop-blur" id="contact-owner">
-            <h2 className="font-display text-2xl font-bold text-pet-ink">Owner</h2>
-            <p className="mt-2 text-lg font-bold text-pet-ink">{pet.owner.name}</p>
-            <p className="mt-2 text-sm leading-6 text-pet-muted">{pet.owner.tagline}</p>
-            {pet.owner.location ? (
+        <section className="rounded-[2rem] bg-white/70 p-5 shadow-soft backdrop-blur sm:p-6" id="contact-owner">
+          <div className="grid gap-6 md:grid-cols-[220px_1fr] md:items-center lg:grid-cols-[280px_1fr]">
+            <SanityImage
+              image={pet.owner?.portrait ?? null}
+              sizes="(min-width: 1024px) 280px, (min-width: 768px) 220px, 100vw"
+              className="aspect-square rounded-[1.5rem]"
+              imageClassName="object-cover"
+            />
+
+            <div>
+              <p className="text-sm font-bold uppercase tracking-[0.18em] text-pet-muted">Owner</p>
+              <h2 className="mt-2 font-display text-3xl font-bold text-pet-ink">{ownerName}</h2>
+              <p className="mt-3 max-w-3xl text-base leading-7 text-pet-muted">
+                {pet.owner?.tagline ?? "Owner details are still being gathered from the handoff notes."}
+              </p>
+            {pet.owner?.location ? (
               <p className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-pet-muted">
                 <MapPin aria-hidden="true" size={16} />
                 {pet.owner.location}
               </p>
             ) : null}
-            <Link
-              href={`/owners/${pet.owner.slug}`}
-              className="mt-5 inline-flex rounded-full bg-pet-ink px-5 py-3 text-sm font-bold text-white transition hover:-rotate-1 focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2"
-            >
-              View owner page
-            </Link>
-          </section>
 
+              {pet.owner?.slug ? (
+                <div className="mt-5">
+                  <Link
+                    href={`/owners/${pet.owner.slug}`}
+                    className="inline-flex rounded-full bg-pet-ink px-5 py-3 text-sm font-bold text-white transition hover:-rotate-1 focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2"
+                  >
+                    View owner page
+                  </Link>
+                </div>
+              ) : null}
+            </div>
+          </div>
+        </section>
+
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(320px,420px)]">
           <section className="rounded-[2rem] bg-white/70 p-6 shadow-soft backdrop-blur">
             <h2 className="font-display text-2xl font-bold text-pet-ink">Borrowing terms</h2>
             <ul className="mt-4 space-y-3 text-sm leading-6 text-pet-muted">
@@ -177,7 +209,7 @@ export default async function PetSlugPage({ params }: PetSlugPageProps) {
               </ul>
             </section>
           ) : null}
-        </aside>
+        </div>
       </div>
     </article>
   );

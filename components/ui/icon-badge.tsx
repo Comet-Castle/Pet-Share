@@ -1,15 +1,24 @@
 import {
   AlertTriangle,
   BadgeDollarSign,
+  CalendarCheck,
   CheckCircle2,
+  ClipboardList,
   CircleHelp,
   HeartHandshake,
+  Home,
   type LucideIcon,
   Mail,
+  MessageCircle,
+  PackageCheck,
   PawPrint,
+  RotateCcw,
+  Search,
+  Send,
   ShieldAlert,
   Sparkles,
   Star,
+  UserPlus,
   Video
 } from "lucide-react";
 import { joinClassNames } from "@/lib/utils/class-names";
@@ -21,15 +30,24 @@ type IconBadgeProps = Readonly<{
 
 const iconMap: Record<string, LucideIcon> = {
   alert: AlertTriangle,
+  calendarCheck: CalendarCheck,
   check: CheckCircle2,
+  clipboardList: ClipboardList,
   contact: Mail,
   cta: Sparkles,
   heart: HeartHandshake,
+  home: Home,
   money: BadgeDollarSign,
+  messageCircle: MessageCircle,
+  packageCheck: PackageCheck,
   paw: PawPrint,
   price: BadgeDollarSign,
+  rotateCcw: RotateCcw,
+  search: Search,
+  send: Send,
   shield: ShieldAlert,
   star: Star,
+  userPlus: UserPlus,
   video: Video,
   warning: ShieldAlert
 };

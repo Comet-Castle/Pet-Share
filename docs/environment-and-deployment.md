@@ -176,11 +176,12 @@ Seed media generation is intentionally separate from normal app runtime.
 Rules:
 
 - AI agents must not run paid, metered, or quota-limited media generation commands.
-- A human must run `pnpm seed:media -- --mode preview` and `pnpm seed:media -- --mode batch`.
+- A human should start with `pnpm seed:wizard` for seed preview, approval, media package preparation, and Sanity population.
+- Provider-backed media commands such as `pnpm seed:media -- --mode preview` and `pnpm seed:media -- --mode batch` must be run by a human when they are implemented.
 - `GEMINI_API_KEY` is for local human-run generation only by default.
 - Generated review files go to `sanity/seed/generated/`, which is ignored by Git.
 - Approved files are copied into `sanity/seed/media/` before commit or Sanity upload.
-- Normal `pnpm seed` should replay saved seed data and approved media; it should not call Gemini or any other AI media provider.
+- Normal Sanity seed replay should use saved seed data and approved media; it should not call Gemini or any other AI media provider.
 
 ## Open Questions
 

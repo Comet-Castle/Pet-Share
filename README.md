@@ -66,7 +66,117 @@ The public scaffold is available at `http://localhost:3000/` during development.
 
 ## Seed Data
 
-Representative Milestone 1 seed data lives under `sanity/seed/`. These files define the sample JSON shape for future Sanity schemas and seed scripts; they are not the final 50-pet demo seed set.
+Seed data lives under `sanity/seed/`. The recommended seed workflow is the wizard. It covers the full demo dataset, including site settings, homepage, pet index page, system pages, marketing pages, pet types, owners, pets, testimonials, forms, and media prompts.
+
+```bash
+pnpm seed:wizard
+```
+
+The wizard validates required local environment values up front and then offers three workflow choices:
+
+1. **Quickly replace the website without media**: choose the generated pet count, generate and approve the content preview, purge existing seeded documents, and write fresh content to Sanity while skipping media approval and local media upload.
+2. **Quickly replace the website with approved local media**: choose the generated pet count, generate and approve the content preview, approve files already in `sanity/seed/media/`, purge existing seeded documents, and write fresh content/media references to Sanity.
+3. **Wizard steps**: use the full guided workflow for detailed content approval, media prompt packages, optional human-run inline media generation, media approval, optional purge, and final Sanity write.
+4. **Start fresh reset**: purge seeded Sanity documents without writing replacements, clear `sanity/seed/generated/`, and clear approved local media under `sanity/seed/media/`.
+
+The quick replace paths are meant for normal reseeding when you want to generate X pets and all content pages with minimal prompts. They do not call AI media providers. The final Sanity write still requires explicit confirmation and `SANITY_API_WRITE_TOKEN`.
+
+The start fresh reset path is intentionally destructive and requires a typed `RESET` confirmation. It preserves the committed seed template files under `sanity/seed/data/`.
+
+The detailed wizard path asks for `y/N` confirmation before each step:
+
+0. Validate required local environment values and print setup instructions for anything missing.
+1. Choose the generated pet count, defaulting to 50.
+2. Choose whether the media prompt package should cover all media or pet images only.
+3. Generate data preview files.
+4. Approve the full content preview.
+5. Prepare the media generation package for the selected media scope.
+6. Optionally generate preview or inline media from the prepared prompt package.
+7. Copy reviewed generated media into `sanity/seed/media/` and approve those reviewed media files.
+8. Optionally purge existing seeded Sanity documents.
+9. Populate Sanity with progress output.
+
+Choose the pet-only media scope when you want to skip owner portraits, page heroes, and marketing/background image prompts while keeping the full content dataset available for review and Sanity writes.
+
+Dependent media steps are skipped when an upstream media step is skipped. For example, if you skip media package preparation, the wizard will not ask to generate or approve media. If you skip media generation, it will not ask to approve newly generated media in that run.
+
+If Gemini returns a quota or rate-limit error during media generation, the wizard reports the model, retry hint, and quota details without recording media approval. Fix quota, billing, or model settings, or wait for the retry window, then rerun the wizard and choose the media generation step again.
+
+Media generation is inline-only. Inline generation calls the provider one prompt at a time, writes each generated file immediately, and prints status for each request, response, parse, and write step.
+
+Use the direct commands only when you need to run one seed step manually or debug the wizard.
+
+The underlying Sanity seed command is dry-run by default:
+
+```bash
+pnpm seed:sanity
+```
+
+To write local preview files for review:
+
+```bash
+pnpm seed:sanity -- --preview
+```
+
+To preview a different number of generated pets:
+
+```bash
+pnpm seed:sanity -- --preview --pet-count 25
+```
+
+To preview the full content dataset while preparing only pet image media prompts:
+
+```bash
+pnpm seed:sanity -- --preview --media-scope pets
+```
+
+To preview only the homepage document:
+
+```bash
+pnpm seed:sanity -- --preview --only homePage
+```
+
+To write seed content to the configured Sanity dataset, set `SANITY_API_WRITE_TOKEN` locally and run:
+
+```bash
+pnpm seed:sanity -- --confirm
+```
+
+Use the same `--pet-count` value for preview and confirm when running direct commands manually.
+
+To purge existing seeded documents before writing fresh seed content:
+
+```bash
+pnpm seed:sanity -- --confirm --purge
+```
+
+To purge existing seeded documents without writing replacement content:
+
+```bash
+pnpm seed:sanity -- --confirm --purge-only
+```
+
+To write content without uploading approved local media:
+
+```bash
+pnpm seed:sanity -- --confirm --skip-media-upload
+```
+
+To replace only the homepage in Sanity while preserving existing page media:
+
+```bash
+pnpm seed:sanity -- --confirm --only homePage --skip-media-upload
+```
+
+Normal seed replay does not call AI generation providers. It uses saved seed content and approved local media only. Preview and approval files are written under `sanity/seed/generated/`, which is ignored by Git.
+
+For preview and review steps, the wizard requires `NEXT_PUBLIC_SANITY_PROJECT_ID`, `NEXT_PUBLIC_SANITY_DATASET`, and `NEXT_PUBLIC_SANITY_API_VERSION`. The final Sanity write step also requires `SANITY_API_WRITE_TOKEN`. Missing values are reported with setup instructions.
+
+The media generation step requires `GEMINI_API_KEY` when confirmed provider calls are requested.
+
+Sanity document writes and optional purges use chunked batch mutations where dependencies allow it. Approved media uploads are still individual asset uploads because Sanity asset ingestion is separate from document mutations. All write steps print progress in `processed / total` format with the remaining count.
+
+Seed wizard and seed command output uses color-coded success, warning, and error states. Set `NO_COLOR=1` before running a seed command if you need plain output for logs or terminals that do not handle ANSI colors.
 
 ## Seed Media Generation
 
@@ -74,25 +184,33 @@ Seed media generation is planned as a human-approved workflow. AI agents may hel
 
 Media generation commands must be run by a human.
 
-Expected preview command:
+The wizard can run media generation as part of the guided flow. Direct preview command:
 
 ```bash
-pnpm seed:media -- --mode preview --pet pet-sir-nibbles
+pnpm seed:media -- --mode preview --pet pet-sir-nibbles --confirm
 ```
 
-Expected full batch command after preview approval:
+Expected full inline command after preview approval:
 
 ```bash
-pnpm seed:media -- --mode batch --confirm
+pnpm seed:media -- --mode inline --confirm
 ```
 
 Optional override example:
 
 ```bash
-pnpm seed:media -- --mode batch --provider gemini --model gemini-2.5-flash-image --count 5 --size 1024x1024 --confirm
+pnpm seed:media -- --mode inline --provider gemini --model gemini-2.5-flash-image --count 5 --size 1024x1024 --confirm
 ```
 
-Generated review files should be written to `sanity/seed/generated/`, which is ignored by Git. Approved files should be copied into `sanity/seed/media/` before they are committed or uploaded to Sanity.
+Inline generation is easier to monitor and resumes through smaller selected runs. Use `--count`, `--pet`, `--model`, and `--size` to keep cost and quota use controlled.
+
+If a Gemini image model has no available quota, retry with a small preview first after changing quota/billing/model settings:
+
+```bash
+pnpm seed:media -- --mode preview --count 1 --model gemini-2.5-flash-image --confirm
+```
+
+Generated review files should be written to `sanity/seed/generated/`, which is ignored by Git. Approved files must be copied into `sanity/seed/media/` before they are committed or uploaded to Sanity. The wizard can copy reviewed generated media during the media approval step.
 
 ## Environment Variables
 

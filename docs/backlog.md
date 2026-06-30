@@ -107,3 +107,35 @@ Constraints:
 - Keep validation lightweight but real enough to protect data shape and server-only credentials.
 - Do not expose Sanity write tokens to the browser.
 - Do not require this flow for the initial CMS demo launch.
+
+## Production Seed Media Strategy
+
+Goal:
+
+- Keep approved seed media available in the repo for deterministic reseeding, while avoiding unnecessary media payload in production deployments.
+
+Status:
+
+- Backlog candidate.
+- Should be resolved before deployment readiness if the committed media set grows materially beyond the current demo set.
+
+Problem:
+
+- Approved images under `sanity/seed/media/` are useful source assets for reseeding Sanity.
+- Production Vercel deployments do not need to serve those source files directly once they have been uploaded to Sanity assets.
+- Carrying large seed media directories into production builds can increase checkout size, upload time, cache pressure, and deployment noise.
+
+Options to evaluate:
+
+- Keep `sanity/seed/media/` committed, but exclude it from deployment output if Vercel/build tooling supports a clean project-level ignore path.
+- Move approved seed media into a separate repository, release artifact, or storage bucket and document how to fetch it before reseeding.
+- Keep lightweight manifests in Git and store binaries externally, with a script that verifies media availability before seed uploads.
+- Keep only a smaller representative media set in Git and document a full-media seed package as optional.
+- Use Git LFS only if the project accepts the hosting, bandwidth, cloning, and contributor workflow tradeoffs.
+
+Acceptance notes:
+
+- Normal website builds should not depend on local seed media after Sanity has been populated.
+- Reseeding should remain possible from a clean checkout plus documented media retrieval steps.
+- The chosen approach must not commit secrets, raw provider responses, or unreviewed generated files.
+- Update `README.md`, `docs/data-seeding-plan.md`, and deployment docs when the strategy is chosen.

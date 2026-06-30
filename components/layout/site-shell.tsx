@@ -22,12 +22,16 @@ const fallbackPrimaryNavigation: NavigationLink[] = [
   { label: "Pets", link: { type: "internalPath", path: "/pets", url: null, openInNewTab: null } },
   { label: "About", link: { type: "internalPath", path: "/about", url: null, openInNewTab: null } },
   { label: "Process", link: { type: "internalPath", path: "/process", url: null, openInNewTab: null } },
-  { label: "Pricing", link: { type: "internalPath", path: "/pricing", url: null, openInNewTab: null } }
+  { label: "Pricing", link: { type: "internalPath", path: "/pricing", url: null, openInNewTab: null } },
+  { label: "Contact", link: { type: "internalPath", path: "/contact", url: null, openInNewTab: null } },
+  { label: "Warranty", link: { type: "internalPath", path: "/warranty", url: null, openInNewTab: null } }
 ];
 
 const fallbackFooterNavigation: NavigationLink[] = [
   { label: "Pets", link: { type: "internalPath", path: "/pets", url: null, openInNewTab: null } },
-  { label: "Studio", link: { type: "internalPath", path: "/studio", url: null, openInNewTab: null } }
+  { label: "Process", link: { type: "internalPath", path: "/process", url: null, openInNewTab: null } },
+  { label: "Contact", link: { type: "internalPath", path: "/contact", url: null, openInNewTab: null } },
+  { label: "Warranty", link: { type: "internalPath", path: "/warranty", url: null, openInNewTab: null } }
 ];
 
 function getLinkHref(item: NavigationLink) {
@@ -81,12 +85,6 @@ export function SiteShell({ children, settings }: SiteShellProps) {
                 {isExternalLink(item) ? <ExternalLink aria-hidden="true" size={14} /> : null}
               </Link>
             ))}
-            <Link
-              href="/studio"
-              className="inline-flex min-h-10 items-center rounded-full bg-pet-ink px-4 py-2 text-sm font-bold text-white transition hover:rotate-1 hover:bg-pet-muted focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2"
-            >
-              Studio
-            </Link>
           </div>
         </nav>
       </header>
@@ -96,7 +94,7 @@ export function SiteShell({ children, settings }: SiteShellProps) {
           <div>
             <p className="font-display text-lg font-bold text-pet-ink">{siteTitle}</p>
             <p className="mt-1 max-w-xl text-sm">
-              A Sanity-powered demo marketplace for fictional pet-sharing decisions.
+              Temporary pet relief for households that need one quiet afternoon.
             </p>
           </div>
           <nav aria-label="Footer navigation" className="flex flex-wrap gap-2">

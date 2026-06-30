@@ -22,7 +22,7 @@ type SectionPlaceholdersProps = Readonly<{
 }>;
 
 function getSectionTitle(section: SectionLike) {
-  return section.headline ?? section.title ?? section.header?.headline ?? section._type ?? "CMS section";
+  return section.headline ?? section.title ?? section.header?.headline ?? section._type ?? "Pet Share section";
 }
 
 function getStringValue(value: unknown) {
@@ -38,7 +38,7 @@ function getSectionSummary(section: SectionLike) {
  */
 export function SectionPlaceholders({
   sections,
-  emptyLabel = "CMS sections will appear here after content is seeded."
+  emptyLabel = "This section is still being negotiated by the pets."
 }: SectionPlaceholdersProps) {
   if (!sections?.length) {
     return (

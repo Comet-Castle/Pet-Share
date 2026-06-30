@@ -93,7 +93,7 @@ export const PET_BY_SLUG_QUERY = defineQuery(/* groq */ `
         ${portableTextFields}
       },
       location,
-      ownerSince,
+      memberSince,
       portrait{
         ${imageWithAltFields}
       },

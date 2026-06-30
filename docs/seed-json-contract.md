@@ -160,7 +160,7 @@ Top-level shape:
       "slug": { "current": "brother-maynard" },
       "portrait": {
         "assetKey": "owner-brother-maynard-portrait",
-        "alt": "A fictional medieval-adjacent caretaker holding a clipboard and looking concerned.",
+        "alt": "A medieval-adjacent caretaker holding a clipboard and looking concerned.",
         "role": "ownerPortrait"
       },
       "tagline": "Caretaker of small problems with large warning labels.",
@@ -171,17 +171,17 @@ Top-level shape:
           "children": [
             {
               "_type": "span",
-              "text": "Brother Maynard has spent years cataloging tiny household risks, most of which fit in a picnic basket."
+              "text": "Brother Maynard filled out this profile at 11:42 p.m. after deciding the pet situation had become more of a community opportunity."
             }
           ]
         }
       ],
-      "location": "A very drafty stone-adjacent townhouse",
-      "ownerSince": "Several incidents ago",
+      "location": "Hamilton, ON",
+      "memberSince": "2020-04-18",
       "testimonialSeedId": null,
       "seo": {
         "title": "Brother Maynard | Pet Share",
-        "description": "Meet the fictional caretaker behind one of Pet Share's most compact liabilities.",
+        "description": "Meet the caretaker behind one of Pet Share's most compact liabilities.",
         "openGraphImageAssetKey": "owner-brother-maynard-portrait",
         "noIndex": false
       }
@@ -204,14 +204,14 @@ Top-level shape:
       "name": "Sir Nibbles",
       "slug": { "current": "sir-nibbles" },
       "petTypeSeedId": "petType-rabbit",
-      "breed": "Tiny white rabbit of disputed temperament",
+      "breed": "Holland Lop",
       "ageYears": 3,
       "ownerSeedId": "owner-brother-maynard",
       "submittedByOwnerSeedId": "owner-brother-maynard",
       "submissionStatus": "approved",
-      "source": "demoSeed",
+      "source": "userSubmitted",
       "listingHeadline": "Small rabbit. Large waiver.",
-      "listingSummary": "Ideal for borrowers who want a quiet weekend and have already made peace with their slippers.",
+      "listingSummary": "Brother Mynrd here: Sir Nibbles is tiny, white, smug, swift, soft, & weirdly keen on cords.",
       "availabilityStatus": "available",
       "temperament": "regal",
       "pickupUrgency": "withinSevenDays",
@@ -221,7 +221,7 @@ Top-level shape:
       "energyLevel": 3,
       "imageTargetCount": 8,
       "mediaPrompt": {
-        "basePrompt": "A tiny white rabbit with suspiciously regal confidence, bright friendly modern marketplace photography, airy pastel interior, soft daylight, playful satirical danger cues, not scary, not violent.",
+        "basePrompt": "A Holland Lop rabbit with suspiciously regal confidence, accurate lop ears and compact rabbit proportions, bright friendly modern marketplace photography, airy pastel interior, soft daylight, playful satirical danger cues, not scary, not violent.",
         "globalNegativePrompt": "No blood, no weapons, no fear, no animal distress, no official movie stills, no exact copyrighted character likeness.",
         "imagePrompts": [
           {
@@ -266,7 +266,6 @@ Top-level shape:
           "role": "gallery"
         }
       ],
-      "summary": "A compact guest with excellent posture and a strict interpretation of personal space.",
       "description": [
         {
           "_type": "block",
@@ -274,7 +273,17 @@ Top-level shape:
           "children": [
             {
               "_type": "span",
-              "text": "Sir Nibbles is a bright-eyed rabbit with soft fur, ceremonial confidence, and a surprising ability to make adults whisper near furniture."
+              "text": "Brother Mynrd here: Sir Nibbles is tiny, white, smug, swift, soft, & weirdly keen on cords."
+            }
+          ]
+        },
+        {
+          "_type": "block",
+          "style": "normal",
+          "children": [
+            {
+              "_type": "span",
+              "text": "Translation from the office: he chewed the A key, then sat beside the keyboard with the calm confidence of a rabbit who had improved the document. Please borrow him before the next warning label has to be handwritten."
             }
           ]
         }
@@ -293,7 +302,7 @@ Top-level shape:
       "borrowTerms": [
         {
           "title": "Return with the same number of opinions",
-          "description": "Additional opinions may incur a fictional processing fee.",
+          "description": "Additional opinions may incur a processing fee and one stern follow-up note.",
           "icon": "clipboardCheck"
         }
       ],
@@ -341,7 +350,7 @@ Rules:
       "type": "testimonial",
       "quote": "A very quiet visitor, except for the part where everyone in the room began negotiating with a rabbit.",
       "authorName": "Gwen From Next Door",
-      "authorRole": "Borrower with surviving slippers",
+      "authorRole": "Temporary host with surviving slippers",
       "authorImage": null,
       "relatedPetSeedId": "pet-sir-nibbles",
       "relatedOwnerSeedId": "owner-brother-maynard",
@@ -386,7 +395,7 @@ Rules:
           "label": "Email",
           "type": "email",
           "required": true,
-          "helpText": "We will only use this to reply about your fictional pet inquiry.",
+          "helpText": "We will only use this to reply about your pet inquiry.",
           "options": []
         },
         {
@@ -418,7 +427,7 @@ Use `pages.json` for singletons and marketing pages so the page-builder seed sha
       "description": "A satirical pet-sharing marketplace for people who need a very temporary break.",
       "defaultSeo": {
         "title": "Pet Share",
-        "description": "Borrowable pets, questionable peace of mind.",
+        "description": "Temporary pets, questionable peace of mind.",
         "openGraphImageAssetKey": "page-default-og",
         "noIndex": false
       },
@@ -434,7 +443,7 @@ Use `pages.json` for singletons and marketing pages so the page-builder seed sha
       "sanityId": "homePage",
       "type": "homePage",
       "seo": {
-        "title": "Pet Share | Borrowable Pets",
+        "title": "Pet Share | Temporary Pets",
         "description": "A bright, friendly, deeply unserious marketplace for temporary pet relief.",
         "openGraphImageAssetKey": "home-og",
         "noIndex": false
@@ -445,7 +454,7 @@ Use `pages.json` for singletons and marketing pages so the page-builder seed sha
           "headline": "Has your dog thrown up in the bed recently?",
           "body": "Lend him out for a couple days. Someone else deserves character development.",
           "imageAssetKey": "home-hero-dog-01",
-          "cta": { "label": "Browse available chaos", "link": { "type": "internalPath", "path": "/pets" }, "style": "primary" }
+          "cta": { "label": "Find a temporary pet", "link": { "type": "internalPath", "path": "/pets" }, "style": "primary" }
         }
       ],
       "featuredPetSeedIds": ["pet-sir-nibbles"],
@@ -458,17 +467,17 @@ Use `pages.json` for singletons and marketing pages so the page-builder seed sha
       "type": "petIndexPage",
       "seo": {
         "title": "Available Pets | Pet Share",
-        "description": "Browse temporary companions with permanent opinions.",
+        "description": "Find temporary companions with permanent opinions.",
         "openGraphImageAssetKey": "pet-index-og",
         "noIndex": false
       },
       "hero": {
         "_type": "hero",
-        "headline": "Browse available chaos.",
+        "headline": "Find pets near you.",
         "body": "Find a temporary roommate with strong opinions.",
         "imageAssetKey": "pet-index-hero",
         "ctaGroup": {
-          "primary": { "label": "Start browsing", "link": { "type": "internalPath", "path": "/pets" }, "style": "primary" },
+          "primary": { "label": "Find a temporary pet", "link": { "type": "internalPath", "path": "/pets" }, "style": "primary" },
           "secondary": null
         }
       },
@@ -494,9 +503,9 @@ Use `pages.json` for singletons and marketing pages so the page-builder seed sha
       },
       "eyebrow": "404",
       "headline": "This pet has slipped its collar.",
-      "message": "The page you are looking for wandered off before we could attach the tiny bell. Try the available pets or head home.",
+      "message": "The page you are looking for wandered off before we could attach the tiny bell. Try the pet listings or head home.",
       "imageAssetKey": "system-not-found",
-      "primaryCta": { "label": "Browse available pets", "link": { "type": "internalPath", "path": "/pets" }, "style": "primary" },
+      "primaryCta": { "label": "Find a temporary pet", "link": { "type": "internalPath", "path": "/pets" }, "style": "primary" },
       "secondaryCta": { "label": "Go home", "link": { "type": "internalPath", "path": "/" }, "style": "secondary" },
       "supportCopy": null,
       "contentSections": []
@@ -513,7 +522,7 @@ Use `pages.json` for singletons and marketing pages so the page-builder seed sha
       },
       "eyebrow": "500",
       "headline": "Something chewed through the server cable.",
-      "message": "Pet Share hit a problem while fetching the good stuff. Try again in a moment or browse pets that are behaving for now.",
+      "message": "Pet Share hit a problem while fetching the good stuff. Try again in a moment or check the listings that are behaving for now.",
       "imageAssetKey": "system-server-error",
       "primaryCta": { "label": "Try the pet listings", "link": { "type": "internalPath", "path": "/pets" }, "style": "primary" },
       "secondaryCta": { "label": "Go home", "link": { "type": "internalPath", "path": "/" }, "style": "secondary" },
@@ -532,9 +541,9 @@ Use `pages.json` for singletons and marketing pages so the page-builder seed sha
       },
       "eyebrow": "Error",
       "headline": "The pets knocked something over.",
-      "message": "Something went wrong, but the site is still trying to look innocent. Try again or head back to the available pets.",
+      "message": "Something went wrong, but the site is still trying to look innocent. Try again or head back to the pet listings.",
       "imageAssetKey": "system-generic-error",
-      "primaryCta": { "label": "Browse pets", "link": { "type": "internalPath", "path": "/pets" }, "style": "primary" },
+      "primaryCta": { "label": "Find a temporary pet", "link": { "type": "internalPath", "path": "/pets" }, "style": "primary" },
       "secondaryCta": { "label": "Go home", "link": { "type": "internalPath", "path": "/" }, "style": "secondary" },
       "supportCopy": null,
       "contentSections": []
@@ -549,14 +558,14 @@ Use `pages.json` for singletons and marketing pages so the page-builder seed sha
       "summary": "How temporary pet relief becomes somebody else's short-term problem.",
       "seo": {
         "title": "Process | Pet Share",
-        "description": "Learn how Pet Share's fictional pet borrowing process works.",
+        "description": "Learn how Pet Share's temporary pet stay process works.",
         "openGraphImageAssetKey": "process-og",
         "noIndex": false
       },
       "hero": {
         "_type": "hero",
         "headline": "A simple process with several disclaimers.",
-        "body": "Submit interest, await a highly fictional approval, and pick up the pet within seven days.",
+        "body": "Submit interest, await owner approval, and pick up the pet within seven days.",
         "imageAssetKey": "process-hero",
         "ctaGroup": null
       },
@@ -571,7 +580,7 @@ Use `pages.json` for singletons and marketing pages so the page-builder seed sha
         }
       ],
       "primaryCta": {
-        "label": "Browse pets",
+        "label": "Find a temporary pet",
         "link": { "type": "internalPath", "path": "/pets" },
         "style": "primary"
       },

@@ -50,6 +50,18 @@ export const pet = defineType({
     }),
     defineField({ name: "breed", title: "Breed", type: "string" }),
     defineField({
+      name: "visualIdentity",
+      title: "Visual identity",
+      type: "object",
+      description: "Stable visual details used to keep generated pet images consistent across shots.",
+      fields: [
+        defineField({ name: "primaryColor", title: "Primary color", type: "string" }),
+        defineField({ name: "secondaryColor", title: "Secondary detail", type: "string" }),
+        defineField({ name: "markings", title: "Distinctive markings", type: "string" }),
+        defineField({ name: "eyeColor", title: "Eye color", type: "string" })
+      ]
+    }),
+    defineField({
       name: "ageYears",
       title: "Age in years",
       type: "number",

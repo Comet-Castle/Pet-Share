@@ -7,14 +7,14 @@
       "name": "Sir Nibbles",
       "slug": { "current": "sir-nibbles" },
       "petTypeSeedId": "petType-rabbit",
-      "breed": "Tiny white rabbit of disputed temperament",
+      "breed": "Holland Lop",
       "ageYears": 3,
       "ownerSeedId": "owner-brother-maynard",
       "submittedByOwnerSeedId": "owner-brother-maynard",
       "submissionStatus": "approved",
-      "source": "demoSeed",
+      "source": "userSubmitted",
       "listingHeadline": "Small rabbit. Large waiver.",
-      "listingSummary": "Ideal for borrowers who want a quiet weekend and have already made peace with their slippers.",
+      "listingSummary": "Brother Mynrd here: Sir Nibbles is tiny, white, smug, swift, soft, & weirdly keen on cords.",
       "availabilityStatus": "available",
       "temperament": "regal",
       "pickupUrgency": "withinSevenDays",
@@ -79,7 +79,6 @@
           "role": "gallery"
         }
       ],
-      "summary": "A compact guest with excellent posture and a strict interpretation of personal space.",
       "description": [
         {
           "_type": "block",
@@ -87,7 +86,7 @@
           "children": [
             {
               "_type": "span",
-              "text": "Sir Nibbles is a bright-eyed rabbit with soft fur, ceremonial confidence, and a surprising ability to make adults whisper near furniture. He looks harmless in direct sunlight, which is part of the scheduling strategy."
+              "text": "Brother Mynrd here: Sir Nibbles is tiny, white, smug, swift, soft, & weirdly keen on cords."
             }
           ]
         },
@@ -97,7 +96,7 @@
           "children": [
             {
               "_type": "span",
-              "text": "He is best suited for borrowers who appreciate quiet companionship, firm boundaries, and pets who arrive with both a snack preference and a legal department. Do not be fooled by the compact packaging."
+              "text": "Translation from the office: he chewed the A key, then sat beside the keyboard with the calm confidence of a rabbit who had improved the document. Please borrow him before the next warning label has to be handwritten."
             }
           ]
         }
@@ -116,7 +115,7 @@
       "borrowTerms": [
         {
           "title": "Return with the same number of opinions",
-          "description": "Additional opinions may incur a fictional processing fee.",
+          "description": "Additional opinions may incur a processing fee and one stern follow-up note.",
           "icon": "clipboardCheck"
         }
       ],
@@ -148,14 +147,14 @@
       "name": "Muffin",
       "slug": { "current": "muffin" },
       "petTypeSeedId": "petType-dog",
-      "breed": "Optimistic medium dog with upholstery opinions",
+      "breed": "Cavalier King Charles Spaniel",
       "ageYears": 5,
       "ownerSeedId": "owner-dana-muffins",
       "submittedByOwnerSeedId": "owner-dana-muffins",
       "submissionStatus": "approved",
-      "source": "demoSeed",
+      "source": "userSubmitted",
       "listingHeadline": "Recently washed. Emotionally available.",
-      "listingSummary": "A cheerful dog for anyone whose bed has not recently experienced enough plot.",
+      "listingSummary": "Muffin is available because I would like to sit on my own couch without being emotionally processed by a damp tennis ball.",
       "availabilityStatus": "available",
       "temperament": "enthusiastic",
       "pickupUrgency": "flexible",
@@ -210,7 +209,6 @@
           "role": "gallery"
         }
       ],
-      "summary": "A sunny dog with a generous heart and several textile-related disclaimers.",
       "description": [
         {
           "_type": "block",
@@ -218,7 +216,7 @@
           "children": [
             {
               "_type": "span",
-              "text": "Muffin is the kind of dog who enters a room like he has been invited to an awards show for blankets. He is affectionate, eager, and convinced that every visitor is here to admire his latest emotional breakthrough."
+              "text": "Muffin is available because I would like to sit on my own couch without being emotionally processed by a damp tennis ball. He is affectionate, eager, and his feelings occupy most of the room."
             }
           ]
         },
@@ -228,7 +226,7 @@
           "children": [
             {
               "_type": "span",
-              "text": "Borrowers should enjoy walks, soft ears, and the possibility of laundering something earlier than planned. In exchange, Muffin provides world-class morale support and a face that makes refunds feel rude."
+              "text": "Please take him for walks, tell him he is doing a good job, and do not let him convince you that every blanket is community property. I will pack the towel. You will understand why."
             }
           ]
         }
@@ -279,14 +277,14 @@
       "name": "Pip After Midnight",
       "slug": { "current": "pip-after-midnight" },
       "petTypeSeedId": "petType-cat",
-      "breed": "Wide-eyed house cat with strict snack bylaws",
+      "breed": "Domestic Shorthair",
       "ageYears": 2,
       "ownerSeedId": "owner-dana-muffins",
       "submittedByOwnerSeedId": "owner-dana-muffins",
       "submissionStatus": "approved",
-      "source": "demoSeed",
+      "source": "userSubmitted",
       "listingHeadline": "Cute. Rule-bound. Do not improvise.",
-      "listingSummary": "A soft little cat for borrowers who can follow a snack policy with courtroom precision.",
+      "listingSummary": "Pip is sweet, tiny, and not to be fed after the printed snack window. I laminated the schedule because optimism failed.",
       "availabilityStatus": "limited",
       "temperament": "sweetUntilProcedural",
       "pickupUrgency": "scheduledOnly",
@@ -341,7 +339,6 @@
           "role": "gallery"
         }
       ],
-      "summary": "A soft, adorable cat with snack rules that should be read before signing anything.",
       "description": [
         {
           "_type": "block",
@@ -349,7 +346,7 @@
           "children": [
             {
               "_type": "span",
-              "text": "Pip is sweet, tiny, and almost aggressively charming, with round eyes that make every rule feel optional until it is very much not optional. The snack schedule is laminated for reasons Dana will only describe as historical."
+              "text": "Dana again. Pip is sweet, tiny, and not to be fed after the printed snack window. I laminated the schedule because optimism failed and because Pip has the face of someone who has already found a loophole."
             }
           ]
         },
@@ -359,7 +356,7 @@
           "children": [
             {
               "_type": "span",
-              "text": "Best for borrowers who enjoy quiet companionship, tidy kitchens, and following printed instructions. Pip rewards compliance with gentle head bumps and punishes improvisation with prolonged eye contact from a shelf."
+              "text": "Good fit for someone who likes quiet companionship and can say, with confidence, \"No, the card says not yet.\" If Pip climbs onto a shelf and watches you think, that is normal. Do not improvise to break the tension."
             }
           ]
         }

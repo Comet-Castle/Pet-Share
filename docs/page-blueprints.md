@@ -524,7 +524,7 @@ Content:
 - Portrait.
 - Tagline.
 - Short bio excerpt.
-- Owner since or location when useful.
+- Member since date or city/province location when useful.
 - Associated pets by inverse `pet.owner` query when practical.
 
 Behavior:
@@ -742,19 +742,19 @@ Content:
 - `owner.name`
 - `owner.tagline`
 - `owner.location`
-- `owner.ownerSince`
+- `owner.memberSince`
 - Optional trust/stat facts, if added later.
 
 Visual direction:
 
 - Portrait-forward and friendly.
-- Owner should feel lightly exhausted but trustworthy.
+- Owner should feel like a public user profile: casual, specific, lightly exhausted, and trustworthy.
 - Use rounded image treatment and soft/glass surfaces rather than borders.
 
 Example copy direction:
 
 - "Dana has shared two pets, one couch, and several warnings about unattended muffins."
-- "Certified provider of temporary pet problems since last Tuesday."
+- "Member since March 2021, emotionally since the first rug incident."
 
 Responsive behavior:
 
@@ -872,7 +872,7 @@ Owner detail query projection should include:
 - `tagline`
 - `bio`
 - `location`
-- `ownerSince`
+- `memberSince`
 - `testimonial`
 - `contactCta`
 - `seo`

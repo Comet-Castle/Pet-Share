@@ -371,7 +371,7 @@ Example detail copy:
 - "This small white rabbit appears harmless from a distance, which is exactly how he prefers to begin negotiations."
 - "Pip is sweet, wide-eyed, and extremely clear about his snack schedule. The care sheet includes several rules that sound decorative until 12:01 a.m."
 
-Detail descriptions should usually be longer than listing copy. Aim for one or two short paragraphs that describe the pet's look, personality, habits, borrowability, and specific comedic problem. These descriptions should be rich enough to support both the page content and AI image generation during seeding.
+Detail descriptions should usually be longer than listing copy. Aim for one or two short paragraphs written in first person from the owner's perspective as the person trying to lend out the pet. Listing summaries should feel like compact excerpts of those descriptions, not unrelated taglines. They should describe the pet's personality, habits, borrowability, why the pet is being listed, and the specific comedic household problem. Keep breed/species detail in structured fields and media prompts instead of making it a default sentence in the description, unless it directly supports a joke. Vary the structure heavily between pets so the seed content does not feel templated; occasional pet-specific gimmicks are fine when they are readable and not overused. These descriptions should be rich enough to support both the page content and AI image generation during seeding.
 
 ### Owner Pages
 

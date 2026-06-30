@@ -12,6 +12,23 @@ type SanityFetchOptions = Readonly<{
 }>;
 
 const defaultRevalidateSeconds = 3600;
+const defaultSanityTimeoutMs = 15000;
+
+function withSanityTimeout<Result>(promise: Promise<Result>, timeoutMs = defaultSanityTimeoutMs) {
+  let timeout: ReturnType<typeof setTimeout> | undefined;
+
+  const timeoutPromise = new Promise<never>((_, reject) => {
+    timeout = setTimeout(() => {
+      reject(new Error(`Sanity fetch timed out after ${timeoutMs}ms.`));
+    }, timeoutMs);
+  });
+
+  return Promise.race([promise, timeoutPromise]).finally(() => {
+    if (timeout) {
+      clearTimeout(timeout);
+    }
+  });
+}
 
 /**
  * Fetches published Sanity content without requiring private tokens.
@@ -25,12 +42,14 @@ export async function sanityFetch<Result>({
 }: SanityFetchOptions): Promise<Result> {
   const client = useCdn ? sanityClient : uncachedSanityClient;
 
-  return client.fetch<Result>(query, params, {
-    next: {
-      revalidate,
-      tags
-    }
-  });
+  return withSanityTimeout(
+    client.fetch<Result>(query, params, {
+      next: {
+        revalidate,
+        tags
+      }
+    })
+  );
 }
 
 /**
@@ -41,10 +60,12 @@ export async function previewSanityFetch<Result>({
   params = {},
   tags = []
 }: Omit<SanityFetchOptions, "perspective" | "revalidate" | "useCdn">): Promise<Result> {
-  return createPreviewClient().fetch<Result>(query, params, {
-    cache: "no-store",
-    next: {
-      tags
-    }
-  });
+  return withSanityTimeout(
+    createPreviewClient().fetch<Result>(query, params, {
+      cache: "no-store",
+      next: {
+        tags
+      }
+    })
+  );
 }

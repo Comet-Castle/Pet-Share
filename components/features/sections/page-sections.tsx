@@ -42,7 +42,7 @@ function SectionHeader({ header }: Readonly<{ header: SectionHeaderValue }>) {
   }
 
   return (
-    <div className={joinClassNames("mb-8 max-w-3xl", header.alignment === "center" && "mx-auto text-center")}>
+    <div className={joinClassNames("mb-8", header.alignment === "center" && "mx-auto max-w-3xl text-center")}>
       {header.eyebrow ? (
         <p className="text-sm font-bold uppercase tracking-[0.18em] text-pet-muted">{header.eyebrow}</p>
       ) : null}
@@ -315,6 +315,74 @@ function PricingTier(section: SectionByType<"pricingTier">) {
   );
 }
 
+function PricingComparisonTable(section: SectionByType<"pricingComparisonTable">) {
+  const plans = section.plans ?? [];
+
+  return (
+    <SectionFrame>
+      <SectionHeader header={section.header} />
+      <div className="overflow-x-auto rounded-[2rem] bg-white/75 shadow-soft backdrop-blur">
+        <table className="w-full min-w-[760px] border-separate border-spacing-0 text-left">
+          <thead>
+            <tr>
+              <th className="w-[34%] p-5 font-display text-xl font-bold text-pet-ink">Feature</th>
+              {plans.map((plan) => (
+                <th
+                  key={plan._key}
+                  className={joinClassNames(
+                    "p-5 align-top",
+                    plan.highlighted && "bg-pet-mint/25"
+                  )}
+                >
+                  <span className="block font-display text-xl font-bold text-pet-ink">{plan.name}</span>
+                  {plan.price ? <span className="mt-1 block text-lg font-bold text-pet-coral">{plan.price}</span> : null}
+                  {plan.note ? <span className="mt-1 block text-sm font-bold text-pet-muted">{plan.note}</span> : null}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {section.rows?.map((row) => (
+              <tr key={row._key} className="border-t border-pet-ink/10">
+                <th className="border-t border-pet-ink/10 p-5 align-top">
+                  <span className="block font-bold text-pet-ink">{row.feature}</span>
+                  {row.description ? <span className="mt-1 block text-sm leading-6 text-pet-muted">{row.description}</span> : null}
+                </th>
+                {plans.map((plan) => {
+                  const value = row.values?.find((item) => item.planKey === plan._key || item.planKey === plan.name);
+                  const included = value?.included ?? false;
+
+                  return (
+                    <td
+                      key={`${row._key}-${plan._key}`}
+                      className={joinClassNames(
+                        "border-t border-pet-ink/10 p-5 align-top text-sm font-bold text-pet-muted",
+                        plan.highlighted && "bg-pet-mint/20"
+                      )}
+                    >
+                      <span className="inline-flex items-start gap-2">
+                        {included ? (
+                          <CheckCircle2 aria-hidden="true" className="mt-0.5 shrink-0 text-pet-ink" size={18} />
+                        ) : (
+                          <AlertTriangle aria-hidden="true" className="mt-0.5 shrink-0 text-pet-coral" size={18} />
+                        )}
+                        <span>{value?.note ?? (included ? "Included" : "Not included")}</span>
+                      </span>
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div className="mt-6">
+        <SectionCtaLink cta={section.cta} />
+      </div>
+    </SectionFrame>
+  );
+}
+
 function ProcessStep(section: SectionByType<"processStep">) {
   return (
     <SectionFrame className="py-6">
@@ -383,7 +451,7 @@ function CtaGroupSection(section: SectionByType<"ctaGroup">) {
   return (
     <SectionFrame>
       <div className="rounded-[2rem] bg-pet-blue/20 p-6 text-center shadow-soft sm:p-8">
-        <p className="font-display text-3xl font-bold text-pet-ink">Ready to borrow questionable judgment?</p>
+        <p className="font-display text-3xl font-bold text-pet-ink">Ready for short-term questionable judgment?</p>
         <SectionCtaGroup group={section as CtaGroupValue} />
       </div>
     </SectionFrame>
@@ -414,6 +482,8 @@ function renderSection(section: PageSection) {
       return <AccordionSection key={section._key} {...section} />;
     case "pricingTier":
       return <PricingTier key={section._key} {...section} />;
+    case "pricingComparisonTable":
+      return <PricingComparisonTable key={section._key} {...section} />;
     case "processStep":
       return <ProcessStep key={section._key} {...section} />;
     case "videoEmbed":
@@ -428,7 +498,7 @@ function renderSection(section: PageSection) {
 /**
  * Renders Sanity page-builder sections through a typed server component registry.
  */
-export function PageSections({ sections, emptyLabel = "CMS sections will appear here after content is seeded." }: PageSectionsProps) {
+export function PageSections({ sections, emptyLabel = "This section is still being negotiated by the pets." }: PageSectionsProps) {
   if (!sections?.length) {
     return (
       <SectionFrame>

@@ -32,7 +32,7 @@ type SanityImageProps = Readonly<{
  * Renders a Sanity image through Next image optimization with a stable fallback.
  */
 export function SanityImage({ image, className, imageClassName, priority = false, sizes }: SanityImageProps) {
-  const asset = image?.image.asset;
+  const asset = image?.image?.asset;
 
   return (
     <figure className={joinClassNames("relative overflow-hidden bg-pet-mint/25", className)}>

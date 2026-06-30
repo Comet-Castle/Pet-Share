@@ -17,7 +17,7 @@ export const submissionStatusOptions = [
 
 export const sourceOptions = [
   { title: "Editorial", value: "editorial" },
-  { title: "Demo seed", value: "demoSeed" },
+  { title: "Starter import", value: "demoSeed" },
   { title: "User submitted", value: "userSubmitted" },
   { title: "Imported", value: "imported" }
 ];

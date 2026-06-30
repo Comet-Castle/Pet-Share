@@ -234,7 +234,8 @@ export const seo = defineType({
     defineField({
       name: "openGraphImage",
       title: "Open Graph image",
-      type: "imageWithAlt"
+      type: "imageWithAlt",
+      description: "Optional social sharing image. Leave empty to fall back to route or site defaults."
     }),
     defineField({
       name: "noIndex",
