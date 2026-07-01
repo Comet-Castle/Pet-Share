@@ -29,9 +29,9 @@ Used for: UI component model and DOM rendering through Next.js.
 Notes: Installed as runtime dependencies.
 
 Name: Sanity packages
-Source: https://github.com/sanity-io/sanity, https://github.com/sanity-io/client, https://github.com/sanity-io/image-url, https://github.com/sanity-io/next-sanity
+Source: https://github.com/sanity-io/sanity, https://github.com/sanity-io/ui, https://github.com/sanity-io/client, https://github.com/sanity-io/image-url, https://github.com/sanity-io/next-sanity
 License: MIT package licenses; Sanity service usage is governed by Sanity terms.
-Used for: Embedded Studio, content API client, image URL helpers, Vision tool, and Next.js Studio integration.
+Used for: Embedded Studio, Studio UI components, content API client, image URL helpers, Vision tool, and Next.js Studio integration.
 Notes: `styled-components` is also installed because `next-sanity` requires it as a peer dependency.
 
 Name: styled-components

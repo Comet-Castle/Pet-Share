@@ -317,6 +317,9 @@ Suggested Sanity fields:
 - `listingHeadline`: short headline for pet cards and listing surfaces.
 - `listingSummary`: short listing copy for index cards and featured sections.
 - `availabilityStatus`: listing status such as available, temporarily unavailable, pending pickup, or retired.
+- `distanceKilometers`: spoofed demo distance for local listing cards until real location search exists.
+- `listingPlan`: owner-paid listing plan attached to the pet, such as Porch Listing, Neighbourhood Spotlight, or Couch Recovery Campaign.
+- `hostPayoutAmount`, `hostPayoutCurrency`, `hostPayoutUnit`: owner-funded payout offered to the temporary host. Borrowers/hosts should be presented as being paid to take the pet for a short stay, not paying to rent the pet.
 - `temperament`: structured category or selector for filtering and display.
 - `pickupUrgency`: structured category or selector for filtering and display.
 - `messRisk`: structured category or selector for filtering and display.

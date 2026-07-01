@@ -10,6 +10,7 @@ Supporting docs:
 - Use `docs/accessibility-checklist.md` as a milestone-relevant review checklist, not as an all-at-once audit.
 - Use `docs/dependency-decision-log.md` before adding or rejecting packages, services, or tooling.
 - Use `docs/testing-strategy.md` to decide which tests are worth adding for each milestone.
+- Use `docs/frontend-qa.md` for Playwright/browser verification notes, Sanity-backed visual QA, and stale-content debugging.
 - Use `docs/content-model.md`, `docs/seed-json-contract.md`, and `docs/data-seeding-plan.md` to keep Sanity and seed work aligned.
 - Use `docs/content-governance.md` when creating, seeding, reviewing, or publishing content.
 - Use `docs/launch-checklist.md` during deployment readiness and post-launch verification.
@@ -25,6 +26,8 @@ Each milestone should follow the workflow in `AGENTS.md`:
 - After approval, run the relevant lint, typecheck, tests, and build checks for that milestone.
 
 Keep test and review scope proportional to the milestone. Avoid broad coverage or checklist work that does not protect a stable contract, user-visible behavior, accessibility requirement, or implementation convention touched by the milestone.
+
+For rapid visual polish inside an active milestone, use `docs/frontend-qa.md` as the verification ladder. Small visual iterations can be handed back after targeted checks and a focused screenshot instead of repeating the full milestone lint/typecheck/test/build cycle every time. Reserve the full check suite for milestone approval, risky data/schema changes, broad refactors, or user-approved finalization.
 
 ## Milestone Review Checklist
 
@@ -202,7 +205,75 @@ Exit criteria:
 - The recommended seed command is `pnpm seed:wizard`, and it is documented as covering the full demo dataset rather than only pet listings.
 - Normal seed replay does not call AI generation providers.
 
-## Milestone 8: Forms And Mailgun
+## Milestone 8: Process And Pricing Page Builder Refinement
+
+Goal:
+
+- Refine the process and pricing marketing pages into the reference implementation for how Sanity page-builder blocks should behave and render.
+
+Scope:
+
+- Refine `/process` and `/pricing` page structure, copy, and frontend presentation.
+- Improve Sanity page-builder schemas, Studio field grouping, initial values, previews, and custom inputs where they make editing clearer.
+- Keep process-specific steps nested inside process sections rather than scattered as standalone page-builder blocks.
+- Derive visible process step numbers from array order.
+- Use rich text where page-builder copy needs links, emphasis, or short lists.
+- Use `docs/sanity-studio-extensions.md` for Studio custom input conventions.
+- Use `docs/page-builder-components.md` as the living reference for reusable page-builder blocks.
+- Update seed data to match the refined schema shape for process and pricing content.
+
+Exit criteria:
+
+- `/process` and `/pricing` can be edited through Sanity without confusing field order or ambiguous blocks.
+- Page-builder sections used by these pages have clear schema previews and grouped Studio fields.
+- Frontend rendering matches the current approved direction for polished marketing pages.
+- Seed data for these pages matches the current schema shape and does not rely on deprecated fields.
+
+## Milestone 9: Sanity Visual Builder And Media Library
+
+Goal:
+
+- Add Sanity editorial tooling so the CMS experience supports visual page editing and better media management.
+
+Scope:
+
+- Implement the Sanity Presentation/Visual Editing workflow appropriate for this project.
+- Add or finish Draft Mode enable and disable handlers as needed for Visual Editing.
+- Confirm preview routes for home, pet index, system pages, marketing pages, pet detail, and owner detail.
+- Add a preview banner and exit preview action if not already complete.
+- Implement or configure Sanity Media Library support.
+- Confirm Studio-origin preview links work for draft and published content.
+- Keep Sanity-specific setup documented in README and relevant docs.
+
+Exit criteria:
+
+- Editors can open supported pages from Studio into a visual editing or presentation flow.
+- Draft content can be previewed without exposing secrets.
+- Media Library usage is documented and functional for the project workflow.
+- Any remaining limitations of Visual Editing are clearly documented.
+
+## Milestone 10: Remaining Page Builder Migration
+
+Goal:
+
+- Bring the rest of the site onto the refined CMS/page-builder patterns established by process and pricing.
+
+Scope:
+
+- Update the homepage where appropriate while preserving bespoke homepage sections that intentionally remain code-composed.
+- Update contact, warranty, about, system pages, pet index supporting content, and other marketing pages to use the refined block conventions.
+- Align forms, CTA groups, callouts, warning/alert blocks, testimonials, accordions, and content sections with the reference patterns.
+- Remove or migrate outdated seed structures that no longer match the current page-builder approach.
+- Update docs when a page intentionally remains bespoke instead of generic page-builder driven.
+
+Exit criteria:
+
+- Remaining pages use the same core CMS structure and editor experience where practical.
+- Any bespoke page sections have clear documented reasons.
+- Seeded page content matches the current block contracts.
+- No page depends on deprecated page-builder fields unless it is explicitly in a compatibility fallback.
+
+## Milestone 11: Forms And Mailgun
 
 Goal:
 
@@ -223,69 +294,119 @@ Exit criteria:
 - No Mailgun credentials are exposed to the browser.
 - Form failures return usable error messages.
 - Owner contact still routes to the master inbox, not individual owners.
+- Contact and warranty forms work with the current page/content structure.
 
-## Milestone 9: Preview And Revalidation
-
-Goal:
-
-- Add editorial preview and cache busting for Sanity content changes.
-
-Scope:
-
-- Add Draft Mode enable and disable handlers.
-- Add preview routes for home, pet index, system pages, marketing pages, pet detail, and owner detail.
-- Add preview banner and exit preview action.
-- Add Sanity webhook route with validation.
-- Add document-type to path/tag revalidation mapping.
-- Add targeted tests for preview and revalidation helpers.
-
-Exit criteria:
-
-- Preview links originate from Studio and require a secret.
-- Unpublished drafts can be previewed by document ID.
-- Published content changes can revalidate the correct pages or tags.
-
-## Milestone 10: Responsive Polish And Animation
+## Milestone 12: Full Visual QA, Responsive Polish, And Animation
 
 Goal:
 
-- Bring the demo up to the intended bright, friendly, polished product feel.
+- Bring the complete demo up to the intended bright, friendly, polished product feel.
 
 Scope:
 
-- Finalize Tailwind design tokens for color, typography, spacing, radius, and shadows.
+- Run a visual pass across all public pages.
+- Run responsive checks across representative mobile, tablet, laptop, and desktop widths.
+- Fix horizontal overflow, clipped content, awkward spacing, overlapping content, and desktop-only interactions.
 - Add entry animations and subtle hover motion.
 - Respect `prefers-reduced-motion`.
-- Keep Framer Motion deferred unless Tailwind/CSS animation has become awkward enough to justify it.
-- Polish pet index filters, carousels, galleries, drawer behavior, video embeds, and forms.
-- Run responsive browser checks across representative mobile and desktop widths.
+- Keep Framer Motion deferred unless Tailwind/CSS animation becomes awkward enough to justify it.
+- Polish pet index filters, carousels, galleries, drawer behavior, video embeds, forms, and page-builder sections.
 
 Exit criteria:
 
 - No known horizontal overflow, clipped content, overlapping content, or desktop-only interaction patterns.
 - Motion feels restrained and does not block content usability.
-- The site visually matches `docs/project-brief.md`.
+- The site visually matches `docs/project-brief.md` and approved design references.
 
-## Milestone 11: Deployment Readiness
+## Milestone 13: Seeding Workflow Refactor
 
 Goal:
 
-- Prepare the site for Vercel deployment and Sanity production usage.
+- Refine seed tooling so content generation, content upload, and media generation/upload are clear separate phases.
+
+Scope:
+
+- Update seed scripts and README docs around three distinct phases:
+  1. Generate or refresh all saved content and media prompts.
+  2. Upload content to Sanity.
+  3. Generate approved media and upload media to Sanity.
+- Reduce the scope of the wizard so it guides phase selection without becoming an opaque all-purpose flow.
+- Keep direct commands documented as manual/debug alternatives.
+- Ensure the seed data shape matches the current Sanity schemas and page-builder configuration.
+- Review how approved seed media is stored in Git and document options or follow-up decisions.
+- Keep AI media provider calls human-run only.
+
+Exit criteria:
+
+- Seed tooling clearly separates content/prompt generation, content upload, and media generation/upload.
+- README points users to the preferred seed workflow.
+- Seed scripts do not unexpectedly call paid or quota-limited AI providers.
+- The media storage approach is documented, including any remaining production deployment concerns.
+
+## Milestone 14: Final Seed Dataset
+
+Goal:
+
+- Produce the final full demo dataset for launch.
+
+Scope:
+
+- Clean up all saved seed JSON files.
+- Ensure owners, pets, pet types, testimonials, forms, system pages, homepage, marketing pages, and media manifests match the final schemas.
+- Generate or refresh the full content set using the refined seed workflow.
+- Generate approved media prompts and media assets through the human-run media workflow.
+- Upload final content and approved media to Sanity.
+- Confirm relationships, slugs, references, image roles, and page-builder sections resolve correctly.
+
+Exit criteria:
+
+- A clean Sanity dataset can be populated from the saved seed data.
+- The full demo site has enough final content to feel complete.
+- Final seed data is committed where appropriate, while unapproved/generated working files remain ignored.
+
+## Milestone 15: Final Content And UI Review
+
+Goal:
+
+- Do one complete review of the launched-content candidate before deployment.
+
+Scope:
+
+- Review all public pages with the final Sanity dataset.
+- Review copy for tone, clarity, satire, and consistency.
+- Review UI and content together, not only component states.
+- Confirm SEO metadata and social images are present where expected.
+- Confirm forms, preview, Visual Editing, media, seed content, and CMS relationships still work after final data loading.
+- Fix any final launch-blocking content or UI issues.
+
+Exit criteria:
+
+- The final content and UI are approved for launch.
+- Known non-launch-blocking issues are documented in backlog.
+- No obvious placeholder copy, broken references, or missing critical images remain.
+
+## Milestone 16: Deployment Readiness And Go Live
+
+Goal:
+
+- Prepare the site for Vercel deployment and Sanity production usage, then launch.
 
 Scope:
 
 - Confirm Vercel environment variables.
-- Confirm Sanity CORS, dataset, tokens, and webhook configuration.
+- Confirm Sanity CORS, dataset, tokens, Visual Editing, Media Library, and webhook configuration.
 - Confirm Mailgun env configuration.
 - Run lint, typecheck, tests, and build.
-- Update README setup instructions with real commands.
+- Update README setup and deployment instructions with real commands.
 - Review attribution and dependency notes.
 - Use `docs/launch-checklist.md` for final readiness verification.
+- Deploy to Vercel and perform post-deployment smoke checks.
 
 Exit criteria:
 
 - Build succeeds locally.
 - Required deployment environment variables are documented but not exposed.
+- Production deployment renders the expected Sanity-backed content.
 - Known limitations and post-launch backlog items are documented.
 - Launch checklist items that are in scope for phase one are complete or explicitly documented as caveats.
 
@@ -297,7 +418,6 @@ These items should stay out of the first build unless priorities change:
 - Direct owner messaging or owner dashboards.
 - Saved/favorite pets.
 - AI-generated owner email replies.
-- Sanity Visual Editing or Presentation Tool implementation.
 - Pet type landing pages.
 - Standalone testimonials page.
 - Generated video binaries.

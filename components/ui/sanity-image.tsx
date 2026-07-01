@@ -2,7 +2,7 @@ import Image from "next/image";
 import { PawPrint } from "lucide-react";
 import { joinClassNames } from "@/lib/utils/class-names";
 
-type SanityImageValue = Readonly<{
+export type SanityImageValue = Readonly<{
   image: {
     asset: {
       url: string;

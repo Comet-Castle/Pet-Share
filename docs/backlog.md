@@ -139,3 +139,42 @@ Acceptance notes:
 - Reseeding should remain possible from a clean checkout plus documented media retrieval steps.
 - The chosen approach must not commit secrets, raw provider responses, or unreviewed generated files.
 - Update `README.md`, `docs/data-seeding-plan.md`, and deployment docs when the strategy is chosen.
+
+## Targeted Seed Document Updates
+
+Goal:
+
+- Add safer direct seed commands for updating a narrow set of Sanity documents without running a full reseed or writing one-off mutation scripts.
+
+Status:
+
+- Backlog candidate.
+- Useful before repeated content-polish passes, especially for testimonials and other referenced homepage content.
+
+Problem:
+
+- The existing targeted page write path supports commands such as `--only homePage`.
+- Referenced documents, such as testimonials used by the homepage, are not updated by a homepage-only write.
+- One-off Sanity mutations are easy to make too broad unless the script supports stable seed-key targeting.
+
+Recommended direction:
+
+- Add direct command support for document type and seed-key targeting.
+- Keep destructive behavior explicit and separate from targeted patches.
+- Preserve existing media unless a media update is intentionally requested.
+- Print the selected document count before writing.
+- Require `--confirm` for Sanity writes.
+
+Candidate commands:
+
+- `pnpm seed:sanity -- --confirm --only testimonial`
+- `pnpm seed:sanity -- --confirm --seed-key testimonial-sir-nibbles-neighbor`
+- `pnpm seed:sanity -- --confirm --seed-key testimonial-sir-nibbles-neighbor --seed-key testimonial-muffin-weekend`
+- `pnpm seed:sanity -- --preview --only testimonial`
+
+Acceptance notes:
+
+- Type-targeted writes should update only documents represented by saved seed data or generated deterministic seed output.
+- Seed-key writes should fail loudly when no matching seed document exists.
+- Targeted writes should hydrate references before patching when referenced fields are included.
+- The command output should list each updated seed key and Sanity document ID.

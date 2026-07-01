@@ -1,26 +1,6 @@
-import {
-  AlertTriangle,
-  BadgeDollarSign,
-  CalendarCheck,
-  CheckCircle2,
-  ClipboardList,
-  CircleHelp,
-  HeartHandshake,
-  Home,
-  type LucideIcon,
-  Mail,
-  MessageCircle,
-  PackageCheck,
-  PawPrint,
-  RotateCcw,
-  Search,
-  Send,
-  ShieldAlert,
-  Sparkles,
-  Star,
-  UserPlus,
-  Video
-} from "lucide-react";
+import { CircleHelp, PawPrint } from "lucide-react";
+import { createElement } from "react";
+import { getLucideIcon } from "@/lib/icons/lucide-icons";
 import { joinClassNames } from "@/lib/utils/class-names";
 
 type IconBadgeProps = Readonly<{
@@ -28,35 +8,11 @@ type IconBadgeProps = Readonly<{
   className?: string;
 }>;
 
-const iconMap: Record<string, LucideIcon> = {
-  alert: AlertTriangle,
-  calendarCheck: CalendarCheck,
-  check: CheckCircle2,
-  clipboardList: ClipboardList,
-  contact: Mail,
-  cta: Sparkles,
-  heart: HeartHandshake,
-  home: Home,
-  money: BadgeDollarSign,
-  messageCircle: MessageCircle,
-  packageCheck: PackageCheck,
-  paw: PawPrint,
-  price: BadgeDollarSign,
-  rotateCcw: RotateCcw,
-  search: Search,
-  send: Send,
-  shield: ShieldAlert,
-  star: Star,
-  userPlus: UserPlus,
-  video: Video,
-  warning: ShieldAlert
-};
-
 /**
- * Maps CMS icon labels to the local Lucide icon set.
+ * Maps CMS icon values to Lucide icons while preserving legacy seed aliases.
  */
 export function IconBadge({ icon, className }: IconBadgeProps) {
-  const Icon = icon ? (iconMap[icon] ?? CircleHelp) : PawPrint;
+  const Icon = icon ? (getLucideIcon(icon) ?? CircleHelp) : PawPrint;
 
   return (
     <span
@@ -65,7 +21,7 @@ export function IconBadge({ icon, className }: IconBadgeProps) {
         className
       )}
     >
-      <Icon aria-hidden="true" size={20} />
+      {createElement(Icon, { "aria-hidden": true, size: 20 })}
     </span>
   );
 }

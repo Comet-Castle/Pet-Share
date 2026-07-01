@@ -2,25 +2,29 @@
 
 import type { KeyboardEvent } from "react";
 import { useId, useMemo, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Check, Search, X } from "lucide-react";
 import type { PET_TYPES_QUERY_RESULT } from "@/sanity.types";
 
 type PetTypeFilterPreviewProps = Readonly<{
   petTypes: PET_TYPES_QUERY_RESULT;
+  selectedSlugs: string[];
 }>;
 
 /**
- * Provides a local pet-type picker preview for the unfinished URL-driven filter milestone.
+ * Provides a URL-driven pet-type picker for the pet index filters.
  */
-export function PetTypeFilterPreview({ petTypes }: PetTypeFilterPreviewProps) {
+export function PetTypeFilterPreview({ petTypes, selectedSlugs }: PetTypeFilterPreviewProps) {
   const inputId = useId();
   const listboxId = useId();
-  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [query, setQuery] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
-  const selectedPetTypes = selectedIds
-    .map((id) => petTypes.find((type) => type._id === id))
+  const selectedPetTypes = selectedSlugs
+    .map((slug) => petTypes.find((type) => type.slug === slug))
     .filter((type): type is PET_TYPES_QUERY_RESULT[number] => Boolean(type));
   const filteredPetTypes = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
@@ -33,14 +37,27 @@ export function PetTypeFilterPreview({ petTypes }: PetTypeFilterPreviewProps) {
   }, [petTypes, query]);
   const activeOptionId = filteredPetTypes[activeIndex]?._id ? `${listboxId}-${filteredPetTypes[activeIndex]._id}` : undefined;
 
-  function selectPetType(id: string) {
-    if (!id) return;
-    setSelectedIds((current) => current.includes(id) ? current.filter((selectedId) => selectedId !== id) : [...current, id]);
+  function updateSelectedSlugs(nextSlugs: string[]) {
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete("type");
+    params.delete("page");
+    nextSlugs.forEach((slug) => params.append("type", slug));
+    const queryString = params.toString();
+
+    router.push(queryString ? `${pathname}?${queryString}` : pathname, { scroll: false });
+  }
+
+  function selectPetType(slug: string) {
+    if (!slug) return;
+    const nextSlugs = selectedSlugs.includes(slug)
+      ? selectedSlugs.filter((selectedSlug) => selectedSlug !== slug)
+      : [...selectedSlugs, slug];
+    updateSelectedSlugs(nextSlugs);
     setIsOpen(true);
   }
 
-  function removePetType(id: string) {
-    setSelectedIds((current) => current.filter((selectedId) => selectedId !== id));
+  function removePetType(slug: string) {
+    updateSelectedSlugs(selectedSlugs.filter((selectedSlug) => selectedSlug !== slug));
   }
 
   function handleQueryChange(value: string) {
@@ -63,7 +80,7 @@ export function PetTypeFilterPreview({ petTypes }: PetTypeFilterPreviewProps) {
 
     if (event.key === "Enter" && isOpen && filteredPetTypes[activeIndex]) {
       event.preventDefault();
-      selectPetType(filteredPetTypes[activeIndex]._id);
+      selectPetType(filteredPetTypes[activeIndex].slug);
     }
 
     if (event.key === "Escape") {
@@ -104,7 +121,7 @@ export function PetTypeFilterPreview({ petTypes }: PetTypeFilterPreviewProps) {
           >
             {filteredPetTypes.length ? (
               filteredPetTypes.map((type, index) => {
-                const isSelected = selectedIds.includes(type._id);
+                const isSelected = selectedSlugs.includes(type.slug);
 
                 return (
                 <button
@@ -115,7 +132,7 @@ export function PetTypeFilterPreview({ petTypes }: PetTypeFilterPreviewProps) {
                   aria-selected={isSelected}
                   onMouseDown={(event) => {
                     event.preventDefault();
-                    selectPetType(type._id);
+                    selectPetType(type.slug);
                   }}
                   onMouseEnter={() => setActiveIndex(index)}
                   className={index === activeIndex || isSelected
@@ -140,7 +157,7 @@ export function PetTypeFilterPreview({ petTypes }: PetTypeFilterPreviewProps) {
             <button
               key={type._id}
               type="button"
-              onClick={() => removePetType(type._id)}
+              onClick={() => removePetType(type.slug)}
               className="inline-flex items-center gap-1 rounded-full bg-pet-mint/35 px-3 py-2 text-sm font-bold text-pet-ink transition hover:-rotate-1 focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2"
               aria-label={`Remove ${type.filterLabel} pet type`}
             >

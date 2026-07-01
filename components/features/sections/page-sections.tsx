@@ -3,7 +3,10 @@ import {
   AlertTriangle,
   CheckCircle2,
   CirclePlay,
+  Home,
+  ListChecks,
   Quote,
+  Search,
   ShieldAlert,
   Star
 } from "lucide-react";
@@ -30,7 +33,7 @@ type SectionByType<Type extends PageSection["_type"]> = Extract<PageSection, { _
 
 function SectionFrame({ children, className }: Readonly<{ children: React.ReactNode; className?: string }>) {
   return (
-    <section className={joinClassNames("mx-auto w-full max-w-[1280px] px-5 py-12 sm:px-8 lg:px-10", className)}>
+    <section className={joinClassNames("mx-auto w-full max-w-[1440px] min-w-0 px-5 py-12 sm:px-8 lg:px-10", className)}>
       {children}
     </section>
   );
@@ -55,12 +58,12 @@ function SectionHeader({ header }: Readonly<{ header: SectionHeaderValue }>) {
 function HeroSection(section: SectionByType<"hero">) {
   return (
     <SectionFrame>
-      <div className="grid min-h-[520px] items-center gap-8 rounded-[2rem] bg-white/65 p-6 shadow-soft backdrop-blur sm:p-10 lg:grid-cols-[1.05fr_0.95fr]">
-        <div>
+      <div className="grid min-h-[520px] min-w-0 items-center gap-8 rounded-[2rem] bg-white/65 p-6 shadow-soft backdrop-blur sm:p-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
+        <div className="min-w-0">
           {section.eyebrow ? (
             <p className="text-sm font-bold uppercase tracking-[0.18em] text-pet-muted">{section.eyebrow}</p>
           ) : null}
-          <h1 className="mt-3 font-display text-5xl font-bold leading-tight text-pet-ink sm:text-6xl">
+          <h1 className="mt-3 text-wrap font-display text-4xl font-bold leading-tight text-pet-ink sm:text-6xl">
             {section.headline}
           </h1>
           {section.body ? <p className="mt-6 max-w-2xl text-lg leading-8 text-pet-muted">{section.body}</p> : null}
@@ -80,11 +83,11 @@ function HeroSection(section: SectionByType<"hero">) {
 function HeroSlideSection(section: SectionByType<"heroSlide">) {
   return (
     <SectionFrame>
-      <div className="grid gap-8 overflow-hidden rounded-[2rem] bg-white/65 p-6 shadow-soft backdrop-blur sm:p-8 lg:grid-cols-[0.9fr_1.1fr]">
+      <div className="grid min-w-0 gap-8 overflow-hidden rounded-[2rem] bg-white/65 p-6 shadow-soft backdrop-blur sm:p-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
         <SanityImage image={section.image} sizes="(min-width: 1024px) 42vw, 100vw" className="aspect-[4/3] rounded-[1.5rem]" />
-        <div className="self-center">
+        <div className="min-w-0 self-center">
           <p className="text-sm font-bold uppercase tracking-[0.18em] text-pet-muted">Featured story</p>
-          <h2 className="mt-3 font-display text-4xl font-bold leading-tight text-pet-ink sm:text-5xl">{section.headline}</h2>
+          <h2 className="mt-3 text-wrap font-display text-3xl font-bold leading-tight text-pet-ink sm:text-5xl">{section.headline}</h2>
           <p className="mt-5 text-lg leading-8 text-pet-muted">{section.body}</p>
           <div className="mt-6 flex flex-wrap gap-3 text-sm font-bold text-pet-muted">
             {section.featuredPet ? (
@@ -115,14 +118,14 @@ function ContentSection(section: SectionByType<"contentSection">) {
     <SectionFrame>
       <div
         className={joinClassNames(
-          "grid gap-8 rounded-[2rem] bg-white/60 p-6 shadow-soft backdrop-blur sm:p-8",
-          hasMedia && "lg:grid-cols-2"
+          "grid min-w-0 gap-8 rounded-[2rem] bg-white/60 p-6 shadow-soft backdrop-blur sm:p-8",
+          hasMedia && "lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]"
         )}
       >
         {hasMedia && mediaFirst ? (
           <SanityImage image={section.media} sizes="(min-width: 1024px) 45vw, 100vw" className="aspect-[4/3] rounded-[1.5rem]" />
         ) : null}
-        <div className="self-center">
+        <div className="min-w-0 self-center">
           <SectionHeader header={section.header} />
           <RichText value={section.body} />
           <SectionCtaGroup group={section.ctaGroup} />
@@ -141,7 +144,7 @@ function CalloutBlock(section: SectionByType<"calloutBlock">) {
       <div className="rounded-[2rem] bg-pet-mint/30 p-6 shadow-soft sm:p-8">
         <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
           <IconBadge icon={section.icon} className="bg-white/75" />
-          <div className="max-w-3xl">
+          <div className="min-w-0 max-w-3xl">
             <p className="text-sm font-bold uppercase tracking-[0.18em] text-pet-muted">{section.tone ?? "callout"}</p>
             <h2 className="mt-2 font-display text-3xl font-bold text-pet-ink">{section.headline}</h2>
             <p className="mt-3 text-lg leading-8 text-pet-muted">{section.body}</p>
@@ -163,7 +166,7 @@ function AlertBlock(section: SectionByType<"alertBlock">) {
       <div className={joinClassNames("rounded-[2rem] p-6 shadow-soft sm:p-8", toneClass)}>
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
           <IconBadge icon={section.tone === "warning" ? "warning" : "alert"} className="bg-white/75" />
-          <div>
+          <div className="min-w-0">
             <h2 className="font-display text-3xl font-bold text-pet-ink">{section.title}</h2>
             <p className="mt-3 text-lg leading-8 text-pet-muted">{section.message}</p>
             <div className="mt-6">
@@ -182,7 +185,7 @@ function WarningBlock(section: SectionByType<"warningBlock">) {
       <aside className="rounded-[2rem] bg-pet-coral/15 p-6 shadow-soft sm:p-8" aria-label="Warning">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
           <IconBadge icon={section.icon ?? "warning"} className="bg-white/75" />
-          <div>
+          <div className="min-w-0">
             <p className="text-sm font-bold uppercase tracking-[0.18em] text-pet-muted">
               {section.severity ? `${section.severity} warning` : "warning"}
             </p>
@@ -212,9 +215,9 @@ function TestimonialBlock(section: SectionByType<"testimonialBlock">) {
   return (
     <SectionFrame>
       <SectionHeader header={section.header} />
-      <div className={joinClassNames("grid gap-5", section.layoutHint === "featured" ? "lg:grid-cols-[1.2fr_0.8fr]" : "md:grid-cols-2 xl:grid-cols-3")}>
+      <div className={joinClassNames("grid min-w-0 gap-5", section.layoutHint === "featured" ? "lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]" : "md:grid-cols-2 xl:grid-cols-3")}>
         {section.testimonials?.map((testimonial) => (
-          <figure key={testimonial._id} className="rounded-[2rem] bg-white/70 p-6 shadow-soft backdrop-blur">
+          <figure key={testimonial._id} className="min-w-0 rounded-[2rem] bg-white/70 p-6 shadow-soft backdrop-blur">
             <Quote aria-hidden="true" className="text-pet-coral" size={28} />
             <blockquote className="mt-4 text-lg leading-8 text-pet-ink">{testimonial.quote}</blockquote>
             <figcaption className="mt-5">
@@ -238,9 +241,9 @@ function FeatureList(section: SectionByType<"featureList">) {
   return (
     <SectionFrame>
       <SectionHeader header={section.header} />
-      <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+      <div className="grid min-w-0 gap-5 md:grid-cols-2 xl:grid-cols-3">
         {section.items?.map((item) => (
-          <article key={item._key} className="rounded-[2rem] bg-white/70 p-6 shadow-soft backdrop-blur">
+          <article key={item._key} className="min-w-0 rounded-[2rem] bg-white/70 p-6 shadow-soft backdrop-blur">
             <IconBadge icon={item.icon} className={section.iconStyle === "outline" ? "bg-white ring-2 ring-pet-mint" : undefined} />
             <h3 className="mt-5 font-display text-2xl font-bold text-pet-ink">{item.title}</h3>
             {item.description ? <p className="mt-3 leading-7 text-pet-muted">{item.description}</p> : null}
@@ -383,23 +386,45 @@ function PricingComparisonTable(section: SectionByType<"pricingComparisonTable">
   );
 }
 
-function ProcessStep(section: SectionByType<"processStep">) {
+function ProcessPathSection(section: SectionByType<"processPathSection">) {
+  const toneClass = section.tone === "owner" ? "bg-pet-mint/25" : section.tone === "host" ? "bg-pet-blue/20" : "bg-white/70";
+  const HeaderIcon = section.tone === "owner" ? Home : section.tone === "host" ? Search : ListChecks;
+
   return (
-    <SectionFrame className="py-6">
-      <article className="rounded-[2rem] bg-white/70 p-6 shadow-soft backdrop-blur sm:p-8">
-        <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
-          <div className="flex size-14 shrink-0 items-center justify-center rounded-full bg-pet-blue/25 font-display text-2xl font-bold text-pet-ink">
-            {section.order ?? <IconBadge icon={section.icon} />}
+    <SectionFrame>
+      <section className={joinClassNames("rounded-[2rem] p-6 shadow-soft sm:p-8", toneClass)}>
+        <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+          <div className="min-w-0">
+            <h2 className="font-display text-3xl font-bold leading-tight text-pet-ink sm:text-4xl">{section.title}</h2>
+            <p className="mt-3 max-w-3xl text-base leading-7 text-pet-muted sm:text-lg">{section.body}</p>
           </div>
-          <div>
-            <h2 className="font-display text-3xl font-bold text-pet-ink">{section.title}</h2>
-            <p className="mt-3 text-lg leading-8 text-pet-muted">{section.description}</p>
-            <div className="mt-6">
-              <SectionCtaLink cta={section.cta} />
-            </div>
-          </div>
+          <span className="flex size-14 shrink-0 items-center justify-center rounded-full bg-white/85 text-pet-ink shadow-sm">
+            {section.icon ? <IconBadge icon={section.icon} className="size-14 bg-transparent" /> : <HeaderIcon aria-hidden="true" size={28} />}
+          </span>
         </div>
-      </article>
+
+        <ol className="grid min-w-0 gap-5 lg:grid-cols-4">
+          {section.steps?.map((step, index) => (
+            <li key={step._key} className="min-w-0 rounded-[1.5rem] bg-white/82 p-5 shadow-sm backdrop-blur">
+              <div className="mb-5 flex items-center justify-between gap-4">
+                <IconBadge icon={step.icon} className="bg-pet-cream text-pet-ink" />
+                <span className="font-display text-3xl font-bold text-pet-coral/45">{index + 1}</span>
+              </div>
+              <h3 className="font-display text-xl font-bold leading-tight text-pet-ink">{step.title}</h3>
+              <div className="mt-3 text-sm">
+                {step.body?.length ? <RichText value={step.body} /> : <p className="leading-6 text-pet-muted">{step.description}</p>}
+              </div>
+              <div className="mt-5">
+                <SectionCtaLink cta={step.cta} />
+              </div>
+            </li>
+          ))}
+        </ol>
+
+        <div className="mt-8">
+          <SectionCtaLink cta={section.cta} />
+        </div>
+      </section>
     </SectionFrame>
   );
 }
@@ -484,8 +509,8 @@ function renderSection(section: PageSection) {
       return <PricingTier key={section._key} {...section} />;
     case "pricingComparisonTable":
       return <PricingComparisonTable key={section._key} {...section} />;
-    case "processStep":
-      return <ProcessStep key={section._key} {...section} />;
+    case "processPathSection":
+      return <ProcessPathSection key={section._key} {...section} />;
     case "videoEmbed":
       return <VideoEmbed key={section._key} {...section} />;
     case "ctaGroup":

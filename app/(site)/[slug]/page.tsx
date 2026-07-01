@@ -23,7 +23,7 @@ function MarketingFormPlaceholder({ pageSlug }: Readonly<{ pageSlug: string }>) 
   const textAreaLabel = isWarranty ? "Incident summary" : "Message";
 
   return (
-    <section className="mx-auto mt-8 w-full max-w-[1280px] px-5 sm:px-8 lg:px-10" id={formId}>
+    <section className="mx-auto mt-8 w-full max-w-[1440px] px-5 sm:px-8 lg:px-10" id={formId}>
       <div className="grid gap-8 rounded-[2rem] bg-white/70 p-6 shadow-soft backdrop-blur sm:p-8 lg:grid-cols-[0.8fr_1.2fr]">
         <div>
           <p className="text-sm font-bold uppercase tracking-[0.18em] text-pet-muted">{eyebrow}</p>

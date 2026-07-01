@@ -14,6 +14,24 @@ import {
   Star
 } from "lucide-react";
 import { defineArrayMember, defineField, defineType } from "sanity";
+import { getLucideIcon } from "@/lib/icons/lucide-icons";
+import { IconPickerInput } from "@/sanity/components/studio-string-inputs";
+import { processPathSection } from "./sections/process";
+
+const placeholderProcessStepBody = [
+  {
+    _type: "block",
+    style: "normal",
+    children: [
+      {
+        _type: "span",
+        text: "Explain what happens in this step and what the editor should expect.",
+        marks: []
+      }
+    ],
+    markDefs: []
+  }
+];
 
 export const sectionMembers = [
   defineArrayMember({ type: "hero" }),
@@ -27,7 +45,7 @@ export const sectionMembers = [
   defineArrayMember({ type: "accordion" }),
   defineArrayMember({ type: "pricingTier" }),
   defineArrayMember({ type: "pricingComparisonTable" }),
-  defineArrayMember({ type: "processStep" }),
+  defineArrayMember({ type: "processPathSection" }),
   defineArrayMember({ type: "videoEmbed" }),
   defineArrayMember({ type: "ctaGroup" })
 ];
@@ -167,7 +185,13 @@ export const calloutBlock = defineType({
       rows: 3,
       validation: (rule) => rule.required()
     }),
-    defineField({ name: "icon", title: "Icon name", type: "string" }),
+    defineField({
+      name: "icon",
+      title: "Icon",
+      description: "Optional icon shown with this callout block. Use the browser to search Lucide icons.",
+      type: "string",
+      components: { input: IconPickerInput }
+    }),
     defineField({ name: "cta", title: "CTA", type: "cta" }),
     defineField({
       name: "tone",
@@ -268,7 +292,13 @@ export const warningBlock = defineType({
       },
       initialValue: "medium"
     }),
-    defineField({ name: "icon", title: "Icon name", type: "string" })
+    defineField({
+      name: "icon",
+      title: "Icon",
+      description: "Optional icon shown with this warning block. Use the browser to search Lucide icons.",
+      type: "string",
+      components: { input: IconPickerInput }
+    })
   ],
   preview: {
     select: { title: "title", subtitle: "severity" },
@@ -297,7 +327,13 @@ export const statBlock = defineType({
       validation: (rule) => rule.required().max(80)
     }),
     defineField({ name: "description", title: "Description", type: "text", rows: 2 }),
-    defineField({ name: "icon", title: "Icon name", type: "string" })
+    defineField({
+      name: "icon",
+      title: "Icon",
+      description: "Optional icon shown with this stat block. Use the browser to search Lucide icons.",
+      type: "string",
+      components: { input: IconPickerInput }
+    })
   ],
   preview: {
     select: { title: "value", subtitle: "label" },
@@ -378,7 +414,13 @@ export const featureList = defineType({
               type: "text",
               rows: 3
             }),
-            defineField({ name: "icon", title: "Icon name", type: "string" }),
+            defineField({
+              name: "icon",
+              title: "Icon",
+              description: "Optional icon shown with this feature item. Use the browser to search Lucide icons.",
+              type: "string",
+              components: { input: IconPickerInput }
+            }),
             defineField({ name: "link", title: "Link", type: "link" })
           ],
           preview: {
@@ -628,30 +670,94 @@ export const processStep = defineType({
   title: "Process step",
   type: "object",
   icon: ClipboardList,
+  groups: [
+    { name: "content", title: "Content", default: true },
+    { name: "display", title: "Display" },
+    { name: "cta", title: "CTA" },
+    { name: "legacy", title: "Legacy" }
+  ],
   fields: [
     defineField({
       name: "title",
       title: "Title",
       type: "string",
+      group: "content",
       validation: (rule) => rule.required().max(100)
     }),
     defineField({
-      name: "description",
+      name: "body",
       title: "Description",
-      type: "text",
-      rows: 3,
-      validation: (rule) => rule.required()
+      description: "Rich text description rendered inside the process step card.",
+      type: "portableText",
+      group: "content",
+      validation: (rule) =>
+        rule.custom((body, context) => {
+          const parent = context.parent as { description?: string } | undefined;
+          const hasRichBody = Array.isArray(body) && body.length > 0;
+          const hasLegacyDescription = Boolean(parent?.description);
+
+          return hasRichBody || hasLegacyDescription ? true : "Add a rich description.";
+        })
     }),
-    defineField({ name: "icon", title: "Icon name", type: "string" }),
-    defineField({ name: "order", title: "Order", type: "number" }),
-    defineField({ name: "cta", title: "CTA", type: "cta" })
+    defineField({
+      name: "description",
+      title: "Description (legacy)",
+      description: "Deprecated plain-text description. Use the rich Description field instead.",
+      type: "text",
+      deprecated: {
+        reason: "Use the rich Description field instead."
+      },
+      group: "legacy",
+      hidden: ({ value }) => value === undefined,
+      readOnly: true,
+      rows: 3,
+      initialValue: undefined
+    }),
+    defineField({
+      name: "icon",
+      title: "Icon",
+      description: "Optional icon shown on this process step card. Use the browser to search Lucide icons.",
+      type: "string",
+      group: "display",
+      components: { input: IconPickerInput }
+    }),
+    defineField({
+      name: "order",
+      title: "Order (legacy)",
+      description: "Deprecated manual order. Step numbers now come from array order.",
+      type: "number",
+      deprecated: {
+        reason: "Step numbers are derived from array order."
+      },
+      group: "legacy",
+      hidden: ({ value }) => value === undefined,
+      readOnly: true,
+      initialValue: undefined
+    }),
+    defineField({ name: "cta", title: "CTA", type: "cta", group: "cta" })
   ],
+  initialValue: {
+    title: "New process step",
+    body: placeholderProcessStepBody,
+    icon: "CircleDot"
+  },
   preview: {
-    select: { title: "title", order: "order" },
-    prepare({ title, order }) {
+    select: { title: "title", body: "body", description: "description", icon: "icon" },
+    prepare({ title, body, description, icon }) {
+      const bodyText = Array.isArray(body)
+        ? body
+            .flatMap((block) => (Array.isArray(block?.children) ? block.children : []))
+            .map((child) => child?.text)
+            .filter(Boolean)
+            .join(" ")
+        : "";
+      const subtitle = bodyText || description;
+      const media = icon ? getLucideIcon(icon) : ClipboardList;
+
       return {
-        title: order ? `${order}. ${title || "Process step"}` : title || "Process step",
-        media: ClipboardList
+        title: title || "Process step",
+        subtitle: subtitle ? `${subtitle.slice(0, 72)}${subtitle.length > 72 ? "..." : ""}` : "No description yet",
+        media
       };
     }
   }
@@ -672,5 +778,6 @@ export const sectionObjects = [
   pricingTier,
   pricingFeature,
   pricingComparisonTable,
+  processPathSection,
   processStep
 ];

@@ -40,11 +40,21 @@ type LoadOptions = Readonly<{
   preview?: boolean;
 }>;
 
+type PetIndexFilters = Readonly<{
+  petTypeSlugs?: string[];
+  availabilityStatuses?: string[];
+  cuddlePolicies?: string[];
+  minChaos?: number | null;
+  minMess?: number | null;
+  minEnergy?: number | null;
+}>;
+
 type QueryLoadOptions = LoadOptions &
   Readonly<{
     query: string;
     params?: QueryParams;
     tags?: string[];
+    revalidate?: number | false;
     useCdn?: boolean;
   }>;
 
@@ -55,13 +65,14 @@ async function loadQuery<Result>({
   query,
   params,
   tags,
+  revalidate,
   useCdn
 }: QueryLoadOptions): Promise<Result> {
   if (preview) {
     return previewSanityFetch<Result>({ query, params, tags });
   }
 
-  return sanityFetch<Result>({ query, params, tags, useCdn });
+  return sanityFetch<Result>({ query, params, tags, revalidate, useCdn });
 }
 
 /**
@@ -82,7 +93,9 @@ export function loadHomePage(options: LoadOptions = {}) {
   return loadQuery<HOME_PAGE_QUERY_RESULT>({
     ...options,
     query: HOME_PAGE_QUERY,
-    tags: [sanityTags.homePage]
+    tags: [sanityTags.homePage],
+    revalidate: process.env.NODE_ENV === "development" ? 0 : undefined,
+    useCdn: false
   });
 }
 
@@ -139,15 +152,17 @@ export function loadSystemPageByType(pageType: string, options: LoadOptions = {}
 export function loadPetsIndex(
   page = 1,
   pageSize = defaultPageSize,
+  filters: PetIndexFilters = {},
   options: LoadOptions = {}
 ) {
   const start = Math.max(page - 1, 0) * pageSize;
   const end = start + pageSize;
+  const queryFilters = normalizePetIndexFilters(filters);
 
   return loadQuery<PETS_INDEX_QUERY_RESULT>({
     ...options,
     query: PETS_INDEX_QUERY,
-    params: { start, end },
+    params: { start, end, ...queryFilters },
     tags: [sanityTags.petIndex]
   });
 }
@@ -155,12 +170,26 @@ export function loadPetsIndex(
 /**
  * Loads the total count of approved public pets.
  */
-export function loadPetsIndexCount(options: LoadOptions = {}) {
+export function loadPetsIndexCount(filters: PetIndexFilters = {}, options: LoadOptions = {}) {
+  const queryFilters = normalizePetIndexFilters(filters);
+
   return loadQuery<PETS_INDEX_COUNT_QUERY_RESULT>({
     ...options,
     query: PETS_INDEX_COUNT_QUERY,
+    params: queryFilters,
     tags: [sanityTags.petIndex]
   });
+}
+
+function normalizePetIndexFilters(filters: PetIndexFilters) {
+  return {
+    petTypeSlugs: filters.petTypeSlugs?.length ? filters.petTypeSlugs : null,
+    availabilityStatuses: filters.availabilityStatuses?.length ? filters.availabilityStatuses : null,
+    cuddlePolicies: filters.cuddlePolicies?.length ? filters.cuddlePolicies : null,
+    minChaos: filters.minChaos ?? null,
+    minMess: filters.minMess ?? null,
+    minEnergy: filters.minEnergy ?? null
+  };
 }
 
 /**

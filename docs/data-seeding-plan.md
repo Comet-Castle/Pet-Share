@@ -121,6 +121,9 @@ Every seeded pet should include:
 - Listing headline.
 - Listing summary.
 - Availability status.
+- Spoofed local distance in kilometers for listing cards and homepage cards.
+- Owner-paid listing plan.
+- Host payout amount, currency, and payout unit. The service model should read as owners paying temporary hosts to take the pet for a short stay, not temporary hosts paying to rent the pet.
 - Structured filter fields.
 - Card media or hero image fallback.
 - Hero image gallery.
@@ -586,6 +589,16 @@ The pet-only media scope should skip owner portrait, page hero, and marketing/ba
 The wizard should treat upstream `n` answers as branch decisions. If media package preparation is skipped, media generation and media approval should be skipped for that run. If media generation is skipped, media approval should also be skipped instead of asking the user to approve or upload unchanged media.
 
 Direct seed commands may still exist for debugging, automation, and targeted reruns, but README and handoff instructions should point users to the wizard first.
+
+Targeted update notes:
+
+- `pnpm seed:sanity -- --confirm --only homePage --skip-media-upload` can replace the homepage singleton while preserving existing page media fields.
+- Targeted homepage writes do not automatically update referenced documents such as testimonials, owners, pets, or forms.
+- Testimonial copy can come from two places: curated entries in `sanity/seed/data/testimonials.json` and generated testimonial logic in `scripts/seed-sanity.mjs`.
+- If homepage testimonial tone changes, update both curated testimonial JSON and the generated testimonial template so a later full reseed does not restore mismatched copy.
+- The current seed tooling does not expose a first-class testimonial-only command. Until that exists, testimonial-only Sanity updates require either a full reseed or a narrow one-off Sanity mutation.
+- When doing narrow one-off Sanity mutations, also update the saved seed source so the next deterministic seed replay preserves the same content.
+- Before assuming a content push failed, verify the Sanity document directly. The rendered Next.js page may still show stale content because Sanity CDN caching and Next.js fetch caching are separate.
 
 Seed environment validation:
 

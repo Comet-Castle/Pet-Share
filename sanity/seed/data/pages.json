@@ -85,19 +85,53 @@
       "contentSections": [
         {
           "_key": "home-process-summary",
-          "_type": "processStep",
-          "title": "A cleaner way to share the responsibility",
-          "description": "Owners create a listing, seekers send an inquiry, and everyone agrees on pickup, care notes, and the exact moment the responsibility comes back home.",
-          "icon": "search",
-          "order": 1,
-          "cta": { "label": "See how it works", "link": { "type": "internalPath", "path": "/process" }, "style": "secondary" }
+          "_type": "processPathSection",
+          "title": "How temporary hosting works",
+          "body": "A short version of the Pet Share flow: list clearly, ask practical questions, follow the notes, and return the pet before anyone starts monogramming a blanket.",
+          "tone": "neutral",
+          "icon": "ListChecks",
+          "steps": [
+            {
+              "_key": "home-process-owner-listing",
+              "_type": "processStep",
+              "title": "Create the listing",
+              "body": [{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Add photos, basic details, and the care notes someone should read before agreeing to host a tiny household manager." }] }],
+              "icon": "upload",
+              "cta": null
+            },
+            {
+              "_key": "home-process-owner-expectations",
+              "_type": "processStep",
+              "title": "Set the expectations",
+              "body": [{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Call out meals, timing, cuddle policy, mess risk, and anything that sounds funny until it happens indoors." }] }],
+              "icon": "shield",
+              "cta": null
+            },
+            {
+              "_key": "home-process-host-inquiry",
+              "_type": "processStep",
+              "title": "Send an inquiry",
+              "body": [{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Ask practical questions, offer your timing, and prove you understand the difference between charming and unsupervised." }] }],
+              "icon": "messageCircle",
+              "cta": null
+            },
+            {
+              "_key": "home-process-return-report",
+              "_type": "processStep",
+              "title": "Return and report",
+              "body": [{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Bring the pet back on schedule, share the highlights, and keep only the story, the photos, and maybe one lint roller." }] }],
+              "icon": "check",
+              "cta": { "label": "See the full process", "link": { "type": "internalPath", "path": "/process" }, "style": "secondary" }
+            }
+          ],
+          "cta": { "label": "See the full process", "link": { "type": "internalPath", "path": "/process" }, "style": "secondary" }
         },
         {
           "_key": "home-trust-callout",
           "_type": "calloutBlock",
-          "headline": "All the pet stories. None of the long-term lint.",
-          "body": "Host the walk, the photos, and the oddly specific personality for a little while. Then return the leash, the mystery noise, and the responsibility to its rightful home.",
-          "tone": "questionably practical",
+          "headline": "Keep the stories. Return the responsibility.",
+          "body": "Pet Share is for short stays, honest expectations, and the kind of weekend plan that ends with someone saying, \"Actually, the tiny instructions were helpful.\"",
+          "tone": "temporary pet relief",
           "cta": { "label": "Find a short-term companion", "link": { "type": "internalPath", "path": "/pets" }, "style": "primary" }
         }
       ]
@@ -257,84 +291,82 @@
       },
       "sections": [
         {
-          "_key": "process-owner-intro",
-          "_type": "calloutBlock",
-          "headline": "For owners who need the house to stop making pet noises",
-          "body": "Create an account, list your pet, review inquiries, and arrange a temporary stay with someone who has read the care notes on purpose.",
-          "tone": "owners",
-          "icon": "home"
+          "_key": "process-owner-path",
+          "_type": "processPathSection",
+          "title": "For owners sharing their pet",
+          "body": "Create the listing, set the expectations, choose the temporary host, and take a break while somebody else learns why the care notes are that specific.",
+          "tone": "owner",
+          "icon": "home",
+          "steps": [
+            {
+              "_key": "process-owner-account",
+              "_type": "processStep",
+              "title": "Create your account",
+              "body": [{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Set up a simple profile so your pet listing has a real contact point and the handoff does not begin with five mysterious text messages." }] }],
+              "icon": "userPlus"
+            },
+            {
+              "_key": "process-owner-list-pet",
+              "_type": "processStep",
+              "title": "Add the pet details",
+              "body": [{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Upload photos, write the honest version of the personality notes, and include the habits people should know before they agree to temporary custody." }] }],
+              "icon": "clipboardList"
+            },
+            {
+              "_key": "process-owner-review-inquiry",
+              "_type": "processStep",
+              "title": "Review incoming requests",
+              "body": [{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Read the inquiry, decide whether the seeker sounds prepared, and agree on timing, supplies, and any sentence they must never say in front of the pet." }] }],
+              "icon": "messageCircle"
+            },
+            {
+              "_key": "process-owner-handoff",
+              "_type": "processStep",
+              "title": "Send them off temporarily",
+              "body": [{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Pack the food, care notes, comfort item, and one final warning that sounds dramatic until approximately day two." }] }],
+              "icon": "packageCheck"
+            }
+          ],
+          "cta": { "label": "See sharing plans", "link": { "type": "internalPath", "path": "/pricing" }, "style": "secondary" }
         },
         {
-          "_key": "process-owner-account",
-          "_type": "processStep",
-          "title": "Create your account",
-          "description": "Set up a simple profile so your pet listing has a real contact point and the handoff does not begin with five mysterious text messages.",
-          "icon": "userPlus",
-          "order": 1
-        },
-        {
-          "_key": "process-owner-list-pet",
-          "_type": "processStep",
-          "title": "Add the pet details",
-          "description": "Upload photos, write the honest version of the personality notes, and include the habits people should know before they agree to temporary custody.",
-          "icon": "clipboardList",
-          "order": 2
-        },
-        {
-          "_key": "process-owner-review-inquiry",
-          "_type": "processStep",
-          "title": "Review incoming requests",
-          "description": "Read the inquiry, decide whether the seeker sounds prepared, and agree on timing, supplies, and any sentence they must never say in front of the pet.",
-          "icon": "messageCircle",
-          "order": 3
-        },
-        {
-          "_key": "process-owner-handoff",
-          "_type": "processStep",
-          "title": "Send them off temporarily",
-          "description": "Pack the food, care notes, comfort item, and one final warning that sounds dramatic until approximately day two.",
-          "icon": "packageCheck",
-          "order": 4
-        },
-        {
-          "_key": "process-seeker-intro",
-          "_type": "calloutBlock",
-          "headline": "For people seeking a short-term companion",
-          "body": "Find pets near you, submit an inquiry, pick up your temporary roommate, and return them before they become part of your household mythology.",
-          "tone": "seekers",
-          "icon": "heart"
-        },
-        {
-          "_key": "process-seeker-find",
-          "_type": "processStep",
-          "title": "Find an animal you like",
-          "description": "Filter by pet type, mess risk, energy, and cuddle policy until you find the right amount of temporary responsibility.",
+          "_key": "process-host-path",
+          "_type": "processPathSection",
+          "title": "For temporary hosts",
+          "body": "Find a pet nearby, submit an inquiry, handle the agreed stay, and return the pet with the supplies, the story, and ideally the same number of socks.",
+          "tone": "host",
           "icon": "search",
-          "order": 1
-        },
-        {
-          "_key": "process-seeker-inquiry",
-          "_type": "processStep",
-          "title": "Submit an inquiry",
-          "description": "Tell the owner why you are prepared, when you are available, and whether your home can handle the listed care notes without improvising.",
-          "icon": "send",
-          "order": 2
-        },
-        {
-          "_key": "process-seeker-pickup",
-          "_type": "processStep",
-          "title": "Pick up at the agreed time",
-          "description": "Meet the owner, confirm the routine, collect the supplies, and ask every practical question before the pet is watching you make decisions.",
-          "icon": "calendarCheck",
-          "order": 3
-        },
-        {
-          "_key": "process-seeker-return",
-          "_type": "processStep",
-          "title": "Return on schedule",
-          "description": "Bring the pet, supplies, and any newly discovered lore back at the agreed time. You keep the story; the owner gets the responsibility back.",
-          "icon": "rotateCcw",
-          "order": 4
+          "steps": [
+            {
+              "_key": "process-seeker-find",
+              "_type": "processStep",
+              "title": "Find an animal you like",
+              "body": [{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Filter by pet type, mess risk, energy, and cuddle policy until you find the right amount of temporary responsibility." }] }],
+              "icon": "search"
+            },
+            {
+              "_key": "process-seeker-inquiry",
+              "_type": "processStep",
+              "title": "Submit an inquiry",
+              "body": [{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Tell the owner why you are prepared, when you are available, and whether your home can handle the listed care notes without improvising." }] }],
+              "icon": "send"
+            },
+            {
+              "_key": "process-seeker-pickup",
+              "_type": "processStep",
+              "title": "Pick up at the agreed time",
+              "body": [{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Meet the owner, confirm the routine, collect the supplies, and ask every practical question before the pet is watching you make decisions." }] }],
+              "icon": "calendarCheck"
+            },
+            {
+              "_key": "process-seeker-return",
+              "_type": "processStep",
+              "title": "Return on schedule",
+              "body": [{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Bring the pet, supplies, and any newly discovered lore back at the agreed time. You keep the story; the owner gets the responsibility back." }] }],
+              "icon": "rotateCcw"
+            }
+          ],
+          "cta": { "label": "Find pets near you", "link": { "type": "internalPath", "path": "/pets" }, "style": "primary" }
         }
       ],
       "primaryCta": { "label": "Find a temporary pet", "link": { "type": "internalPath", "path": "/pets" }, "style": "primary" },
@@ -345,17 +377,17 @@
       "type": "marketingPage",
       "title": "Pricing",
       "slug": { "current": "pricing" },
-      "summary": "Simple listing plans for owners. Hosting a temporary pet stays free.",
+      "summary": "Owner-paid listing plans with host payouts for people willing to take the pet for a while.",
       "seo": {
         "title": "Pricing | Pet Share",
-        "description": "Compare Pet Share listing plans for owners who want to lend out their pets temporarily.",
+        "description": "Compare Pet Share listing plans and host payout options for owners who want a temporary break from their pets.",
         "openGraphImageAssetKey": "pricing-og",
         "noIndex": false
       },
       "hero": {
         "_type": "hero",
-        "headline": "List your pet. Let someone else host the personality.",
-        "body": "Pet Share is free for temporary hosts. Owners pay only when they want to list a pet and invite carefully optimistic strangers into the care-note ecosystem.",
+        "headline": "List your pet. Pay someone else to host the personality.",
+        "body": "Owners choose a listing plan, set a host payout, and invite carefully optimistic neighbours into the care-note ecosystem. Temporary hosts get paid for taking the pet off your hands.",
         "imageAssetKey": "pricing-hero",
         "ctaGroup": {
           "primary": { "label": "Submit your pet", "link": { "type": "internalPath", "path": "/process" }, "style": "primary" },
@@ -365,10 +397,10 @@
       },
       "sections": [
         {
-          "_key": "pricing-free-hosting-callout",
+          "_key": "pricing-host-payout-callout",
           "_type": "calloutBlock",
-          "headline": "Hosting is free. The lint is between you and your furniture.",
-          "body": "People seeking a short-term companion can inquire at no cost. The listing plans below are for owners who want their pet seen, understood, and temporarily appreciated by someone else.",
+          "headline": "Temporary hosts get paid. The lint is still between them and their furniture.",
+          "body": "People seeking a short-term companion can inquire without paying a site fee. If the stay is approved, the owner-funded payout compensates them for accepting the leash, care notes, and whatever emotional subplot arrives with the pet.",
           "tone": "pricing note",
           "icon": "heart"
         },
@@ -382,8 +414,9 @@
           "features": [
             { "_key": "pricing-basic-feature-1", "_type": "pricingFeature", "label": "Pet profile listing", "included": true, "note": "Name, breed, care notes, and a dignified amount of honesty." },
             { "_key": "pricing-basic-feature-2", "_type": "pricingFeature", "label": "Up to 6 photos", "included": true, "note": "Enough angles to prove the pet is real and judging." },
-            { "_key": "pricing-basic-feature-3", "_type": "pricingFeature", "label": "Inquiry forwarding", "included": true, "note": "Requests route to the master inbox for phase one." },
-            { "_key": "pricing-basic-feature-4", "_type": "pricingFeature", "label": "Featured placement", "included": false, "note": "Your pet waits politely in the regular listings." }
+            { "_key": "pricing-basic-feature-3", "_type": "pricingFeature", "label": "Suggested host payout", "included": true, "note": "$20 to $30 per day, depending on charm density and towel risk." },
+            { "_key": "pricing-basic-feature-4", "_type": "pricingFeature", "label": "Inquiry forwarding", "included": true, "note": "Requests route to the master inbox for phase one." },
+            { "_key": "pricing-basic-feature-5", "_type": "pricingFeature", "label": "Featured placement", "included": false, "note": "Your pet waits politely in the regular listings." }
           ],
           "cta": { "label": "Submit your pet", "link": { "type": "internalPath", "path": "/process" }, "style": "primary" }
         },
@@ -398,7 +431,8 @@
             { "_key": "pricing-spotlight-feature-1", "_type": "pricingFeature", "label": "Everything in Porch Listing", "included": true },
             { "_key": "pricing-spotlight-feature-2", "_type": "pricingFeature", "label": "Up to 10 photos", "included": true, "note": "Includes the flattering one and the legally informative one." },
             { "_key": "pricing-spotlight-feature-3", "_type": "pricingFeature", "label": "Priority listing rotation", "included": true, "note": "More chances to be seen by brave nearby hosts." },
-            { "_key": "pricing-spotlight-feature-4", "_type": "pricingFeature", "label": "Care-note review", "included": true, "note": "We help make the warnings sound useful, not like a haunted voicemail." }
+            { "_key": "pricing-spotlight-feature-4", "_type": "pricingFeature", "label": "Host payout guidance", "included": true, "note": "A better suggested range for pets with opinions, stairs, or snack legislation." },
+            { "_key": "pricing-spotlight-feature-5", "_type": "pricingFeature", "label": "Care-note review", "included": true, "note": "We help make the warnings sound useful, not like a haunted voicemail." }
           ],
           "cta": { "label": "Submit your pet", "link": { "type": "internalPath", "path": "/process" }, "style": "primary" }
         },
@@ -413,7 +447,8 @@
             { "_key": "pricing-couch-feature-1", "_type": "pricingFeature", "label": "Everything in Spotlight", "included": true },
             { "_key": "pricing-couch-feature-2", "_type": "pricingFeature", "label": "Homepage feature eligibility", "included": true, "note": "For pets with strong photos and a compelling incident history." },
             { "_key": "pricing-couch-feature-3", "_type": "pricingFeature", "label": "Owner profile polish", "included": true, "note": "We make you sound calm, prepared, and only reasonably tired." },
-            { "_key": "pricing-couch-feature-4", "_type": "pricingFeature", "label": "Relisting reminder", "included": true, "note": "A polite nudge before the pet reclaims the hallway." }
+            { "_key": "pricing-couch-feature-4", "_type": "pricingFeature", "label": "Premium host payout framing", "included": true, "note": "For pets whose listing should admit, financially, that this is a lot." },
+            { "_key": "pricing-couch-feature-5", "_type": "pricingFeature", "label": "Relisting reminder", "included": true, "note": "A polite nudge before the pet reclaims the hallway." }
           ],
           "cta": { "label": "Submit your pet", "link": { "type": "internalPath", "path": "/process" }, "style": "primary" }
         },
@@ -450,6 +485,16 @@
                 { "_key": "photos-porch", "planKey": "porch", "included": true, "note": "Up to 6" },
                 { "_key": "photos-spotlight", "planKey": "spotlight", "included": true, "note": "Up to 10" },
                 { "_key": "photos-couch", "planKey": "couch", "included": true, "note": "Up to 10 plus feature picks" }
+              ]
+            },
+            {
+              "_key": "comparison-host-payout",
+              "feature": "Suggested host payout",
+              "description": "The owner-funded amount offered to the person taking the pet for a temporary stay.",
+              "values": [
+                { "_key": "payout-porch", "planKey": "porch", "included": true, "note": "$20-$30/day" },
+                { "_key": "payout-spotlight", "planKey": "spotlight", "included": true, "note": "$28-$40/day" },
+                { "_key": "payout-couch", "planKey": "couch", "included": true, "note": "$38+/day or apology-sized weekend rate" }
               ]
             },
             {

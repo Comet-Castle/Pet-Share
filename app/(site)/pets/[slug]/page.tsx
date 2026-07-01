@@ -81,7 +81,7 @@ export default async function PetSlugPage({ params }: PetSlugPageProps) {
   const ownerName = pet.owner?.name ?? "A very tired owner";
 
   return (
-    <article className="mx-auto w-full max-w-[1280px] px-5 py-12 sm:px-8 lg:px-10">
+    <article className="mx-auto w-full max-w-[1440px] px-5 py-12 sm:px-8 lg:px-10">
       <div className="grid min-w-0 gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
         <PetImageGallery images={galleryImages} petName={pet.name} />
 

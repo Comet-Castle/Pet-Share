@@ -87,7 +87,7 @@ export default async function OwnerSlugPage({ params }: OwnerSlugPageProps) {
   const memberSince = formatMemberSince(owner.memberSince);
 
   return (
-    <article className="mx-auto w-full max-w-[1280px] px-5 py-12 sm:px-8 lg:px-10">
+    <article className="mx-auto w-full max-w-[1440px] px-5 py-12 sm:px-8 lg:px-10">
       <section className="grid gap-8 rounded-[2rem] bg-white/70 p-6 shadow-soft backdrop-blur sm:p-8 lg:grid-cols-[320px_1fr]">
         <div className="relative aspect-square overflow-hidden rounded-[1.5rem] bg-pet-mint/25">
           {portraitUrl ? (

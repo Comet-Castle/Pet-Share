@@ -9,6 +9,18 @@ import {
   temperamentOptions
 } from "./constants";
 
+const listingPlanOptions = [
+  { title: "Porch Listing", value: "porch" },
+  { title: "Neighbourhood Spotlight", value: "spotlight" },
+  { title: "Couch Recovery Campaign", value: "couchRecovery" }
+];
+
+const hostPayoutUnitOptions = [
+  { title: "Per day", value: "day" },
+  { title: "Per stay", value: "stay" },
+  { title: "Per weekend", value: "weekend" }
+];
+
 export const pet = defineType({
   name: "pet",
   title: "Pet",
@@ -122,6 +134,47 @@ export const pet = defineType({
       type: "string",
       options: { list: availabilityStatusOptions, layout: "radio" },
       initialValue: "available",
+      validation: (rule) => rule.required()
+    }),
+    defineField({
+      name: "distanceKilometers",
+      title: "Distance from viewer (km)",
+      type: "number",
+      description: "Seed/demo distance used for local listing cards until real geo search exists.",
+      validation: (rule) => rule.min(0).precision(1)
+    }),
+    defineField({
+      name: "listingPlan",
+      title: "Listing plan",
+      type: "string",
+      description: "Owner-paid listing plan attached to this pet listing.",
+      options: { list: listingPlanOptions, layout: "radio" },
+      validation: (rule) => rule.required()
+    }),
+    defineField({
+      name: "hostPayoutAmount",
+      title: "Host payout amount",
+      type: "number",
+      description: "Amount the temporary host is paid for taking this pet for a short stay.",
+      validation: (rule) => rule.required().min(0).precision(2)
+    }),
+    defineField({
+      name: "hostPayoutCurrency",
+      title: "Host payout currency",
+      type: "string",
+      initialValue: "CAD",
+      validation: (rule) =>
+        rule.required().custom((currency) => {
+          if (!currency) return "Required";
+          return /^[A-Z]{3}$/.test(currency) ? true : "Use a three-letter uppercase currency code, such as CAD.";
+        })
+    }),
+    defineField({
+      name: "hostPayoutUnit",
+      title: "Host payout unit",
+      type: "string",
+      options: { list: hostPayoutUnitOptions, layout: "radio" },
+      initialValue: "day",
       validation: (rule) => rule.required()
     }),
     defineField({

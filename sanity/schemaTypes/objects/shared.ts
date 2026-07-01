@@ -10,6 +10,8 @@ import {
   Play
 } from "lucide-react";
 import { defineArrayMember, defineField, defineType } from "sanity";
+import { IconPickerInput, VisualStringOptionsInput } from "@/sanity/components/studio-string-inputs";
+import { ctaStyleOptions } from "./studio-options";
 
 const linkTargets = [
   { title: "Internal path", value: "internalPath" },
@@ -353,22 +355,21 @@ export const cta = defineType({
     defineField({
       name: "style",
       title: "Style",
+      description: "Controls the frontend button/link treatment.",
       type: "string",
       options: {
-        list: [
-          { title: "Primary", value: "primary" },
-          { title: "Secondary", value: "secondary" },
-          { title: "Text", value: "text" }
-        ],
-        layout: "radio"
+        list: ctaStyleOptions
       },
+      components: { input: VisualStringOptionsInput },
       initialValue: "primary",
       validation: (rule) => rule.required()
     }),
     defineField({
       name: "icon",
-      title: "Icon name",
-      type: "string"
+      title: "Icon",
+      description: "Optional icon metadata for components that render CTA icons. Use the browser to search Lucide icons.",
+      type: "string",
+      components: { input: IconPickerInput }
     })
   ],
   preview: {
@@ -377,9 +378,11 @@ export const cta = defineType({
       subtitle: "style"
     },
     prepare({ title, subtitle }) {
+      const styleLabel = ctaStyleOptions.find((option) => option.value === subtitle)?.title;
+
       return {
         title: title || "CTA",
-        subtitle,
+        subtitle: styleLabel ? `${styleLabel} CTA` : subtitle,
         media: MousePointerClick
       };
     }

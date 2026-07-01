@@ -160,6 +160,21 @@ Boundary rules:
 - Use Sanity image helpers to build Sanity CDN URLs, then render with `next/image` where practical.
 - Configure `next.config` image `remotePatterns` for the Sanity image CDN domain before using Sanity-hosted images with `next/image`.
 - Keep public published queries separate from draft/preview queries.
+- Remember that Sanity CDN caching and Next.js fetch caching are separate. If recently changed CMS content appears stale, verify the Sanity document directly before changing UI code.
+- For fast-changing singleton pages during local visual work, it is acceptable to use the non-CDN Sanity client intentionally in that page loader. Document the reason in code or the handoff when doing so.
+- Once webhook revalidation exists, prefer explicit tag/path revalidation over broad cache disabling.
+
+## Page Composition Ownership
+
+Not every page section is owned by the generic page-builder renderer.
+
+- Generic marketing page sections should use `components/features/sections/page-sections.tsx` unless a page needs a bespoke experience.
+- The homepage can use code-composed sections in `app/(site)/page.tsx` when fidelity to the approved design requires a custom marketplace-style layout.
+- If a code-composed homepage section uses Sanity data, keep seed defaults in sync with the component so reseeding does not reintroduce old copy or structure.
+- Before changing homepage copy or layout, check whether the visible content comes from `homePage`, related referenced documents such as testimonials, generated seed logic, or hardcoded fallback copy.
+- For small homepage visual refinements, prefer direct component changes in `app/(site)/page.tsx` and a focused rendered screenshot. Do not push Sanity content unless the changed copy or data is actually CMS-authored.
+- Keep the homepage marketplace cards visually simple and close to the approved references. Avoid adding extra labels, dividers, badges, buttons, or explanatory UI unless the user asks for them.
+- Keep homepage process content focused. The current homepage explains the temporary host flow; the owner/listing flow belongs on `/process` and is linked from a CTA.
 
 ## Forms
 
@@ -218,3 +233,4 @@ Before handing implementation work back for review:
 - Sanity queries return only the fields needed by renderers.
 - New dependencies are justified in `docs/dependency-decision-log.md`.
 - Attribution-relevant additions are reflected in `ATTRIBUTIONS.md`.
+- Verification scope matches the change size. Use `docs/frontend-qa.md` to avoid over-testing small visual tweaks while still checking meaningful layout, responsive, CMS, or interaction risk.

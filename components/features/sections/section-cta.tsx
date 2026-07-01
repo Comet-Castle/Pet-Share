@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowRight, ExternalLink } from "lucide-react";
+import { IconBadge } from "@/components/ui/icon-badge";
 import type { CtaGroupValue, CtaLinkValue, CtaValue } from "./section-types";
 import { joinClassNames } from "@/lib/utils/class-names";
 
@@ -49,6 +50,7 @@ export function SectionCtaLink({ cta }: CtaLinkProps) {
         cta.style === "text" && "px-0 text-pet-ink underline decoration-pet-coral decoration-2 underline-offset-4 hover:-rotate-1"
       )}
     >
+      {cta.icon ? <IconBadge icon={cta.icon} className="size-5 bg-transparent text-current" /> : null}
       <span>{cta.label}</span>
       {external ? <ExternalLink aria-hidden="true" size={18} /> : <ArrowRight aria-hidden="true" size={18} />}
     </Link>

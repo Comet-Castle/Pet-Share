@@ -25,7 +25,7 @@
 
 html {
   min-width: 320px;
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
 }
 
 body {
@@ -34,6 +34,13 @@ body {
   font-family: var(--font-sans);
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+}
+
+.pet-site-background {
+  background-color: #fffdf9;
+  background-image: url("data:image/svg+xml,%3Csvg width='320' height='320' viewBox='0 0 320 320' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23ff8f70' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round' opacity='0.052'%3E%3Cg transform='translate(24 28)'%3E%3Ccircle cx='24' cy='10' r='6'/%3E%3Ccircle cx='40' cy='10' r='6'/%3E%3Ccircle cx='14' cy='26' r='6'/%3E%3Ccircle cx='50' cy='26' r='6'/%3E%3Cpath d='M20 45c3-11 21-11 24 0 2 8-4 14-12 14s-14-6-12-14Z'/%3E%3C/g%3E%3Cg transform='translate(205 40) rotate(-10 38 16)'%3E%3Ccircle cx='8' cy='16' r='8'/%3E%3Ccircle cx='68' cy='16' r='8'/%3E%3Cpath d='M14 10h48M14 22h48'/%3E%3C/g%3E%3Cg transform='translate(92 114)'%3E%3Cpath d='M4 22c16-18 37-18 54 0-17 18-38 18-54 0Z'/%3E%3Cpath d='M58 22l14-12v24Z'/%3E%3Ccircle cx='18' cy='20' r='1.5' fill='%23ff8f70' stroke='none'/%3E%3C/g%3E%3Cg transform='translate(232 178)'%3E%3Ccircle cx='28' cy='28' r='22'/%3E%3Cpath d='M13 28h30M28 13v30'/%3E%3C/g%3E%3Cg transform='translate(48 224) rotate(12 36 18)'%3E%3Cpath d='M8 18h56'/%3E%3Cpath d='M8 18c0-9 11-15 18-8 4-8 16-8 20 0 7-7 18-1 18 8s-11 15-18 8c-4 8-16 8-20 0-7 7-18 1-18-8Z'/%3E%3C/g%3E%3C/g%3E%3Cg fill='none' stroke='%2382c7f5' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round' opacity='0.038'%3E%3Cg transform='translate(258 92)'%3E%3Cpath d='M14 4c6 8 6 18 0 26C8 22 8 12 14 4Z'/%3E%3Cpath d='M30 4c-6 8-6 18 0 26 6-8 6-18 0-26Z'/%3E%3C/g%3E%3Cg transform='translate(146 248)'%3E%3Cpath d='M16 8c6-7 16-7 22 0 6-7 16-7 22 0-7 12-18 21-22 24-4-3-15-12-22-24Z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  background-position: 0 0;
+  background-size: 320px 320px;
 }
 
 a {
@@ -78,6 +85,22 @@ input[type="submit"]:not(:disabled) {
     opacity: 1;
     transform: scale(1);
   }
+}
+
+@keyframes pet-hero-slide-enter {
+  from {
+    opacity: 0;
+    transform: translateX(18px) scale(0.992);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+.animate-pet-hero-slide {
+  animation: pet-hero-slide-enter 260ms ease-out;
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -14,15 +14,25 @@ const publicPetFilter = /* groq */ `
   submissionStatus == "approved"
 `;
 
+const petIndexFilters = /* groq */ `
+  ${publicPetFilter} &&
+  (!defined($petTypeSlugs) || petType->slug.current in $petTypeSlugs) &&
+  (!defined($availabilityStatuses) || availabilityStatus in $availabilityStatuses) &&
+  (!defined($cuddlePolicies) || cuddlePolicy in $cuddlePolicies) &&
+  (!defined($minChaos) || chaosLevel >= $minChaos) &&
+  (!defined($minMess) || messRisk >= $minMess) &&
+  (!defined($minEnergy) || energyLevel >= $minEnergy)
+`;
+
 export const PETS_INDEX_QUERY = defineQuery(/* groq */ `
-  *[${publicPetFilter}]
+  *[${petIndexFilters}]
   | order(name asc, _id asc)[$start...$end]{
     ${petCardFields}
   }
 `);
 
 export const PETS_INDEX_COUNT_QUERY = defineQuery(/* groq */ `
-  count(*[${publicPetFilter}])
+  count(*[${petIndexFilters}])
 `);
 
 export const PET_BY_SLUG_QUERY = defineQuery(/* groq */ `

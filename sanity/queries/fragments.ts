@@ -225,8 +225,33 @@ export const sectionFields = /* groq */ `
       ${ctaFields}
     }
   },
+  _type == "processPathSection" => {
+    title,
+    body,
+    tone,
+    icon,
+    steps[]{
+      _key,
+      title,
+      body[]{
+        ${portableTextFields}
+      },
+      description,
+      icon,
+      order,
+      cta{
+        ${ctaFields}
+      }
+    },
+    cta{
+      ${ctaFields}
+    }
+  },
   _type == "processStep" => {
     title,
+    body[]{
+      ${portableTextFields}
+    },
     description,
     icon,
     order,
@@ -250,6 +275,11 @@ export const petCardFields = /* groq */ `
   listingHeadline,
   listingSummary,
   availabilityStatus,
+  distanceKilometers,
+  listingPlan,
+  hostPayoutAmount,
+  hostPayoutCurrency,
+  hostPayoutUnit,
   temperament,
   pickupUrgency,
   messRisk,

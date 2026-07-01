@@ -21,6 +21,12 @@ const mediaScope = parseMediaScope(args.values.get("media-scope"));
 const onlyTarget = parseOnlyTarget(args.values.get("only") ?? args.values.get("only-page"));
 const documentMutationChunkSize = 25;
 const deleteMutationChunkSize = 50;
+const listingPlans = [
+  { value: "porch", label: "Porch Listing", basePayout: 20 },
+  { value: "spotlight", label: "Neighbourhood Spotlight", basePayout: 28 },
+  { value: "couchRecovery", label: "Couch Recovery Campaign", basePayout: 38 }
+];
+const payoutUnits = ["day", "day", "day", "stay", "weekend"];
 
 loadLocalEnv(rootDir);
 
@@ -928,6 +934,8 @@ function buildPets(targetCount = DEFAULT_PET_COUNT) {
     const imageCount = imageCountForPetIndex(index);
 
     const visualIdentity = buildPetVisualIdentity(seedKey, index);
+    const listingPlan = pick(listingPlans, index);
+    const hostPayoutUnit = pick(payoutUnits, index);
 
     return {
       _type: "pet",
@@ -945,6 +953,11 @@ function buildPets(targetCount = DEFAULT_PET_COUNT) {
       listingHeadline: headline,
       listingSummary: listingSummaryOverrides[seedKey] ?? buildListingSummary(detailParagraphs),
       availabilityStatus: ["available", "available", "temporarilyUnavailable", "pendingPickup"][index % 4],
+      distanceKilometers: getSpoofDistanceKilometers(index),
+      listingPlan: listingPlan.value,
+      hostPayoutAmount: listingPlan.basePayout + ((index * 3) % 11),
+      hostPayoutCurrency: "CAD",
+      hostPayoutUnit,
       temperament,
       pickupUrgency,
       messRisk,
@@ -975,6 +988,10 @@ function buildPets(targetCount = DEFAULT_PET_COUNT) {
       seo: seo(null, `${name} | Pet Share`, `Borrow ${name}, a ${breed} with care notes, owner instructions, and a few practical warnings.`)
     };
   });
+}
+
+function getSpoofDistanceKilometers(index) {
+  return Number((1.4 + ((index * 2.65) % 34)).toFixed(1));
 }
 
 function getGeneratedPetName(index) {
@@ -1082,7 +1099,7 @@ function buildTestimonials(seedTestimonials, pets, owners) {
   const generated = pets.slice(0, 18).map((pet, index) => ({
     _type: "testimonial",
     seedKey: `testimonial-${pet.seedKey.replace("pet-", "")}`,
-    quote: `${pet.name} stayed for one weekend and somehow made our household policies more specific. Five stars for charm, minus one star for paperwork.`,
+    quote: `${pet.name} stayed for one weekend and left behind better photos, one new household rule, and a strong case for reading care notes twice.`,
     authorName: temporaryHostNames[index],
     authorRole: "Temporary pet custodian",
     relatedPetSeedKey: pet.seedKey,
@@ -1190,7 +1207,7 @@ function transformPage(page, pets, owners) {
         {
           _key: key("section"),
           _type: "testimonialBlock",
-          header: { _type: "sectionHeader", headline: "Field notes from temporary hosts", body: "A few people agreed to host a pet briefly and lived to write something oddly specific.", alignment: "left" },
+          header: { _type: "sectionHeader", headline: "Reports from temporary hosts", body: "Lightly professional feedback from people who accepted a short stay and lived to recommend a lint roller.", alignment: "left" },
           testimonialsSeedKeys: page.testimonialSeedIds,
           layoutHint: "grid"
         }
@@ -1292,6 +1309,26 @@ function transformSection(section, options = {}) {
   if (section._type === "ctaGroup") {
     return { _key: section._key ?? key("section"), _type: "ctaGroup", primary: cta(section.primary), secondary: cta(section.secondary), alignment: section.alignment ?? "left" };
   }
+  if (section._type === "processPathSection") {
+    return {
+      _key: section._key ?? key("section"),
+      _type: "processPathSection",
+      title: section.title,
+      body: section.body,
+      tone: section.tone ?? "neutral",
+      icon: section.icon ?? null,
+      steps: section.steps?.map((step) => ({
+        _key: step._key ?? key("processStep"),
+        _type: "processStep",
+        title: step.title,
+        description: step.description,
+        icon: step.icon ?? null,
+        order: step.order ?? null,
+        cta: cta(step.cta)
+      })) ?? [],
+      cta: cta(section.cta)
+    };
+  }
   return {
     _key: section._key ?? key("section"),
     ...section,
@@ -1355,6 +1392,10 @@ function assetKeyFromApprovedMediaPath(filePath) {
 
   if (parts[0] === "owners" && parts[2] === "images" && fileBase === "portrait") {
     return `owner-${parts[1]}-portrait`;
+  }
+
+  if (parts[0] === "pages" && parts[1] === "home" && parts[2] === "images" && fileBase) {
+    return `home-${fileBase}`;
   }
 
   if (parts[0] === "pages" && parts[2] === "images" && fileBase === "hero") {

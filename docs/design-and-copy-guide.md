@@ -4,6 +4,27 @@ This guide defines the practical visual and writing direction for Pet Share. Use
 
 The project brief stays high level. This document is the working reference for how the site should look, move, and sound.
 
+## Visual References
+
+Approved mockups live in `docs/design-references/`.
+
+- `homepage-clean-marketplace-reference.png`: use as the primary homepage and marketing-page direction. Marketing pages should feel clean, bright, airy, and polished, with fewer competing modules and more white space.
+- `catalog-browsing-reference.png`: use as the primary pet catalog/index direction. The catalog can be busier because filtering, sorting, and comparison benefit from a denser interface.
+- `process-clean-spacious-reference.png`: use as the primary process page direction. Keep the page calm and spacious, with a clear text-first hero, restrained timeline/checklist sections, and generous separation between navigation, hero, and content.
+- `pricing-clean-spacious-reference.png`: use as the primary pricing page direction. Keep the page centered, airy, and calm, with compact pricing tiers, a simple FAQ preview, and restrained CTA sections.
+- `warranty-header-cards-reference.png` and `warranty-form-lower-reference.png`: use together as the warranty page direction. Use the second warranty reference for the header and the `Covered-ish`, `Not covered`, and `Please do not send` boxes; use the third warranty reference for the claim form and lower-page flow.
+
+Generated mockups may include extra interface ideas that are not in scope. Do not implement favorites, saved items, messaging, account controls, notifications, or other unapproved features just because they appear in a reference image.
+
+### How To Use These References
+
+- Treat the PNGs as directional design targets, not exact production screenshots.
+- Match the spacing, hierarchy, mood, and component relationships before matching small generated details.
+- Keep marketing pages spacious and calm. Increase white space between navigation, hero/banner areas, and content sections.
+- Let the catalog page stay denser than marketing pages because filtering, sorting, and browsing need more controls.
+- Adapt layouts responsively instead of forcing desktop mockup proportions onto mobile.
+- Replace generated placeholder copy, icons, and incidental UI with scoped project content and approved features.
+
 ## Brand Position
 
 Pet Share should feel like a polished consumer marketplace built around an obviously ridiculous premise: lending out pets when their owners need a break.
