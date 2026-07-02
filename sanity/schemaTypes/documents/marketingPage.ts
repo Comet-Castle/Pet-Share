@@ -5,7 +5,7 @@ import { reservedMarketingSlugs } from "./constants";
 
 export const marketingPage = defineType({
   name: "marketingPage",
-  title: "Marketing page",
+  title: "Standard Page",
   type: "document",
   icon: FileText,
   groups: [
@@ -74,7 +74,7 @@ export const marketingPage = defineType({
   preview: {
     select: { title: "title", subtitle: "slug.current" },
     prepare({ title, subtitle }) {
-      return { title: title || "Marketing page", subtitle: subtitle ? `/${subtitle}` : undefined, media: FileText };
+      return { title: title || "Standard Page", subtitle: subtitle ? `/${subtitle}` : undefined, media: FileText };
     }
   }
 });

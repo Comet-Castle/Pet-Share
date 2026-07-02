@@ -781,6 +781,8 @@ function buildListingSummary(detailParagraphs) {
 }
 
 function link(input) {
+  if (!input) return null;
+
   return {
     _type: "link",
     label: input.label ?? "",
@@ -800,6 +802,16 @@ function cta(input) {
     style: input.style ?? "primary",
     icon: input.icon ?? null,
     link: link({ label: input.label, ...(input.link ?? { type: "internalPath", path: "/" }) })
+  };
+}
+
+function ctaGroup(input) {
+  if (!input) return null;
+  return {
+    _type: "ctaGroup",
+    primary: cta(input.primary),
+    secondary: cta(input.secondary),
+    alignment: input.alignment ?? "left"
   };
 }
 
@@ -1203,14 +1215,7 @@ function transformPage(page, pets, owners) {
         { _key: key("stat"), _type: "statBlock", value: "0", label: "Apologies guaranteed", description: "We offer guidance, warning labels, and emotional support towels.", icon: "shield" }
       ],
       contentSections: [
-        ...page.contentSections.map(transformSection),
-        {
-          _key: key("section"),
-          _type: "testimonialBlock",
-          header: { _type: "sectionHeader", headline: "Reports from temporary hosts", body: "Lightly professional feedback from people who accepted a short stay and lived to recommend a lint roller.", alignment: "left" },
-          testimonialsSeedKeys: page.testimonialSeedIds,
-          layoutHint: "grid"
-        }
+        ...page.contentSections.map(transformSection)
       ],
       primaryCta: cta({ label: "Find a temporary pet", link: { type: "internalPath", path: "/pets" }, style: "primary" })
     };
@@ -1237,7 +1242,7 @@ function transformPage(page, pets, owners) {
       eyebrow: page.eyebrow,
       headline: page.headline,
       message: page.message,
-      image: imageWithAlt(`${page._id}-hero`, `${page.headline} system illustration.`),
+      image: imageWithAlt(page.imageAssetKey ?? `${page._id}-hero`, `${page.headline} system illustration.`),
       primaryCta: cta(page.primaryCta),
       secondaryCta: cta(page.secondaryCta),
       supportCopy: page.supportCopy,
@@ -1245,13 +1250,15 @@ function transformPage(page, pets, owners) {
     };
   }
 
+  const shouldUseDedicatedCtaSection = page.sections?.some((section) => section._type === "pricingCtaBand");
+
   return {
     ...base,
     title: page.title,
     sections: [
       transformSection(page.hero, { fallbackAssetKey: `${page.seedId}-hero` }),
       ...page.sections.map(transformSection),
-      page.primaryCta
+      page.primaryCta && !shouldUseDedicatedCtaSection
         ? { _key: key("section"), _type: "ctaGroup", primary: cta(page.primaryCta), secondary: null, alignment: "center" }
         : null
     ].filter(Boolean),
@@ -1265,7 +1272,7 @@ function navItem(item) {
 
 function transformSection(section, options = {}) {
   if (!section) return null;
-  const imageAssetKey = options.fallbackAssetKey ?? section.imageAssetKey;
+  const imageAssetKey = section.imageAssetKey ?? (section.layoutHint === "centered" ? null : options.fallbackAssetKey);
   if (section._type === "hero") {
     return {
       _key: section._key ?? key("section"),
@@ -1273,8 +1280,9 @@ function transformSection(section, options = {}) {
       eyebrow: section.eyebrow ?? null,
       headline: section.headline,
       body: section.body ?? null,
-      image: imageWithAlt(imageAssetKey, `${section.headline} hero image.`),
-      ctaGroup: section.ctaGroup ? { _type: "ctaGroup", primary: cta(section.ctaGroup.primary), secondary: cta(section.ctaGroup.secondary), alignment: section.ctaGroup.alignment ?? "left" } : null
+      image: imageAssetKey ? imageWithAlt(imageAssetKey, `${section.headline} hero image.`) : null,
+      ctaGroup: ctaGroup(section.ctaGroup),
+      layoutHint: section.layoutHint ?? "mediaCard"
     };
   }
   if (section._type === "heroSlide") {
@@ -1296,37 +1304,149 @@ function transformSection(section, options = {}) {
       header: { _type: "sectionHeader", headline: section.headline ?? section.header?.headline ?? "Content", body: section.header?.body ?? null, alignment: section.header?.alignment ?? "left" },
       body: Array.isArray(section.body) ? section.body : [block(section.body ?? "")],
       media: section.imageAssetKey ? imageWithAlt(section.imageAssetKey, `${section.headline ?? "Pet Share"} section image.`) : null,
-      ctaGroup: section.ctaGroup ?? null,
+      ctaGroup: ctaGroup(section.ctaGroup),
       layoutHint: section.layoutHint ?? "textOnly"
     };
   }
   if (section._type === "statBlock") {
     return { _key: section._key ?? key("section"), _type: "statBlock", value: section.value, label: section.label, description: section.description ?? section.supportingText ?? null, icon: section.icon ?? "star" };
   }
-  if (section._type === "alertBlock") {
-    return { _key: section._key ?? key("section"), _type: "alertBlock", title: section.title ?? section.headline, message: section.message ?? section.body, tone: section.tone ?? "info", cta: cta(section.cta) };
+  if (section._type === "featureList") {
+    return {
+      _key: section._key ?? key("section"),
+      _type: "featureList",
+      header: section.header ?? null,
+      iconStyle: section.iconStyle ?? "outline",
+      items: section.items?.map((item) => ({
+        _key: item._key ?? key("feature"),
+        _type: "featureItem",
+        title: item.title,
+        description: item.description ?? null,
+        icon: item.icon ?? null,
+        link: link(item.link)
+      })) ?? []
+    };
   }
   if (section._type === "ctaGroup") {
-    return { _key: section._key ?? key("section"), _type: "ctaGroup", primary: cta(section.primary), secondary: cta(section.secondary), alignment: section.alignment ?? "left" };
+    return { _key: section._key ?? key("section"), ...ctaGroup(section) };
+  }
+  if (section._type === "pricingValueSection") {
+    return {
+      _key: section._key ?? key("section"),
+      _type: "pricingValueSection",
+      valueItems: section.valueItems?.map((item) => ({
+        _key: item._key ?? key("pricingValue"),
+        _type: "pricingValueItem",
+        title: item.title,
+        body: item.body,
+        icon: item.icon ?? null
+      })) ?? []
+    };
+  }
+  if (section._type === "pricingPackageGrid") {
+    return {
+      _key: section._key ?? key("section"),
+      _type: "pricingPackageGrid",
+      header: section.header ?? null,
+      packages: section.packages?.map((item) => ({
+        _key: item._key ?? key("pricingPackage"),
+        _type: "pricingPackage",
+        name: item.name,
+        price: item.price,
+        duration: item.duration,
+        description: item.description,
+        icon: item.icon ?? null,
+        tone: item.tone ?? "mint",
+        badge: item.badge ?? null,
+        highlighted: item.highlighted ?? false,
+        features: item.features?.map((feature) => ({
+          _key: feature._key ?? key("pricingPlanFeature"),
+          _type: "pricingPlanFeatureItem",
+          label: feature.label
+        })) ?? []
+      })) ?? []
+    };
+  }
+  if (section._type === "pricingCtaBand") {
+    return {
+      _key: section._key ?? key("section"),
+      _type: "pricingCtaBand",
+      headline: section.headline,
+      body: section.body,
+      icon: section.icon ?? null,
+      ctaGroup: ctaGroup(section.ctaGroup),
+      proofItems: section.proofItems?.map((item) => ({
+        _key: item._key ?? key("pricingProof"),
+        _type: "pricingCtaProofItem",
+        label: item.label,
+        icon: item.icon ?? null
+      })) ?? []
+    };
   }
   if (section._type === "processPathSection") {
     return {
       _key: section._key ?? key("section"),
       _type: "processPathSection",
-      title: section.title,
-      body: section.body,
+      header: section.header ?? (section.title || section.body
+        ? {
+            _type: "sectionHeader",
+            headline: section.title,
+            body: section.body ?? null,
+            alignment: "left"
+          }
+        : null),
       tone: section.tone ?? "neutral",
       icon: section.icon ?? null,
       steps: section.steps?.map((step) => ({
         _key: step._key ?? key("processStep"),
         _type: "processStep",
         title: step.title,
-        description: step.description,
+        body: Array.isArray(step.body) ? step.body : step.description ? [block(step.description)] : [],
         icon: step.icon ?? null,
-        order: step.order ?? null,
         cta: cta(step.cta)
       })) ?? [],
       cta: cta(section.cta)
+    };
+  }
+  if (section._type === "warrantyConditionGrid") {
+    return {
+      _key: section._key ?? key("section"),
+      _type: "warrantyConditionGrid",
+      header: section.header ?? null,
+      items: section.items?.map((item) => ({
+        _key: item._key ?? key("warrantyCondition"),
+        _type: "warrantyConditionItem",
+        title: item.title,
+        body: item.body,
+        tone: item.tone ?? "covered",
+        icon: item.icon ?? null
+      })) ?? []
+    };
+  }
+  if (section._type === "warrantyNoticeSection") {
+    return {
+      _key: section._key ?? key("section"),
+      _type: "warrantyNoticeSection",
+      anchorId: section.anchorId ?? null,
+      header: section.header ?? null,
+      body: Array.isArray(section.body) ? section.body : [block(section.body ?? "")],
+      badgeLabel: section.badgeLabel ?? null
+    };
+  }
+  if (section._type === "warrantyClaimPrep") {
+    return {
+      _key: section._key ?? key("section"),
+      _type: "warrantyClaimPrep",
+      anchorId: section.anchorId ?? null,
+      header: section.header ?? null,
+      items: section.items?.map((item) => ({
+        _key: item._key ?? key("warrantyPrep"),
+        _type: "warrantyClaimPrepItem",
+        title: item.title,
+        body: item.body,
+        icon: item.icon ?? null
+      })) ?? [],
+      ctaGroup: ctaGroup(section.ctaGroup)
     };
   }
   return {
@@ -1335,7 +1455,6 @@ function transformSection(section, options = {}) {
     cta: cta(section.cta),
     primary: cta(section.primary),
     secondary: cta(section.secondary),
-    features: section.features?.map((feature) => ({ _key: feature._key ?? key("pricing"), _type: "pricingFeature", ...feature })) ?? section.features,
     items: section.items?.map((item) => ({ _key: item._key ?? key("item"), ...item, body: Array.isArray(item.body) ? item.body : [block(item.body ?? "")] })) ?? section.items
   };
 }

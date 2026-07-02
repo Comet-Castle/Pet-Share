@@ -82,7 +82,8 @@ export const sectionFields = /* groq */ `
     },
     ctaGroup{
       ${ctaGroupFields}
-    }
+    },
+    layoutHint
   },
   _type == "heroSlide" => {
     headline,
@@ -128,40 +129,11 @@ export const sectionFields = /* groq */ `
       ${ctaFields}
     }
   },
-  _type == "alertBlock" => {
-    title,
-    message,
-    tone,
-    cta{
-      ${ctaFields}
-    }
-  },
-  _type == "warningBlock" => {
-    title,
-    message,
-    severity,
-    icon
-  },
   _type == "statBlock" => {
     value,
     label,
     description,
     icon
-  },
-  _type == "testimonialBlock" => {
-    header,
-    layoutHint,
-    testimonials[]->{
-      _id,
-      quote,
-      authorName,
-      authorRole,
-      rating,
-      tone,
-      authorImage{
-        ${imageWithAltFields}
-      }
-    }
   },
   _type == "featureList" => {
     header,
@@ -184,21 +156,6 @@ export const sectionFields = /* groq */ `
       body[]{
         ${portableTextFields}
       }
-    }
-  },
-  _type == "pricingTier" => {
-    name,
-    price,
-    billingNote,
-    highlighted,
-    features[]{
-      _key,
-      label,
-      included,
-      note
-    },
-    cta{
-      ${ctaFields}
     }
   },
   _type == "pricingComparisonTable" => {
@@ -225,7 +182,47 @@ export const sectionFields = /* groq */ `
       ${ctaFields}
     }
   },
+  _type == "pricingValueSection" => {
+    valueItems[]{
+      _key,
+      title,
+      body,
+      icon
+    }
+  },
+  _type == "pricingPackageGrid" => {
+    header,
+    packages[]{
+      _key,
+      name,
+      price,
+      duration,
+      description,
+      icon,
+      tone,
+      badge,
+      highlighted,
+      features[]{
+        _key,
+        label
+      }
+    }
+  },
+  _type == "pricingCtaBand" => {
+    headline,
+    body,
+    icon,
+    ctaGroup{
+      ${ctaGroupFields}
+    },
+    proofItems[]{
+      _key,
+      label,
+      icon
+    }
+  },
   _type == "processPathSection" => {
+    header,
     title,
     body,
     tone,
@@ -247,6 +244,37 @@ export const sectionFields = /* groq */ `
       ${ctaFields}
     }
   },
+  _type == "warrantyConditionGrid" => {
+    header,
+    items[]{
+      _key,
+      title,
+      body,
+      tone,
+      icon
+    }
+  },
+  _type == "warrantyNoticeSection" => {
+    anchorId,
+    header,
+    body[]{
+      ${portableTextFields}
+    },
+    badgeLabel
+  },
+  _type == "warrantyClaimPrep" => {
+    anchorId,
+    header,
+    items[]{
+      _key,
+      title,
+      body,
+      icon
+    },
+    ctaGroup{
+      ${ctaGroupFields}
+    }
+  },
   _type == "processStep" => {
     title,
     body[]{
@@ -258,9 +286,6 @@ export const sectionFields = /* groq */ `
     cta{
       ${ctaFields}
     }
-  },
-  _type == "videoEmbed" => {
-    ${videoEmbedFields}
   },
   _type == "ctaGroup" => {
     ${ctaGroupFields}

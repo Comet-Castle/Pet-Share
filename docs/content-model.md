@@ -36,13 +36,13 @@ There should not be a public owner directory. Owner detail pages can exist at di
 - The `/pets` route should have a `petIndexPage` singleton for page-level CMS content.
 - Pet types power filtering, labels, icons, and organization only. Do not create pet type landing pages in phase one.
 - Starter `petType` documents should be seeded so the demo has useful filters immediately.
-- Pricing tiers should be reusable objects embedded on the pricing page.
-- Process steps should be reusable objects embedded in relevant page documents.
+- Pricing packages and comparison rows should be embedded in pricing-specific page-builder sections.
+- Process steps should be nested inside process sections so related steps move together.
 - Forms should submit email to a single master project email address in phase one through Mailgun.
 - Owner contact should use a drawer UI.
 - Pet records should include structured category fields such as temperament, pickup urgency, mess risk, chaos level, energy level, and cuddle policy.
 - Testimonials should be reusable content for homepage and marketing sections. Do not create a standalone testimonials page in the first pass.
-- Video embeds, alert blocks, and warning blocks should be part of the early reusable section set so pet pages and marketing pages can demonstrate richer CMS-authored content.
+- Pet-level video embeds remain available on pet documents. Generic alert, warning, testimonial, and page-builder video sections are deferred or removed until a polished use case exists.
 - Marketing pages should support a fairly open page-builder-style section array while keeping restricted content types such as pets, owners, pet types, and forms modeled separately.
 - Portable Text should stay relatively simple. Use reusable section objects for rich layout, media, callouts, alerts, and warnings instead of allowing every layout pattern inside rich text.
 
@@ -79,15 +79,15 @@ Initial reusable objects:
 - `sectionHeader`
 - `contentSection`
 - `calloutBlock`
-- `alertBlock`
-- `warningBlock`
 - `statBlock`
-- `testimonialBlock`
 - `featureList`
 - `accordion`
 - `accordionItem`
-- `pricingTier`
-- `pricingFeature`
+- `pricingValueSection`
+- `pricingPackageGrid`
+- `pricingCtaBand`
+- `pricingComparisonTable`
+- `processPathSection`
 - `processStep`
 - `petTrait`
 - `petStat`
@@ -146,7 +146,7 @@ Suggested Sanity fields:
 - `featuredPets`: references to `pet` documents.
 - `featuredOwners`: references to `owner` documents, used only in curated homepage sections rather than an owner directory.
 - `processSummary`: array of reusable `processStep` objects or a reusable `contentSection`.
-- `testimonials`: references to `testimonial` documents or reusable `testimonialBlock`.
+- `testimonials`: references to reusable `testimonial` documents for homepage and dedicated surfaces.
 - `statBlocks`: array of reusable `statBlock` objects.
 - `contentSections`: array of reusable page section objects.
 - `primaryCta`
@@ -239,16 +239,16 @@ Initial section types:
 - `hero`
 - `contentSection`
 - `calloutBlock`
-- `alertBlock`
-- `warningBlock`
 - `statBlock`
-- `testimonialBlock`
 - `featureList`
 - `accordion`
 - `accordionItem`
-- `pricingTier`
+- `pricingValueSection`
+- `pricingPackageGrid`
+- `pricingCtaBand`
+- `pricingComparisonTable`
+- `processPathSection`
 - `processStep`
-- `videoEmbed`
 - `ctaGroup`
 
 Likely documents:
@@ -646,15 +646,15 @@ Early implementation objects:
 - `sectionHeader`
 - `contentSection`
 - `calloutBlock`
-- `alertBlock`
-- `warningBlock`
 - `statBlock`
-- `testimonialBlock`
 - `featureList`
 - `accordion`
 - `accordionItem`
-- `pricingTier`
-- `pricingFeature`
+- `pricingValueSection`
+- `pricingPackageGrid`
+- `pricingCtaBand`
+- `pricingComparisonTable`
+- `processPathSection`
 - `processStep`
 - `petTrait`
 - `petStat`
@@ -694,8 +694,8 @@ Planned objects:
 
 - `imageWithAlt`: image, alt text, caption, focal metadata.
 - `gallery`: images, layout hint, caption.
-- `videoEmbed`: provider, URL, title, transcript or description.
-- `portableText`: rich text content with supported marks, inline links, lists, and simple headings. Keep complex layout, media, alerts, warnings, and callouts as separate reusable section objects.
+- `videoEmbed`: pet-level provider, URL, title, transcript or description.
+- `portableText`: rich text content with supported marks, inline links, lists, and simple headings. Keep complex layout, media, and callouts as separate reusable section objects.
 - `seo`: meta title, meta description, open graph image, no-index toggle.
 - `badge`: label, tone, optional icon.
 - `iconLabel`: icon name, label, value, accessible label.
@@ -716,10 +716,7 @@ Planned objects:
 - `heroSlide`: headline, body, image, CTA, optional featured pet or owner reference.
 - `sectionHeader`: eyebrow, headline, body, alignment.
 - `calloutBlock`: headline, body, icon, CTA, tone.
-- `alertBlock`: title, message, tone, optional CTA.
-- `warningBlock`: title, message, severity, optional icon.
 - `statBlock`: value, label, description, icon.
-- `testimonialBlock`: selected testimonials, layout hint.
 - `featureList`: heading, items, icon style.
 - `featureItem`: title, description, icon, optional link.
 - `accordion`: heading, items.
@@ -728,9 +725,12 @@ Planned objects:
 - `toggleOption`: label, value, content.
 - `listBlock`: heading, list style, items.
 - `listItem`: label, body, icon.
-- `pricingTier`: name, price, billing note, features, CTA, highlighted flag.
-- `pricingFeature`: label, included flag, note.
-- `processStep`: title, description, icon, order, optional CTA.
+- `pricingValueSection`: short pricing model explanation cards.
+- `pricingPackageGrid`: listing packages, prices, durations, feature bullets, tone, and highlighted state.
+- `pricingCtaBand`: final pricing conversion section with CTA group and proof items.
+- `pricingComparisonTable`: plan columns, comparison rows, values, and CTA.
+- `processPathSection`: grouped process lane with header, tone, icon, nested process steps, and CTA.
+- `processStep`: title, rich body, icon, optional CTA. Visible step numbers come from array order.
 - `contentSection`: heading, body, media, CTA group, layout hint.
 - `timeline`: heading, items.
 - `timelineItem`: date or label, title, description, icon.
@@ -830,12 +830,12 @@ Likely sections:
 
 Purpose:
 
-- Demonstrate pricing-tier content and satirical product packaging.
+- Demonstrate pricing package content and satirical product packaging.
 
 Likely sections:
 
 - Hero.
-- Pricing tiers.
+- Pricing package grid.
 - Feature comparison.
 - FAQ accordion.
 - Testimonials.
@@ -925,6 +925,7 @@ Content goals:
 - Clearly identify the issue with a visible status label where useful.
 - Use satirical pet-related copy without hiding what went wrong.
 - Offer at least one practical recovery CTA, usually home, pet listings, or contact.
+- Optional lower content sections can provide a small number of helpful next steps, but the main error state must remain immediately understandable.
 - Keep these pages responsive, accessible, and friendly rather than technical.
 - Use no-index SEO defaults so search engines do not index error states.
 
@@ -950,7 +951,7 @@ Implementation note:
 - `petType` can be referenced by many `pet` documents.
 - `testimonial` may reference a `pet`, an `owner`, both, or neither.
 - `homePage` references featured pets, featured owners, and testimonials.
-- `marketingPage` can reference testimonials, CTAs, process steps, pricing tiers, and reusable sections.
+- `marketingPage` can include testimonials through dedicated surfaces, CTAs, process paths, pricing package sections, and reusable sections.
 - `formDefinition` can be referenced by marketing pages and pet contact CTAs.
 
 Implementation note:

@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { defineArrayMember, defineField, defineType } from "sanity";
 import { IconPickerInput, VisualStringOptionsInput } from "@/sanity/components/studio-string-inputs";
-import { ctaStyleOptions } from "./studio-options";
+import { alignmentOptions, ctaStyleOptions } from "./studio-options";
 
 const linkTargets = [
   { title: "Internal path", value: "internalPath" },
@@ -260,11 +260,17 @@ export const link = defineType({
   title: "Link",
   type: "object",
   icon: LinkIcon,
+  groups: [
+    { name: "content", title: "Content", default: true },
+    { name: "destination", title: "Destination" },
+    { name: "behavior", title: "Behavior" }
+  ],
   fields: [
     defineField({
       name: "type",
       title: "Type",
       type: "string",
+      group: "destination",
       options: { list: linkTargets, layout: "radio" },
       initialValue: "internalPath",
       validation: (rule) => rule.required()
@@ -273,12 +279,14 @@ export const link = defineType({
       name: "label",
       title: "Label",
       type: "string",
+      group: "content",
       validation: (rule) => rule.required().max(80)
     }),
     defineField({
       name: "path",
       title: "Internal path",
       type: "string",
+      group: "destination",
       hidden: ({ parent }) => parent?.type !== "internalPath",
       validation: (rule) =>
         rule.custom((path, context) => {
@@ -292,6 +300,7 @@ export const link = defineType({
       name: "url",
       title: "External URL",
       type: "url",
+      group: "destination",
       hidden: ({ parent }) => parent?.type !== "externalUrl",
       validation: (rule) =>
         rule.uri({ scheme: ["http", "https", "mailto", "tel"] })
@@ -300,6 +309,7 @@ export const link = defineType({
       name: "action",
       title: "Action",
       type: "string",
+      group: "destination",
       options: {
         list: [
           { title: "Open owner contact drawer", value: "openOwnerContactDrawer" },
@@ -312,6 +322,7 @@ export const link = defineType({
       name: "openInNewTab",
       title: "Open in new tab",
       type: "boolean",
+      group: "behavior",
       initialValue: false,
       hidden: ({ parent }) => parent?.type !== "externalUrl"
     })
@@ -339,17 +350,24 @@ export const cta = defineType({
   title: "CTA",
   type: "object",
   icon: MousePointerClick,
+  groups: [
+    { name: "content", title: "Content", default: true },
+    { name: "destination", title: "Destination" },
+    { name: "display", title: "Display" }
+  ],
   fields: [
     defineField({
       name: "label",
       title: "Label",
       type: "string",
+      group: "content",
       validation: (rule) => rule.required().max(80)
     }),
     defineField({
       name: "link",
       title: "Link",
       type: "link",
+      group: "destination",
       validation: (rule) => rule.required()
     }),
     defineField({
@@ -357,6 +375,7 @@ export const cta = defineType({
       title: "Style",
       description: "Controls the frontend button/link treatment.",
       type: "string",
+      group: "display",
       options: {
         list: ctaStyleOptions
       },
@@ -369,6 +388,7 @@ export const cta = defineType({
       title: "Icon",
       description: "Optional icon metadata for components that render CTA icons. Use the browser to search Lucide icons.",
       type: "string",
+      group: "display",
       components: { input: IconPickerInput }
     })
   ],
@@ -394,28 +414,33 @@ export const ctaGroup = defineType({
   title: "CTA group",
   type: "object",
   icon: MousePointerClick,
+  groups: [
+    { name: "actions", title: "Actions", default: true },
+    { name: "display", title: "Display" }
+  ],
   fields: [
     defineField({
       name: "primary",
       title: "Primary CTA",
-      type: "cta"
+      description: "Main action. Prefer one clear primary CTA per section.",
+      type: "cta",
+      group: "actions"
     }),
     defineField({
       name: "secondary",
       title: "Secondary CTA",
-      type: "cta"
+      description: "Optional supporting action.",
+      type: "cta",
+      group: "actions"
     }),
     defineField({
       name: "alignment",
       title: "Alignment",
+      description: "Controls how the CTA group aligns inside components that support CTA alignment.",
       type: "string",
-      options: {
-        list: [
-          { title: "Left", value: "left" },
-          { title: "Center", value: "center" }
-        ],
-        layout: "radio"
-      },
+      group: "display",
+      options: { list: alignmentOptions },
+      components: { input: VisualStringOptionsInput },
       initialValue: "left"
     })
   ],
@@ -426,9 +451,11 @@ export const ctaGroup = defineType({
       alignment: "alignment"
     },
     prepare({ primary, secondary, alignment }) {
+      const alignmentLabel = alignmentOptions.find((option) => option.value === alignment)?.title ?? alignment;
+
       return {
         title: [primary, secondary].filter(Boolean).join(" + ") || "CTA group",
-        subtitle: alignment,
+        subtitle: alignmentLabel,
         media: MousePointerClick
       };
     }
@@ -481,48 +508,54 @@ export const sectionHeader = defineType({
   title: "Section header",
   type: "object",
   icon: AlignCenter,
+  groups: [
+    { name: "content", title: "Content", default: true },
+    { name: "display", title: "Display" }
+  ],
   fields: [
     defineField({
       name: "eyebrow",
       title: "Eyebrow",
       type: "string",
+      group: "content",
       validation: (rule) => rule.max(80)
     }),
     defineField({
       name: "headline",
       title: "Headline",
       type: "string",
+      group: "content",
       validation: (rule) => rule.required().max(120)
     }),
     defineField({
       name: "body",
       title: "Body",
       type: "text",
+      group: "content",
       rows: 3
     }),
     defineField({
       name: "alignment",
       title: "Alignment",
       type: "string",
-      options: {
-        list: [
-          { title: "Left", value: "left" },
-          { title: "Center", value: "center" }
-        ],
-        layout: "radio"
-      },
+      group: "display",
+      options: { list: alignmentOptions },
+      components: { input: VisualStringOptionsInput },
       initialValue: "left"
     })
   ],
   preview: {
     select: {
       title: "headline",
-      subtitle: "eyebrow"
+      subtitle: "eyebrow",
+      alignment: "alignment"
     },
-    prepare({ title, subtitle }) {
+    prepare({ title, subtitle, alignment }) {
+      const alignmentLabel = alignmentOptions.find((option) => option.value === alignment)?.title ?? "Left";
+
       return {
         title: title || "Section header",
-        subtitle,
+        subtitle: [subtitle, alignmentLabel].filter(Boolean).join(" - "),
         media: AlignCenter
       };
     }

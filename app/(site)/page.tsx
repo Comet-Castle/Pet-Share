@@ -4,7 +4,9 @@ import { ArrowRight, CalendarCheck, Circle, Clock, MapPin, PawPrint, Quote, Sear
 import { HomeHeroCarousel } from "@/components/features/home/home-hero-carousel";
 import type { HomeHeroSlide } from "@/components/features/home/home-hero-carousel";
 import { availabilityLabels, cuddlePolicyLabels, temperamentLabels } from "@/components/features/pets/status";
+import type { CtaValue, PageSection } from "@/components/features/sections/section-types";
 import { Button } from "@/components/ui/button";
+import { RichText } from "@/components/ui/portable-text";
 import { SanityImage } from "@/components/ui/sanity-image";
 import { logger } from "@/lib/diagnostics/logger";
 import { metadataFromSeo } from "@/lib/content/metadata";
@@ -31,6 +33,8 @@ type FeaturedPet = NonNullable<HomePageData["featuredPets"]>[number] & {
   hostPayoutUnit?: keyof typeof hostPayoutUnitLabels | null;
 };
 type FeaturedTestimonial = NonNullable<HomePageData["testimonials"]>[number];
+type HomeProcessSection = Extract<PageSection, { _type: "processPathSection" }>;
+type HomeCalloutSection = Extract<PageSection, { _type: "calloutBlock" }>;
 
 function getAvailabilityTone(status: keyof typeof availabilityLabels) {
   return status === "available" ? "fill-pet-mint text-pet-mint" : "fill-pet-coral text-pet-coral";
@@ -79,6 +83,10 @@ function getHeroMediaFallback(slide: HomeHeroSlide, featuredPets: FeaturedPet[],
   return matchingPet?.cardMedia?.image ?? featuredPets[index % Math.max(featuredPets.length, 1)]?.cardMedia?.image ?? null;
 }
 
+function getCtaHref(cta: CtaValue | null | undefined, fallbackHref: string) {
+  return cta?.link?.path ?? cta?.link?.url ?? fallbackHref;
+}
+
 const homepageProcessSteps = [
   {
     icon: Search,
@@ -125,13 +133,19 @@ const homepageProcessBenefits = [
   }
 ] as const;
 
-function HomepageProcessSection() {
+function HomepageProcessSection({ section }: Readonly<{ section?: HomeProcessSection | null }>) {
+  const header = section?.header ?? {
+    headline: section?.title ?? "How Pet Share works",
+    body: section?.body ?? "A better way to care, connect, and share."
+  };
+  const primaryCta = section?.cta;
+
   return (
     <section className="mx-auto w-full max-w-[1440px] min-w-0 px-5 pb-20 pt-8 sm:px-8 lg:px-10">
       <div className="rounded-[2rem] bg-white/82 px-6 py-10 shadow-soft backdrop-blur sm:px-10 sm:py-12 lg:px-14 lg:py-14">
         <div className="mx-auto max-w-3xl text-center">
-          <h2 className="font-display text-4xl font-bold leading-tight text-pet-ink sm:text-5xl">How Pet Share works</h2>
-          <p className="mt-3 text-base leading-7 text-pet-muted sm:text-lg">A better way to care, connect, and share.</p>
+          <h2 className="font-display text-4xl font-bold leading-tight text-pet-ink sm:text-5xl">{header.headline}</h2>
+          {header.body ? <p className="mt-3 text-base leading-7 text-pet-muted sm:text-lg">{header.body}</p> : null}
         </div>
 
         <div className="relative mt-12">
@@ -153,18 +167,25 @@ function HomepageProcessSection() {
 
           <ol className="relative z-10 grid min-w-0 gap-10 sm:grid-cols-2 xl:grid-cols-4">
             {homepageProcessSteps.map((step, index) => {
+              const cmsStep = section?.steps?.[index];
               const Icon = step.icon;
 
               return (
-                <li key={step.title} className="min-w-0 text-center">
+                <li key={cmsStep?._key ?? step.title} className="min-w-0 text-center">
                   <span className="mx-auto flex size-28 items-center justify-center rounded-full bg-pet-cream text-pet-ink shadow-sm">
                     <Icon aria-hidden="true" size={42} strokeWidth={2.25} />
                   </span>
                   <span className="mx-auto mt-4 flex size-8 items-center justify-center rounded-full bg-pet-coral/10 font-display text-sm font-bold text-pet-coral">
                     {index + 1}
                   </span>
-                  <h3 className="mt-5 font-display text-xl font-bold leading-tight text-pet-ink">{step.title}</h3>
-                  <p className="mx-auto mt-3 max-w-56 text-sm leading-6 text-pet-muted">{step.body}</p>
+                  <h3 className="mt-5 font-display text-xl font-bold leading-tight text-pet-ink">{cmsStep?.title ?? step.title}</h3>
+                  <div className="mx-auto mt-3 max-w-60 text-sm leading-6 text-pet-muted">
+                    {cmsStep && "body" in cmsStep && cmsStep.body?.length ? (
+                      <RichText value={cmsStep.body} />
+                    ) : (
+                      <p>{cmsStep?.description ?? step.body}</p>
+                    )}
+                  </div>
                 </li>
               );
             })}
@@ -193,28 +214,30 @@ function HomepageProcessSection() {
 
         <div className="mt-10 flex flex-col items-center gap-3 text-center sm:flex-row sm:justify-center">
           <Button href="/pets">Find pets near you</Button>
-          <Button href="/process" variant="secondary">Learn more about sharing your pet</Button>
+          <Button href={getCtaHref(primaryCta, "/process")} variant="secondary">
+            {primaryCta?.label ?? "Learn more about sharing your pet"}
+          </Button>
         </div>
       </div>
     </section>
   );
 }
 
-function HomepageReliefSection() {
+function HomepageReliefSection({ section }: Readonly<{ section?: HomeCalloutSection | null }>) {
   return (
     <section className="mx-auto w-full max-w-[1440px] min-w-0 px-5 pb-20 sm:px-8 lg:px-10">
       <div className="grid min-w-0 gap-8 rounded-[2rem] bg-pet-mint/20 p-6 shadow-soft sm:p-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:p-12">
         <div className="min-w-0 self-center">
-          <p className="font-bold text-pet-coral">Temporary pet relief</p>
+          <p className="font-bold text-pet-coral">{section?.tone ?? "Temporary pet relief"}</p>
           <h2 className="mt-3 font-display text-4xl font-bold leading-tight text-pet-ink">
-            Keep the stories. Return the responsibility.
+            {section?.headline ?? "Keep the stories. Return the responsibility."}
           </h2>
           <p className="mt-5 text-lg leading-8 text-pet-muted">
-            Pet Share is for short stays, honest expectations, and the kind of weekend plan that ends with someone saying,
-            &quot;Actually, the tiny instructions were helpful.&quot;
+            {section?.body ??
+              "Pet Share is for short stays, honest expectations, and the kind of weekend plan that ends with someone saying, \"Actually, the tiny instructions were helpful.\""}
           </p>
           <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-            <Button href="/pets">Find a temporary pet</Button>
+            <Button href={getCtaHref(section?.cta, "/pets")}>{section?.cta?.label ?? "Find a temporary pet"}</Button>
             <Button href="/pricing" variant="secondary">List your pet</Button>
           </div>
         </div>
@@ -247,9 +270,9 @@ function HomepageTestimonialsSection({ testimonials }: Readonly<{ testimonials: 
     <section className="mx-auto w-full max-w-[1440px] min-w-0 px-5 pb-20 sm:px-8 lg:px-10">
       <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div className="min-w-0">
-          <h2 className="font-display text-4xl font-bold text-pet-ink">Reports from temporary hosts</h2>
+          <h2 className="font-display text-4xl font-bold text-pet-ink">Notes from people who agreed to this</h2>
           <p className="mt-3 max-w-2xl text-lg leading-8 text-pet-muted">
-            Lightly professional feedback from people who accepted a short stay and lived to recommend a lint roller.
+            Friendly field notes from temporary hosts, owners, and people who now keep backup lint rollers in the car.
           </p>
         </div>
         <Link
@@ -261,7 +284,7 @@ function HomepageTestimonialsSection({ testimonials }: Readonly<{ testimonials: 
         </Link>
       </div>
       <div className="grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
-        <figure className="min-w-0 rounded-[2rem] bg-white p-7 shadow-soft sm:p-9">
+        <figure className="min-w-0 rounded-[2rem] bg-white/82 p-7 shadow-soft backdrop-blur sm:p-9">
           <Quote aria-hidden="true" className="text-pet-coral" size={34} />
           <blockquote className="mt-5 font-display text-3xl font-bold leading-tight text-pet-ink">
             {featured.quote}
@@ -273,7 +296,7 @@ function HomepageTestimonialsSection({ testimonials }: Readonly<{ testimonials: 
         </figure>
         <div className="grid gap-5">
           {supporting.slice(0, 3).map((testimonial) => (
-            <figure key={testimonial._id} className="min-w-0 rounded-[1.5rem] bg-pet-cream/70 p-5">
+            <figure key={testimonial._id} className="min-w-0 rounded-[1.5rem] bg-pet-cream/70 p-5 shadow-sm">
               <blockquote className="text-base leading-7 text-pet-ink">&quot;{testimonial.quote}&quot;</blockquote>
               <figcaption className="mt-4 text-sm font-bold text-pet-muted">
                 {testimonial.authorName}
@@ -335,6 +358,9 @@ export default async function HomePage() {
     image: getHeroMediaFallback(slide, featuredPets, index)
   }));
   const featuredTestimonials = page?.testimonials ?? [];
+  const contentSections = page?.contentSections ?? [];
+  const homepageProcess = contentSections.find((section): section is HomeProcessSection => section._type === "processPathSection");
+  const homepageRelief = contentSections.find((section): section is HomeCalloutSection => section._type === "calloutBlock");
 
   return (
     <main>
@@ -366,7 +392,7 @@ export default async function HomePage() {
                 aria-label={`View ${pet.name}`}
                 className="group block min-w-0 cursor-pointer rounded-[1.75rem] focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-4"
               >
-                <article className="min-w-0 overflow-hidden rounded-[1.75rem] bg-white shadow-soft transition duration-200 group-hover:-translate-y-1">
+                <article className="min-w-0 overflow-hidden rounded-[1.75rem] bg-white/86 shadow-soft backdrop-blur transition duration-200 group-hover:-translate-y-1">
                   <div className="relative">
                     <SanityImage
                       image={pet.cardMedia?.image ?? null}
@@ -377,7 +403,7 @@ export default async function HomePage() {
                       <Circle aria-hidden="true" size={9} className={getAvailabilityTone(pet.availabilityStatus)} />
                       {availabilityLabels[pet.availabilityStatus]}
                     </span>
-                    <div className="absolute inset-x-4 bottom-4 flex flex-wrap gap-2">
+                    <div className="absolute inset-x-4 bottom-4 flex flex-wrap gap-2 opacity-95">
                       {getPetChips(pet).map((chip) => (
                         <span key={`${pet._id}-${chip}`} className="rounded-full bg-pet-mint/80 px-3 py-1 text-xs font-bold text-pet-ink shadow-sm backdrop-blur">
                           {chip}
@@ -389,12 +415,12 @@ export default async function HomePage() {
                     <h3 className="font-display text-[1.45rem] font-bold leading-[1.08] text-pet-ink">{pet.name}</h3>
                     <p className="mt-1.5 text-[0.9rem] font-bold leading-5 text-pet-muted">{pet.breed ?? pet.petType?.filterLabel ?? "Pet"}</p>
                     <p className="mt-3 text-[0.95rem] leading-6 text-pet-muted">{pet.listingHeadline}</p>
-                    <div className="mt-7 flex items-center justify-between gap-4">
+                    <div className="mt-7 flex items-center justify-between gap-4 rounded-[1.25rem] bg-pet-cream/55 px-3 py-3">
                       <div className="inline-flex min-w-0 items-center gap-1.5 text-sm font-bold text-pet-muted">
                         <MapPin aria-hidden="true" size={17} className="shrink-0 text-pet-coral" />
                         <span className="truncate">{getDistanceLabel(pet, index)}</span>
                       </div>
-                      <p className="shrink-0 font-display text-lg font-bold leading-none text-pet-ink">{getHostPayoutLabel(pet, index)}</p>
+                      <p className="shrink-0 font-display text-base font-bold leading-none text-pet-ink">{getHostPayoutLabel(pet, index)}</p>
                     </div>
                   </div>
                 </article>
@@ -408,8 +434,8 @@ export default async function HomePage() {
         )}
       </section>
 
-      <HomepageProcessSection />
-      <HomepageReliefSection />
+      <HomepageProcessSection section={homepageProcess} />
+      <HomepageReliefSection section={homepageRelief} />
       <HomepageTestimonialsSection testimonials={featuredTestimonials} />
     </main>
   );

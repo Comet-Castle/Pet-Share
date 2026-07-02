@@ -86,53 +86,60 @@
         {
           "_key": "home-process-summary",
           "_type": "processPathSection",
-          "title": "How temporary hosting works",
-          "body": "A short version of the Pet Share flow: list clearly, ask practical questions, follow the notes, and return the pet before anyone starts monogramming a blanket.",
+          "header": {
+            "_type": "sectionHeader",
+            "headline": "How Pet Share works",
+            "body": "A cleaner way to share the pet, keep the stories, and schedule the return before anyone buys a tiny seasonal outfit.",
+            "alignment": "center"
+          },
+          "title": "How Pet Share works",
+          "body": "A cleaner way to share the pet, keep the stories, and schedule the return before anyone buys a tiny seasonal outfit.",
           "tone": "neutral",
           "icon": "ListChecks",
           "steps": [
             {
               "_key": "home-process-owner-listing",
               "_type": "processStep",
-              "title": "Create the listing",
-              "body": [{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Add photos, basic details, and the care notes someone should read before agreeing to host a tiny household manager." }] }],
+              "title": "List the situation",
+              "body": [{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Add photos, care notes, timing, and the one habit that sounds harmless until it happens on a rug." }] }],
               "icon": "upload",
               "cta": null
             },
             {
               "_key": "home-process-owner-expectations",
               "_type": "processStep",
-              "title": "Set the expectations",
-              "body": [{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Call out meals, timing, cuddle policy, mess risk, and anything that sounds funny until it happens indoors." }] }],
+              "title": "Set the terms",
+              "body": [{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Share meals, pickup windows, cuddle policy, and how much personality the host should expect before coffee." }] }],
               "icon": "shield",
               "cta": null
             },
             {
               "_key": "home-process-host-inquiry",
               "_type": "processStep",
-              "title": "Send an inquiry",
-              "body": [{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Ask practical questions, offer your timing, and prove you understand the difference between charming and unsupervised." }] }],
+              "title": "Choose a host",
+              "body": [{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Review interested temporary hosts and pick the one whose home seems least vulnerable to small negotiations." }] }],
               "icon": "messageCircle",
               "cta": null
             },
             {
               "_key": "home-process-return-report",
               "_type": "processStep",
-              "title": "Return and report",
-              "body": [{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Bring the pet back on schedule, share the highlights, and keep only the story, the photos, and maybe one lint roller." }] }],
+              "title": "Send them off temporarily",
+              "body": [{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "The host gets the story, the owner gets a break, and the pet returns before the goodbye becomes a household event." }] }],
               "icon": "check",
               "cta": { "label": "See the full process", "link": { "type": "internalPath", "path": "/process" }, "style": "secondary" }
             }
           ],
-          "cta": { "label": "See the full process", "link": { "type": "internalPath", "path": "/process" }, "style": "secondary" }
+          "cta": { "label": "Learn more about sharing your pet", "link": { "type": "internalPath", "path": "/process" }, "style": "secondary" }
         },
         {
           "_key": "home-trust-callout",
           "_type": "calloutBlock",
-          "headline": "Keep the stories. Return the responsibility.",
-          "body": "Pet Share is for short stays, honest expectations, and the kind of weekend plan that ends with someone saying, \"Actually, the tiny instructions were helpful.\"",
+          "headline": "A break for owners. A paid adventure for hosts.",
+          "body": "Pet Share is for honest short stays: the owner gets breathing room, the host gets paid, and the pet gets a temporary audience with fresh furniture to evaluate.",
           "tone": "temporary pet relief",
-          "cta": { "label": "Find a short-term companion", "link": { "type": "internalPath", "path": "/pets" }, "style": "primary" }
+          "icon": "Sparkles",
+          "cta": { "label": "Find pets near you", "link": { "type": "internalPath", "path": "/pets" }, "style": "primary" }
         }
       ]
     },
@@ -190,7 +197,45 @@
       "primaryCta": { "label": "Find a temporary pet", "link": { "type": "internalPath", "path": "/pets" }, "style": "primary" },
       "secondaryCta": { "label": "Go home", "link": { "type": "internalPath", "path": "/" }, "style": "secondary" },
       "supportCopy": null,
-      "contentSections": []
+      "contentSections": [
+        {
+          "_key": "system-not-found-routes",
+          "_type": "featureList",
+          "header": {
+            "_type": "sectionHeader",
+            "headline": "Helpful places to sniff next.",
+            "body": "The missing page is unavailable, but the useful doors are still open.",
+            "alignment": "center"
+          },
+          "items": [
+            {
+              "_key": "system-not-found-pets",
+              "_type": "featureItem",
+              "title": "Browse available pets",
+              "description": "Find a temporary companion with a readable listing and probably too many notes.",
+              "icon": "Search",
+              "link": { "label": "Browse pets", "type": "internalPath", "path": "/pets" }
+            },
+            {
+              "_key": "system-not-found-process",
+              "_type": "featureItem",
+              "title": "Learn the handoff process",
+              "description": "See how listing, hosting, pickup, and return are supposed to work when everyone behaves.",
+              "icon": "ListChecks",
+              "link": { "label": "View process", "type": "internalPath", "path": "/process" }
+            },
+            {
+              "_key": "system-not-found-contact",
+              "_type": "featureItem",
+              "title": "Contact the desk",
+              "description": "Send a note if a link has vanished in a suspiciously pet-shaped way.",
+              "icon": "Mail",
+              "link": { "label": "Contact Pet Share", "type": "internalPath", "path": "/contact" }
+            }
+          ],
+          "iconStyle": "filledBadge"
+        }
+      ]
     },
     "systemPageServerError": {
       "sanityId": "systemPage-serverError",
@@ -209,7 +254,17 @@
       "primaryCta": { "label": "Try the pet listings", "link": { "type": "internalPath", "path": "/pets" }, "style": "primary" },
       "secondaryCta": { "label": "Go home", "link": { "type": "internalPath", "path": "/" }, "style": "secondary" },
       "supportCopy": "If this keeps happening, the master inbox can receive a polite report.",
-      "contentSections": []
+      "contentSections": [
+        {
+          "_key": "system-server-error-callout",
+          "_type": "calloutBlock",
+          "headline": "No technical details are shown here.",
+          "body": "The useful information is kept in server logs where it belongs. You get the friendly version because nobody needs a stack trace with their pet listings.",
+          "icon": "ShieldCheck",
+          "tone": "calm",
+          "cta": { "label": "Contact support", "link": { "type": "internalPath", "path": "/contact" }, "style": "secondary" }
+        }
+      ]
     },
     "systemPageGenericError": {
       "sanityId": "systemPage-genericError",
@@ -228,7 +283,17 @@
       "primaryCta": { "label": "Find a temporary pet", "link": { "type": "internalPath", "path": "/pets" }, "style": "primary" },
       "secondaryCta": { "label": "Go home", "link": { "type": "internalPath", "path": "/" }, "style": "secondary" },
       "supportCopy": null,
-      "contentSections": []
+      "contentSections": [
+        {
+          "_key": "system-generic-error-callout",
+          "_type": "calloutBlock",
+          "headline": "Try the ordinary exits first.",
+          "body": "Refresh the page, browse the pet listings, or head home. If the issue keeps returning with a toy in its mouth, contact the desk.",
+          "icon": "RefreshCcw",
+          "tone": "friendly",
+          "cta": { "label": "Contact Pet Share", "link": { "type": "internalPath", "path": "/contact" }, "style": "secondary" }
+        }
+      ]
     }
   },
   "marketingPages": [
@@ -286,15 +351,19 @@
         "_type": "hero",
         "headline": "How Pet Share works.",
         "body": "Two paths, one shared goal: short-term pet relief with clear expectations, honest care notes, and return times everyone can survive.",
-        "imageAssetKey": "process-hero",
+        "layoutHint": "centered",
         "ctaGroup": null
       },
       "sections": [
         {
           "_key": "process-owner-path",
           "_type": "processPathSection",
-          "title": "For owners sharing their pet",
-          "body": "Create the listing, set the expectations, choose the temporary host, and take a break while somebody else learns why the care notes are that specific.",
+          "header": {
+            "_type": "sectionHeader",
+            "headline": "For owners sharing their pet",
+            "body": "Create the listing, set the expectations, choose the temporary host, and take a break while somebody else learns why the care notes are that specific.",
+            "alignment": "left"
+          },
           "tone": "owner",
           "icon": "home",
           "steps": [
@@ -332,8 +401,12 @@
         {
           "_key": "process-host-path",
           "_type": "processPathSection",
-          "title": "For temporary hosts",
-          "body": "Find a pet nearby, submit an inquiry, handle the agreed stay, and return the pet with the supplies, the story, and ideally the same number of socks.",
+          "header": {
+            "_type": "sectionHeader",
+            "headline": "For temporary hosts",
+            "body": "Find a pet nearby, submit an inquiry, handle the agreed stay, and return the pet with the supplies, the story, and ideally the same number of socks.",
+            "alignment": "left"
+          },
           "tone": "host",
           "icon": "search",
           "steps": [
@@ -386,71 +459,106 @@
       },
       "hero": {
         "_type": "hero",
-        "headline": "List your pet. Pay someone else to host the personality.",
-        "body": "Owners choose a listing plan, set a host payout, and invite carefully optimistic neighbours into the care-note ecosystem. Temporary hosts get paid for taking the pet off your hands.",
+        "headline": "List your pet. Take a break. Pay a host.",
+        "body": "Choose a listing plan, set the daily host payout, and let a carefully optimistic neighbour take the personality shift for a while.",
         "imageAssetKey": "pricing-hero",
+        "layoutHint": "centered",
         "ctaGroup": {
-          "primary": { "label": "Submit your pet", "link": { "type": "internalPath", "path": "/process" }, "style": "primary" },
-          "secondary": { "label": "Find a temporary pet", "link": { "type": "internalPath", "path": "/pets" }, "style": "secondary" },
-          "alignment": "left"
+          "primary": { "label": "Start a listing", "link": { "type": "internalPath", "path": "/process" }, "style": "primary" },
+          "secondary": { "label": "Host a temporary pet", "link": { "type": "internalPath", "path": "/pets" }, "style": "secondary" },
+          "alignment": "center"
         }
       },
       "sections": [
         {
-          "_key": "pricing-host-payout-callout",
-          "_type": "calloutBlock",
-          "headline": "Temporary hosts get paid. The lint is still between them and their furniture.",
-          "body": "People seeking a short-term companion can inquire without paying a site fee. If the stay is approved, the owner-funded payout compensates them for accepting the leash, care notes, and whatever emotional subplot arrives with the pet.",
-          "tone": "pricing note",
-          "icon": "heart"
+          "_key": "pricing-value-strip",
+          "_type": "pricingValueSection",
+          "valueItems": [
+            { "_key": "pricing-value-owners", "_type": "pricingValueItem", "title": "Owners list", "body": "Pay once, publish the details, and let the listing do less awkward asking around.", "icon": "CircleDollarSign" },
+            { "_key": "pricing-value-hosts", "_type": "pricingValueItem", "title": "Hosts earn", "body": "Temporary hosts are paid for the stay because lint, walks, and tiny judgement are still labour.", "icon": "WalletCards" },
+            { "_key": "pricing-value-agreement", "_type": "pricingValueItem", "title": "Everyone agrees", "body": "Clear pickup windows, care notes, and return timing keep the arrangement mostly dignified.", "icon": "ShieldCheck" }
+          ]
         },
         {
-          "_key": "pricing-basic-listing",
-          "_type": "pricingTier",
-          "name": "Porch Listing",
-          "price": "$20",
-          "billingNote": "30 days live",
-          "highlighted": false,
-          "features": [
-            { "_key": "pricing-basic-feature-1", "_type": "pricingFeature", "label": "Pet profile listing", "included": true, "note": "Name, breed, care notes, and a dignified amount of honesty." },
-            { "_key": "pricing-basic-feature-2", "_type": "pricingFeature", "label": "Up to 6 photos", "included": true, "note": "Enough angles to prove the pet is real and judging." },
-            { "_key": "pricing-basic-feature-3", "_type": "pricingFeature", "label": "Suggested host payout", "included": true, "note": "$20 to $30 per day, depending on charm density and towel risk." },
-            { "_key": "pricing-basic-feature-4", "_type": "pricingFeature", "label": "Inquiry forwarding", "included": true, "note": "Requests route to the master inbox for phase one." },
-            { "_key": "pricing-basic-feature-5", "_type": "pricingFeature", "label": "Featured placement", "included": false, "note": "Your pet waits politely in the regular listings." }
-          ],
-          "cta": { "label": "Submit your pet", "link": { "type": "internalPath", "path": "/process" }, "style": "primary" }
-        },
-        {
-          "_key": "pricing-neighborhood-spotlight",
-          "_type": "pricingTier",
-          "name": "Neighbourhood Spotlight",
-          "price": "$35",
-          "billingNote": "60 days live",
-          "highlighted": true,
-          "features": [
-            { "_key": "pricing-spotlight-feature-1", "_type": "pricingFeature", "label": "Everything in Porch Listing", "included": true },
-            { "_key": "pricing-spotlight-feature-2", "_type": "pricingFeature", "label": "Up to 10 photos", "included": true, "note": "Includes the flattering one and the legally informative one." },
-            { "_key": "pricing-spotlight-feature-3", "_type": "pricingFeature", "label": "Priority listing rotation", "included": true, "note": "More chances to be seen by brave nearby hosts." },
-            { "_key": "pricing-spotlight-feature-4", "_type": "pricingFeature", "label": "Host payout guidance", "included": true, "note": "A better suggested range for pets with opinions, stairs, or snack legislation." },
-            { "_key": "pricing-spotlight-feature-5", "_type": "pricingFeature", "label": "Care-note review", "included": true, "note": "We help make the warnings sound useful, not like a haunted voicemail." }
-          ],
-          "cta": { "label": "Submit your pet", "link": { "type": "internalPath", "path": "/process" }, "style": "primary" }
-        },
-        {
-          "_key": "pricing-couch-recovery",
-          "_type": "pricingTier",
-          "name": "Couch Recovery Campaign",
-          "price": "$55",
-          "billingNote": "90 days live",
-          "highlighted": false,
-          "features": [
-            { "_key": "pricing-couch-feature-1", "_type": "pricingFeature", "label": "Everything in Spotlight", "included": true },
-            { "_key": "pricing-couch-feature-2", "_type": "pricingFeature", "label": "Homepage feature eligibility", "included": true, "note": "For pets with strong photos and a compelling incident history." },
-            { "_key": "pricing-couch-feature-3", "_type": "pricingFeature", "label": "Owner profile polish", "included": true, "note": "We make you sound calm, prepared, and only reasonably tired." },
-            { "_key": "pricing-couch-feature-4", "_type": "pricingFeature", "label": "Premium host payout framing", "included": true, "note": "For pets whose listing should admit, financially, that this is a lot." },
-            { "_key": "pricing-couch-feature-5", "_type": "pricingFeature", "label": "Relisting reminder", "included": true, "note": "A polite nudge before the pet reclaims the hallway." }
-          ],
-          "cta": { "label": "Submit your pet", "link": { "type": "internalPath", "path": "/process" }, "style": "primary" }
+          "_key": "pricing-approved-packages",
+          "_type": "pricingPackageGrid",
+          "header": {
+            "_type": "sectionHeader",
+            "headline": "Pick the listing that matches the situation.",
+            "body": "From basic visibility to full neighbourhood theatre, each package keeps the same promise: owners get relief, hosts get paid, and pets get a temporary audience.",
+            "alignment": "center"
+          },
+          "packages": [
+            {
+              "_key": "pricing-package-porch",
+              "_type": "pricingPackage",
+              "name": "Porch Listing",
+              "price": "$20",
+              "duration": "30 days live",
+              "description": "For pets who need a short public appearance and one household that needs a quiet weekend.",
+              "icon": "PawPrint",
+              "tone": "mint",
+              "highlighted": false,
+              "features": [
+                { "_key": "pricing-package-porch-1", "_type": "pricingPlanFeatureItem", "label": "Public pet listing" },
+                { "_key": "pricing-package-porch-2", "_type": "pricingPlanFeatureItem", "label": "Five approved photos" },
+                { "_key": "pricing-package-porch-3", "_type": "pricingPlanFeatureItem", "label": "Basic availability notes" },
+                { "_key": "pricing-package-porch-4", "_type": "pricingPlanFeatureItem", "label": "Host inquiries sent to the master inbox" }
+              ]
+            },
+            {
+              "_key": "pricing-package-spotlight",
+              "_type": "pricingPackage",
+              "name": "Neighbourhood Spotlight",
+              "price": "$35",
+              "duration": "60 days live",
+              "description": "The sensible favourite for owners who know their pet has range, opinions, and a local audience.",
+              "icon": "Star",
+              "tone": "coral",
+              "badge": "Most sensible",
+              "highlighted": true,
+              "features": [
+                { "_key": "pricing-package-spotlight-1", "_type": "pricingPlanFeatureItem", "label": "Everything in Porch Listing" },
+                { "_key": "pricing-package-spotlight-2", "_type": "pricingPlanFeatureItem", "label": "Priority placement near Hamilton hosts" },
+                { "_key": "pricing-package-spotlight-3", "_type": "pricingPlanFeatureItem", "label": "Ten approved photos" },
+                { "_key": "pricing-package-spotlight-4", "_type": "pricingPlanFeatureItem", "label": "Featured badge for pets with presence" }
+              ]
+            },
+            {
+              "_key": "pricing-package-recovery",
+              "_type": "pricingPackage",
+              "name": "Couch Recovery Campaign",
+              "price": "$55",
+              "duration": "90 days live",
+              "description": "For households recovering from sofa politics, snack lobbying, or suspiciously timed hallway zooms.",
+              "icon": "HeartHandshake",
+              "tone": "blue",
+              "highlighted": false,
+              "features": [
+                { "_key": "pricing-package-recovery-1", "_type": "pricingPlanFeatureItem", "label": "Everything in Spotlight" },
+                { "_key": "pricing-package-recovery-2", "_type": "pricingPlanFeatureItem", "label": "Longer listing window" },
+                { "_key": "pricing-package-recovery-3", "_type": "pricingPlanFeatureItem", "label": "Care notes review" },
+                { "_key": "pricing-package-recovery-4", "_type": "pricingPlanFeatureItem", "label": "Extra room for personality disclosures" }
+              ]
+            },
+            {
+              "_key": "pricing-package-main-character",
+              "_type": "pricingPackage",
+              "name": "Main Character Placement",
+              "price": "$75",
+              "duration": "120 days live",
+              "description": "For pets whose listing needs a slightly larger stage and a legally modest amount of applause.",
+              "icon": "Sparkles",
+              "tone": "cream",
+              "highlighted": false,
+              "features": [
+                { "_key": "pricing-package-main-character-1", "_type": "pricingPlanFeatureItem", "label": "Everything in Couch Recovery" },
+                { "_key": "pricing-package-main-character-2", "_type": "pricingPlanFeatureItem", "label": "Homepage feature consideration" },
+                { "_key": "pricing-package-main-character-3", "_type": "pricingPlanFeatureItem", "label": "Seasonal refresh prompt" },
+                { "_key": "pricing-package-main-character-4", "_type": "pricingPlanFeatureItem", "label": "One tasteful warning label polish pass" }
+              ]
+            }
+          ]
         },
         {
           "_key": "pricing-comparison",
@@ -551,13 +659,57 @@
           "cta": { "label": "Submit your pet", "link": { "type": "internalPath", "path": "/process" }, "style": "primary" }
         },
         {
+          "_key": "pricing-faq",
+          "_type": "accordion",
+          "header": {
+            "_type": "sectionHeader",
+            "headline": "Questions before you list the tiny roommate?",
+            "body": "A few practical answers before you decide which plan best matches the household situation currently chewing through your patience.",
+            "alignment": "left"
+          },
+          "items": [
+            {
+              "_key": "pricing-faq-who-pays",
+              "_type": "accordionItem",
+              "title": "Who pays on Pet Share?",
+              "body": [{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Owners pay to list their pet. Temporary hosts browse for free and receive the listed host payout for helping with a short stay." }] }]
+            },
+            {
+              "_key": "pricing-faq-rental",
+              "_type": "accordionItem",
+              "title": "Is this a rental marketplace?",
+              "body": [{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Not quite. Pet Share is framed around temporary care, clear expectations, and giving owners a break while hosts enjoy a short companion stay." }] }]
+            },
+            {
+              "_key": "pricing-faq-multiple-pets",
+              "_type": "accordionItem",
+              "title": "Can I list more than one pet?",
+              "body": [{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Yes. Each pet gets its own listing so their photos, care notes, availability, and suspicious habits stay easy to review." }] }]
+            },
+            {
+              "_key": "pricing-faq-expiry",
+              "_type": "accordionItem",
+              "title": "What happens when a listing expires?",
+              "body": [{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "The pet leaves active promotion. You can renew the listing if your sofa, slippers, or sleep schedule require another support cycle." }] }]
+            }
+          ]
+        },
+        {
           "_key": "pricing-final-submit",
-          "_type": "calloutBlock",
+          "_type": "pricingCtaBand",
           "headline": "Ready to give your pet a short public relations tour?",
-          "body": "Start with the listing details. You can decide how much spotlight the tiny roommate deserves once the photos and care notes are in order.",
-          "tone": "next step",
-          "icon": "paw",
-          "cta": { "label": "Submit your pet", "link": { "type": "internalPath", "path": "/process" }, "style": "primary" }
+          "body": "Put the listing up, set the host payout, and let someone nearby discover why your pet has such a dedicated notes section.",
+          "icon": "Megaphone",
+          "ctaGroup": {
+            "primary": { "label": "Learn more about sharing your pet", "link": { "type": "internalPath", "path": "/process" }, "style": "primary", "icon": "BadgeCheck" },
+            "secondary": { "label": "Find a temporary pet", "link": { "type": "internalPath", "path": "/pets" }, "style": "secondary", "icon": "Search" },
+            "alignment": "left"
+          },
+          "proofItems": [
+            { "_key": "pricing-proof-duration", "_type": "pricingCtaProofItem", "label": "30-120 day listings", "icon": "CalendarDays" },
+            { "_key": "pricing-proof-hosts", "_type": "pricingCtaProofItem", "label": "Paid temporary hosts", "icon": "WalletCards" },
+            { "_key": "pricing-proof-return", "_type": "pricingCtaProofItem", "label": "Return window included", "icon": "PawPrint" }
+          ]
         }
       ],
       "primaryCta": { "label": "Submit your pet", "link": { "type": "internalPath", "path": "/process" }, "style": "primary" },
@@ -577,31 +729,102 @@
       },
       "hero": {
         "_type": "hero",
-        "headline": "Contact the Pet Share desk.",
-        "body": "Questions, listing help, suspiciously specific pet concerns, and messages that do not yet require the warranty clipboard can start here.",
-        "imageAssetKey": "contact-hero",
+        "eyebrow": "Contact Pet Share",
+        "headline": "Questions, concerns, and mildly suspicious pet updates.",
+        "body": "Reach the Pet Share desk for listing help, temporary-host questions, press notes, or messages that are not quite dramatic enough for the warranty clipboard.",
+        "layoutHint": "centered",
+        "imageAssetKey": null,
         "ctaGroup": {
-          "primary": { "label": "Send a message", "link": { "type": "internalPath", "path": "/contact#contact-form" }, "style": "primary" },
-          "secondary": { "label": "File a warranty claim", "link": { "type": "internalPath", "path": "/warranty" }, "style": "secondary" },
-          "alignment": "left"
+          "primary": { "label": "Send a message", "link": { "type": "internalPath", "path": "/contact#contact-form" }, "style": "primary", "icon": "Send" },
+          "secondary": { "label": "File a warranty claim", "link": { "type": "internalPath", "path": "/warranty" }, "style": "secondary", "icon": "ClipboardList" },
+          "alignment": "center"
         }
       },
       "sections": [
         {
+          "_key": "contact-methods",
+          "_type": "featureList",
+          "header": {
+            "_type": "sectionHeader",
+            "eyebrow": "How to reach us",
+            "headline": "The desk is open, supervised, and only partly covered in lint",
+            "body": "Use the form for anything practical. Use the address if your message can survive a mail carrier asking several follow-up questions.",
+            "alignment": "center"
+          },
+          "iconStyle": "filledBadge",
+          "items": [
+            {
+              "_key": "contact-address",
+              "title": "Visit the tiny office",
+              "description": "2149 Biscuit Lane, Suite 3B, Hamilton, ON L8P 2Z4. Look for the door with the tasteful paw-print mat and the suspiciously confident goldfish.",
+              "icon": "MapPin"
+            },
+            {
+              "_key": "contact-email",
+              "title": "Send an inbox note",
+              "description": "hello@petshare.example is best for listing questions, account help, partnerships, and anything that starts with \"quick question\" but has four paragraphs.",
+              "icon": "Mail"
+            },
+            {
+              "_key": "contact-hours",
+              "title": "Desk hours",
+              "description": "Monday to Friday, 9:00 AM to 5:00 PM Eastern. Weekend messages are reviewed after someone checks whether the office plant has been blamed for anything.",
+              "icon": "Clock"
+            }
+          ]
+        },
+        {
           "_key": "contact-instructions",
           "_type": "contentSection",
-          "headline": "What to send us",
-          "body": "Use the contact form for general questions, listing support, account questions, press inquiries, or any message that can be answered without measuring bite marks. If your message involves a dramatic incident, a rug with a backstory, or snack-related damages, the warranty page is probably the more official-looking place to start.",
-          "imageAssetKey": null
+          "header": {
+            "_type": "sectionHeader",
+            "eyebrow": "Before you write",
+            "headline": "Send the useful details and spare us the envelope of fur",
+            "body": "A little context helps the desk sort messages quickly.",
+            "alignment": "left"
+          },
+          "body": [
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "For listing questions, include the pet name, the owner name if you know it, and whether this is about sharing your pet or temporarily hosting someone else's. For general support, tell us what you expected to happen, what actually happened, and whether a pet was looking directly at you while it happened.",
+                  "marks": []
+                }
+              ],
+              "markDefs": []
+            },
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "If your message involves snack damages, mysterious stains, emotional consequences, or evidence that should not be photographed before breakfast, the warranty page is the more official place to start.",
+                  "marks": []
+                }
+              ],
+              "markDefs": []
+            }
+          ],
+          "imageAssetKey": null,
+          "ctaGroup": {
+            "primary": { "label": "Use the contact form", "link": { "type": "internalPath", "path": "/contact#contact-form" }, "style": "primary", "icon": "Send" },
+            "secondary": { "label": "Go to warranty", "link": { "type": "internalPath", "path": "/warranty" }, "style": "secondary", "icon": "FileWarning" },
+            "alignment": "left"
+          },
+          "layoutHint": "textOnly"
         },
         {
           "_key": "contact-response-time",
           "_type": "calloutBlock",
           "headline": "Response expectations",
-          "body": "Messages go to the Pet Share master inbox. We try to answer practical questions first, then the ones written entirely in capital letters by someone who has just discovered a pet in the laundry basket.",
-          "tone": "contact note",
-          "icon": "mail",
-          "cta": { "label": "Start the message", "link": { "type": "internalPath", "path": "/contact#contact-form" }, "style": "primary" }
+          "body": "Messages go to the Pet Share master inbox. Practical questions usually get answered first, followed by the ones written entirely in capital letters after someone discovered a temporary companion in the laundry basket.",
+          "tone": "friendly desk note",
+          "icon": "MessagesSquare",
+          "cta": { "label": "Start the message", "link": { "type": "internalPath", "path": "/contact#contact-form" }, "style": "primary", "icon": "Send" }
         }
       ],
       "primaryCta": null,
@@ -622,41 +845,166 @@
       },
       "hero": {
         "_type": "hero",
-        "headline": "File a claim with the warranty desk.",
-        "body": "For incidents involving suspicious cuteness, snack coercion, rug-based negotiations, and other temporary pet side effects.",
-        "imageAssetKey": "contact-hero",
+        "eyebrow": "Temporary companion warranty",
+        "headline": "The warranty desk is technically open.",
+        "body": "For incidents involving suspicious cuteness, snack pressure, emotional overexposure, and other conditions best described in writing.",
+        "layoutHint": "centered",
+        "imageAssetKey": null,
         "ctaGroup": {
           "primary": { "label": "Start a warranty claim", "link": { "type": "internalPath", "path": "/warranty#claim-form" }, "style": "primary" },
           "secondary": { "label": "Read the fine print", "link": { "type": "internalPath", "path": "/warranty#warranty-notice" }, "style": "secondary" },
-          "alignment": "left"
+          "alignment": "center"
         }
       },
       "sections": [
         {
-          "_key": "contact-alert",
-          "_type": "alertBlock",
-          "headline": "Please do not mail us the evidence",
-          "body": "The warranty desk accepts photos, descriptions, timestamps, and reasonable emotional testimony. We do not accept loose fur in envelopes, suspicious socks in padded mailers, damp chew toys, or anything described by the courier as making eye contact.",
-          "tone": "warning"
+          "_key": "warranty-condition-cards",
+          "_type": "warrantyConditionGrid",
+          "header": {
+            "_type": "sectionHeader",
+            "eyebrow": "Claim categories",
+            "headline": "Before you file a deeply reasonable claim",
+            "body": "Most temporary companion incidents fit into one of these official-looking categories.",
+            "alignment": "center"
+          },
+          "items": [
+            {
+              "_key": "warranty-covered",
+              "_type": "warrantyConditionItem",
+              "title": "Covered-ish",
+              "body": "Suspiciously persuasive eyes, unauthorized lap occupation, short-term sock uncertainty, and other events that can be described without a sealed evidence bag.",
+              "tone": "covered",
+              "icon": "ClipboardCheck"
+            },
+            {
+              "_key": "warranty-not-covered",
+              "_type": "warrantyConditionItem",
+              "title": "Not covered",
+              "body": "Emotional attachment after return, treat spending above your stated budget, or being judged by a small animal in your own kitchen are considered normal operating conditions.",
+              "tone": "excluded",
+              "icon": "Scale"
+            },
+            {
+              "_key": "warranty-do-not-send",
+              "_type": "warrantyConditionItem",
+              "title": "Please do not send",
+              "body": "Loose fur, damp toys, chewed slippers, snack evidence, or anything the courier describes as making eye contact. Photos are acceptable. Parcels are not.",
+              "tone": "evidence",
+              "icon": "Inbox"
+            }
+          ]
         },
         {
           "_key": "warranty-notice",
-          "_type": "contentSection",
-          "headline": "Limited temporary companion warranty notice",
-          "body": "By hosting, admiring, transporting, photographing, snack-negotiating with, or otherwise becoming emotionally compromised by a listed pet, you acknowledge that Pet Share is not responsible for uncontrolled cute aggression, spontaneous baby voice, the purchase of premium treats outside your stated budget, or treat spending habits that exceed the national average. Pet Share further disclaims liability for guests who rearrange your household hierarchy, occupy warm laundry without written authorization, stare at you like a Victorian creditor, develop a favorite chair through adverse possession, or make you say the phrase \"just one more photo\" more than seven times in a calendar hour. Claims involving chewed slippers, rearranged cushions, dramatic hallway galloping, unplanned nicknames, snack debt, and emotional damages caused by returning a pet on schedule will be reviewed by the warranty desk with great concern and very little legal standing. Nothing on this page should be interpreted as a promise that the pet will respect your flooring, your personal space, your houseplants, your keyboard, or the quiet optimism you had before pickup. Additional exclusions include, but are not limited to, sofa negotiations conducted entirely through eye contact, unauthorized blanket tunneling, surprise affection delivered while you are holding hot coffee, and the sudden realization that your home has always lacked a small creature judging the hallway. Pet Share does not warrant that a temporary companion will arrive with reasonable opinions, depart with all of your socks accounted for, or refrain from becoming the subject of a group chat within fifteen minutes of pickup. Any claim alleging excessive charm, suspicious compliance before mischief, snack-based lobbying, or the creation of a new household nickname shall be treated as evidence that the system is functioning approximately as designed. By filing this claim, you further confirm that you understand the warranty desk cannot refund dignity lost during baby talk, reimburse throw pillows placed in morally compromised positions, or reverse the emotional consequence of returning a pet who briefly made your living room feel like it had better management.",
-          "imageAssetKey": null
+          "_type": "warrantyNoticeSection",
+          "anchorId": "warranty-notice",
+          "header": {
+            "_type": "sectionHeader",
+            "headline": "Limited temporary companion warranty notice",
+            "body": "A substantial legal-ish notice for claims involving pets, feelings, household objects, and the questionable choices made around all three.",
+            "alignment": "left"
+          },
+          "badgeLabel": "Fine print with feelings",
+          "body": [
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "By hosting, admiring, transporting, photographing, snack-negotiating with, or otherwise becoming emotionally compromised by a listed pet, you acknowledge that Pet Share is not responsible for uncontrolled cute aggression, spontaneous baby voice, the purchase of premium treats outside your stated budget, or treat spending habits that exceed the national average. Pet Share further disclaims liability for guests who rearrange your household hierarchy, occupy warm laundry without written authorization, stare at you like a Victorian creditor, develop a favorite chair through adverse possession, or make you say the phrase \"just one more photo\" more than seven times in a calendar hour.",
+                  "marks": []
+                }
+              ],
+              "markDefs": []
+            },
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "Claims involving chewed slippers, rearranged cushions, dramatic hallway galloping, unplanned nicknames, snack debt, and emotional damages caused by returning a pet on schedule will be reviewed by the warranty desk with great concern and very little legal standing. Nothing on this page should be interpreted as a promise that the pet will respect your flooring, your personal space, your houseplants, your keyboard, or the quiet optimism you had before pickup.",
+                  "marks": []
+                }
+              ],
+              "markDefs": []
+            },
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "Additional exclusions include, but are not limited to, sofa negotiations conducted entirely through eye contact, unauthorized blanket tunneling, surprise affection delivered while you are holding hot coffee, and the sudden realization that your home has always lacked a small creature judging the hallway. Pet Share does not warrant that a temporary companion will arrive with reasonable opinions, depart with all of your socks accounted for, or refrain from becoming the subject of a group chat within fifteen minutes of pickup.",
+                  "marks": []
+                }
+              ],
+              "markDefs": []
+            },
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "Any claim alleging excessive charm, suspicious compliance before mischief, snack-based lobbying, or the creation of a new household nickname shall be treated as evidence that the system is functioning approximately as designed. By filing this claim, you further confirm that you understand the warranty desk cannot refund dignity lost during baby talk, reimburse throw pillows placed in morally compromised positions, or reverse the emotional consequence of returning a pet who briefly made your living room feel like it had better management.",
+                  "marks": []
+                }
+              ],
+              "markDefs": []
+            }
+          ]
         },
         {
-          "_key": "warranty-after-claim-cta",
-          "_type": "calloutBlock",
-          "headline": "Still convinced this was not standard pet behavior?",
-          "body": "Submit the form and the warranty desk will route your claim to the appropriate imaginary department, where it will be handled with the procedural gravity of a clipboard wearing a tiny tie.",
-          "tone": "formal concern",
-          "icon": "mail",
-          "cta": { "label": "File the claim", "link": { "type": "internalPath", "path": "/warranty#claim-form" }, "style": "primary" }
+          "_key": "warranty-claim-prep",
+          "_type": "warrantyClaimPrep",
+          "anchorId": "claim-prep",
+          "header": {
+            "_type": "sectionHeader",
+            "eyebrow": "Still filing?",
+            "headline": "Help the desk understand what happened",
+            "body": "Submit the form below and the warranty desk will route your claim to the appropriate imaginary department, where it will be handled with procedural gravity and a very small clipboard.",
+            "alignment": "left"
+          },
+          "items": [
+            {
+              "_key": "claim-what-happened",
+              "_type": "warrantyClaimPrepItem",
+              "title": "What happened",
+              "body": "Give us the scene, the timing, and whether the pet looked sorry or simply better lit.",
+              "icon": "ClipboardList"
+            },
+            {
+              "_key": "claim-snack",
+              "_type": "warrantyClaimPrepItem",
+              "title": "Which snack was involved",
+              "body": "Most claims improve dramatically once the snack context has been disclosed.",
+              "icon": "Cookie"
+            },
+            {
+              "_key": "claim-photos",
+              "_type": "warrantyClaimPrepItem",
+              "title": "Photos are fine",
+              "body": "Upload or describe photos if helpful. Do not mail physical evidence, especially if it is damp.",
+              "icon": "Image"
+            },
+            {
+              "_key": "claim-outcome",
+              "_type": "warrantyClaimPrepItem",
+              "title": "Desired outcome",
+              "body": "Tell us whether you need support, clarification, or a formal statement that the pet was technically adorable.",
+              "icon": "MessageSquareText"
+            }
+          ],
+          "ctaGroup": {
+            "primary": { "label": "Continue to the form", "link": { "type": "internalPath", "path": "/warranty#claim-form" }, "style": "primary" },
+            "secondary": { "label": "Browse pets instead", "link": { "type": "internalPath", "path": "/pets" }, "style": "secondary" },
+            "alignment": "left"
+          }
         }
       ],
-      "primaryCta": { "label": "File a claim", "link": { "type": "internalPath", "path": "/warranty#claim-form" }, "style": "primary" },
+      "primaryCta": null,
       "showContactForm": true,
       "formSeedId": "form-warranty"
     }

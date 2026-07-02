@@ -31,19 +31,45 @@ export const processPathSection = defineType({
   ],
   fields: [
     defineField({
+      name: "header",
+      title: "Header",
+      description: "Shared section header used by process and other page-builder sections.",
+      type: "sectionHeader",
+      group: "content",
+      validation: (rule) =>
+        rule.custom((header, context) => {
+          const parent = context.parent as { title?: string; body?: string } | undefined;
+          return header || parent?.title || parent?.body ? true : "Add a header.";
+        })
+    }),
+    defineField({
       name: "title",
-      title: "Title",
+      title: "Title (legacy)",
+      description: "Deprecated plain-text title. Use Header instead.",
       type: "string",
       group: "content",
-      validation: (rule) => rule.required().max(120)
+      deprecated: {
+        reason: "Use the shared Header field instead."
+      },
+      hidden: ({ value }) => value === undefined,
+      readOnly: true,
+      initialValue: undefined,
+      validation: (rule) => rule.max(120)
     }),
     defineField({
       name: "body",
-      title: "Body",
+      title: "Body (legacy)",
+      description: "Deprecated plain-text body. Use Header body instead.",
       type: "text",
       group: "content",
       rows: 3,
-      validation: (rule) => rule.required().max(360)
+      deprecated: {
+        reason: "Use the shared Header body field instead."
+      },
+      hidden: ({ value }) => value === undefined,
+      readOnly: true,
+      initialValue: undefined,
+      validation: (rule) => rule.max(360)
     }),
     defineField({
       name: "tone",
@@ -86,13 +112,13 @@ export const processPathSection = defineType({
     ]
   },
   preview: {
-    select: { title: "title", tone: "tone", steps: "steps" },
-    prepare({ title, tone, steps }) {
+    select: { title: "header.headline", legacyTitle: "title", tone: "tone", steps: "steps" },
+    prepare({ title, legacyTitle, tone, steps }) {
       const count = Array.isArray(steps) ? steps.length : 0;
       const toneLabel = processToneOptions.find((option) => option.value === tone)?.title;
 
       return {
-        title: title || "Process step path",
+        title: title || legacyTitle || "Process step path",
         subtitle: `Process: Step path${toneLabel ? ` - ${toneLabel}` : ""} - ${count} steps`,
         media: ClipboardList
       };

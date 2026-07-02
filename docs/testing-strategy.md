@@ -234,10 +234,12 @@ Recommended level:
 - Milestone 5: route smoke tests, not-found/empty states, and basic custom error fallback behavior.
 - Milestone 6: section renderer tests for supported block types and key responsive interactions.
 - Milestone 7: seed replay validation and manifest consistency.
-- Milestone 8: form validation and Mailgun adapter tests.
-- Milestone 9: preview secret and webhook revalidation tests.
-- Milestone 10: responsive Playwright checks and accessibility-focused interaction checks.
-- Milestone 11: full lint, typecheck, test, and build.
+- Milestone 8: schema/typegen checks, targeted renderer checks for process and pricing sections, and focused browser QA for `/process` and `/pricing`.
+- Milestone 9: preview secret, Draft Mode, Visual Editing, and Media Library checks.
+- Milestone 10: pet index filter/pagination checks, pet detail gallery/contact-surface checks, and focused browser QA for `/pets` plus representative pet detail pages.
+- Milestone 11: form validation and Mailgun adapter tests.
+- Milestone 12: responsive Playwright checks and accessibility-focused interaction checks.
+- Milestone 16: full lint, typecheck, test, and build before launch.
 
 ## Open Questions
 

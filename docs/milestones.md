@@ -252,26 +252,30 @@ Exit criteria:
 - Media Library usage is documented and functional for the project workflow.
 - Any remaining limitations of Visual Editing are clearly documented.
 
-## Milestone 10: Remaining Page Builder Migration
+## Milestone 10: Pet Marketplace Page Refinement
 
 Goal:
 
-- Bring the rest of the site onto the refined CMS/page-builder patterns established by process and pricing.
+- Refine the pet index and pet detail experience into the reference implementation for structured marketplace content.
 
 Scope:
 
-- Update the homepage where appropriate while preserving bespoke homepage sections that intentionally remain code-composed.
-- Update contact, warranty, about, system pages, pet index supporting content, and other marketing pages to use the refined block conventions.
-- Align forms, CTA groups, callouts, warning/alert blocks, testimonials, accordions, and content sections with the reference patterns.
-- Remove or migrate outdated seed structures that no longer match the current page-builder approach.
-- Update docs when a page intentionally remains bespoke instead of generic page-builder driven.
+- Refine `/pets` layout, filters, sorting, pagination, URL state, empty states, and pet card presentation.
+- Refine `/pets/[slug]` layout, gallery behavior, pet facts, owner summary, availability/status display, care notes, CTA surfaces, and optional pet video support.
+- Keep the pet index and pet detail pages more structured than Standard Pages; do not turn pet records into generic page-builder content.
+- Improve Sanity schemas, Studio previews, field grouping, and validation for pet, pet type, owner, and pet index content where the editing workflow is unclear.
+- Align pet cards, galleries, status indicators, owner summaries, and marketplace CTA components with the polished component patterns established in milestones 8 and 9.
+- Update saved seed data and seed normalization for pet marketplace fields when schema or renderer expectations change.
+- Preserve the rule that owner pages are reachable from pet listings, pet detail pages, or direct URLs, but there is no public owner directory.
+- Document any marketplace surfaces that intentionally stay bespoke instead of generic page-builder driven.
 
 Exit criteria:
 
-- Remaining pages use the same core CMS structure and editor experience where practical.
-- Any bespoke page sections have clear documented reasons.
-- Seeded page content matches the current block contracts.
-- No page depends on deprecated page-builder fields unless it is explicitly in a compatibility fallback.
+- `/pets` feels like a polished, responsive marketplace index with shareable server-driven filters and pagination.
+- `/pets/[slug]` presents the selected pet, gallery, structured facts, owner context, and contact CTA clearly on mobile and desktop.
+- Pet marketplace schemas are editor-friendly, with clear previews, validation, grouping, and reusable objects where appropriate.
+- Seeded pet, owner, pet type, and pet index content matches the current schema and renderer contracts.
+- No marketplace page depends on deprecated page-builder or legacy pet fields unless it is explicitly in a compatibility fallback.
 
 ## Milestone 11: Forms And Mailgun
 

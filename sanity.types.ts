@@ -88,6 +88,68 @@ export type PetTrait = {
   tone?: "friendly" | "warning" | "playful";
 };
 
+export type WarrantyClaimPrepItem = {
+  _type: "warrantyClaimPrepItem";
+  title: string;
+  body: string;
+  icon?: string;
+};
+
+export type WarrantyClaimPrep = {
+  _type: "warrantyClaimPrep";
+  anchorId?: string;
+  header?: SectionHeader;
+  items: Array<
+    {
+      _key: string;
+    } & WarrantyClaimPrepItem
+  >;
+  ctaGroup?: CtaGroup;
+};
+
+export type WarrantyNoticeSection = {
+  _type: "warrantyNoticeSection";
+  anchorId?: string;
+  header?: SectionHeader;
+  body: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
+    listItem?: "bullet" | "number";
+    markDefs?: Array<{
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  }>;
+  badgeLabel?: string;
+};
+
+export type WarrantyConditionItem = {
+  _type: "warrantyConditionItem";
+  title: string;
+  body: string;
+  tone: "covered" | "excluded" | "evidence";
+  icon?: string;
+};
+
+export type WarrantyConditionGrid = {
+  _type: "warrantyConditionGrid";
+  header?: SectionHeader;
+  items: Array<
+    {
+      _key: string;
+    } & WarrantyConditionItem
+  >;
+};
+
 export type ProcessStep = {
   _type: "processStep";
   title: string;
@@ -100,8 +162,9 @@ export type ProcessStep = {
 
 export type ProcessPathSection = {
   _type: "processPathSection";
-  title: string;
-  body: string;
+  header?: SectionHeader;
+  title?: string;
+  body?: string;
   tone: "owner" | "host" | "neutral";
   icon?: string;
   steps: Array<
@@ -110,6 +173,68 @@ export type ProcessPathSection = {
     } & ProcessStep
   >;
   cta?: Cta;
+};
+
+export type PricingCtaBand = {
+  _type: "pricingCtaBand";
+  headline: string;
+  body: string;
+  icon?: string;
+  ctaGroup?: CtaGroup;
+  proofItems?: Array<{
+    label: string;
+    icon?: string;
+    _type: "pricingCtaProofItem";
+    _key: string;
+  }>;
+};
+
+export type PricingPlanFeatureItem = {
+  _type: "pricingPlanFeatureItem";
+  label: string;
+};
+
+export type PricingPackage = {
+  _type: "pricingPackage";
+  name: string;
+  price: string;
+  duration: string;
+  description: string;
+  icon?: string;
+  tone?: "coral" | "mint" | "blue" | "cream";
+  badge?: string;
+  highlighted?: boolean;
+  features?: Array<
+    {
+      _key: string;
+    } & PricingPlanFeatureItem
+  >;
+};
+
+export type PricingPackageGrid = {
+  _type: "pricingPackageGrid";
+  header?: SectionHeader;
+  packages?: Array<
+    {
+      _key: string;
+    } & PricingPackage
+  >;
+};
+
+export type PricingValueItem = {
+  _type: "pricingValueItem";
+  title: string;
+  body: string;
+  icon?: string;
+};
+
+export type PricingValueSection = {
+  _type: "pricingValueSection";
+  valueItems?: Array<
+    {
+      _key: string;
+    } & PricingValueItem
+  >;
 };
 
 export type PricingComparisonTable = {
@@ -137,27 +262,6 @@ export type PricingComparisonTable = {
     _key: string;
   }>;
   cta?: Cta;
-};
-
-export type PricingFeature = {
-  _type: "pricingFeature";
-  label: string;
-  included?: boolean;
-  note?: string;
-};
-
-export type PricingTier = {
-  _type: "pricingTier";
-  name: string;
-  price?: string;
-  billingNote?: string;
-  features?: Array<
-    {
-      _key: string;
-    } & PricingFeature
-  >;
-  cta?: Cta;
-  highlighted?: boolean;
 };
 
 export type AccordionItem = {
@@ -190,46 +294,12 @@ export type FeatureList = {
   iconStyle?: "outline" | "filledBadge";
 };
 
-export type TestimonialReference = {
-  _ref: string;
-  _type: "reference";
-  _weak?: boolean;
-  [internalGroqTypeReferenceTo]?: "testimonial";
-};
-
-export type TestimonialBlock = {
-  _type: "testimonialBlock";
-  header?: SectionHeader;
-  testimonials?: Array<
-    {
-      _key: string;
-    } & TestimonialReference
-  >;
-  layoutHint?: "carousel" | "grid" | "featured";
-};
-
 export type StatBlock = {
   _type: "statBlock";
   value: string;
   label: string;
   description?: string;
   icon?: string;
-};
-
-export type WarningBlock = {
-  _type: "warningBlock";
-  title: string;
-  message: string;
-  severity?: "low" | "medium" | "high";
-  icon?: string;
-};
-
-export type AlertBlock = {
-  _type: "alertBlock";
-  title: string;
-  message: string;
-  tone?: "info" | "success" | "warning";
-  cta?: Cta;
 };
 
 export type CalloutBlock = {
@@ -281,6 +351,7 @@ export type Hero = {
   body?: string;
   image?: ImageWithAlt;
   ctaGroup?: CtaGroup;
+  layoutHint?: "mediaCard" | "centered";
 };
 
 export type SectionHeader = {
@@ -288,7 +359,7 @@ export type SectionHeader = {
   eyebrow?: string;
   headline: string;
   body?: string;
-  alignment?: "left" | "center";
+  alignment?: "left" | "center" | "right";
 };
 
 export type NavigationItem = {
@@ -306,7 +377,7 @@ export type CtaGroup = {
   _type: "ctaGroup";
   primary?: Cta;
   secondary?: Cta;
-  alignment?: "left" | "center";
+  alignment?: "left" | "center" | "right";
 };
 
 export type Cta = {
@@ -418,6 +489,13 @@ export type Slug = {
   _type: "slug";
   current: string;
   source?: string;
+};
+
+export type TestimonialReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "testimonial";
 };
 
 export type Owner = {
@@ -639,16 +717,7 @@ export type MarketingPage = {
       } & CalloutBlock)
     | ({
         _key: string;
-      } & AlertBlock)
-    | ({
-        _key: string;
-      } & WarningBlock)
-    | ({
-        _key: string;
       } & StatBlock)
-    | ({
-        _key: string;
-      } & TestimonialBlock)
     | ({
         _key: string;
       } & FeatureList)
@@ -657,16 +726,28 @@ export type MarketingPage = {
       } & Accordion)
     | ({
         _key: string;
-      } & PricingTier)
+      } & PricingComparisonTable)
     | ({
         _key: string;
-      } & PricingComparisonTable)
+      } & PricingValueSection)
+    | ({
+        _key: string;
+      } & PricingPackageGrid)
+    | ({
+        _key: string;
+      } & PricingCtaBand)
     | ({
         _key: string;
       } & ProcessPathSection)
     | ({
         _key: string;
-      } & VideoEmbed)
+      } & WarrantyConditionGrid)
+    | ({
+        _key: string;
+      } & WarrantyNoticeSection)
+    | ({
+        _key: string;
+      } & WarrantyClaimPrep)
     | ({
         _key: string;
       } & CtaGroup)
@@ -707,16 +788,7 @@ export type SystemPage = {
       } & CalloutBlock)
     | ({
         _key: string;
-      } & AlertBlock)
-    | ({
-        _key: string;
-      } & WarningBlock)
-    | ({
-        _key: string;
       } & StatBlock)
-    | ({
-        _key: string;
-      } & TestimonialBlock)
     | ({
         _key: string;
       } & FeatureList)
@@ -725,16 +797,28 @@ export type SystemPage = {
       } & Accordion)
     | ({
         _key: string;
-      } & PricingTier)
+      } & PricingComparisonTable)
     | ({
         _key: string;
-      } & PricingComparisonTable)
+      } & PricingValueSection)
+    | ({
+        _key: string;
+      } & PricingPackageGrid)
+    | ({
+        _key: string;
+      } & PricingCtaBand)
     | ({
         _key: string;
       } & ProcessPathSection)
     | ({
         _key: string;
-      } & VideoEmbed)
+      } & WarrantyConditionGrid)
+    | ({
+        _key: string;
+      } & WarrantyNoticeSection)
+    | ({
+        _key: string;
+      } & WarrantyClaimPrep)
     | ({
         _key: string;
       } & CtaGroup)
@@ -769,16 +853,7 @@ export type PetIndexPage = {
       } & CalloutBlock)
     | ({
         _key: string;
-      } & AlertBlock)
-    | ({
-        _key: string;
-      } & WarningBlock)
-    | ({
-        _key: string;
       } & StatBlock)
-    | ({
-        _key: string;
-      } & TestimonialBlock)
     | ({
         _key: string;
       } & FeatureList)
@@ -787,16 +862,28 @@ export type PetIndexPage = {
       } & Accordion)
     | ({
         _key: string;
-      } & PricingTier)
+      } & PricingComparisonTable)
     | ({
         _key: string;
-      } & PricingComparisonTable)
+      } & PricingValueSection)
+    | ({
+        _key: string;
+      } & PricingPackageGrid)
+    | ({
+        _key: string;
+      } & PricingCtaBand)
     | ({
         _key: string;
       } & ProcessPathSection)
     | ({
         _key: string;
-      } & VideoEmbed)
+      } & WarrantyConditionGrid)
+    | ({
+        _key: string;
+      } & WarrantyNoticeSection)
+    | ({
+        _key: string;
+      } & WarrantyClaimPrep)
     | ({
         _key: string;
       } & CtaGroup)
@@ -854,16 +941,7 @@ export type HomePage = {
       } & CalloutBlock)
     | ({
         _key: string;
-      } & AlertBlock)
-    | ({
-        _key: string;
-      } & WarningBlock)
-    | ({
-        _key: string;
       } & StatBlock)
-    | ({
-        _key: string;
-      } & TestimonialBlock)
     | ({
         _key: string;
       } & FeatureList)
@@ -872,16 +950,28 @@ export type HomePage = {
       } & Accordion)
     | ({
         _key: string;
-      } & PricingTier)
+      } & PricingComparisonTable)
     | ({
         _key: string;
-      } & PricingComparisonTable)
+      } & PricingValueSection)
+    | ({
+        _key: string;
+      } & PricingPackageGrid)
+    | ({
+        _key: string;
+      } & PricingCtaBand)
     | ({
         _key: string;
       } & ProcessPathSection)
     | ({
         _key: string;
-      } & VideoEmbed)
+      } & WarrantyConditionGrid)
+    | ({
+        _key: string;
+      } & WarrantyNoticeSection)
+    | ({
+        _key: string;
+      } & WarrantyClaimPrep)
     | ({
         _key: string;
       } & CtaGroup)
@@ -1036,19 +1126,24 @@ export type AllSanitySchemaTypes =
   | AvailabilityWindow
   | PetStat
   | PetTrait
+  | WarrantyClaimPrepItem
+  | WarrantyClaimPrep
+  | WarrantyNoticeSection
+  | WarrantyConditionItem
+  | WarrantyConditionGrid
   | ProcessStep
   | ProcessPathSection
+  | PricingCtaBand
+  | PricingPlanFeatureItem
+  | PricingPackage
+  | PricingPackageGrid
+  | PricingValueItem
+  | PricingValueSection
   | PricingComparisonTable
-  | PricingFeature
-  | PricingTier
   | AccordionItem
   | Accordion
   | FeatureList
-  | TestimonialReference
-  | TestimonialBlock
   | StatBlock
-  | WarningBlock
-  | AlertBlock
   | CalloutBlock
   | ContentSection
   | PetReference
@@ -1068,6 +1163,7 @@ export type AllSanitySchemaTypes =
   | ImageWithAlt
   | FormDefinition
   | Slug
+  | TestimonialReference
   | Owner
   | Testimonial
   | PetTypeReference
@@ -1354,7 +1450,7 @@ export type OWNER_SLUGS_QUERY_RESULT = Array<{
 
 // Source: sanity/queries/pages.ts
 // Variable: HOME_PAGE_QUERY
-// Query: *[_id == "homePage"][0]{    _id,    seo{        title,  description,  noIndex,  openGraphImage{      image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption  }    },    heroCarousel[]{      _key,      _type,      headline,      body,      image{          image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption      },      cta{          label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }      },      featuredPet->{        _id,        name,        "slug": slug.current,        listingHeadline      },      featuredOwner->{        _id,        name,        "slug": slug.current,        tagline      }    },    intro{        _key,  _type,  _type == "hero" => {    eyebrow,    headline,    body,    image{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    ctaGroup{        primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment    }  },  _type == "heroSlide" => {    headline,    body,    image{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    },    featuredPet->{      _id,      name,      "slug": slug.current,      listingHeadline    },    featuredOwner->{      _id,      name,      "slug": slug.current,      tagline    }  },  _type == "contentSection" => {    header,    body[]{        ...    },    media{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    ctaGroup{        primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment    },    layoutHint  },  _type == "calloutBlock" => {    headline,    body,    icon,    tone,    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "alertBlock" => {    title,    message,    tone,    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "warningBlock" => {    title,    message,    severity,    icon  },  _type == "statBlock" => {    value,    label,    description,    icon  },  _type == "testimonialBlock" => {    header,    layoutHint,    testimonials[]->{      _id,      quote,      authorName,      authorRole,      rating,      tone,      authorImage{          image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption      }    }  },  _type == "featureList" => {    header,    iconStyle,    items[]{      _key,      title,      description,      icon,      link{          type,  label,  path,  url,  action,  openInNewTab      }    }  },  _type == "accordion" => {    header,    items[]{      _key,      title,      body[]{          ...      }    }  },  _type == "pricingTier" => {    name,    price,    billingNote,    highlighted,    features[]{      _key,      label,      included,      note    },    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "pricingComparisonTable" => {    header,    plans[]{      _key,      name,      price,      note,      highlighted    },    rows[]{      _key,      feature,      description,      values[]{        _key,        planKey,        included,        note      }    },    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "processPathSection" => {    title,    body,    tone,    icon,    steps[]{      _key,      title,      body[]{          ...      },      description,      icon,      order,      cta{          label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }      }    },    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "processStep" => {    title,    body[]{        ...    },    description,    icon,    order,    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "videoEmbed" => {      provider,  url,  title,  description,  posterImage{      image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption  }  },  _type == "ctaGroup" => {      primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment  }    },    featuredPets[]->{        _id,  name,  "slug": slug.current,  breed,  listingHeadline,  listingSummary,  availabilityStatus,  distanceKilometers,  listingPlan,  hostPayoutAmount,  hostPayoutCurrency,  hostPayoutUnit,  temperament,  pickupUrgency,  messRisk,  chaosLevel,  energyLevel,  cuddlePolicy,  cardMedia{    image{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    lowFrameRateVideo{        provider,  url,  title,  description,  posterImage{      image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption  }    }  },  petType->{    _id,    name,    pluralName,    "slug": slug.current,    filterLabel,    icon,    category,    sortOrder  },  owner->{    _id,    name,    "slug": slug.current,    tagline  }    },    featuredOwners[]->{      _id,      name,      "slug": slug.current,      tagline,      portrait{          image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption      }    },    processSummary[]{      _key,      title,      description,      icon,      order,      cta{          label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }      }    },    testimonials[]->{      _id,      quote,      authorName,      authorRole,      rating,      tone,      authorImage{          image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption      }    },    statBlocks[]{      _key,      value,      label,      description,      icon    },    contentSections[]{        _key,  _type,  _type == "hero" => {    eyebrow,    headline,    body,    image{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    ctaGroup{        primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment    }  },  _type == "heroSlide" => {    headline,    body,    image{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    },    featuredPet->{      _id,      name,      "slug": slug.current,      listingHeadline    },    featuredOwner->{      _id,      name,      "slug": slug.current,      tagline    }  },  _type == "contentSection" => {    header,    body[]{        ...    },    media{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    ctaGroup{        primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment    },    layoutHint  },  _type == "calloutBlock" => {    headline,    body,    icon,    tone,    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "alertBlock" => {    title,    message,    tone,    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "warningBlock" => {    title,    message,    severity,    icon  },  _type == "statBlock" => {    value,    label,    description,    icon  },  _type == "testimonialBlock" => {    header,    layoutHint,    testimonials[]->{      _id,      quote,      authorName,      authorRole,      rating,      tone,      authorImage{          image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption      }    }  },  _type == "featureList" => {    header,    iconStyle,    items[]{      _key,      title,      description,      icon,      link{          type,  label,  path,  url,  action,  openInNewTab      }    }  },  _type == "accordion" => {    header,    items[]{      _key,      title,      body[]{          ...      }    }  },  _type == "pricingTier" => {    name,    price,    billingNote,    highlighted,    features[]{      _key,      label,      included,      note    },    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "pricingComparisonTable" => {    header,    plans[]{      _key,      name,      price,      note,      highlighted    },    rows[]{      _key,      feature,      description,      values[]{        _key,        planKey,        included,        note      }    },    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "processPathSection" => {    title,    body,    tone,    icon,    steps[]{      _key,      title,      body[]{          ...      },      description,      icon,      order,      cta{          label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }      }    },    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "processStep" => {    title,    body[]{        ...    },    description,    icon,    order,    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "videoEmbed" => {      provider,  url,  title,  description,  posterImage{      image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption  }  },  _type == "ctaGroup" => {      primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment  }    },    primaryCta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  }
+// Query: *[_id == "homePage"][0]{    _id,    seo{        title,  description,  noIndex,  openGraphImage{      image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption  }    },    heroCarousel[]{      _key,      _type,      headline,      body,      image{          image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption      },      cta{          label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }      },      featuredPet->{        _id,        name,        "slug": slug.current,        listingHeadline      },      featuredOwner->{        _id,        name,        "slug": slug.current,        tagline      }    },    intro{        _key,  _type,  _type == "hero" => {    eyebrow,    headline,    body,    image{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    ctaGroup{        primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment    },    layoutHint  },  _type == "heroSlide" => {    headline,    body,    image{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    },    featuredPet->{      _id,      name,      "slug": slug.current,      listingHeadline    },    featuredOwner->{      _id,      name,      "slug": slug.current,      tagline    }  },  _type == "contentSection" => {    header,    body[]{        ...    },    media{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    ctaGroup{        primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment    },    layoutHint  },  _type == "calloutBlock" => {    headline,    body,    icon,    tone,    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "statBlock" => {    value,    label,    description,    icon  },  _type == "featureList" => {    header,    iconStyle,    items[]{      _key,      title,      description,      icon,      link{          type,  label,  path,  url,  action,  openInNewTab      }    }  },  _type == "accordion" => {    header,    items[]{      _key,      title,      body[]{          ...      }    }  },  _type == "pricingComparisonTable" => {    header,    plans[]{      _key,      name,      price,      note,      highlighted    },    rows[]{      _key,      feature,      description,      values[]{        _key,        planKey,        included,        note      }    },    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "pricingValueSection" => {    valueItems[]{      _key,      title,      body,      icon    }  },  _type == "pricingPackageGrid" => {    header,    packages[]{      _key,      name,      price,      duration,      description,      icon,      tone,      badge,      highlighted,      features[]{        _key,        label      }    }  },  _type == "pricingCtaBand" => {    headline,    body,    icon,    ctaGroup{        primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment    },    proofItems[]{      _key,      label,      icon    }  },  _type == "processPathSection" => {    header,    title,    body,    tone,    icon,    steps[]{      _key,      title,      body[]{          ...      },      description,      icon,      order,      cta{          label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }      }    },    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "warrantyConditionGrid" => {    header,    items[]{      _key,      title,      body,      tone,      icon    }  },  _type == "warrantyNoticeSection" => {    anchorId,    header,    body[]{        ...    },    badgeLabel  },  _type == "warrantyClaimPrep" => {    anchorId,    header,    items[]{      _key,      title,      body,      icon    },    ctaGroup{        primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment    }  },  _type == "processStep" => {    title,    body[]{        ...    },    description,    icon,    order,    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "ctaGroup" => {      primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment  }    },    featuredPets[]->{        _id,  name,  "slug": slug.current,  breed,  listingHeadline,  listingSummary,  availabilityStatus,  distanceKilometers,  listingPlan,  hostPayoutAmount,  hostPayoutCurrency,  hostPayoutUnit,  temperament,  pickupUrgency,  messRisk,  chaosLevel,  energyLevel,  cuddlePolicy,  cardMedia{    image{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    lowFrameRateVideo{        provider,  url,  title,  description,  posterImage{      image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption  }    }  },  petType->{    _id,    name,    pluralName,    "slug": slug.current,    filterLabel,    icon,    category,    sortOrder  },  owner->{    _id,    name,    "slug": slug.current,    tagline  }    },    featuredOwners[]->{      _id,      name,      "slug": slug.current,      tagline,      portrait{          image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption      }    },    processSummary[]{      _key,      title,      description,      icon,      order,      cta{          label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }      }    },    testimonials[]->{      _id,      quote,      authorName,      authorRole,      rating,      tone,      authorImage{          image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption      }    },    statBlocks[]{      _key,      value,      label,      description,      icon    },    contentSections[]{        _key,  _type,  _type == "hero" => {    eyebrow,    headline,    body,    image{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    ctaGroup{        primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment    },    layoutHint  },  _type == "heroSlide" => {    headline,    body,    image{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    },    featuredPet->{      _id,      name,      "slug": slug.current,      listingHeadline    },    featuredOwner->{      _id,      name,      "slug": slug.current,      tagline    }  },  _type == "contentSection" => {    header,    body[]{        ...    },    media{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    ctaGroup{        primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment    },    layoutHint  },  _type == "calloutBlock" => {    headline,    body,    icon,    tone,    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "statBlock" => {    value,    label,    description,    icon  },  _type == "featureList" => {    header,    iconStyle,    items[]{      _key,      title,      description,      icon,      link{          type,  label,  path,  url,  action,  openInNewTab      }    }  },  _type == "accordion" => {    header,    items[]{      _key,      title,      body[]{          ...      }    }  },  _type == "pricingComparisonTable" => {    header,    plans[]{      _key,      name,      price,      note,      highlighted    },    rows[]{      _key,      feature,      description,      values[]{        _key,        planKey,        included,        note      }    },    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "pricingValueSection" => {    valueItems[]{      _key,      title,      body,      icon    }  },  _type == "pricingPackageGrid" => {    header,    packages[]{      _key,      name,      price,      duration,      description,      icon,      tone,      badge,      highlighted,      features[]{        _key,        label      }    }  },  _type == "pricingCtaBand" => {    headline,    body,    icon,    ctaGroup{        primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment    },    proofItems[]{      _key,      label,      icon    }  },  _type == "processPathSection" => {    header,    title,    body,    tone,    icon,    steps[]{      _key,      title,      body[]{          ...      },      description,      icon,      order,      cta{          label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }      }    },    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "warrantyConditionGrid" => {    header,    items[]{      _key,      title,      body,      tone,      icon    }  },  _type == "warrantyNoticeSection" => {    anchorId,    header,    body[]{        ...    },    badgeLabel  },  _type == "warrantyClaimPrep" => {    anchorId,    header,    items[]{      _key,      title,      body,      icon    },    ctaGroup{        primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment    }  },  _type == "processStep" => {    title,    body[]{        ...    },    description,    icon,    order,    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "ctaGroup" => {      primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment  }    },    primaryCta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  }
 export type HOME_PAGE_QUERY_RESULT =
   | {
       _id: "homePage";
@@ -1507,26 +1603,6 @@ export type HOME_PAGE_QUERY_RESULT =
           }
         | {
             _key: string;
-            _type: "alertBlock";
-            title: string;
-            message: string;
-            tone: "info" | "success" | "warning" | null;
-            cta: {
-              label: string;
-              style: "primary" | "secondary" | "text";
-              icon: string | null;
-              link: {
-                type: "action" | "externalUrl" | "internalPath";
-                label: string;
-                path: string | null;
-                url: string | null;
-                action: "openContactForm" | "openOwnerContactDrawer" | null;
-                openInNewTab: boolean | null;
-              };
-            } | null;
-          }
-        | {
-            _key: string;
             _type: "calloutBlock";
             headline: string;
             body: string;
@@ -1615,7 +1691,7 @@ export type HOME_PAGE_QUERY_RESULT =
                   openInNewTab: boolean | null;
                 };
               } | null;
-              alignment: "center" | "left" | null;
+              alignment: "center" | "left" | "right" | null;
             } | null;
             layoutHint: "mediaLeft" | "mediaRight" | "textOnly" | null;
           }
@@ -1648,7 +1724,7 @@ export type HOME_PAGE_QUERY_RESULT =
                 openInNewTab: boolean | null;
               };
             } | null;
-            alignment: "center" | "left" | null;
+            alignment: "center" | "left" | "right" | null;
           }
         | {
             _key: string;
@@ -1723,8 +1799,9 @@ export type HOME_PAGE_QUERY_RESULT =
                   openInNewTab: boolean | null;
                 };
               } | null;
-              alignment: "center" | "left" | null;
+              alignment: "center" | "left" | "right" | null;
             } | null;
+            layoutHint: "centered" | "mediaCard" | null;
           }
         | {
             _key: string;
@@ -1764,36 +1841,81 @@ export type HOME_PAGE_QUERY_RESULT =
           }
         | {
             _key: string;
-            _type: "pricingTier";
-            name: string;
-            price: string | null;
-            billingNote: string | null;
-            highlighted: boolean | null;
-            features: Array<{
+            _type: "pricingCtaBand";
+            headline: string;
+            body: string;
+            icon: string | null;
+            ctaGroup: {
+              primary: {
+                label: string;
+                style: "primary" | "secondary" | "text";
+                icon: string | null;
+                link: {
+                  type: "action" | "externalUrl" | "internalPath";
+                  label: string;
+                  path: string | null;
+                  url: string | null;
+                  action: "openContactForm" | "openOwnerContactDrawer" | null;
+                  openInNewTab: boolean | null;
+                };
+              } | null;
+              secondary: {
+                label: string;
+                style: "primary" | "secondary" | "text";
+                icon: string | null;
+                link: {
+                  type: "action" | "externalUrl" | "internalPath";
+                  label: string;
+                  path: string | null;
+                  url: string | null;
+                  action: "openContactForm" | "openOwnerContactDrawer" | null;
+                  openInNewTab: boolean | null;
+                };
+              } | null;
+              alignment: "center" | "left" | "right" | null;
+            } | null;
+            proofItems: Array<{
               _key: string;
               label: string;
-              included: boolean | null;
-              note: string | null;
-            }> | null;
-            cta: {
-              label: string;
-              style: "primary" | "secondary" | "text";
               icon: string | null;
-              link: {
-                type: "action" | "externalUrl" | "internalPath";
+            }> | null;
+          }
+        | {
+            _key: string;
+            _type: "pricingPackageGrid";
+            header: SectionHeader | null;
+            packages: Array<{
+              _key: string;
+              name: string;
+              price: string;
+              duration: string;
+              description: string;
+              icon: string | null;
+              tone: "blue" | "coral" | "cream" | "mint" | null;
+              badge: string | null;
+              highlighted: boolean | null;
+              features: Array<{
+                _key: string;
                 label: string;
-                path: string | null;
-                url: string | null;
-                action: "openContactForm" | "openOwnerContactDrawer" | null;
-                openInNewTab: boolean | null;
-              };
-            } | null;
+              }> | null;
+            }> | null;
+          }
+        | {
+            _key: string;
+            _type: "pricingValueSection";
+            valueItems: Array<{
+              _key: string;
+              title: string;
+              body: string;
+              icon: string | null;
+            }> | null;
           }
         | {
             _key: string;
             _type: "processPathSection";
-            title: string;
-            body: string;
+            header: SectionHeader | null;
+            title: string | null;
+            body: string | null;
             tone: "host" | "neutral" | "owner";
             icon: string | null;
             steps: Array<{
@@ -1858,73 +1980,89 @@ export type HOME_PAGE_QUERY_RESULT =
           }
         | {
             _key: string;
-            _type: "testimonialBlock";
+            _type: "warrantyClaimPrep";
+            anchorId: string | null;
             header: SectionHeader | null;
-            layoutHint: "carousel" | "featured" | "grid" | null;
-            testimonials: Array<{
-              _id: string;
-              quote: string;
-              authorName: string;
-              authorRole: string | null;
-              rating: number | null;
-              tone: "playful" | "trust" | "warning" | null;
-              authorImage: {
-                image: {
-                  asset: {
-                    _id: string;
-                    url: string;
-                    metadata: {
-                      lqip: string | null;
-                      dimensions: {
-                        width: number;
-                        height: number;
-                        aspectRatio: number;
-                      } | null;
-                    } | null;
-                  } | null;
-                  crop: SanityImageCrop | null;
-                  hotspot: SanityImageHotspot | null;
+            items: Array<{
+              _key: string;
+              title: string;
+              body: string;
+              icon: string | null;
+            }>;
+            ctaGroup: {
+              primary: {
+                label: string;
+                style: "primary" | "secondary" | "text";
+                icon: string | null;
+                link: {
+                  type: "action" | "externalUrl" | "internalPath";
+                  label: string;
+                  path: string | null;
+                  url: string | null;
+                  action: "openContactForm" | "openOwnerContactDrawer" | null;
+                  openInNewTab: boolean | null;
                 };
-                alt: string;
-                caption: string | null;
               } | null;
-            }> | null;
-          }
-        | {
-            _key: string;
-            _type: "videoEmbed";
-            provider: "localAsset" | "other" | "vimeo" | "youtube";
-            url: string;
-            title: string;
-            description: string | null;
-            posterImage: {
-              image: {
-                asset: {
-                  _id: string;
-                  url: string;
-                  metadata: {
-                    lqip: string | null;
-                    dimensions: {
-                      width: number;
-                      height: number;
-                      aspectRatio: number;
-                    } | null;
-                  } | null;
-                } | null;
-                crop: SanityImageCrop | null;
-                hotspot: SanityImageHotspot | null;
-              };
-              alt: string;
-              caption: string | null;
+              secondary: {
+                label: string;
+                style: "primary" | "secondary" | "text";
+                icon: string | null;
+                link: {
+                  type: "action" | "externalUrl" | "internalPath";
+                  label: string;
+                  path: string | null;
+                  url: string | null;
+                  action: "openContactForm" | "openOwnerContactDrawer" | null;
+                  openInNewTab: boolean | null;
+                };
+              } | null;
+              alignment: "center" | "left" | "right" | null;
             } | null;
           }
         | {
             _key: string;
-            _type: "warningBlock";
-            title: string;
-            message: string;
-            severity: "high" | "low" | "medium" | null;
-            icon: string | null;
+            _type: "warrantyConditionGrid";
+            header: SectionHeader | null;
+            items: Array<{
+              _key: string;
+              title: string;
+              body: string;
+              tone: "covered" | "evidence" | "excluded";
+              icon: string | null;
+            }>;
+          }
+        | {
+            _key: string;
+            _type: "warrantyNoticeSection";
+            anchorId: string | null;
+            header: SectionHeader | null;
+            body: Array<{
+              children?: Array<{
+                marks?: Array<string>;
+                text?: string;
+                _type: "span";
+                _key: string;
+              }>;
+              style?:
+                | "blockquote"
+                | "h1"
+                | "h2"
+                | "h3"
+                | "h4"
+                | "h5"
+                | "h6"
+                | "normal";
+              listItem?: "bullet" | "number";
+              markDefs?: Array<{
+                href?: string;
+                _type: "link";
+                _key: string;
+              }>;
+              level?: number;
+              _type: "block";
+              _key: string;
+            }>;
+            badgeLabel: string | null;
           }
       > | null;
       primaryCta: {
@@ -2101,26 +2239,6 @@ export type HOME_PAGE_QUERY_RESULT =
           }
         | {
             _key: string;
-            _type: "alertBlock";
-            title: string;
-            message: string;
-            tone: "info" | "success" | "warning" | null;
-            cta: {
-              label: string;
-              style: "primary" | "secondary" | "text";
-              icon: string | null;
-              link: {
-                type: "action" | "externalUrl" | "internalPath";
-                label: string;
-                path: string | null;
-                url: string | null;
-                action: "openContactForm" | "openOwnerContactDrawer" | null;
-                openInNewTab: boolean | null;
-              };
-            } | null;
-          }
-        | {
-            _key: string;
             _type: "calloutBlock";
             headline: string;
             body: string;
@@ -2209,7 +2327,7 @@ export type HOME_PAGE_QUERY_RESULT =
                   openInNewTab: boolean | null;
                 };
               } | null;
-              alignment: "center" | "left" | null;
+              alignment: "center" | "left" | "right" | null;
             } | null;
             layoutHint: "mediaLeft" | "mediaRight" | "textOnly" | null;
           }
@@ -2242,7 +2360,7 @@ export type HOME_PAGE_QUERY_RESULT =
                 openInNewTab: boolean | null;
               };
             } | null;
-            alignment: "center" | "left" | null;
+            alignment: "center" | "left" | "right" | null;
           }
         | {
             _key: string;
@@ -2317,8 +2435,9 @@ export type HOME_PAGE_QUERY_RESULT =
                   openInNewTab: boolean | null;
                 };
               } | null;
-              alignment: "center" | "left" | null;
+              alignment: "center" | "left" | "right" | null;
             } | null;
+            layoutHint: "centered" | "mediaCard" | null;
           }
         | {
             _key: string;
@@ -2358,36 +2477,81 @@ export type HOME_PAGE_QUERY_RESULT =
           }
         | {
             _key: string;
-            _type: "pricingTier";
-            name: string;
-            price: string | null;
-            billingNote: string | null;
-            highlighted: boolean | null;
-            features: Array<{
+            _type: "pricingCtaBand";
+            headline: string;
+            body: string;
+            icon: string | null;
+            ctaGroup: {
+              primary: {
+                label: string;
+                style: "primary" | "secondary" | "text";
+                icon: string | null;
+                link: {
+                  type: "action" | "externalUrl" | "internalPath";
+                  label: string;
+                  path: string | null;
+                  url: string | null;
+                  action: "openContactForm" | "openOwnerContactDrawer" | null;
+                  openInNewTab: boolean | null;
+                };
+              } | null;
+              secondary: {
+                label: string;
+                style: "primary" | "secondary" | "text";
+                icon: string | null;
+                link: {
+                  type: "action" | "externalUrl" | "internalPath";
+                  label: string;
+                  path: string | null;
+                  url: string | null;
+                  action: "openContactForm" | "openOwnerContactDrawer" | null;
+                  openInNewTab: boolean | null;
+                };
+              } | null;
+              alignment: "center" | "left" | "right" | null;
+            } | null;
+            proofItems: Array<{
               _key: string;
               label: string;
-              included: boolean | null;
-              note: string | null;
-            }> | null;
-            cta: {
-              label: string;
-              style: "primary" | "secondary" | "text";
               icon: string | null;
-              link: {
-                type: "action" | "externalUrl" | "internalPath";
+            }> | null;
+          }
+        | {
+            _key: string;
+            _type: "pricingPackageGrid";
+            header: SectionHeader | null;
+            packages: Array<{
+              _key: string;
+              name: string;
+              price: string;
+              duration: string;
+              description: string;
+              icon: string | null;
+              tone: "blue" | "coral" | "cream" | "mint" | null;
+              badge: string | null;
+              highlighted: boolean | null;
+              features: Array<{
+                _key: string;
                 label: string;
-                path: string | null;
-                url: string | null;
-                action: "openContactForm" | "openOwnerContactDrawer" | null;
-                openInNewTab: boolean | null;
-              };
-            } | null;
+              }> | null;
+            }> | null;
+          }
+        | {
+            _key: string;
+            _type: "pricingValueSection";
+            valueItems: Array<{
+              _key: string;
+              title: string;
+              body: string;
+              icon: string | null;
+            }> | null;
           }
         | {
             _key: string;
             _type: "processPathSection";
-            title: string;
-            body: string;
+            header: SectionHeader | null;
+            title: string | null;
+            body: string | null;
             tone: "host" | "neutral" | "owner";
             icon: string | null;
             steps: Array<{
@@ -2452,73 +2616,89 @@ export type HOME_PAGE_QUERY_RESULT =
           }
         | {
             _key: string;
-            _type: "testimonialBlock";
+            _type: "warrantyClaimPrep";
+            anchorId: string | null;
             header: SectionHeader | null;
-            layoutHint: "carousel" | "featured" | "grid" | null;
-            testimonials: Array<{
-              _id: string;
-              quote: string;
-              authorName: string;
-              authorRole: string | null;
-              rating: number | null;
-              tone: "playful" | "trust" | "warning" | null;
-              authorImage: {
-                image: {
-                  asset: {
-                    _id: string;
-                    url: string;
-                    metadata: {
-                      lqip: string | null;
-                      dimensions: {
-                        width: number;
-                        height: number;
-                        aspectRatio: number;
-                      } | null;
-                    } | null;
-                  } | null;
-                  crop: SanityImageCrop | null;
-                  hotspot: SanityImageHotspot | null;
+            items: Array<{
+              _key: string;
+              title: string;
+              body: string;
+              icon: string | null;
+            }>;
+            ctaGroup: {
+              primary: {
+                label: string;
+                style: "primary" | "secondary" | "text";
+                icon: string | null;
+                link: {
+                  type: "action" | "externalUrl" | "internalPath";
+                  label: string;
+                  path: string | null;
+                  url: string | null;
+                  action: "openContactForm" | "openOwnerContactDrawer" | null;
+                  openInNewTab: boolean | null;
                 };
-                alt: string;
-                caption: string | null;
               } | null;
-            }> | null;
-          }
-        | {
-            _key: string;
-            _type: "videoEmbed";
-            provider: "localAsset" | "other" | "vimeo" | "youtube";
-            url: string;
-            title: string;
-            description: string | null;
-            posterImage: {
-              image: {
-                asset: {
-                  _id: string;
-                  url: string;
-                  metadata: {
-                    lqip: string | null;
-                    dimensions: {
-                      width: number;
-                      height: number;
-                      aspectRatio: number;
-                    } | null;
-                  } | null;
-                } | null;
-                crop: SanityImageCrop | null;
-                hotspot: SanityImageHotspot | null;
-              };
-              alt: string;
-              caption: string | null;
+              secondary: {
+                label: string;
+                style: "primary" | "secondary" | "text";
+                icon: string | null;
+                link: {
+                  type: "action" | "externalUrl" | "internalPath";
+                  label: string;
+                  path: string | null;
+                  url: string | null;
+                  action: "openContactForm" | "openOwnerContactDrawer" | null;
+                  openInNewTab: boolean | null;
+                };
+              } | null;
+              alignment: "center" | "left" | "right" | null;
             } | null;
           }
         | {
             _key: string;
-            _type: "warningBlock";
-            title: string;
-            message: string;
-            severity: "high" | "low" | "medium" | null;
-            icon: string | null;
+            _type: "warrantyConditionGrid";
+            header: SectionHeader | null;
+            items: Array<{
+              _key: string;
+              title: string;
+              body: string;
+              tone: "covered" | "evidence" | "excluded";
+              icon: string | null;
+            }>;
+          }
+        | {
+            _key: string;
+            _type: "warrantyNoticeSection";
+            anchorId: string | null;
+            header: SectionHeader | null;
+            body: Array<{
+              children?: Array<{
+                marks?: Array<string>;
+                text?: string;
+                _type: "span";
+                _key: string;
+              }>;
+              style?:
+                | "blockquote"
+                | "h1"
+                | "h2"
+                | "h3"
+                | "h4"
+                | "h5"
+                | "h6"
+                | "normal";
+              listItem?: "bullet" | "number";
+              markDefs?: Array<{
+                href?: string;
+                _type: "link";
+                _key: string;
+              }>;
+              level?: number;
+              _type: "block";
+              _key: string;
+            }>;
+            badgeLabel: string | null;
           }
       > | null;
       primaryCta: {
@@ -2682,7 +2862,7 @@ export type HOME_PAGE_QUERY_RESULT =
               openInNewTab: boolean | null;
             };
           } | null;
-          alignment: "center" | "left" | null;
+          alignment: "center" | "left" | "right" | null;
         } | null;
         layoutHint: "mediaLeft" | "mediaRight" | "textOnly" | null;
       } | null;
@@ -2894,26 +3074,6 @@ export type HOME_PAGE_QUERY_RESULT =
           }
         | {
             _key: string;
-            _type: "alertBlock";
-            title: string;
-            message: string;
-            tone: "info" | "success" | "warning" | null;
-            cta: {
-              label: string;
-              style: "primary" | "secondary" | "text";
-              icon: string | null;
-              link: {
-                type: "action" | "externalUrl" | "internalPath";
-                label: string;
-                path: string | null;
-                url: string | null;
-                action: "openContactForm" | "openOwnerContactDrawer" | null;
-                openInNewTab: boolean | null;
-              };
-            } | null;
-          }
-        | {
-            _key: string;
             _type: "calloutBlock";
             headline: string;
             body: string;
@@ -3002,7 +3162,7 @@ export type HOME_PAGE_QUERY_RESULT =
                   openInNewTab: boolean | null;
                 };
               } | null;
-              alignment: "center" | "left" | null;
+              alignment: "center" | "left" | "right" | null;
             } | null;
             layoutHint: "mediaLeft" | "mediaRight" | "textOnly" | null;
           }
@@ -3035,7 +3195,7 @@ export type HOME_PAGE_QUERY_RESULT =
                 openInNewTab: boolean | null;
               };
             } | null;
-            alignment: "center" | "left" | null;
+            alignment: "center" | "left" | "right" | null;
           }
         | {
             _key: string;
@@ -3110,8 +3270,9 @@ export type HOME_PAGE_QUERY_RESULT =
                   openInNewTab: boolean | null;
                 };
               } | null;
-              alignment: "center" | "left" | null;
+              alignment: "center" | "left" | "right" | null;
             } | null;
+            layoutHint: "centered" | "mediaCard" | null;
           }
         | {
             _key: string;
@@ -3151,36 +3312,81 @@ export type HOME_PAGE_QUERY_RESULT =
           }
         | {
             _key: string;
-            _type: "pricingTier";
-            name: string;
-            price: string | null;
-            billingNote: string | null;
-            highlighted: boolean | null;
-            features: Array<{
+            _type: "pricingCtaBand";
+            headline: string;
+            body: string;
+            icon: string | null;
+            ctaGroup: {
+              primary: {
+                label: string;
+                style: "primary" | "secondary" | "text";
+                icon: string | null;
+                link: {
+                  type: "action" | "externalUrl" | "internalPath";
+                  label: string;
+                  path: string | null;
+                  url: string | null;
+                  action: "openContactForm" | "openOwnerContactDrawer" | null;
+                  openInNewTab: boolean | null;
+                };
+              } | null;
+              secondary: {
+                label: string;
+                style: "primary" | "secondary" | "text";
+                icon: string | null;
+                link: {
+                  type: "action" | "externalUrl" | "internalPath";
+                  label: string;
+                  path: string | null;
+                  url: string | null;
+                  action: "openContactForm" | "openOwnerContactDrawer" | null;
+                  openInNewTab: boolean | null;
+                };
+              } | null;
+              alignment: "center" | "left" | "right" | null;
+            } | null;
+            proofItems: Array<{
               _key: string;
               label: string;
-              included: boolean | null;
-              note: string | null;
-            }> | null;
-            cta: {
-              label: string;
-              style: "primary" | "secondary" | "text";
               icon: string | null;
-              link: {
-                type: "action" | "externalUrl" | "internalPath";
+            }> | null;
+          }
+        | {
+            _key: string;
+            _type: "pricingPackageGrid";
+            header: SectionHeader | null;
+            packages: Array<{
+              _key: string;
+              name: string;
+              price: string;
+              duration: string;
+              description: string;
+              icon: string | null;
+              tone: "blue" | "coral" | "cream" | "mint" | null;
+              badge: string | null;
+              highlighted: boolean | null;
+              features: Array<{
+                _key: string;
                 label: string;
-                path: string | null;
-                url: string | null;
-                action: "openContactForm" | "openOwnerContactDrawer" | null;
-                openInNewTab: boolean | null;
-              };
-            } | null;
+              }> | null;
+            }> | null;
+          }
+        | {
+            _key: string;
+            _type: "pricingValueSection";
+            valueItems: Array<{
+              _key: string;
+              title: string;
+              body: string;
+              icon: string | null;
+            }> | null;
           }
         | {
             _key: string;
             _type: "processPathSection";
-            title: string;
-            body: string;
+            header: SectionHeader | null;
+            title: string | null;
+            body: string | null;
             tone: "host" | "neutral" | "owner";
             icon: string | null;
             steps: Array<{
@@ -3245,73 +3451,89 @@ export type HOME_PAGE_QUERY_RESULT =
           }
         | {
             _key: string;
-            _type: "testimonialBlock";
+            _type: "warrantyClaimPrep";
+            anchorId: string | null;
             header: SectionHeader | null;
-            layoutHint: "carousel" | "featured" | "grid" | null;
-            testimonials: Array<{
-              _id: string;
-              quote: string;
-              authorName: string;
-              authorRole: string | null;
-              rating: number | null;
-              tone: "playful" | "trust" | "warning" | null;
-              authorImage: {
-                image: {
-                  asset: {
-                    _id: string;
-                    url: string;
-                    metadata: {
-                      lqip: string | null;
-                      dimensions: {
-                        width: number;
-                        height: number;
-                        aspectRatio: number;
-                      } | null;
-                    } | null;
-                  } | null;
-                  crop: SanityImageCrop | null;
-                  hotspot: SanityImageHotspot | null;
+            items: Array<{
+              _key: string;
+              title: string;
+              body: string;
+              icon: string | null;
+            }>;
+            ctaGroup: {
+              primary: {
+                label: string;
+                style: "primary" | "secondary" | "text";
+                icon: string | null;
+                link: {
+                  type: "action" | "externalUrl" | "internalPath";
+                  label: string;
+                  path: string | null;
+                  url: string | null;
+                  action: "openContactForm" | "openOwnerContactDrawer" | null;
+                  openInNewTab: boolean | null;
                 };
-                alt: string;
-                caption: string | null;
               } | null;
-            }> | null;
-          }
-        | {
-            _key: string;
-            _type: "videoEmbed";
-            provider: "localAsset" | "other" | "vimeo" | "youtube";
-            url: string;
-            title: string;
-            description: string | null;
-            posterImage: {
-              image: {
-                asset: {
-                  _id: string;
-                  url: string;
-                  metadata: {
-                    lqip: string | null;
-                    dimensions: {
-                      width: number;
-                      height: number;
-                      aspectRatio: number;
-                    } | null;
-                  } | null;
-                } | null;
-                crop: SanityImageCrop | null;
-                hotspot: SanityImageHotspot | null;
-              };
-              alt: string;
-              caption: string | null;
+              secondary: {
+                label: string;
+                style: "primary" | "secondary" | "text";
+                icon: string | null;
+                link: {
+                  type: "action" | "externalUrl" | "internalPath";
+                  label: string;
+                  path: string | null;
+                  url: string | null;
+                  action: "openContactForm" | "openOwnerContactDrawer" | null;
+                  openInNewTab: boolean | null;
+                };
+              } | null;
+              alignment: "center" | "left" | "right" | null;
             } | null;
           }
         | {
             _key: string;
-            _type: "warningBlock";
-            title: string;
-            message: string;
-            severity: "high" | "low" | "medium" | null;
-            icon: string | null;
+            _type: "warrantyConditionGrid";
+            header: SectionHeader | null;
+            items: Array<{
+              _key: string;
+              title: string;
+              body: string;
+              tone: "covered" | "evidence" | "excluded";
+              icon: string | null;
+            }>;
+          }
+        | {
+            _key: string;
+            _type: "warrantyNoticeSection";
+            anchorId: string | null;
+            header: SectionHeader | null;
+            body: Array<{
+              children?: Array<{
+                marks?: Array<string>;
+                text?: string;
+                _type: "span";
+                _key: string;
+              }>;
+              style?:
+                | "blockquote"
+                | "h1"
+                | "h2"
+                | "h3"
+                | "h4"
+                | "h5"
+                | "h6"
+                | "normal";
+              listItem?: "bullet" | "number";
+              markDefs?: Array<{
+                href?: string;
+                _type: "link";
+                _key: string;
+              }>;
+              level?: number;
+              _type: "block";
+              _key: string;
+            }>;
+            badgeLabel: string | null;
           }
       > | null;
       primaryCta: {
@@ -3332,7 +3554,7 @@ export type HOME_PAGE_QUERY_RESULT =
 
 // Source: sanity/queries/pages.ts
 // Variable: PET_INDEX_PAGE_QUERY
-// Query: *[_id == "petIndexPage"][0]{    _id,    seo{        title,  description,  noIndex,  openGraphImage{      image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption  }    },    hero{        _key,  _type,  _type == "hero" => {    eyebrow,    headline,    body,    image{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    ctaGroup{        primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment    }  },  _type == "heroSlide" => {    headline,    body,    image{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    },    featuredPet->{      _id,      name,      "slug": slug.current,      listingHeadline    },    featuredOwner->{      _id,      name,      "slug": slug.current,      tagline    }  },  _type == "contentSection" => {    header,    body[]{        ...    },    media{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    ctaGroup{        primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment    },    layoutHint  },  _type == "calloutBlock" => {    headline,    body,    icon,    tone,    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "alertBlock" => {    title,    message,    tone,    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "warningBlock" => {    title,    message,    severity,    icon  },  _type == "statBlock" => {    value,    label,    description,    icon  },  _type == "testimonialBlock" => {    header,    layoutHint,    testimonials[]->{      _id,      quote,      authorName,      authorRole,      rating,      tone,      authorImage{          image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption      }    }  },  _type == "featureList" => {    header,    iconStyle,    items[]{      _key,      title,      description,      icon,      link{          type,  label,  path,  url,  action,  openInNewTab      }    }  },  _type == "accordion" => {    header,    items[]{      _key,      title,      body[]{          ...      }    }  },  _type == "pricingTier" => {    name,    price,    billingNote,    highlighted,    features[]{      _key,      label,      included,      note    },    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "pricingComparisonTable" => {    header,    plans[]{      _key,      name,      price,      note,      highlighted    },    rows[]{      _key,      feature,      description,      values[]{        _key,        planKey,        included,        note      }    },    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "processPathSection" => {    title,    body,    tone,    icon,    steps[]{      _key,      title,      body[]{          ...      },      description,      icon,      order,      cta{          label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }      }    },    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "processStep" => {    title,    body[]{        ...    },    description,    icon,    order,    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "videoEmbed" => {      provider,  url,  title,  description,  posterImage{      image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption  }  },  _type == "ctaGroup" => {      primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment  }    },    summary,    filterIntro,    emptyState{        _key,  _type,  _type == "hero" => {    eyebrow,    headline,    body,    image{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    ctaGroup{        primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment    }  },  _type == "heroSlide" => {    headline,    body,    image{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    },    featuredPet->{      _id,      name,      "slug": slug.current,      listingHeadline    },    featuredOwner->{      _id,      name,      "slug": slug.current,      tagline    }  },  _type == "contentSection" => {    header,    body[]{        ...    },    media{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    ctaGroup{        primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment    },    layoutHint  },  _type == "calloutBlock" => {    headline,    body,    icon,    tone,    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "alertBlock" => {    title,    message,    tone,    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "warningBlock" => {    title,    message,    severity,    icon  },  _type == "statBlock" => {    value,    label,    description,    icon  },  _type == "testimonialBlock" => {    header,    layoutHint,    testimonials[]->{      _id,      quote,      authorName,      authorRole,      rating,      tone,      authorImage{          image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption      }    }  },  _type == "featureList" => {    header,    iconStyle,    items[]{      _key,      title,      description,      icon,      link{          type,  label,  path,  url,  action,  openInNewTab      }    }  },  _type == "accordion" => {    header,    items[]{      _key,      title,      body[]{          ...      }    }  },  _type == "pricingTier" => {    name,    price,    billingNote,    highlighted,    features[]{      _key,      label,      included,      note    },    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "pricingComparisonTable" => {    header,    plans[]{      _key,      name,      price,      note,      highlighted    },    rows[]{      _key,      feature,      description,      values[]{        _key,        planKey,        included,        note      }    },    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "processPathSection" => {    title,    body,    tone,    icon,    steps[]{      _key,      title,      body[]{          ...      },      description,      icon,      order,      cta{          label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }      }    },    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "processStep" => {    title,    body[]{        ...    },    description,    icon,    order,    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "videoEmbed" => {      provider,  url,  title,  description,  posterImage{      image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption  }  },  _type == "ctaGroup" => {      primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment  }    },    featuredPets[]->{        _id,  name,  "slug": slug.current,  breed,  listingHeadline,  listingSummary,  availabilityStatus,  distanceKilometers,  listingPlan,  hostPayoutAmount,  hostPayoutCurrency,  hostPayoutUnit,  temperament,  pickupUrgency,  messRisk,  chaosLevel,  energyLevel,  cuddlePolicy,  cardMedia{    image{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    lowFrameRateVideo{        provider,  url,  title,  description,  posterImage{      image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption  }    }  },  petType->{    _id,    name,    pluralName,    "slug": slug.current,    filterLabel,    icon,    category,    sortOrder  },  owner->{    _id,    name,    "slug": slug.current,    tagline  }    },    contentSections[]{        _key,  _type,  _type == "hero" => {    eyebrow,    headline,    body,    image{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    ctaGroup{        primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment    }  },  _type == "heroSlide" => {    headline,    body,    image{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    },    featuredPet->{      _id,      name,      "slug": slug.current,      listingHeadline    },    featuredOwner->{      _id,      name,      "slug": slug.current,      tagline    }  },  _type == "contentSection" => {    header,    body[]{        ...    },    media{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    ctaGroup{        primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment    },    layoutHint  },  _type == "calloutBlock" => {    headline,    body,    icon,    tone,    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "alertBlock" => {    title,    message,    tone,    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "warningBlock" => {    title,    message,    severity,    icon  },  _type == "statBlock" => {    value,    label,    description,    icon  },  _type == "testimonialBlock" => {    header,    layoutHint,    testimonials[]->{      _id,      quote,      authorName,      authorRole,      rating,      tone,      authorImage{          image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption      }    }  },  _type == "featureList" => {    header,    iconStyle,    items[]{      _key,      title,      description,      icon,      link{          type,  label,  path,  url,  action,  openInNewTab      }    }  },  _type == "accordion" => {    header,    items[]{      _key,      title,      body[]{          ...      }    }  },  _type == "pricingTier" => {    name,    price,    billingNote,    highlighted,    features[]{      _key,      label,      included,      note    },    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "pricingComparisonTable" => {    header,    plans[]{      _key,      name,      price,      note,      highlighted    },    rows[]{      _key,      feature,      description,      values[]{        _key,        planKey,        included,        note      }    },    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "processPathSection" => {    title,    body,    tone,    icon,    steps[]{      _key,      title,      body[]{          ...      },      description,      icon,      order,      cta{          label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }      }    },    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "processStep" => {    title,    body[]{        ...    },    description,    icon,    order,    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "videoEmbed" => {      provider,  url,  title,  description,  posterImage{      image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption  }  },  _type == "ctaGroup" => {      primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment  }    },    primaryCta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  }
+// Query: *[_id == "petIndexPage"][0]{    _id,    seo{        title,  description,  noIndex,  openGraphImage{      image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption  }    },    hero{        _key,  _type,  _type == "hero" => {    eyebrow,    headline,    body,    image{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    ctaGroup{        primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment    },    layoutHint  },  _type == "heroSlide" => {    headline,    body,    image{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    },    featuredPet->{      _id,      name,      "slug": slug.current,      listingHeadline    },    featuredOwner->{      _id,      name,      "slug": slug.current,      tagline    }  },  _type == "contentSection" => {    header,    body[]{        ...    },    media{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    ctaGroup{        primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment    },    layoutHint  },  _type == "calloutBlock" => {    headline,    body,    icon,    tone,    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "statBlock" => {    value,    label,    description,    icon  },  _type == "featureList" => {    header,    iconStyle,    items[]{      _key,      title,      description,      icon,      link{          type,  label,  path,  url,  action,  openInNewTab      }    }  },  _type == "accordion" => {    header,    items[]{      _key,      title,      body[]{          ...      }    }  },  _type == "pricingComparisonTable" => {    header,    plans[]{      _key,      name,      price,      note,      highlighted    },    rows[]{      _key,      feature,      description,      values[]{        _key,        planKey,        included,        note      }    },    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "pricingValueSection" => {    valueItems[]{      _key,      title,      body,      icon    }  },  _type == "pricingPackageGrid" => {    header,    packages[]{      _key,      name,      price,      duration,      description,      icon,      tone,      badge,      highlighted,      features[]{        _key,        label      }    }  },  _type == "pricingCtaBand" => {    headline,    body,    icon,    ctaGroup{        primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment    },    proofItems[]{      _key,      label,      icon    }  },  _type == "processPathSection" => {    header,    title,    body,    tone,    icon,    steps[]{      _key,      title,      body[]{          ...      },      description,      icon,      order,      cta{          label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }      }    },    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "warrantyConditionGrid" => {    header,    items[]{      _key,      title,      body,      tone,      icon    }  },  _type == "warrantyNoticeSection" => {    anchorId,    header,    body[]{        ...    },    badgeLabel  },  _type == "warrantyClaimPrep" => {    anchorId,    header,    items[]{      _key,      title,      body,      icon    },    ctaGroup{        primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment    }  },  _type == "processStep" => {    title,    body[]{        ...    },    description,    icon,    order,    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "ctaGroup" => {      primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment  }    },    summary,    filterIntro,    emptyState{        _key,  _type,  _type == "hero" => {    eyebrow,    headline,    body,    image{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    ctaGroup{        primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment    },    layoutHint  },  _type == "heroSlide" => {    headline,    body,    image{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    },    featuredPet->{      _id,      name,      "slug": slug.current,      listingHeadline    },    featuredOwner->{      _id,      name,      "slug": slug.current,      tagline    }  },  _type == "contentSection" => {    header,    body[]{        ...    },    media{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    ctaGroup{        primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment    },    layoutHint  },  _type == "calloutBlock" => {    headline,    body,    icon,    tone,    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "statBlock" => {    value,    label,    description,    icon  },  _type == "featureList" => {    header,    iconStyle,    items[]{      _key,      title,      description,      icon,      link{          type,  label,  path,  url,  action,  openInNewTab      }    }  },  _type == "accordion" => {    header,    items[]{      _key,      title,      body[]{          ...      }    }  },  _type == "pricingComparisonTable" => {    header,    plans[]{      _key,      name,      price,      note,      highlighted    },    rows[]{      _key,      feature,      description,      values[]{        _key,        planKey,        included,        note      }    },    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "pricingValueSection" => {    valueItems[]{      _key,      title,      body,      icon    }  },  _type == "pricingPackageGrid" => {    header,    packages[]{      _key,      name,      price,      duration,      description,      icon,      tone,      badge,      highlighted,      features[]{        _key,        label      }    }  },  _type == "pricingCtaBand" => {    headline,    body,    icon,    ctaGroup{        primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment    },    proofItems[]{      _key,      label,      icon    }  },  _type == "processPathSection" => {    header,    title,    body,    tone,    icon,    steps[]{      _key,      title,      body[]{          ...      },      description,      icon,      order,      cta{          label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }      }    },    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "warrantyConditionGrid" => {    header,    items[]{      _key,      title,      body,      tone,      icon    }  },  _type == "warrantyNoticeSection" => {    anchorId,    header,    body[]{        ...    },    badgeLabel  },  _type == "warrantyClaimPrep" => {    anchorId,    header,    items[]{      _key,      title,      body,      icon    },    ctaGroup{        primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment    }  },  _type == "processStep" => {    title,    body[]{        ...    },    description,    icon,    order,    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "ctaGroup" => {      primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment  }    },    featuredPets[]->{        _id,  name,  "slug": slug.current,  breed,  listingHeadline,  listingSummary,  availabilityStatus,  distanceKilometers,  listingPlan,  hostPayoutAmount,  hostPayoutCurrency,  hostPayoutUnit,  temperament,  pickupUrgency,  messRisk,  chaosLevel,  energyLevel,  cuddlePolicy,  cardMedia{    image{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    lowFrameRateVideo{        provider,  url,  title,  description,  posterImage{      image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption  }    }  },  petType->{    _id,    name,    pluralName,    "slug": slug.current,    filterLabel,    icon,    category,    sortOrder  },  owner->{    _id,    name,    "slug": slug.current,    tagline  }    },    contentSections[]{        _key,  _type,  _type == "hero" => {    eyebrow,    headline,    body,    image{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    ctaGroup{        primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment    },    layoutHint  },  _type == "heroSlide" => {    headline,    body,    image{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    },    featuredPet->{      _id,      name,      "slug": slug.current,      listingHeadline    },    featuredOwner->{      _id,      name,      "slug": slug.current,      tagline    }  },  _type == "contentSection" => {    header,    body[]{        ...    },    media{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    ctaGroup{        primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment    },    layoutHint  },  _type == "calloutBlock" => {    headline,    body,    icon,    tone,    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "statBlock" => {    value,    label,    description,    icon  },  _type == "featureList" => {    header,    iconStyle,    items[]{      _key,      title,      description,      icon,      link{          type,  label,  path,  url,  action,  openInNewTab      }    }  },  _type == "accordion" => {    header,    items[]{      _key,      title,      body[]{          ...      }    }  },  _type == "pricingComparisonTable" => {    header,    plans[]{      _key,      name,      price,      note,      highlighted    },    rows[]{      _key,      feature,      description,      values[]{        _key,        planKey,        included,        note      }    },    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "pricingValueSection" => {    valueItems[]{      _key,      title,      body,      icon    }  },  _type == "pricingPackageGrid" => {    header,    packages[]{      _key,      name,      price,      duration,      description,      icon,      tone,      badge,      highlighted,      features[]{        _key,        label      }    }  },  _type == "pricingCtaBand" => {    headline,    body,    icon,    ctaGroup{        primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment    },    proofItems[]{      _key,      label,      icon    }  },  _type == "processPathSection" => {    header,    title,    body,    tone,    icon,    steps[]{      _key,      title,      body[]{          ...      },      description,      icon,      order,      cta{          label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }      }    },    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "warrantyConditionGrid" => {    header,    items[]{      _key,      title,      body,      tone,      icon    }  },  _type == "warrantyNoticeSection" => {    anchorId,    header,    body[]{        ...    },    badgeLabel  },  _type == "warrantyClaimPrep" => {    anchorId,    header,    items[]{      _key,      title,      body,      icon    },    ctaGroup{        primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment    }  },  _type == "processStep" => {    title,    body[]{        ...    },    description,    icon,    order,    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "ctaGroup" => {      primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment  }    },    primaryCta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  }
 export type PET_INDEX_PAGE_QUERY_RESULT =
   | {
       _id: "petIndexPage";
@@ -3547,26 +3769,6 @@ export type PET_INDEX_PAGE_QUERY_RESULT =
           }
         | {
             _key: string;
-            _type: "alertBlock";
-            title: string;
-            message: string;
-            tone: "info" | "success" | "warning" | null;
-            cta: {
-              label: string;
-              style: "primary" | "secondary" | "text";
-              icon: string | null;
-              link: {
-                type: "action" | "externalUrl" | "internalPath";
-                label: string;
-                path: string | null;
-                url: string | null;
-                action: "openContactForm" | "openOwnerContactDrawer" | null;
-                openInNewTab: boolean | null;
-              };
-            } | null;
-          }
-        | {
-            _key: string;
             _type: "calloutBlock";
             headline: string;
             body: string;
@@ -3655,7 +3857,7 @@ export type PET_INDEX_PAGE_QUERY_RESULT =
                   openInNewTab: boolean | null;
                 };
               } | null;
-              alignment: "center" | "left" | null;
+              alignment: "center" | "left" | "right" | null;
             } | null;
             layoutHint: "mediaLeft" | "mediaRight" | "textOnly" | null;
           }
@@ -3688,7 +3890,7 @@ export type PET_INDEX_PAGE_QUERY_RESULT =
                 openInNewTab: boolean | null;
               };
             } | null;
-            alignment: "center" | "left" | null;
+            alignment: "center" | "left" | "right" | null;
           }
         | {
             _key: string;
@@ -3763,8 +3965,9 @@ export type PET_INDEX_PAGE_QUERY_RESULT =
                   openInNewTab: boolean | null;
                 };
               } | null;
-              alignment: "center" | "left" | null;
+              alignment: "center" | "left" | "right" | null;
             } | null;
+            layoutHint: "centered" | "mediaCard" | null;
           }
         | {
             _key: string;
@@ -3804,36 +4007,81 @@ export type PET_INDEX_PAGE_QUERY_RESULT =
           }
         | {
             _key: string;
-            _type: "pricingTier";
-            name: string;
-            price: string | null;
-            billingNote: string | null;
-            highlighted: boolean | null;
-            features: Array<{
+            _type: "pricingCtaBand";
+            headline: string;
+            body: string;
+            icon: string | null;
+            ctaGroup: {
+              primary: {
+                label: string;
+                style: "primary" | "secondary" | "text";
+                icon: string | null;
+                link: {
+                  type: "action" | "externalUrl" | "internalPath";
+                  label: string;
+                  path: string | null;
+                  url: string | null;
+                  action: "openContactForm" | "openOwnerContactDrawer" | null;
+                  openInNewTab: boolean | null;
+                };
+              } | null;
+              secondary: {
+                label: string;
+                style: "primary" | "secondary" | "text";
+                icon: string | null;
+                link: {
+                  type: "action" | "externalUrl" | "internalPath";
+                  label: string;
+                  path: string | null;
+                  url: string | null;
+                  action: "openContactForm" | "openOwnerContactDrawer" | null;
+                  openInNewTab: boolean | null;
+                };
+              } | null;
+              alignment: "center" | "left" | "right" | null;
+            } | null;
+            proofItems: Array<{
               _key: string;
               label: string;
-              included: boolean | null;
-              note: string | null;
-            }> | null;
-            cta: {
-              label: string;
-              style: "primary" | "secondary" | "text";
               icon: string | null;
-              link: {
-                type: "action" | "externalUrl" | "internalPath";
+            }> | null;
+          }
+        | {
+            _key: string;
+            _type: "pricingPackageGrid";
+            header: SectionHeader | null;
+            packages: Array<{
+              _key: string;
+              name: string;
+              price: string;
+              duration: string;
+              description: string;
+              icon: string | null;
+              tone: "blue" | "coral" | "cream" | "mint" | null;
+              badge: string | null;
+              highlighted: boolean | null;
+              features: Array<{
+                _key: string;
                 label: string;
-                path: string | null;
-                url: string | null;
-                action: "openContactForm" | "openOwnerContactDrawer" | null;
-                openInNewTab: boolean | null;
-              };
-            } | null;
+              }> | null;
+            }> | null;
+          }
+        | {
+            _key: string;
+            _type: "pricingValueSection";
+            valueItems: Array<{
+              _key: string;
+              title: string;
+              body: string;
+              icon: string | null;
+            }> | null;
           }
         | {
             _key: string;
             _type: "processPathSection";
-            title: string;
-            body: string;
+            header: SectionHeader | null;
+            title: string | null;
+            body: string | null;
             tone: "host" | "neutral" | "owner";
             icon: string | null;
             steps: Array<{
@@ -3898,73 +4146,89 @@ export type PET_INDEX_PAGE_QUERY_RESULT =
           }
         | {
             _key: string;
-            _type: "testimonialBlock";
+            _type: "warrantyClaimPrep";
+            anchorId: string | null;
             header: SectionHeader | null;
-            layoutHint: "carousel" | "featured" | "grid" | null;
-            testimonials: Array<{
-              _id: string;
-              quote: string;
-              authorName: string;
-              authorRole: string | null;
-              rating: number | null;
-              tone: "playful" | "trust" | "warning" | null;
-              authorImage: {
-                image: {
-                  asset: {
-                    _id: string;
-                    url: string;
-                    metadata: {
-                      lqip: string | null;
-                      dimensions: {
-                        width: number;
-                        height: number;
-                        aspectRatio: number;
-                      } | null;
-                    } | null;
-                  } | null;
-                  crop: SanityImageCrop | null;
-                  hotspot: SanityImageHotspot | null;
+            items: Array<{
+              _key: string;
+              title: string;
+              body: string;
+              icon: string | null;
+            }>;
+            ctaGroup: {
+              primary: {
+                label: string;
+                style: "primary" | "secondary" | "text";
+                icon: string | null;
+                link: {
+                  type: "action" | "externalUrl" | "internalPath";
+                  label: string;
+                  path: string | null;
+                  url: string | null;
+                  action: "openContactForm" | "openOwnerContactDrawer" | null;
+                  openInNewTab: boolean | null;
                 };
-                alt: string;
-                caption: string | null;
               } | null;
-            }> | null;
-          }
-        | {
-            _key: string;
-            _type: "videoEmbed";
-            provider: "localAsset" | "other" | "vimeo" | "youtube";
-            url: string;
-            title: string;
-            description: string | null;
-            posterImage: {
-              image: {
-                asset: {
-                  _id: string;
-                  url: string;
-                  metadata: {
-                    lqip: string | null;
-                    dimensions: {
-                      width: number;
-                      height: number;
-                      aspectRatio: number;
-                    } | null;
-                  } | null;
-                } | null;
-                crop: SanityImageCrop | null;
-                hotspot: SanityImageHotspot | null;
-              };
-              alt: string;
-              caption: string | null;
+              secondary: {
+                label: string;
+                style: "primary" | "secondary" | "text";
+                icon: string | null;
+                link: {
+                  type: "action" | "externalUrl" | "internalPath";
+                  label: string;
+                  path: string | null;
+                  url: string | null;
+                  action: "openContactForm" | "openOwnerContactDrawer" | null;
+                  openInNewTab: boolean | null;
+                };
+              } | null;
+              alignment: "center" | "left" | "right" | null;
             } | null;
           }
         | {
             _key: string;
-            _type: "warningBlock";
-            title: string;
-            message: string;
-            severity: "high" | "low" | "medium" | null;
-            icon: string | null;
+            _type: "warrantyConditionGrid";
+            header: SectionHeader | null;
+            items: Array<{
+              _key: string;
+              title: string;
+              body: string;
+              tone: "covered" | "evidence" | "excluded";
+              icon: string | null;
+            }>;
+          }
+        | {
+            _key: string;
+            _type: "warrantyNoticeSection";
+            anchorId: string | null;
+            header: SectionHeader | null;
+            body: Array<{
+              children?: Array<{
+                marks?: Array<string>;
+                text?: string;
+                _type: "span";
+                _key: string;
+              }>;
+              style?:
+                | "blockquote"
+                | "h1"
+                | "h2"
+                | "h3"
+                | "h4"
+                | "h5"
+                | "h6"
+                | "normal";
+              listItem?: "bullet" | "number";
+              markDefs?: Array<{
+                href?: string;
+                _type: "link";
+                _key: string;
+              }>;
+              level?: number;
+              _type: "block";
+              _key: string;
+            }>;
+            badgeLabel: string | null;
           }
       > | null;
       primaryCta: {
@@ -4139,26 +4403,6 @@ export type PET_INDEX_PAGE_QUERY_RESULT =
           }
         | {
             _key: string;
-            _type: "alertBlock";
-            title: string;
-            message: string;
-            tone: "info" | "success" | "warning" | null;
-            cta: {
-              label: string;
-              style: "primary" | "secondary" | "text";
-              icon: string | null;
-              link: {
-                type: "action" | "externalUrl" | "internalPath";
-                label: string;
-                path: string | null;
-                url: string | null;
-                action: "openContactForm" | "openOwnerContactDrawer" | null;
-                openInNewTab: boolean | null;
-              };
-            } | null;
-          }
-        | {
-            _key: string;
             _type: "calloutBlock";
             headline: string;
             body: string;
@@ -4247,7 +4491,7 @@ export type PET_INDEX_PAGE_QUERY_RESULT =
                   openInNewTab: boolean | null;
                 };
               } | null;
-              alignment: "center" | "left" | null;
+              alignment: "center" | "left" | "right" | null;
             } | null;
             layoutHint: "mediaLeft" | "mediaRight" | "textOnly" | null;
           }
@@ -4280,7 +4524,7 @@ export type PET_INDEX_PAGE_QUERY_RESULT =
                 openInNewTab: boolean | null;
               };
             } | null;
-            alignment: "center" | "left" | null;
+            alignment: "center" | "left" | "right" | null;
           }
         | {
             _key: string;
@@ -4355,8 +4599,9 @@ export type PET_INDEX_PAGE_QUERY_RESULT =
                   openInNewTab: boolean | null;
                 };
               } | null;
-              alignment: "center" | "left" | null;
+              alignment: "center" | "left" | "right" | null;
             } | null;
+            layoutHint: "centered" | "mediaCard" | null;
           }
         | {
             _key: string;
@@ -4396,36 +4641,81 @@ export type PET_INDEX_PAGE_QUERY_RESULT =
           }
         | {
             _key: string;
-            _type: "pricingTier";
-            name: string;
-            price: string | null;
-            billingNote: string | null;
-            highlighted: boolean | null;
-            features: Array<{
+            _type: "pricingCtaBand";
+            headline: string;
+            body: string;
+            icon: string | null;
+            ctaGroup: {
+              primary: {
+                label: string;
+                style: "primary" | "secondary" | "text";
+                icon: string | null;
+                link: {
+                  type: "action" | "externalUrl" | "internalPath";
+                  label: string;
+                  path: string | null;
+                  url: string | null;
+                  action: "openContactForm" | "openOwnerContactDrawer" | null;
+                  openInNewTab: boolean | null;
+                };
+              } | null;
+              secondary: {
+                label: string;
+                style: "primary" | "secondary" | "text";
+                icon: string | null;
+                link: {
+                  type: "action" | "externalUrl" | "internalPath";
+                  label: string;
+                  path: string | null;
+                  url: string | null;
+                  action: "openContactForm" | "openOwnerContactDrawer" | null;
+                  openInNewTab: boolean | null;
+                };
+              } | null;
+              alignment: "center" | "left" | "right" | null;
+            } | null;
+            proofItems: Array<{
               _key: string;
               label: string;
-              included: boolean | null;
-              note: string | null;
-            }> | null;
-            cta: {
-              label: string;
-              style: "primary" | "secondary" | "text";
               icon: string | null;
-              link: {
-                type: "action" | "externalUrl" | "internalPath";
+            }> | null;
+          }
+        | {
+            _key: string;
+            _type: "pricingPackageGrid";
+            header: SectionHeader | null;
+            packages: Array<{
+              _key: string;
+              name: string;
+              price: string;
+              duration: string;
+              description: string;
+              icon: string | null;
+              tone: "blue" | "coral" | "cream" | "mint" | null;
+              badge: string | null;
+              highlighted: boolean | null;
+              features: Array<{
+                _key: string;
                 label: string;
-                path: string | null;
-                url: string | null;
-                action: "openContactForm" | "openOwnerContactDrawer" | null;
-                openInNewTab: boolean | null;
-              };
-            } | null;
+              }> | null;
+            }> | null;
+          }
+        | {
+            _key: string;
+            _type: "pricingValueSection";
+            valueItems: Array<{
+              _key: string;
+              title: string;
+              body: string;
+              icon: string | null;
+            }> | null;
           }
         | {
             _key: string;
             _type: "processPathSection";
-            title: string;
-            body: string;
+            header: SectionHeader | null;
+            title: string | null;
+            body: string | null;
             tone: "host" | "neutral" | "owner";
             icon: string | null;
             steps: Array<{
@@ -4490,73 +4780,89 @@ export type PET_INDEX_PAGE_QUERY_RESULT =
           }
         | {
             _key: string;
-            _type: "testimonialBlock";
+            _type: "warrantyClaimPrep";
+            anchorId: string | null;
             header: SectionHeader | null;
-            layoutHint: "carousel" | "featured" | "grid" | null;
-            testimonials: Array<{
-              _id: string;
-              quote: string;
-              authorName: string;
-              authorRole: string | null;
-              rating: number | null;
-              tone: "playful" | "trust" | "warning" | null;
-              authorImage: {
-                image: {
-                  asset: {
-                    _id: string;
-                    url: string;
-                    metadata: {
-                      lqip: string | null;
-                      dimensions: {
-                        width: number;
-                        height: number;
-                        aspectRatio: number;
-                      } | null;
-                    } | null;
-                  } | null;
-                  crop: SanityImageCrop | null;
-                  hotspot: SanityImageHotspot | null;
+            items: Array<{
+              _key: string;
+              title: string;
+              body: string;
+              icon: string | null;
+            }>;
+            ctaGroup: {
+              primary: {
+                label: string;
+                style: "primary" | "secondary" | "text";
+                icon: string | null;
+                link: {
+                  type: "action" | "externalUrl" | "internalPath";
+                  label: string;
+                  path: string | null;
+                  url: string | null;
+                  action: "openContactForm" | "openOwnerContactDrawer" | null;
+                  openInNewTab: boolean | null;
                 };
-                alt: string;
-                caption: string | null;
               } | null;
-            }> | null;
-          }
-        | {
-            _key: string;
-            _type: "videoEmbed";
-            provider: "localAsset" | "other" | "vimeo" | "youtube";
-            url: string;
-            title: string;
-            description: string | null;
-            posterImage: {
-              image: {
-                asset: {
-                  _id: string;
-                  url: string;
-                  metadata: {
-                    lqip: string | null;
-                    dimensions: {
-                      width: number;
-                      height: number;
-                      aspectRatio: number;
-                    } | null;
-                  } | null;
-                } | null;
-                crop: SanityImageCrop | null;
-                hotspot: SanityImageHotspot | null;
-              };
-              alt: string;
-              caption: string | null;
+              secondary: {
+                label: string;
+                style: "primary" | "secondary" | "text";
+                icon: string | null;
+                link: {
+                  type: "action" | "externalUrl" | "internalPath";
+                  label: string;
+                  path: string | null;
+                  url: string | null;
+                  action: "openContactForm" | "openOwnerContactDrawer" | null;
+                  openInNewTab: boolean | null;
+                };
+              } | null;
+              alignment: "center" | "left" | "right" | null;
             } | null;
           }
         | {
             _key: string;
-            _type: "warningBlock";
-            title: string;
-            message: string;
-            severity: "high" | "low" | "medium" | null;
-            icon: string | null;
+            _type: "warrantyConditionGrid";
+            header: SectionHeader | null;
+            items: Array<{
+              _key: string;
+              title: string;
+              body: string;
+              tone: "covered" | "evidence" | "excluded";
+              icon: string | null;
+            }>;
+          }
+        | {
+            _key: string;
+            _type: "warrantyNoticeSection";
+            anchorId: string | null;
+            header: SectionHeader | null;
+            body: Array<{
+              children?: Array<{
+                marks?: Array<string>;
+                text?: string;
+                _type: "span";
+                _key: string;
+              }>;
+              style?:
+                | "blockquote"
+                | "h1"
+                | "h2"
+                | "h3"
+                | "h4"
+                | "h5"
+                | "h6"
+                | "normal";
+              listItem?: "bullet" | "number";
+              markDefs?: Array<{
+                href?: string;
+                _type: "link";
+                _key: string;
+              }>;
+              level?: number;
+              _type: "block";
+              _key: string;
+            }>;
+            badgeLabel: string | null;
           }
       > | null;
       primaryCta: {
@@ -4653,8 +4959,9 @@ export type PET_INDEX_PAGE_QUERY_RESULT =
               openInNewTab: boolean | null;
             };
           } | null;
-          alignment: "center" | "left" | null;
+          alignment: "center" | "left" | "right" | null;
         } | null;
+        layoutHint: "centered" | "mediaCard" | null;
       };
       summary: string | null;
       filterIntro: string;
@@ -4806,26 +5113,6 @@ export type PET_INDEX_PAGE_QUERY_RESULT =
           }
         | {
             _key: string;
-            _type: "alertBlock";
-            title: string;
-            message: string;
-            tone: "info" | "success" | "warning" | null;
-            cta: {
-              label: string;
-              style: "primary" | "secondary" | "text";
-              icon: string | null;
-              link: {
-                type: "action" | "externalUrl" | "internalPath";
-                label: string;
-                path: string | null;
-                url: string | null;
-                action: "openContactForm" | "openOwnerContactDrawer" | null;
-                openInNewTab: boolean | null;
-              };
-            } | null;
-          }
-        | {
-            _key: string;
             _type: "calloutBlock";
             headline: string;
             body: string;
@@ -4914,7 +5201,7 @@ export type PET_INDEX_PAGE_QUERY_RESULT =
                   openInNewTab: boolean | null;
                 };
               } | null;
-              alignment: "center" | "left" | null;
+              alignment: "center" | "left" | "right" | null;
             } | null;
             layoutHint: "mediaLeft" | "mediaRight" | "textOnly" | null;
           }
@@ -4947,7 +5234,7 @@ export type PET_INDEX_PAGE_QUERY_RESULT =
                 openInNewTab: boolean | null;
               };
             } | null;
-            alignment: "center" | "left" | null;
+            alignment: "center" | "left" | "right" | null;
           }
         | {
             _key: string;
@@ -5022,8 +5309,9 @@ export type PET_INDEX_PAGE_QUERY_RESULT =
                   openInNewTab: boolean | null;
                 };
               } | null;
-              alignment: "center" | "left" | null;
+              alignment: "center" | "left" | "right" | null;
             } | null;
+            layoutHint: "centered" | "mediaCard" | null;
           }
         | {
             _key: string;
@@ -5063,36 +5351,81 @@ export type PET_INDEX_PAGE_QUERY_RESULT =
           }
         | {
             _key: string;
-            _type: "pricingTier";
-            name: string;
-            price: string | null;
-            billingNote: string | null;
-            highlighted: boolean | null;
-            features: Array<{
+            _type: "pricingCtaBand";
+            headline: string;
+            body: string;
+            icon: string | null;
+            ctaGroup: {
+              primary: {
+                label: string;
+                style: "primary" | "secondary" | "text";
+                icon: string | null;
+                link: {
+                  type: "action" | "externalUrl" | "internalPath";
+                  label: string;
+                  path: string | null;
+                  url: string | null;
+                  action: "openContactForm" | "openOwnerContactDrawer" | null;
+                  openInNewTab: boolean | null;
+                };
+              } | null;
+              secondary: {
+                label: string;
+                style: "primary" | "secondary" | "text";
+                icon: string | null;
+                link: {
+                  type: "action" | "externalUrl" | "internalPath";
+                  label: string;
+                  path: string | null;
+                  url: string | null;
+                  action: "openContactForm" | "openOwnerContactDrawer" | null;
+                  openInNewTab: boolean | null;
+                };
+              } | null;
+              alignment: "center" | "left" | "right" | null;
+            } | null;
+            proofItems: Array<{
               _key: string;
               label: string;
-              included: boolean | null;
-              note: string | null;
-            }> | null;
-            cta: {
-              label: string;
-              style: "primary" | "secondary" | "text";
               icon: string | null;
-              link: {
-                type: "action" | "externalUrl" | "internalPath";
+            }> | null;
+          }
+        | {
+            _key: string;
+            _type: "pricingPackageGrid";
+            header: SectionHeader | null;
+            packages: Array<{
+              _key: string;
+              name: string;
+              price: string;
+              duration: string;
+              description: string;
+              icon: string | null;
+              tone: "blue" | "coral" | "cream" | "mint" | null;
+              badge: string | null;
+              highlighted: boolean | null;
+              features: Array<{
+                _key: string;
                 label: string;
-                path: string | null;
-                url: string | null;
-                action: "openContactForm" | "openOwnerContactDrawer" | null;
-                openInNewTab: boolean | null;
-              };
-            } | null;
+              }> | null;
+            }> | null;
+          }
+        | {
+            _key: string;
+            _type: "pricingValueSection";
+            valueItems: Array<{
+              _key: string;
+              title: string;
+              body: string;
+              icon: string | null;
+            }> | null;
           }
         | {
             _key: string;
             _type: "processPathSection";
-            title: string;
-            body: string;
+            header: SectionHeader | null;
+            title: string | null;
+            body: string | null;
             tone: "host" | "neutral" | "owner";
             icon: string | null;
             steps: Array<{
@@ -5157,73 +5490,89 @@ export type PET_INDEX_PAGE_QUERY_RESULT =
           }
         | {
             _key: string;
-            _type: "testimonialBlock";
+            _type: "warrantyClaimPrep";
+            anchorId: string | null;
             header: SectionHeader | null;
-            layoutHint: "carousel" | "featured" | "grid" | null;
-            testimonials: Array<{
-              _id: string;
-              quote: string;
-              authorName: string;
-              authorRole: string | null;
-              rating: number | null;
-              tone: "playful" | "trust" | "warning" | null;
-              authorImage: {
-                image: {
-                  asset: {
-                    _id: string;
-                    url: string;
-                    metadata: {
-                      lqip: string | null;
-                      dimensions: {
-                        width: number;
-                        height: number;
-                        aspectRatio: number;
-                      } | null;
-                    } | null;
-                  } | null;
-                  crop: SanityImageCrop | null;
-                  hotspot: SanityImageHotspot | null;
+            items: Array<{
+              _key: string;
+              title: string;
+              body: string;
+              icon: string | null;
+            }>;
+            ctaGroup: {
+              primary: {
+                label: string;
+                style: "primary" | "secondary" | "text";
+                icon: string | null;
+                link: {
+                  type: "action" | "externalUrl" | "internalPath";
+                  label: string;
+                  path: string | null;
+                  url: string | null;
+                  action: "openContactForm" | "openOwnerContactDrawer" | null;
+                  openInNewTab: boolean | null;
                 };
-                alt: string;
-                caption: string | null;
               } | null;
-            }> | null;
-          }
-        | {
-            _key: string;
-            _type: "videoEmbed";
-            provider: "localAsset" | "other" | "vimeo" | "youtube";
-            url: string;
-            title: string;
-            description: string | null;
-            posterImage: {
-              image: {
-                asset: {
-                  _id: string;
-                  url: string;
-                  metadata: {
-                    lqip: string | null;
-                    dimensions: {
-                      width: number;
-                      height: number;
-                      aspectRatio: number;
-                    } | null;
-                  } | null;
-                } | null;
-                crop: SanityImageCrop | null;
-                hotspot: SanityImageHotspot | null;
-              };
-              alt: string;
-              caption: string | null;
+              secondary: {
+                label: string;
+                style: "primary" | "secondary" | "text";
+                icon: string | null;
+                link: {
+                  type: "action" | "externalUrl" | "internalPath";
+                  label: string;
+                  path: string | null;
+                  url: string | null;
+                  action: "openContactForm" | "openOwnerContactDrawer" | null;
+                  openInNewTab: boolean | null;
+                };
+              } | null;
+              alignment: "center" | "left" | "right" | null;
             } | null;
           }
         | {
             _key: string;
-            _type: "warningBlock";
-            title: string;
-            message: string;
-            severity: "high" | "low" | "medium" | null;
-            icon: string | null;
+            _type: "warrantyConditionGrid";
+            header: SectionHeader | null;
+            items: Array<{
+              _key: string;
+              title: string;
+              body: string;
+              tone: "covered" | "evidence" | "excluded";
+              icon: string | null;
+            }>;
+          }
+        | {
+            _key: string;
+            _type: "warrantyNoticeSection";
+            anchorId: string | null;
+            header: SectionHeader | null;
+            body: Array<{
+              children?: Array<{
+                marks?: Array<string>;
+                text?: string;
+                _type: "span";
+                _key: string;
+              }>;
+              style?:
+                | "blockquote"
+                | "h1"
+                | "h2"
+                | "h3"
+                | "h4"
+                | "h5"
+                | "h6"
+                | "normal";
+              listItem?: "bullet" | "number";
+              markDefs?: Array<{
+                href?: string;
+                _type: "link";
+                _key: string;
+              }>;
+              level?: number;
+              _type: "block";
+              _key: string;
+            }>;
+            badgeLabel: string | null;
           }
       > | null;
       primaryCta: {
@@ -5244,7 +5593,7 @@ export type PET_INDEX_PAGE_QUERY_RESULT =
 
 // Source: sanity/queries/pages.ts
 // Variable: MARKETING_PAGE_BY_SLUG_QUERY
-// Query: *[_type == "marketingPage" && slug.current == $slug][0]{    _id,    title,    "slug": slug.current,    seo{        title,  description,  noIndex,  openGraphImage{      image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption  }    },    sections[]{        _key,  _type,  _type == "hero" => {    eyebrow,    headline,    body,    image{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    ctaGroup{        primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment    }  },  _type == "heroSlide" => {    headline,    body,    image{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    },    featuredPet->{      _id,      name,      "slug": slug.current,      listingHeadline    },    featuredOwner->{      _id,      name,      "slug": slug.current,      tagline    }  },  _type == "contentSection" => {    header,    body[]{        ...    },    media{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    ctaGroup{        primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment    },    layoutHint  },  _type == "calloutBlock" => {    headline,    body,    icon,    tone,    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "alertBlock" => {    title,    message,    tone,    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "warningBlock" => {    title,    message,    severity,    icon  },  _type == "statBlock" => {    value,    label,    description,    icon  },  _type == "testimonialBlock" => {    header,    layoutHint,    testimonials[]->{      _id,      quote,      authorName,      authorRole,      rating,      tone,      authorImage{          image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption      }    }  },  _type == "featureList" => {    header,    iconStyle,    items[]{      _key,      title,      description,      icon,      link{          type,  label,  path,  url,  action,  openInNewTab      }    }  },  _type == "accordion" => {    header,    items[]{      _key,      title,      body[]{          ...      }    }  },  _type == "pricingTier" => {    name,    price,    billingNote,    highlighted,    features[]{      _key,      label,      included,      note    },    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "pricingComparisonTable" => {    header,    plans[]{      _key,      name,      price,      note,      highlighted    },    rows[]{      _key,      feature,      description,      values[]{        _key,        planKey,        included,        note      }    },    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "processPathSection" => {    title,    body,    tone,    icon,    steps[]{      _key,      title,      body[]{          ...      },      description,      icon,      order,      cta{          label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }      }    },    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "processStep" => {    title,    body[]{        ...    },    description,    icon,    order,    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "videoEmbed" => {      provider,  url,  title,  description,  posterImage{      image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption  }  },  _type == "ctaGroup" => {      primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment  }    },    showContactForm  }
+// Query: *[_type == "marketingPage" && slug.current == $slug][0]{    _id,    title,    "slug": slug.current,    seo{        title,  description,  noIndex,  openGraphImage{      image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption  }    },    sections[]{        _key,  _type,  _type == "hero" => {    eyebrow,    headline,    body,    image{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    ctaGroup{        primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment    },    layoutHint  },  _type == "heroSlide" => {    headline,    body,    image{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    },    featuredPet->{      _id,      name,      "slug": slug.current,      listingHeadline    },    featuredOwner->{      _id,      name,      "slug": slug.current,      tagline    }  },  _type == "contentSection" => {    header,    body[]{        ...    },    media{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    ctaGroup{        primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment    },    layoutHint  },  _type == "calloutBlock" => {    headline,    body,    icon,    tone,    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "statBlock" => {    value,    label,    description,    icon  },  _type == "featureList" => {    header,    iconStyle,    items[]{      _key,      title,      description,      icon,      link{          type,  label,  path,  url,  action,  openInNewTab      }    }  },  _type == "accordion" => {    header,    items[]{      _key,      title,      body[]{          ...      }    }  },  _type == "pricingComparisonTable" => {    header,    plans[]{      _key,      name,      price,      note,      highlighted    },    rows[]{      _key,      feature,      description,      values[]{        _key,        planKey,        included,        note      }    },    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "pricingValueSection" => {    valueItems[]{      _key,      title,      body,      icon    }  },  _type == "pricingPackageGrid" => {    header,    packages[]{      _key,      name,      price,      duration,      description,      icon,      tone,      badge,      highlighted,      features[]{        _key,        label      }    }  },  _type == "pricingCtaBand" => {    headline,    body,    icon,    ctaGroup{        primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment    },    proofItems[]{      _key,      label,      icon    }  },  _type == "processPathSection" => {    header,    title,    body,    tone,    icon,    steps[]{      _key,      title,      body[]{          ...      },      description,      icon,      order,      cta{          label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }      }    },    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "warrantyConditionGrid" => {    header,    items[]{      _key,      title,      body,      tone,      icon    }  },  _type == "warrantyNoticeSection" => {    anchorId,    header,    body[]{        ...    },    badgeLabel  },  _type == "warrantyClaimPrep" => {    anchorId,    header,    items[]{      _key,      title,      body,      icon    },    ctaGroup{        primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment    }  },  _type == "processStep" => {    title,    body[]{        ...    },    description,    icon,    order,    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "ctaGroup" => {      primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment  }    },    showContactForm  }
 export type MARKETING_PAGE_BY_SLUG_QUERY_RESULT = {
   _id: string;
   title: string;
@@ -5301,26 +5650,6 @@ export type MARKETING_PAGE_BY_SLUG_QUERY_RESULT = {
             _key: string;
           }>;
         }> | null;
-      }
-    | {
-        _key: string;
-        _type: "alertBlock";
-        title: string;
-        message: string;
-        tone: "info" | "success" | "warning" | null;
-        cta: {
-          label: string;
-          style: "primary" | "secondary" | "text";
-          icon: string | null;
-          link: {
-            type: "action" | "externalUrl" | "internalPath";
-            label: string;
-            path: string | null;
-            url: string | null;
-            action: "openContactForm" | "openOwnerContactDrawer" | null;
-            openInNewTab: boolean | null;
-          };
-        } | null;
       }
     | {
         _key: string;
@@ -5412,7 +5741,7 @@ export type MARKETING_PAGE_BY_SLUG_QUERY_RESULT = {
               openInNewTab: boolean | null;
             };
           } | null;
-          alignment: "center" | "left" | null;
+          alignment: "center" | "left" | "right" | null;
         } | null;
         layoutHint: "mediaLeft" | "mediaRight" | "textOnly" | null;
       }
@@ -5445,7 +5774,7 @@ export type MARKETING_PAGE_BY_SLUG_QUERY_RESULT = {
             openInNewTab: boolean | null;
           };
         } | null;
-        alignment: "center" | "left" | null;
+        alignment: "center" | "left" | "right" | null;
       }
     | {
         _key: string;
@@ -5520,8 +5849,9 @@ export type MARKETING_PAGE_BY_SLUG_QUERY_RESULT = {
               openInNewTab: boolean | null;
             };
           } | null;
-          alignment: "center" | "left" | null;
+          alignment: "center" | "left" | "right" | null;
         } | null;
+        layoutHint: "centered" | "mediaCard" | null;
       }
     | {
         _key: string;
@@ -5561,36 +5891,81 @@ export type MARKETING_PAGE_BY_SLUG_QUERY_RESULT = {
       }
     | {
         _key: string;
-        _type: "pricingTier";
-        name: string;
-        price: string | null;
-        billingNote: string | null;
-        highlighted: boolean | null;
-        features: Array<{
+        _type: "pricingCtaBand";
+        headline: string;
+        body: string;
+        icon: string | null;
+        ctaGroup: {
+          primary: {
+            label: string;
+            style: "primary" | "secondary" | "text";
+            icon: string | null;
+            link: {
+              type: "action" | "externalUrl" | "internalPath";
+              label: string;
+              path: string | null;
+              url: string | null;
+              action: "openContactForm" | "openOwnerContactDrawer" | null;
+              openInNewTab: boolean | null;
+            };
+          } | null;
+          secondary: {
+            label: string;
+            style: "primary" | "secondary" | "text";
+            icon: string | null;
+            link: {
+              type: "action" | "externalUrl" | "internalPath";
+              label: string;
+              path: string | null;
+              url: string | null;
+              action: "openContactForm" | "openOwnerContactDrawer" | null;
+              openInNewTab: boolean | null;
+            };
+          } | null;
+          alignment: "center" | "left" | "right" | null;
+        } | null;
+        proofItems: Array<{
           _key: string;
           label: string;
-          included: boolean | null;
-          note: string | null;
-        }> | null;
-        cta: {
-          label: string;
-          style: "primary" | "secondary" | "text";
           icon: string | null;
-          link: {
-            type: "action" | "externalUrl" | "internalPath";
+        }> | null;
+      }
+    | {
+        _key: string;
+        _type: "pricingPackageGrid";
+        header: SectionHeader | null;
+        packages: Array<{
+          _key: string;
+          name: string;
+          price: string;
+          duration: string;
+          description: string;
+          icon: string | null;
+          tone: "blue" | "coral" | "cream" | "mint" | null;
+          badge: string | null;
+          highlighted: boolean | null;
+          features: Array<{
+            _key: string;
             label: string;
-            path: string | null;
-            url: string | null;
-            action: "openContactForm" | "openOwnerContactDrawer" | null;
-            openInNewTab: boolean | null;
-          };
-        } | null;
+          }> | null;
+        }> | null;
+      }
+    | {
+        _key: string;
+        _type: "pricingValueSection";
+        valueItems: Array<{
+          _key: string;
+          title: string;
+          body: string;
+          icon: string | null;
+        }> | null;
       }
     | {
         _key: string;
         _type: "processPathSection";
-        title: string;
-        body: string;
+        header: SectionHeader | null;
+        title: string | null;
+        body: string | null;
         tone: "host" | "neutral" | "owner";
         icon: string | null;
         steps: Array<{
@@ -5655,73 +6030,82 @@ export type MARKETING_PAGE_BY_SLUG_QUERY_RESULT = {
       }
     | {
         _key: string;
-        _type: "testimonialBlock";
+        _type: "warrantyClaimPrep";
+        anchorId: string | null;
         header: SectionHeader | null;
-        layoutHint: "carousel" | "featured" | "grid" | null;
-        testimonials: Array<{
-          _id: string;
-          quote: string;
-          authorName: string;
-          authorRole: string | null;
-          rating: number | null;
-          tone: "playful" | "trust" | "warning" | null;
-          authorImage: {
-            image: {
-              asset: {
-                _id: string;
-                url: string;
-                metadata: {
-                  lqip: string | null;
-                  dimensions: {
-                    width: number;
-                    height: number;
-                    aspectRatio: number;
-                  } | null;
-                } | null;
-              } | null;
-              crop: SanityImageCrop | null;
-              hotspot: SanityImageHotspot | null;
+        items: Array<{
+          _key: string;
+          title: string;
+          body: string;
+          icon: string | null;
+        }>;
+        ctaGroup: {
+          primary: {
+            label: string;
+            style: "primary" | "secondary" | "text";
+            icon: string | null;
+            link: {
+              type: "action" | "externalUrl" | "internalPath";
+              label: string;
+              path: string | null;
+              url: string | null;
+              action: "openContactForm" | "openOwnerContactDrawer" | null;
+              openInNewTab: boolean | null;
             };
-            alt: string;
-            caption: string | null;
           } | null;
-        }> | null;
-      }
-    | {
-        _key: string;
-        _type: "videoEmbed";
-        provider: "localAsset" | "other" | "vimeo" | "youtube";
-        url: string;
-        title: string;
-        description: string | null;
-        posterImage: {
-          image: {
-            asset: {
-              _id: string;
-              url: string;
-              metadata: {
-                lqip: string | null;
-                dimensions: {
-                  width: number;
-                  height: number;
-                  aspectRatio: number;
-                } | null;
-              } | null;
-            } | null;
-            crop: SanityImageCrop | null;
-            hotspot: SanityImageHotspot | null;
-          };
-          alt: string;
-          caption: string | null;
+          secondary: {
+            label: string;
+            style: "primary" | "secondary" | "text";
+            icon: string | null;
+            link: {
+              type: "action" | "externalUrl" | "internalPath";
+              label: string;
+              path: string | null;
+              url: string | null;
+              action: "openContactForm" | "openOwnerContactDrawer" | null;
+              openInNewTab: boolean | null;
+            };
+          } | null;
+          alignment: "center" | "left" | "right" | null;
         } | null;
       }
     | {
         _key: string;
-        _type: "warningBlock";
-        title: string;
-        message: string;
-        severity: "high" | "low" | "medium" | null;
-        icon: string | null;
+        _type: "warrantyConditionGrid";
+        header: SectionHeader | null;
+        items: Array<{
+          _key: string;
+          title: string;
+          body: string;
+          tone: "covered" | "evidence" | "excluded";
+          icon: string | null;
+        }>;
+      }
+    | {
+        _key: string;
+        _type: "warrantyNoticeSection";
+        anchorId: string | null;
+        header: SectionHeader | null;
+        body: Array<{
+          children?: Array<{
+            marks?: Array<string>;
+            text?: string;
+            _type: "span";
+            _key: string;
+          }>;
+          style?:
+            "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+          listItem?: "bullet" | "number";
+          markDefs?: Array<{
+            href?: string;
+            _type: "link";
+            _key: string;
+          }>;
+          level?: number;
+          _type: "block";
+          _key: string;
+        }>;
+        badgeLabel: string | null;
       }
   >;
   showContactForm: boolean | null;
@@ -5736,7 +6120,7 @@ export type MARKETING_PAGE_SLUGS_QUERY_RESULT = Array<{
 
 // Source: sanity/queries/pages.ts
 // Variable: SYSTEM_PAGE_BY_TYPE_QUERY
-// Query: *[_type == "systemPage" && pageType == $pageType][0]{    _id,    title,    pageType,    seo{        title,  description,  noIndex,  openGraphImage{      image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption  }    },    eyebrow,    headline,    message,    image{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    primaryCta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    },    secondaryCta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    },    supportCopy,    contentSections[]{        _key,  _type,  _type == "hero" => {    eyebrow,    headline,    body,    image{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    ctaGroup{        primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment    }  },  _type == "heroSlide" => {    headline,    body,    image{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    },    featuredPet->{      _id,      name,      "slug": slug.current,      listingHeadline    },    featuredOwner->{      _id,      name,      "slug": slug.current,      tagline    }  },  _type == "contentSection" => {    header,    body[]{        ...    },    media{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    ctaGroup{        primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment    },    layoutHint  },  _type == "calloutBlock" => {    headline,    body,    icon,    tone,    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "alertBlock" => {    title,    message,    tone,    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "warningBlock" => {    title,    message,    severity,    icon  },  _type == "statBlock" => {    value,    label,    description,    icon  },  _type == "testimonialBlock" => {    header,    layoutHint,    testimonials[]->{      _id,      quote,      authorName,      authorRole,      rating,      tone,      authorImage{          image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption      }    }  },  _type == "featureList" => {    header,    iconStyle,    items[]{      _key,      title,      description,      icon,      link{          type,  label,  path,  url,  action,  openInNewTab      }    }  },  _type == "accordion" => {    header,    items[]{      _key,      title,      body[]{          ...      }    }  },  _type == "pricingTier" => {    name,    price,    billingNote,    highlighted,    features[]{      _key,      label,      included,      note    },    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "pricingComparisonTable" => {    header,    plans[]{      _key,      name,      price,      note,      highlighted    },    rows[]{      _key,      feature,      description,      values[]{        _key,        planKey,        included,        note      }    },    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "processPathSection" => {    title,    body,    tone,    icon,    steps[]{      _key,      title,      body[]{          ...      },      description,      icon,      order,      cta{          label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }      }    },    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "processStep" => {    title,    body[]{        ...    },    description,    icon,    order,    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "videoEmbed" => {      provider,  url,  title,  description,  posterImage{      image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption  }  },  _type == "ctaGroup" => {      primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment  }    }  }
+// Query: *[_type == "systemPage" && pageType == $pageType][0]{    _id,    title,    pageType,    seo{        title,  description,  noIndex,  openGraphImage{      image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption  }    },    eyebrow,    headline,    message,    image{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    primaryCta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    },    secondaryCta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    },    supportCopy,    contentSections[]{        _key,  _type,  _type == "hero" => {    eyebrow,    headline,    body,    image{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    ctaGroup{        primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment    },    layoutHint  },  _type == "heroSlide" => {    headline,    body,    image{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    },    featuredPet->{      _id,      name,      "slug": slug.current,      listingHeadline    },    featuredOwner->{      _id,      name,      "slug": slug.current,      tagline    }  },  _type == "contentSection" => {    header,    body[]{        ...    },    media{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    ctaGroup{        primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment    },    layoutHint  },  _type == "calloutBlock" => {    headline,    body,    icon,    tone,    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "statBlock" => {    value,    label,    description,    icon  },  _type == "featureList" => {    header,    iconStyle,    items[]{      _key,      title,      description,      icon,      link{          type,  label,  path,  url,  action,  openInNewTab      }    }  },  _type == "accordion" => {    header,    items[]{      _key,      title,      body[]{          ...      }    }  },  _type == "pricingComparisonTable" => {    header,    plans[]{      _key,      name,      price,      note,      highlighted    },    rows[]{      _key,      feature,      description,      values[]{        _key,        planKey,        included,        note      }    },    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "pricingValueSection" => {    valueItems[]{      _key,      title,      body,      icon    }  },  _type == "pricingPackageGrid" => {    header,    packages[]{      _key,      name,      price,      duration,      description,      icon,      tone,      badge,      highlighted,      features[]{        _key,        label      }    }  },  _type == "pricingCtaBand" => {    headline,    body,    icon,    ctaGroup{        primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment    },    proofItems[]{      _key,      label,      icon    }  },  _type == "processPathSection" => {    header,    title,    body,    tone,    icon,    steps[]{      _key,      title,      body[]{          ...      },      description,      icon,      order,      cta{          label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }      }    },    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "warrantyConditionGrid" => {    header,    items[]{      _key,      title,      body,      tone,      icon    }  },  _type == "warrantyNoticeSection" => {    anchorId,    header,    body[]{        ...    },    badgeLabel  },  _type == "warrantyClaimPrep" => {    anchorId,    header,    items[]{      _key,      title,      body,      icon    },    ctaGroup{        primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment    }  },  _type == "processStep" => {    title,    body[]{        ...    },    description,    icon,    order,    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "ctaGroup" => {      primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment  }    }  }
 export type SYSTEM_PAGE_BY_TYPE_QUERY_RESULT = {
   _id: string;
   title: string;
@@ -5851,26 +6235,6 @@ export type SYSTEM_PAGE_BY_TYPE_QUERY_RESULT = {
       }
     | {
         _key: string;
-        _type: "alertBlock";
-        title: string;
-        message: string;
-        tone: "info" | "success" | "warning" | null;
-        cta: {
-          label: string;
-          style: "primary" | "secondary" | "text";
-          icon: string | null;
-          link: {
-            type: "action" | "externalUrl" | "internalPath";
-            label: string;
-            path: string | null;
-            url: string | null;
-            action: "openContactForm" | "openOwnerContactDrawer" | null;
-            openInNewTab: boolean | null;
-          };
-        } | null;
-      }
-    | {
-        _key: string;
         _type: "calloutBlock";
         headline: string;
         body: string;
@@ -5959,7 +6323,7 @@ export type SYSTEM_PAGE_BY_TYPE_QUERY_RESULT = {
               openInNewTab: boolean | null;
             };
           } | null;
-          alignment: "center" | "left" | null;
+          alignment: "center" | "left" | "right" | null;
         } | null;
         layoutHint: "mediaLeft" | "mediaRight" | "textOnly" | null;
       }
@@ -5992,7 +6356,7 @@ export type SYSTEM_PAGE_BY_TYPE_QUERY_RESULT = {
             openInNewTab: boolean | null;
           };
         } | null;
-        alignment: "center" | "left" | null;
+        alignment: "center" | "left" | "right" | null;
       }
     | {
         _key: string;
@@ -6067,8 +6431,9 @@ export type SYSTEM_PAGE_BY_TYPE_QUERY_RESULT = {
               openInNewTab: boolean | null;
             };
           } | null;
-          alignment: "center" | "left" | null;
+          alignment: "center" | "left" | "right" | null;
         } | null;
+        layoutHint: "centered" | "mediaCard" | null;
       }
     | {
         _key: string;
@@ -6108,36 +6473,81 @@ export type SYSTEM_PAGE_BY_TYPE_QUERY_RESULT = {
       }
     | {
         _key: string;
-        _type: "pricingTier";
-        name: string;
-        price: string | null;
-        billingNote: string | null;
-        highlighted: boolean | null;
-        features: Array<{
+        _type: "pricingCtaBand";
+        headline: string;
+        body: string;
+        icon: string | null;
+        ctaGroup: {
+          primary: {
+            label: string;
+            style: "primary" | "secondary" | "text";
+            icon: string | null;
+            link: {
+              type: "action" | "externalUrl" | "internalPath";
+              label: string;
+              path: string | null;
+              url: string | null;
+              action: "openContactForm" | "openOwnerContactDrawer" | null;
+              openInNewTab: boolean | null;
+            };
+          } | null;
+          secondary: {
+            label: string;
+            style: "primary" | "secondary" | "text";
+            icon: string | null;
+            link: {
+              type: "action" | "externalUrl" | "internalPath";
+              label: string;
+              path: string | null;
+              url: string | null;
+              action: "openContactForm" | "openOwnerContactDrawer" | null;
+              openInNewTab: boolean | null;
+            };
+          } | null;
+          alignment: "center" | "left" | "right" | null;
+        } | null;
+        proofItems: Array<{
           _key: string;
           label: string;
-          included: boolean | null;
-          note: string | null;
-        }> | null;
-        cta: {
-          label: string;
-          style: "primary" | "secondary" | "text";
           icon: string | null;
-          link: {
-            type: "action" | "externalUrl" | "internalPath";
+        }> | null;
+      }
+    | {
+        _key: string;
+        _type: "pricingPackageGrid";
+        header: SectionHeader | null;
+        packages: Array<{
+          _key: string;
+          name: string;
+          price: string;
+          duration: string;
+          description: string;
+          icon: string | null;
+          tone: "blue" | "coral" | "cream" | "mint" | null;
+          badge: string | null;
+          highlighted: boolean | null;
+          features: Array<{
+            _key: string;
             label: string;
-            path: string | null;
-            url: string | null;
-            action: "openContactForm" | "openOwnerContactDrawer" | null;
-            openInNewTab: boolean | null;
-          };
-        } | null;
+          }> | null;
+        }> | null;
+      }
+    | {
+        _key: string;
+        _type: "pricingValueSection";
+        valueItems: Array<{
+          _key: string;
+          title: string;
+          body: string;
+          icon: string | null;
+        }> | null;
       }
     | {
         _key: string;
         _type: "processPathSection";
-        title: string;
-        body: string;
+        header: SectionHeader | null;
+        title: string | null;
+        body: string | null;
         tone: "host" | "neutral" | "owner";
         icon: string | null;
         steps: Array<{
@@ -6202,73 +6612,82 @@ export type SYSTEM_PAGE_BY_TYPE_QUERY_RESULT = {
       }
     | {
         _key: string;
-        _type: "testimonialBlock";
+        _type: "warrantyClaimPrep";
+        anchorId: string | null;
         header: SectionHeader | null;
-        layoutHint: "carousel" | "featured" | "grid" | null;
-        testimonials: Array<{
-          _id: string;
-          quote: string;
-          authorName: string;
-          authorRole: string | null;
-          rating: number | null;
-          tone: "playful" | "trust" | "warning" | null;
-          authorImage: {
-            image: {
-              asset: {
-                _id: string;
-                url: string;
-                metadata: {
-                  lqip: string | null;
-                  dimensions: {
-                    width: number;
-                    height: number;
-                    aspectRatio: number;
-                  } | null;
-                } | null;
-              } | null;
-              crop: SanityImageCrop | null;
-              hotspot: SanityImageHotspot | null;
+        items: Array<{
+          _key: string;
+          title: string;
+          body: string;
+          icon: string | null;
+        }>;
+        ctaGroup: {
+          primary: {
+            label: string;
+            style: "primary" | "secondary" | "text";
+            icon: string | null;
+            link: {
+              type: "action" | "externalUrl" | "internalPath";
+              label: string;
+              path: string | null;
+              url: string | null;
+              action: "openContactForm" | "openOwnerContactDrawer" | null;
+              openInNewTab: boolean | null;
             };
-            alt: string;
-            caption: string | null;
           } | null;
-        }> | null;
-      }
-    | {
-        _key: string;
-        _type: "videoEmbed";
-        provider: "localAsset" | "other" | "vimeo" | "youtube";
-        url: string;
-        title: string;
-        description: string | null;
-        posterImage: {
-          image: {
-            asset: {
-              _id: string;
-              url: string;
-              metadata: {
-                lqip: string | null;
-                dimensions: {
-                  width: number;
-                  height: number;
-                  aspectRatio: number;
-                } | null;
-              } | null;
-            } | null;
-            crop: SanityImageCrop | null;
-            hotspot: SanityImageHotspot | null;
-          };
-          alt: string;
-          caption: string | null;
+          secondary: {
+            label: string;
+            style: "primary" | "secondary" | "text";
+            icon: string | null;
+            link: {
+              type: "action" | "externalUrl" | "internalPath";
+              label: string;
+              path: string | null;
+              url: string | null;
+              action: "openContactForm" | "openOwnerContactDrawer" | null;
+              openInNewTab: boolean | null;
+            };
+          } | null;
+          alignment: "center" | "left" | "right" | null;
         } | null;
       }
     | {
         _key: string;
-        _type: "warningBlock";
-        title: string;
-        message: string;
-        severity: "high" | "low" | "medium" | null;
-        icon: string | null;
+        _type: "warrantyConditionGrid";
+        header: SectionHeader | null;
+        items: Array<{
+          _key: string;
+          title: string;
+          body: string;
+          tone: "covered" | "evidence" | "excluded";
+          icon: string | null;
+        }>;
+      }
+    | {
+        _key: string;
+        _type: "warrantyNoticeSection";
+        anchorId: string | null;
+        header: SectionHeader | null;
+        body: Array<{
+          children?: Array<{
+            marks?: Array<string>;
+            text?: string;
+            _type: "span";
+            _key: string;
+          }>;
+          style?:
+            "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+          listItem?: "bullet" | "number";
+          markDefs?: Array<{
+            href?: string;
+            _type: "link";
+            _key: string;
+          }>;
+          level?: number;
+          _type: "block";
+          _key: string;
+        }>;
+        badgeLabel: string | null;
       }
   > | null;
 } | null;
@@ -6966,11 +7385,11 @@ declare module "@sanity/client" {
     '\n  *[_type == "formDefinition" && slug.current == $slug][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    description,\n    formType,\n    submitLabel,\n    successMessage{\n      headline,\n      message,\n      cta{\n        \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n      }\n    },\n    fields[]{\n      _key,\n      label,\n      name,\n      type,\n      required,\n      helpText,\n      options[]{\n        _key,\n        label,\n        value\n      }\n    }\n  }\n': FORM_DEFINITION_BY_SLUG_QUERY_RESULT;
     '\n  *[_type == "owner" && slug.current == $slug][0]{\n    _id,\n    name,\n    "slug": slug.current,\n    tagline,\n    bio[]{\n      \n  ...\n\n    },\n    location,\n    memberSince,\n    portrait{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    contactCta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    },\n    seo{\n      \n  title,\n  description,\n  noIndex,\n  openGraphImage{\n    \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n  }\n\n    },\n    testimonial->{\n      _id,\n      quote,\n      authorName,\n      authorRole,\n      rating,\n      tone,\n      authorImage{\n        \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n      }\n    },\n    "pets": *[\n      _type == "pet" &&\n      owner._ref == ^._id &&\n      submissionStatus == "approved" &&\n      defined(slug.current)\n    ] | order(name asc){\n      \n  _id,\n  name,\n  "slug": slug.current,\n  breed,\n  listingHeadline,\n  listingSummary,\n  availabilityStatus,\n  distanceKilometers,\n  listingPlan,\n  hostPayoutAmount,\n  hostPayoutCurrency,\n  hostPayoutUnit,\n  temperament,\n  pickupUrgency,\n  messRisk,\n  chaosLevel,\n  energyLevel,\n  cuddlePolicy,\n  cardMedia{\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    lowFrameRateVideo{\n      \n  provider,\n  url,\n  title,\n  description,\n  posterImage{\n    \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n  }\n\n    }\n  },\n  petType->{\n    _id,\n    name,\n    pluralName,\n    "slug": slug.current,\n    filterLabel,\n    icon,\n    category,\n    sortOrder\n  },\n  owner->{\n    _id,\n    name,\n    "slug": slug.current,\n    tagline\n  }\n\n    }\n  }\n': OWNER_BY_SLUG_QUERY_RESULT;
     '\n  *[_type == "owner" && defined(slug.current)] | order(slug.current asc){\n    "slug": slug.current\n  }\n': OWNER_SLUGS_QUERY_RESULT;
-    '\n  *[_id == "homePage"][0]{\n    _id,\n    seo{\n      \n  title,\n  description,\n  noIndex,\n  openGraphImage{\n    \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n  }\n\n    },\n    heroCarousel[]{\n      _key,\n      _type,\n      headline,\n      body,\n      image{\n        \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n      },\n      cta{\n        \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n      },\n      featuredPet->{\n        _id,\n        name,\n        "slug": slug.current,\n        listingHeadline\n      },\n      featuredOwner->{\n        _id,\n        name,\n        "slug": slug.current,\n        tagline\n      }\n    },\n    intro{\n      \n  _key,\n  _type,\n  _type == "hero" => {\n    eyebrow,\n    headline,\n    body,\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    }\n  },\n  _type == "heroSlide" => {\n    headline,\n    body,\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    },\n    featuredPet->{\n      _id,\n      name,\n      "slug": slug.current,\n      listingHeadline\n    },\n    featuredOwner->{\n      _id,\n      name,\n      "slug": slug.current,\n      tagline\n    }\n  },\n  _type == "contentSection" => {\n    header,\n    body[]{\n      \n  ...\n\n    },\n    media{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    },\n    layoutHint\n  },\n  _type == "calloutBlock" => {\n    headline,\n    body,\n    icon,\n    tone,\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "alertBlock" => {\n    title,\n    message,\n    tone,\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "warningBlock" => {\n    title,\n    message,\n    severity,\n    icon\n  },\n  _type == "statBlock" => {\n    value,\n    label,\n    description,\n    icon\n  },\n  _type == "testimonialBlock" => {\n    header,\n    layoutHint,\n    testimonials[]->{\n      _id,\n      quote,\n      authorName,\n      authorRole,\n      rating,\n      tone,\n      authorImage{\n        \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n      }\n    }\n  },\n  _type == "featureList" => {\n    header,\n    iconStyle,\n    items[]{\n      _key,\n      title,\n      description,\n      icon,\n      link{\n        \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n      }\n    }\n  },\n  _type == "accordion" => {\n    header,\n    items[]{\n      _key,\n      title,\n      body[]{\n        \n  ...\n\n      }\n    }\n  },\n  _type == "pricingTier" => {\n    name,\n    price,\n    billingNote,\n    highlighted,\n    features[]{\n      _key,\n      label,\n      included,\n      note\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "pricingComparisonTable" => {\n    header,\n    plans[]{\n      _key,\n      name,\n      price,\n      note,\n      highlighted\n    },\n    rows[]{\n      _key,\n      feature,\n      description,\n      values[]{\n        _key,\n        planKey,\n        included,\n        note\n      }\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "processPathSection" => {\n    title,\n    body,\n    tone,\n    icon,\n    steps[]{\n      _key,\n      title,\n      body[]{\n        \n  ...\n\n      },\n      description,\n      icon,\n      order,\n      cta{\n        \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n      }\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "processStep" => {\n    title,\n    body[]{\n      \n  ...\n\n    },\n    description,\n    icon,\n    order,\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "videoEmbed" => {\n    \n  provider,\n  url,\n  title,\n  description,\n  posterImage{\n    \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n  }\n\n  },\n  _type == "ctaGroup" => {\n    \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n  }\n\n    },\n    featuredPets[]->{\n      \n  _id,\n  name,\n  "slug": slug.current,\n  breed,\n  listingHeadline,\n  listingSummary,\n  availabilityStatus,\n  distanceKilometers,\n  listingPlan,\n  hostPayoutAmount,\n  hostPayoutCurrency,\n  hostPayoutUnit,\n  temperament,\n  pickupUrgency,\n  messRisk,\n  chaosLevel,\n  energyLevel,\n  cuddlePolicy,\n  cardMedia{\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    lowFrameRateVideo{\n      \n  provider,\n  url,\n  title,\n  description,\n  posterImage{\n    \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n  }\n\n    }\n  },\n  petType->{\n    _id,\n    name,\n    pluralName,\n    "slug": slug.current,\n    filterLabel,\n    icon,\n    category,\n    sortOrder\n  },\n  owner->{\n    _id,\n    name,\n    "slug": slug.current,\n    tagline\n  }\n\n    },\n    featuredOwners[]->{\n      _id,\n      name,\n      "slug": slug.current,\n      tagline,\n      portrait{\n        \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n      }\n    },\n    processSummary[]{\n      _key,\n      title,\n      description,\n      icon,\n      order,\n      cta{\n        \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n      }\n    },\n    testimonials[]->{\n      _id,\n      quote,\n      authorName,\n      authorRole,\n      rating,\n      tone,\n      authorImage{\n        \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n      }\n    },\n    statBlocks[]{\n      _key,\n      value,\n      label,\n      description,\n      icon\n    },\n    contentSections[]{\n      \n  _key,\n  _type,\n  _type == "hero" => {\n    eyebrow,\n    headline,\n    body,\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    }\n  },\n  _type == "heroSlide" => {\n    headline,\n    body,\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    },\n    featuredPet->{\n      _id,\n      name,\n      "slug": slug.current,\n      listingHeadline\n    },\n    featuredOwner->{\n      _id,\n      name,\n      "slug": slug.current,\n      tagline\n    }\n  },\n  _type == "contentSection" => {\n    header,\n    body[]{\n      \n  ...\n\n    },\n    media{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    },\n    layoutHint\n  },\n  _type == "calloutBlock" => {\n    headline,\n    body,\n    icon,\n    tone,\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "alertBlock" => {\n    title,\n    message,\n    tone,\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "warningBlock" => {\n    title,\n    message,\n    severity,\n    icon\n  },\n  _type == "statBlock" => {\n    value,\n    label,\n    description,\n    icon\n  },\n  _type == "testimonialBlock" => {\n    header,\n    layoutHint,\n    testimonials[]->{\n      _id,\n      quote,\n      authorName,\n      authorRole,\n      rating,\n      tone,\n      authorImage{\n        \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n      }\n    }\n  },\n  _type == "featureList" => {\n    header,\n    iconStyle,\n    items[]{\n      _key,\n      title,\n      description,\n      icon,\n      link{\n        \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n      }\n    }\n  },\n  _type == "accordion" => {\n    header,\n    items[]{\n      _key,\n      title,\n      body[]{\n        \n  ...\n\n      }\n    }\n  },\n  _type == "pricingTier" => {\n    name,\n    price,\n    billingNote,\n    highlighted,\n    features[]{\n      _key,\n      label,\n      included,\n      note\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "pricingComparisonTable" => {\n    header,\n    plans[]{\n      _key,\n      name,\n      price,\n      note,\n      highlighted\n    },\n    rows[]{\n      _key,\n      feature,\n      description,\n      values[]{\n        _key,\n        planKey,\n        included,\n        note\n      }\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "processPathSection" => {\n    title,\n    body,\n    tone,\n    icon,\n    steps[]{\n      _key,\n      title,\n      body[]{\n        \n  ...\n\n      },\n      description,\n      icon,\n      order,\n      cta{\n        \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n      }\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "processStep" => {\n    title,\n    body[]{\n      \n  ...\n\n    },\n    description,\n    icon,\n    order,\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "videoEmbed" => {\n    \n  provider,\n  url,\n  title,\n  description,\n  posterImage{\n    \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n  }\n\n  },\n  _type == "ctaGroup" => {\n    \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n  }\n\n    },\n    primaryCta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  }\n': HOME_PAGE_QUERY_RESULT;
-    '\n  *[_id == "petIndexPage"][0]{\n    _id,\n    seo{\n      \n  title,\n  description,\n  noIndex,\n  openGraphImage{\n    \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n  }\n\n    },\n    hero{\n      \n  _key,\n  _type,\n  _type == "hero" => {\n    eyebrow,\n    headline,\n    body,\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    }\n  },\n  _type == "heroSlide" => {\n    headline,\n    body,\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    },\n    featuredPet->{\n      _id,\n      name,\n      "slug": slug.current,\n      listingHeadline\n    },\n    featuredOwner->{\n      _id,\n      name,\n      "slug": slug.current,\n      tagline\n    }\n  },\n  _type == "contentSection" => {\n    header,\n    body[]{\n      \n  ...\n\n    },\n    media{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    },\n    layoutHint\n  },\n  _type == "calloutBlock" => {\n    headline,\n    body,\n    icon,\n    tone,\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "alertBlock" => {\n    title,\n    message,\n    tone,\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "warningBlock" => {\n    title,\n    message,\n    severity,\n    icon\n  },\n  _type == "statBlock" => {\n    value,\n    label,\n    description,\n    icon\n  },\n  _type == "testimonialBlock" => {\n    header,\n    layoutHint,\n    testimonials[]->{\n      _id,\n      quote,\n      authorName,\n      authorRole,\n      rating,\n      tone,\n      authorImage{\n        \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n      }\n    }\n  },\n  _type == "featureList" => {\n    header,\n    iconStyle,\n    items[]{\n      _key,\n      title,\n      description,\n      icon,\n      link{\n        \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n      }\n    }\n  },\n  _type == "accordion" => {\n    header,\n    items[]{\n      _key,\n      title,\n      body[]{\n        \n  ...\n\n      }\n    }\n  },\n  _type == "pricingTier" => {\n    name,\n    price,\n    billingNote,\n    highlighted,\n    features[]{\n      _key,\n      label,\n      included,\n      note\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "pricingComparisonTable" => {\n    header,\n    plans[]{\n      _key,\n      name,\n      price,\n      note,\n      highlighted\n    },\n    rows[]{\n      _key,\n      feature,\n      description,\n      values[]{\n        _key,\n        planKey,\n        included,\n        note\n      }\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "processPathSection" => {\n    title,\n    body,\n    tone,\n    icon,\n    steps[]{\n      _key,\n      title,\n      body[]{\n        \n  ...\n\n      },\n      description,\n      icon,\n      order,\n      cta{\n        \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n      }\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "processStep" => {\n    title,\n    body[]{\n      \n  ...\n\n    },\n    description,\n    icon,\n    order,\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "videoEmbed" => {\n    \n  provider,\n  url,\n  title,\n  description,\n  posterImage{\n    \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n  }\n\n  },\n  _type == "ctaGroup" => {\n    \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n  }\n\n    },\n    summary,\n    filterIntro,\n    emptyState{\n      \n  _key,\n  _type,\n  _type == "hero" => {\n    eyebrow,\n    headline,\n    body,\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    }\n  },\n  _type == "heroSlide" => {\n    headline,\n    body,\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    },\n    featuredPet->{\n      _id,\n      name,\n      "slug": slug.current,\n      listingHeadline\n    },\n    featuredOwner->{\n      _id,\n      name,\n      "slug": slug.current,\n      tagline\n    }\n  },\n  _type == "contentSection" => {\n    header,\n    body[]{\n      \n  ...\n\n    },\n    media{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    },\n    layoutHint\n  },\n  _type == "calloutBlock" => {\n    headline,\n    body,\n    icon,\n    tone,\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "alertBlock" => {\n    title,\n    message,\n    tone,\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "warningBlock" => {\n    title,\n    message,\n    severity,\n    icon\n  },\n  _type == "statBlock" => {\n    value,\n    label,\n    description,\n    icon\n  },\n  _type == "testimonialBlock" => {\n    header,\n    layoutHint,\n    testimonials[]->{\n      _id,\n      quote,\n      authorName,\n      authorRole,\n      rating,\n      tone,\n      authorImage{\n        \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n      }\n    }\n  },\n  _type == "featureList" => {\n    header,\n    iconStyle,\n    items[]{\n      _key,\n      title,\n      description,\n      icon,\n      link{\n        \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n      }\n    }\n  },\n  _type == "accordion" => {\n    header,\n    items[]{\n      _key,\n      title,\n      body[]{\n        \n  ...\n\n      }\n    }\n  },\n  _type == "pricingTier" => {\n    name,\n    price,\n    billingNote,\n    highlighted,\n    features[]{\n      _key,\n      label,\n      included,\n      note\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "pricingComparisonTable" => {\n    header,\n    plans[]{\n      _key,\n      name,\n      price,\n      note,\n      highlighted\n    },\n    rows[]{\n      _key,\n      feature,\n      description,\n      values[]{\n        _key,\n        planKey,\n        included,\n        note\n      }\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "processPathSection" => {\n    title,\n    body,\n    tone,\n    icon,\n    steps[]{\n      _key,\n      title,\n      body[]{\n        \n  ...\n\n      },\n      description,\n      icon,\n      order,\n      cta{\n        \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n      }\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "processStep" => {\n    title,\n    body[]{\n      \n  ...\n\n    },\n    description,\n    icon,\n    order,\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "videoEmbed" => {\n    \n  provider,\n  url,\n  title,\n  description,\n  posterImage{\n    \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n  }\n\n  },\n  _type == "ctaGroup" => {\n    \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n  }\n\n    },\n    featuredPets[]->{\n      \n  _id,\n  name,\n  "slug": slug.current,\n  breed,\n  listingHeadline,\n  listingSummary,\n  availabilityStatus,\n  distanceKilometers,\n  listingPlan,\n  hostPayoutAmount,\n  hostPayoutCurrency,\n  hostPayoutUnit,\n  temperament,\n  pickupUrgency,\n  messRisk,\n  chaosLevel,\n  energyLevel,\n  cuddlePolicy,\n  cardMedia{\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    lowFrameRateVideo{\n      \n  provider,\n  url,\n  title,\n  description,\n  posterImage{\n    \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n  }\n\n    }\n  },\n  petType->{\n    _id,\n    name,\n    pluralName,\n    "slug": slug.current,\n    filterLabel,\n    icon,\n    category,\n    sortOrder\n  },\n  owner->{\n    _id,\n    name,\n    "slug": slug.current,\n    tagline\n  }\n\n    },\n    contentSections[]{\n      \n  _key,\n  _type,\n  _type == "hero" => {\n    eyebrow,\n    headline,\n    body,\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    }\n  },\n  _type == "heroSlide" => {\n    headline,\n    body,\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    },\n    featuredPet->{\n      _id,\n      name,\n      "slug": slug.current,\n      listingHeadline\n    },\n    featuredOwner->{\n      _id,\n      name,\n      "slug": slug.current,\n      tagline\n    }\n  },\n  _type == "contentSection" => {\n    header,\n    body[]{\n      \n  ...\n\n    },\n    media{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    },\n    layoutHint\n  },\n  _type == "calloutBlock" => {\n    headline,\n    body,\n    icon,\n    tone,\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "alertBlock" => {\n    title,\n    message,\n    tone,\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "warningBlock" => {\n    title,\n    message,\n    severity,\n    icon\n  },\n  _type == "statBlock" => {\n    value,\n    label,\n    description,\n    icon\n  },\n  _type == "testimonialBlock" => {\n    header,\n    layoutHint,\n    testimonials[]->{\n      _id,\n      quote,\n      authorName,\n      authorRole,\n      rating,\n      tone,\n      authorImage{\n        \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n      }\n    }\n  },\n  _type == "featureList" => {\n    header,\n    iconStyle,\n    items[]{\n      _key,\n      title,\n      description,\n      icon,\n      link{\n        \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n      }\n    }\n  },\n  _type == "accordion" => {\n    header,\n    items[]{\n      _key,\n      title,\n      body[]{\n        \n  ...\n\n      }\n    }\n  },\n  _type == "pricingTier" => {\n    name,\n    price,\n    billingNote,\n    highlighted,\n    features[]{\n      _key,\n      label,\n      included,\n      note\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "pricingComparisonTable" => {\n    header,\n    plans[]{\n      _key,\n      name,\n      price,\n      note,\n      highlighted\n    },\n    rows[]{\n      _key,\n      feature,\n      description,\n      values[]{\n        _key,\n        planKey,\n        included,\n        note\n      }\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "processPathSection" => {\n    title,\n    body,\n    tone,\n    icon,\n    steps[]{\n      _key,\n      title,\n      body[]{\n        \n  ...\n\n      },\n      description,\n      icon,\n      order,\n      cta{\n        \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n      }\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "processStep" => {\n    title,\n    body[]{\n      \n  ...\n\n    },\n    description,\n    icon,\n    order,\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "videoEmbed" => {\n    \n  provider,\n  url,\n  title,\n  description,\n  posterImage{\n    \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n  }\n\n  },\n  _type == "ctaGroup" => {\n    \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n  }\n\n    },\n    primaryCta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  }\n': PET_INDEX_PAGE_QUERY_RESULT;
-    '\n  *[_type == "marketingPage" && slug.current == $slug][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    seo{\n      \n  title,\n  description,\n  noIndex,\n  openGraphImage{\n    \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n  }\n\n    },\n    sections[]{\n      \n  _key,\n  _type,\n  _type == "hero" => {\n    eyebrow,\n    headline,\n    body,\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    }\n  },\n  _type == "heroSlide" => {\n    headline,\n    body,\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    },\n    featuredPet->{\n      _id,\n      name,\n      "slug": slug.current,\n      listingHeadline\n    },\n    featuredOwner->{\n      _id,\n      name,\n      "slug": slug.current,\n      tagline\n    }\n  },\n  _type == "contentSection" => {\n    header,\n    body[]{\n      \n  ...\n\n    },\n    media{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    },\n    layoutHint\n  },\n  _type == "calloutBlock" => {\n    headline,\n    body,\n    icon,\n    tone,\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "alertBlock" => {\n    title,\n    message,\n    tone,\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "warningBlock" => {\n    title,\n    message,\n    severity,\n    icon\n  },\n  _type == "statBlock" => {\n    value,\n    label,\n    description,\n    icon\n  },\n  _type == "testimonialBlock" => {\n    header,\n    layoutHint,\n    testimonials[]->{\n      _id,\n      quote,\n      authorName,\n      authorRole,\n      rating,\n      tone,\n      authorImage{\n        \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n      }\n    }\n  },\n  _type == "featureList" => {\n    header,\n    iconStyle,\n    items[]{\n      _key,\n      title,\n      description,\n      icon,\n      link{\n        \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n      }\n    }\n  },\n  _type == "accordion" => {\n    header,\n    items[]{\n      _key,\n      title,\n      body[]{\n        \n  ...\n\n      }\n    }\n  },\n  _type == "pricingTier" => {\n    name,\n    price,\n    billingNote,\n    highlighted,\n    features[]{\n      _key,\n      label,\n      included,\n      note\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "pricingComparisonTable" => {\n    header,\n    plans[]{\n      _key,\n      name,\n      price,\n      note,\n      highlighted\n    },\n    rows[]{\n      _key,\n      feature,\n      description,\n      values[]{\n        _key,\n        planKey,\n        included,\n        note\n      }\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "processPathSection" => {\n    title,\n    body,\n    tone,\n    icon,\n    steps[]{\n      _key,\n      title,\n      body[]{\n        \n  ...\n\n      },\n      description,\n      icon,\n      order,\n      cta{\n        \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n      }\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "processStep" => {\n    title,\n    body[]{\n      \n  ...\n\n    },\n    description,\n    icon,\n    order,\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "videoEmbed" => {\n    \n  provider,\n  url,\n  title,\n  description,\n  posterImage{\n    \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n  }\n\n  },\n  _type == "ctaGroup" => {\n    \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n  }\n\n    },\n    showContactForm\n  }\n': MARKETING_PAGE_BY_SLUG_QUERY_RESULT;
+    '\n  *[_id == "homePage"][0]{\n    _id,\n    seo{\n      \n  title,\n  description,\n  noIndex,\n  openGraphImage{\n    \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n  }\n\n    },\n    heroCarousel[]{\n      _key,\n      _type,\n      headline,\n      body,\n      image{\n        \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n      },\n      cta{\n        \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n      },\n      featuredPet->{\n        _id,\n        name,\n        "slug": slug.current,\n        listingHeadline\n      },\n      featuredOwner->{\n        _id,\n        name,\n        "slug": slug.current,\n        tagline\n      }\n    },\n    intro{\n      \n  _key,\n  _type,\n  _type == "hero" => {\n    eyebrow,\n    headline,\n    body,\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    },\n    layoutHint\n  },\n  _type == "heroSlide" => {\n    headline,\n    body,\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    },\n    featuredPet->{\n      _id,\n      name,\n      "slug": slug.current,\n      listingHeadline\n    },\n    featuredOwner->{\n      _id,\n      name,\n      "slug": slug.current,\n      tagline\n    }\n  },\n  _type == "contentSection" => {\n    header,\n    body[]{\n      \n  ...\n\n    },\n    media{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    },\n    layoutHint\n  },\n  _type == "calloutBlock" => {\n    headline,\n    body,\n    icon,\n    tone,\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "statBlock" => {\n    value,\n    label,\n    description,\n    icon\n  },\n  _type == "featureList" => {\n    header,\n    iconStyle,\n    items[]{\n      _key,\n      title,\n      description,\n      icon,\n      link{\n        \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n      }\n    }\n  },\n  _type == "accordion" => {\n    header,\n    items[]{\n      _key,\n      title,\n      body[]{\n        \n  ...\n\n      }\n    }\n  },\n  _type == "pricingComparisonTable" => {\n    header,\n    plans[]{\n      _key,\n      name,\n      price,\n      note,\n      highlighted\n    },\n    rows[]{\n      _key,\n      feature,\n      description,\n      values[]{\n        _key,\n        planKey,\n        included,\n        note\n      }\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "pricingValueSection" => {\n    valueItems[]{\n      _key,\n      title,\n      body,\n      icon\n    }\n  },\n  _type == "pricingPackageGrid" => {\n    header,\n    packages[]{\n      _key,\n      name,\n      price,\n      duration,\n      description,\n      icon,\n      tone,\n      badge,\n      highlighted,\n      features[]{\n        _key,\n        label\n      }\n    }\n  },\n  _type == "pricingCtaBand" => {\n    headline,\n    body,\n    icon,\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    },\n    proofItems[]{\n      _key,\n      label,\n      icon\n    }\n  },\n  _type == "processPathSection" => {\n    header,\n    title,\n    body,\n    tone,\n    icon,\n    steps[]{\n      _key,\n      title,\n      body[]{\n        \n  ...\n\n      },\n      description,\n      icon,\n      order,\n      cta{\n        \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n      }\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "warrantyConditionGrid" => {\n    header,\n    items[]{\n      _key,\n      title,\n      body,\n      tone,\n      icon\n    }\n  },\n  _type == "warrantyNoticeSection" => {\n    anchorId,\n    header,\n    body[]{\n      \n  ...\n\n    },\n    badgeLabel\n  },\n  _type == "warrantyClaimPrep" => {\n    anchorId,\n    header,\n    items[]{\n      _key,\n      title,\n      body,\n      icon\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    }\n  },\n  _type == "processStep" => {\n    title,\n    body[]{\n      \n  ...\n\n    },\n    description,\n    icon,\n    order,\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "ctaGroup" => {\n    \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n  }\n\n    },\n    featuredPets[]->{\n      \n  _id,\n  name,\n  "slug": slug.current,\n  breed,\n  listingHeadline,\n  listingSummary,\n  availabilityStatus,\n  distanceKilometers,\n  listingPlan,\n  hostPayoutAmount,\n  hostPayoutCurrency,\n  hostPayoutUnit,\n  temperament,\n  pickupUrgency,\n  messRisk,\n  chaosLevel,\n  energyLevel,\n  cuddlePolicy,\n  cardMedia{\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    lowFrameRateVideo{\n      \n  provider,\n  url,\n  title,\n  description,\n  posterImage{\n    \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n  }\n\n    }\n  },\n  petType->{\n    _id,\n    name,\n    pluralName,\n    "slug": slug.current,\n    filterLabel,\n    icon,\n    category,\n    sortOrder\n  },\n  owner->{\n    _id,\n    name,\n    "slug": slug.current,\n    tagline\n  }\n\n    },\n    featuredOwners[]->{\n      _id,\n      name,\n      "slug": slug.current,\n      tagline,\n      portrait{\n        \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n      }\n    },\n    processSummary[]{\n      _key,\n      title,\n      description,\n      icon,\n      order,\n      cta{\n        \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n      }\n    },\n    testimonials[]->{\n      _id,\n      quote,\n      authorName,\n      authorRole,\n      rating,\n      tone,\n      authorImage{\n        \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n      }\n    },\n    statBlocks[]{\n      _key,\n      value,\n      label,\n      description,\n      icon\n    },\n    contentSections[]{\n      \n  _key,\n  _type,\n  _type == "hero" => {\n    eyebrow,\n    headline,\n    body,\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    },\n    layoutHint\n  },\n  _type == "heroSlide" => {\n    headline,\n    body,\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    },\n    featuredPet->{\n      _id,\n      name,\n      "slug": slug.current,\n      listingHeadline\n    },\n    featuredOwner->{\n      _id,\n      name,\n      "slug": slug.current,\n      tagline\n    }\n  },\n  _type == "contentSection" => {\n    header,\n    body[]{\n      \n  ...\n\n    },\n    media{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    },\n    layoutHint\n  },\n  _type == "calloutBlock" => {\n    headline,\n    body,\n    icon,\n    tone,\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "statBlock" => {\n    value,\n    label,\n    description,\n    icon\n  },\n  _type == "featureList" => {\n    header,\n    iconStyle,\n    items[]{\n      _key,\n      title,\n      description,\n      icon,\n      link{\n        \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n      }\n    }\n  },\n  _type == "accordion" => {\n    header,\n    items[]{\n      _key,\n      title,\n      body[]{\n        \n  ...\n\n      }\n    }\n  },\n  _type == "pricingComparisonTable" => {\n    header,\n    plans[]{\n      _key,\n      name,\n      price,\n      note,\n      highlighted\n    },\n    rows[]{\n      _key,\n      feature,\n      description,\n      values[]{\n        _key,\n        planKey,\n        included,\n        note\n      }\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "pricingValueSection" => {\n    valueItems[]{\n      _key,\n      title,\n      body,\n      icon\n    }\n  },\n  _type == "pricingPackageGrid" => {\n    header,\n    packages[]{\n      _key,\n      name,\n      price,\n      duration,\n      description,\n      icon,\n      tone,\n      badge,\n      highlighted,\n      features[]{\n        _key,\n        label\n      }\n    }\n  },\n  _type == "pricingCtaBand" => {\n    headline,\n    body,\n    icon,\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    },\n    proofItems[]{\n      _key,\n      label,\n      icon\n    }\n  },\n  _type == "processPathSection" => {\n    header,\n    title,\n    body,\n    tone,\n    icon,\n    steps[]{\n      _key,\n      title,\n      body[]{\n        \n  ...\n\n      },\n      description,\n      icon,\n      order,\n      cta{\n        \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n      }\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "warrantyConditionGrid" => {\n    header,\n    items[]{\n      _key,\n      title,\n      body,\n      tone,\n      icon\n    }\n  },\n  _type == "warrantyNoticeSection" => {\n    anchorId,\n    header,\n    body[]{\n      \n  ...\n\n    },\n    badgeLabel\n  },\n  _type == "warrantyClaimPrep" => {\n    anchorId,\n    header,\n    items[]{\n      _key,\n      title,\n      body,\n      icon\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    }\n  },\n  _type == "processStep" => {\n    title,\n    body[]{\n      \n  ...\n\n    },\n    description,\n    icon,\n    order,\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "ctaGroup" => {\n    \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n  }\n\n    },\n    primaryCta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  }\n': HOME_PAGE_QUERY_RESULT;
+    '\n  *[_id == "petIndexPage"][0]{\n    _id,\n    seo{\n      \n  title,\n  description,\n  noIndex,\n  openGraphImage{\n    \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n  }\n\n    },\n    hero{\n      \n  _key,\n  _type,\n  _type == "hero" => {\n    eyebrow,\n    headline,\n    body,\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    },\n    layoutHint\n  },\n  _type == "heroSlide" => {\n    headline,\n    body,\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    },\n    featuredPet->{\n      _id,\n      name,\n      "slug": slug.current,\n      listingHeadline\n    },\n    featuredOwner->{\n      _id,\n      name,\n      "slug": slug.current,\n      tagline\n    }\n  },\n  _type == "contentSection" => {\n    header,\n    body[]{\n      \n  ...\n\n    },\n    media{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    },\n    layoutHint\n  },\n  _type == "calloutBlock" => {\n    headline,\n    body,\n    icon,\n    tone,\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "statBlock" => {\n    value,\n    label,\n    description,\n    icon\n  },\n  _type == "featureList" => {\n    header,\n    iconStyle,\n    items[]{\n      _key,\n      title,\n      description,\n      icon,\n      link{\n        \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n      }\n    }\n  },\n  _type == "accordion" => {\n    header,\n    items[]{\n      _key,\n      title,\n      body[]{\n        \n  ...\n\n      }\n    }\n  },\n  _type == "pricingComparisonTable" => {\n    header,\n    plans[]{\n      _key,\n      name,\n      price,\n      note,\n      highlighted\n    },\n    rows[]{\n      _key,\n      feature,\n      description,\n      values[]{\n        _key,\n        planKey,\n        included,\n        note\n      }\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "pricingValueSection" => {\n    valueItems[]{\n      _key,\n      title,\n      body,\n      icon\n    }\n  },\n  _type == "pricingPackageGrid" => {\n    header,\n    packages[]{\n      _key,\n      name,\n      price,\n      duration,\n      description,\n      icon,\n      tone,\n      badge,\n      highlighted,\n      features[]{\n        _key,\n        label\n      }\n    }\n  },\n  _type == "pricingCtaBand" => {\n    headline,\n    body,\n    icon,\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    },\n    proofItems[]{\n      _key,\n      label,\n      icon\n    }\n  },\n  _type == "processPathSection" => {\n    header,\n    title,\n    body,\n    tone,\n    icon,\n    steps[]{\n      _key,\n      title,\n      body[]{\n        \n  ...\n\n      },\n      description,\n      icon,\n      order,\n      cta{\n        \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n      }\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "warrantyConditionGrid" => {\n    header,\n    items[]{\n      _key,\n      title,\n      body,\n      tone,\n      icon\n    }\n  },\n  _type == "warrantyNoticeSection" => {\n    anchorId,\n    header,\n    body[]{\n      \n  ...\n\n    },\n    badgeLabel\n  },\n  _type == "warrantyClaimPrep" => {\n    anchorId,\n    header,\n    items[]{\n      _key,\n      title,\n      body,\n      icon\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    }\n  },\n  _type == "processStep" => {\n    title,\n    body[]{\n      \n  ...\n\n    },\n    description,\n    icon,\n    order,\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "ctaGroup" => {\n    \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n  }\n\n    },\n    summary,\n    filterIntro,\n    emptyState{\n      \n  _key,\n  _type,\n  _type == "hero" => {\n    eyebrow,\n    headline,\n    body,\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    },\n    layoutHint\n  },\n  _type == "heroSlide" => {\n    headline,\n    body,\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    },\n    featuredPet->{\n      _id,\n      name,\n      "slug": slug.current,\n      listingHeadline\n    },\n    featuredOwner->{\n      _id,\n      name,\n      "slug": slug.current,\n      tagline\n    }\n  },\n  _type == "contentSection" => {\n    header,\n    body[]{\n      \n  ...\n\n    },\n    media{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    },\n    layoutHint\n  },\n  _type == "calloutBlock" => {\n    headline,\n    body,\n    icon,\n    tone,\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "statBlock" => {\n    value,\n    label,\n    description,\n    icon\n  },\n  _type == "featureList" => {\n    header,\n    iconStyle,\n    items[]{\n      _key,\n      title,\n      description,\n      icon,\n      link{\n        \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n      }\n    }\n  },\n  _type == "accordion" => {\n    header,\n    items[]{\n      _key,\n      title,\n      body[]{\n        \n  ...\n\n      }\n    }\n  },\n  _type == "pricingComparisonTable" => {\n    header,\n    plans[]{\n      _key,\n      name,\n      price,\n      note,\n      highlighted\n    },\n    rows[]{\n      _key,\n      feature,\n      description,\n      values[]{\n        _key,\n        planKey,\n        included,\n        note\n      }\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "pricingValueSection" => {\n    valueItems[]{\n      _key,\n      title,\n      body,\n      icon\n    }\n  },\n  _type == "pricingPackageGrid" => {\n    header,\n    packages[]{\n      _key,\n      name,\n      price,\n      duration,\n      description,\n      icon,\n      tone,\n      badge,\n      highlighted,\n      features[]{\n        _key,\n        label\n      }\n    }\n  },\n  _type == "pricingCtaBand" => {\n    headline,\n    body,\n    icon,\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    },\n    proofItems[]{\n      _key,\n      label,\n      icon\n    }\n  },\n  _type == "processPathSection" => {\n    header,\n    title,\n    body,\n    tone,\n    icon,\n    steps[]{\n      _key,\n      title,\n      body[]{\n        \n  ...\n\n      },\n      description,\n      icon,\n      order,\n      cta{\n        \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n      }\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "warrantyConditionGrid" => {\n    header,\n    items[]{\n      _key,\n      title,\n      body,\n      tone,\n      icon\n    }\n  },\n  _type == "warrantyNoticeSection" => {\n    anchorId,\n    header,\n    body[]{\n      \n  ...\n\n    },\n    badgeLabel\n  },\n  _type == "warrantyClaimPrep" => {\n    anchorId,\n    header,\n    items[]{\n      _key,\n      title,\n      body,\n      icon\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    }\n  },\n  _type == "processStep" => {\n    title,\n    body[]{\n      \n  ...\n\n    },\n    description,\n    icon,\n    order,\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "ctaGroup" => {\n    \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n  }\n\n    },\n    featuredPets[]->{\n      \n  _id,\n  name,\n  "slug": slug.current,\n  breed,\n  listingHeadline,\n  listingSummary,\n  availabilityStatus,\n  distanceKilometers,\n  listingPlan,\n  hostPayoutAmount,\n  hostPayoutCurrency,\n  hostPayoutUnit,\n  temperament,\n  pickupUrgency,\n  messRisk,\n  chaosLevel,\n  energyLevel,\n  cuddlePolicy,\n  cardMedia{\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    lowFrameRateVideo{\n      \n  provider,\n  url,\n  title,\n  description,\n  posterImage{\n    \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n  }\n\n    }\n  },\n  petType->{\n    _id,\n    name,\n    pluralName,\n    "slug": slug.current,\n    filterLabel,\n    icon,\n    category,\n    sortOrder\n  },\n  owner->{\n    _id,\n    name,\n    "slug": slug.current,\n    tagline\n  }\n\n    },\n    contentSections[]{\n      \n  _key,\n  _type,\n  _type == "hero" => {\n    eyebrow,\n    headline,\n    body,\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    },\n    layoutHint\n  },\n  _type == "heroSlide" => {\n    headline,\n    body,\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    },\n    featuredPet->{\n      _id,\n      name,\n      "slug": slug.current,\n      listingHeadline\n    },\n    featuredOwner->{\n      _id,\n      name,\n      "slug": slug.current,\n      tagline\n    }\n  },\n  _type == "contentSection" => {\n    header,\n    body[]{\n      \n  ...\n\n    },\n    media{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    },\n    layoutHint\n  },\n  _type == "calloutBlock" => {\n    headline,\n    body,\n    icon,\n    tone,\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "statBlock" => {\n    value,\n    label,\n    description,\n    icon\n  },\n  _type == "featureList" => {\n    header,\n    iconStyle,\n    items[]{\n      _key,\n      title,\n      description,\n      icon,\n      link{\n        \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n      }\n    }\n  },\n  _type == "accordion" => {\n    header,\n    items[]{\n      _key,\n      title,\n      body[]{\n        \n  ...\n\n      }\n    }\n  },\n  _type == "pricingComparisonTable" => {\n    header,\n    plans[]{\n      _key,\n      name,\n      price,\n      note,\n      highlighted\n    },\n    rows[]{\n      _key,\n      feature,\n      description,\n      values[]{\n        _key,\n        planKey,\n        included,\n        note\n      }\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "pricingValueSection" => {\n    valueItems[]{\n      _key,\n      title,\n      body,\n      icon\n    }\n  },\n  _type == "pricingPackageGrid" => {\n    header,\n    packages[]{\n      _key,\n      name,\n      price,\n      duration,\n      description,\n      icon,\n      tone,\n      badge,\n      highlighted,\n      features[]{\n        _key,\n        label\n      }\n    }\n  },\n  _type == "pricingCtaBand" => {\n    headline,\n    body,\n    icon,\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    },\n    proofItems[]{\n      _key,\n      label,\n      icon\n    }\n  },\n  _type == "processPathSection" => {\n    header,\n    title,\n    body,\n    tone,\n    icon,\n    steps[]{\n      _key,\n      title,\n      body[]{\n        \n  ...\n\n      },\n      description,\n      icon,\n      order,\n      cta{\n        \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n      }\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "warrantyConditionGrid" => {\n    header,\n    items[]{\n      _key,\n      title,\n      body,\n      tone,\n      icon\n    }\n  },\n  _type == "warrantyNoticeSection" => {\n    anchorId,\n    header,\n    body[]{\n      \n  ...\n\n    },\n    badgeLabel\n  },\n  _type == "warrantyClaimPrep" => {\n    anchorId,\n    header,\n    items[]{\n      _key,\n      title,\n      body,\n      icon\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    }\n  },\n  _type == "processStep" => {\n    title,\n    body[]{\n      \n  ...\n\n    },\n    description,\n    icon,\n    order,\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "ctaGroup" => {\n    \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n  }\n\n    },\n    primaryCta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  }\n': PET_INDEX_PAGE_QUERY_RESULT;
+    '\n  *[_type == "marketingPage" && slug.current == $slug][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    seo{\n      \n  title,\n  description,\n  noIndex,\n  openGraphImage{\n    \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n  }\n\n    },\n    sections[]{\n      \n  _key,\n  _type,\n  _type == "hero" => {\n    eyebrow,\n    headline,\n    body,\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    },\n    layoutHint\n  },\n  _type == "heroSlide" => {\n    headline,\n    body,\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    },\n    featuredPet->{\n      _id,\n      name,\n      "slug": slug.current,\n      listingHeadline\n    },\n    featuredOwner->{\n      _id,\n      name,\n      "slug": slug.current,\n      tagline\n    }\n  },\n  _type == "contentSection" => {\n    header,\n    body[]{\n      \n  ...\n\n    },\n    media{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    },\n    layoutHint\n  },\n  _type == "calloutBlock" => {\n    headline,\n    body,\n    icon,\n    tone,\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "statBlock" => {\n    value,\n    label,\n    description,\n    icon\n  },\n  _type == "featureList" => {\n    header,\n    iconStyle,\n    items[]{\n      _key,\n      title,\n      description,\n      icon,\n      link{\n        \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n      }\n    }\n  },\n  _type == "accordion" => {\n    header,\n    items[]{\n      _key,\n      title,\n      body[]{\n        \n  ...\n\n      }\n    }\n  },\n  _type == "pricingComparisonTable" => {\n    header,\n    plans[]{\n      _key,\n      name,\n      price,\n      note,\n      highlighted\n    },\n    rows[]{\n      _key,\n      feature,\n      description,\n      values[]{\n        _key,\n        planKey,\n        included,\n        note\n      }\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "pricingValueSection" => {\n    valueItems[]{\n      _key,\n      title,\n      body,\n      icon\n    }\n  },\n  _type == "pricingPackageGrid" => {\n    header,\n    packages[]{\n      _key,\n      name,\n      price,\n      duration,\n      description,\n      icon,\n      tone,\n      badge,\n      highlighted,\n      features[]{\n        _key,\n        label\n      }\n    }\n  },\n  _type == "pricingCtaBand" => {\n    headline,\n    body,\n    icon,\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    },\n    proofItems[]{\n      _key,\n      label,\n      icon\n    }\n  },\n  _type == "processPathSection" => {\n    header,\n    title,\n    body,\n    tone,\n    icon,\n    steps[]{\n      _key,\n      title,\n      body[]{\n        \n  ...\n\n      },\n      description,\n      icon,\n      order,\n      cta{\n        \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n      }\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "warrantyConditionGrid" => {\n    header,\n    items[]{\n      _key,\n      title,\n      body,\n      tone,\n      icon\n    }\n  },\n  _type == "warrantyNoticeSection" => {\n    anchorId,\n    header,\n    body[]{\n      \n  ...\n\n    },\n    badgeLabel\n  },\n  _type == "warrantyClaimPrep" => {\n    anchorId,\n    header,\n    items[]{\n      _key,\n      title,\n      body,\n      icon\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    }\n  },\n  _type == "processStep" => {\n    title,\n    body[]{\n      \n  ...\n\n    },\n    description,\n    icon,\n    order,\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "ctaGroup" => {\n    \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n  }\n\n    },\n    showContactForm\n  }\n': MARKETING_PAGE_BY_SLUG_QUERY_RESULT;
     '\n  *[_type == "marketingPage" && defined(slug.current)] | order(slug.current asc){\n    "slug": slug.current\n  }\n': MARKETING_PAGE_SLUGS_QUERY_RESULT;
-    '\n  *[_type == "systemPage" && pageType == $pageType][0]{\n    _id,\n    title,\n    pageType,\n    seo{\n      \n  title,\n  description,\n  noIndex,\n  openGraphImage{\n    \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n  }\n\n    },\n    eyebrow,\n    headline,\n    message,\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    primaryCta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    },\n    secondaryCta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    },\n    supportCopy,\n    contentSections[]{\n      \n  _key,\n  _type,\n  _type == "hero" => {\n    eyebrow,\n    headline,\n    body,\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    }\n  },\n  _type == "heroSlide" => {\n    headline,\n    body,\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    },\n    featuredPet->{\n      _id,\n      name,\n      "slug": slug.current,\n      listingHeadline\n    },\n    featuredOwner->{\n      _id,\n      name,\n      "slug": slug.current,\n      tagline\n    }\n  },\n  _type == "contentSection" => {\n    header,\n    body[]{\n      \n  ...\n\n    },\n    media{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    },\n    layoutHint\n  },\n  _type == "calloutBlock" => {\n    headline,\n    body,\n    icon,\n    tone,\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "alertBlock" => {\n    title,\n    message,\n    tone,\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "warningBlock" => {\n    title,\n    message,\n    severity,\n    icon\n  },\n  _type == "statBlock" => {\n    value,\n    label,\n    description,\n    icon\n  },\n  _type == "testimonialBlock" => {\n    header,\n    layoutHint,\n    testimonials[]->{\n      _id,\n      quote,\n      authorName,\n      authorRole,\n      rating,\n      tone,\n      authorImage{\n        \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n      }\n    }\n  },\n  _type == "featureList" => {\n    header,\n    iconStyle,\n    items[]{\n      _key,\n      title,\n      description,\n      icon,\n      link{\n        \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n      }\n    }\n  },\n  _type == "accordion" => {\n    header,\n    items[]{\n      _key,\n      title,\n      body[]{\n        \n  ...\n\n      }\n    }\n  },\n  _type == "pricingTier" => {\n    name,\n    price,\n    billingNote,\n    highlighted,\n    features[]{\n      _key,\n      label,\n      included,\n      note\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "pricingComparisonTable" => {\n    header,\n    plans[]{\n      _key,\n      name,\n      price,\n      note,\n      highlighted\n    },\n    rows[]{\n      _key,\n      feature,\n      description,\n      values[]{\n        _key,\n        planKey,\n        included,\n        note\n      }\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "processPathSection" => {\n    title,\n    body,\n    tone,\n    icon,\n    steps[]{\n      _key,\n      title,\n      body[]{\n        \n  ...\n\n      },\n      description,\n      icon,\n      order,\n      cta{\n        \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n      }\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "processStep" => {\n    title,\n    body[]{\n      \n  ...\n\n    },\n    description,\n    icon,\n    order,\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "videoEmbed" => {\n    \n  provider,\n  url,\n  title,\n  description,\n  posterImage{\n    \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n  }\n\n  },\n  _type == "ctaGroup" => {\n    \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n  }\n\n    }\n  }\n': SYSTEM_PAGE_BY_TYPE_QUERY_RESULT;
+    '\n  *[_type == "systemPage" && pageType == $pageType][0]{\n    _id,\n    title,\n    pageType,\n    seo{\n      \n  title,\n  description,\n  noIndex,\n  openGraphImage{\n    \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n  }\n\n    },\n    eyebrow,\n    headline,\n    message,\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    primaryCta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    },\n    secondaryCta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    },\n    supportCopy,\n    contentSections[]{\n      \n  _key,\n  _type,\n  _type == "hero" => {\n    eyebrow,\n    headline,\n    body,\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    },\n    layoutHint\n  },\n  _type == "heroSlide" => {\n    headline,\n    body,\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    },\n    featuredPet->{\n      _id,\n      name,\n      "slug": slug.current,\n      listingHeadline\n    },\n    featuredOwner->{\n      _id,\n      name,\n      "slug": slug.current,\n      tagline\n    }\n  },\n  _type == "contentSection" => {\n    header,\n    body[]{\n      \n  ...\n\n    },\n    media{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    },\n    layoutHint\n  },\n  _type == "calloutBlock" => {\n    headline,\n    body,\n    icon,\n    tone,\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "statBlock" => {\n    value,\n    label,\n    description,\n    icon\n  },\n  _type == "featureList" => {\n    header,\n    iconStyle,\n    items[]{\n      _key,\n      title,\n      description,\n      icon,\n      link{\n        \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n      }\n    }\n  },\n  _type == "accordion" => {\n    header,\n    items[]{\n      _key,\n      title,\n      body[]{\n        \n  ...\n\n      }\n    }\n  },\n  _type == "pricingComparisonTable" => {\n    header,\n    plans[]{\n      _key,\n      name,\n      price,\n      note,\n      highlighted\n    },\n    rows[]{\n      _key,\n      feature,\n      description,\n      values[]{\n        _key,\n        planKey,\n        included,\n        note\n      }\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "pricingValueSection" => {\n    valueItems[]{\n      _key,\n      title,\n      body,\n      icon\n    }\n  },\n  _type == "pricingPackageGrid" => {\n    header,\n    packages[]{\n      _key,\n      name,\n      price,\n      duration,\n      description,\n      icon,\n      tone,\n      badge,\n      highlighted,\n      features[]{\n        _key,\n        label\n      }\n    }\n  },\n  _type == "pricingCtaBand" => {\n    headline,\n    body,\n    icon,\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    },\n    proofItems[]{\n      _key,\n      label,\n      icon\n    }\n  },\n  _type == "processPathSection" => {\n    header,\n    title,\n    body,\n    tone,\n    icon,\n    steps[]{\n      _key,\n      title,\n      body[]{\n        \n  ...\n\n      },\n      description,\n      icon,\n      order,\n      cta{\n        \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n      }\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "warrantyConditionGrid" => {\n    header,\n    items[]{\n      _key,\n      title,\n      body,\n      tone,\n      icon\n    }\n  },\n  _type == "warrantyNoticeSection" => {\n    anchorId,\n    header,\n    body[]{\n      \n  ...\n\n    },\n    badgeLabel\n  },\n  _type == "warrantyClaimPrep" => {\n    anchorId,\n    header,\n    items[]{\n      _key,\n      title,\n      body,\n      icon\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    }\n  },\n  _type == "processStep" => {\n    title,\n    body[]{\n      \n  ...\n\n    },\n    description,\n    icon,\n    order,\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "ctaGroup" => {\n    \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n  }\n\n    }\n  }\n': SYSTEM_PAGE_BY_TYPE_QUERY_RESULT;
     '\n  *[\n  \n  _type == "pet" &&\n  defined(slug.current) &&\n  submissionStatus == "approved"\n &&\n  (!defined($petTypeSlugs) || petType->slug.current in $petTypeSlugs) &&\n  (!defined($availabilityStatuses) || availabilityStatus in $availabilityStatuses) &&\n  (!defined($cuddlePolicies) || cuddlePolicy in $cuddlePolicies) &&\n  (!defined($minChaos) || chaosLevel >= $minChaos) &&\n  (!defined($minMess) || messRisk >= $minMess) &&\n  (!defined($minEnergy) || energyLevel >= $minEnergy)\n]\n  | order(name asc, _id asc)[$start...$end]{\n    \n  _id,\n  name,\n  "slug": slug.current,\n  breed,\n  listingHeadline,\n  listingSummary,\n  availabilityStatus,\n  distanceKilometers,\n  listingPlan,\n  hostPayoutAmount,\n  hostPayoutCurrency,\n  hostPayoutUnit,\n  temperament,\n  pickupUrgency,\n  messRisk,\n  chaosLevel,\n  energyLevel,\n  cuddlePolicy,\n  cardMedia{\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    lowFrameRateVideo{\n      \n  provider,\n  url,\n  title,\n  description,\n  posterImage{\n    \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n  }\n\n    }\n  },\n  petType->{\n    _id,\n    name,\n    pluralName,\n    "slug": slug.current,\n    filterLabel,\n    icon,\n    category,\n    sortOrder\n  },\n  owner->{\n    _id,\n    name,\n    "slug": slug.current,\n    tagline\n  }\n\n  }\n': PETS_INDEX_QUERY_RESULT;
     '\n  count(*[\n  \n  _type == "pet" &&\n  defined(slug.current) &&\n  submissionStatus == "approved"\n &&\n  (!defined($petTypeSlugs) || petType->slug.current in $petTypeSlugs) &&\n  (!defined($availabilityStatuses) || availabilityStatus in $availabilityStatuses) &&\n  (!defined($cuddlePolicies) || cuddlePolicy in $cuddlePolicies) &&\n  (!defined($minChaos) || chaosLevel >= $minChaos) &&\n  (!defined($minMess) || messRisk >= $minMess) &&\n  (!defined($minEnergy) || energyLevel >= $minEnergy)\n])\n': PETS_INDEX_COUNT_QUERY_RESULT;
     '\n  *[\n  _type == "pet" &&\n  defined(slug.current) &&\n  submissionStatus == "approved"\n && slug.current == $slug][0]{\n    _id,\n    name,\n    "slug": slug.current,\n    breed,\n    ageYears,\n    dateOfBirth,\n    listingHeadline,\n    listingSummary,\n    availabilityStatus,\n    temperament,\n    pickupUrgency,\n    messRisk,\n    chaosLevel,\n    energyLevel,\n    cuddlePolicy,\n    cardMedia{\n      image{\n        \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n      },\n      lowFrameRateVideo{\n        \n  provider,\n  url,\n  title,\n  description,\n  posterImage{\n    \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n  }\n\n      }\n    },\n    heroImages[]{\n      _key,\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    summary,\n    description[]{\n      \n  ...\n\n    },\n    personalityTraits[],\n    careNotes[],\n    availability[],\n    borrowTerms[],\n    stats[],\n    warnings[],\n    videos[]{\n      _key,\n      \n  provider,\n  url,\n  title,\n  description,\n  posterImage{\n    \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n  }\n\n    },\n    contactOwnerCta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    },\n    seo{\n      \n  title,\n  description,\n  noIndex,\n  openGraphImage{\n    \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n  }\n\n    },\n    petType->{\n      _id,\n      name,\n      pluralName,\n      "slug": slug.current,\n      filterLabel,\n      icon,\n      category,\n      summary\n    },\n    owner->{\n      _id,\n      name,\n      "slug": slug.current,\n      tagline,\n      bio[]{\n        \n  ...\n\n      },\n      location,\n      memberSince,\n      portrait{\n        \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n      },\n      contactCta{\n        \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n      }\n    },\n    testimonial->{\n      _id,\n      quote,\n      authorName,\n      authorRole,\n      rating,\n      tone,\n      authorImage{\n        \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n      }\n    }\n  }\n': PET_BY_SLUG_QUERY_RESULT;

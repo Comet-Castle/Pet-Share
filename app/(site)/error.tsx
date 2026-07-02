@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { Home, RotateCcw } from "lucide-react";
+import { AlertTriangle, Home, RotateCcw } from "lucide-react";
 import Link from "next/link";
 
 type SiteErrorProps = Readonly<{
@@ -18,13 +18,16 @@ export default function SiteError({ error, reset }: SiteErrorProps) {
   }, [error]);
 
   return (
-    <section className="mx-auto flex min-h-[60vh] w-full max-w-[960px] items-center px-5 py-16 sm:px-8 lg:px-10">
-      <div className="w-full rounded-[2rem] bg-white/75 p-6 text-center shadow-soft backdrop-blur sm:p-10">
-        <p className="text-sm font-bold uppercase tracking-[0.18em] text-pet-muted">Something slipped the leash</p>
-        <h1 className="mx-auto mt-3 max-w-3xl font-display text-4xl font-bold leading-tight text-pet-ink sm:text-5xl">
+    <section className="mx-auto flex min-h-[62vh] w-full max-w-[1440px] items-center px-5 py-12 sm:px-8 lg:px-10 lg:py-16">
+      <div className="mx-auto w-full max-w-4xl rounded-[2rem] bg-white/78 p-6 text-center shadow-soft backdrop-blur sm:p-10">
+        <div className="mx-auto flex size-16 items-center justify-center rounded-full bg-pet-coral/16 text-pet-ink">
+          <AlertTriangle aria-hidden="true" size={30} />
+        </div>
+        <p className="mt-6 text-sm font-bold uppercase tracking-[0.18em] text-pet-muted">Something slipped the leash</p>
+        <h1 className="mx-auto mt-3 max-w-3xl text-wrap font-display text-5xl font-bold leading-[1.04] text-pet-ink sm:text-6xl lg:text-7xl">
           The page got distracted by a squeaky toy.
         </h1>
-        <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-pet-muted">
+        <p className="mx-auto mt-5 max-w-3xl text-lg leading-8 text-pet-muted sm:text-xl">
           Try again in a moment. If this keeps happening, the debug logs should have the non-secret details.
         </p>
         <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">

@@ -18,7 +18,7 @@ function MarketingFormPlaceholder({ pageSlug }: Readonly<{ pageSlug: string }>) 
   const title = isWarranty ? "The warranty desk is still training." : "Send us a message.";
   const message = isWarranty
     ? "This claim form is not taking claims yet. Please keep the evidence somewhere the pet cannot improve it."
-    : "This contact form is ready for layout review while email delivery is being connected to the master inbox.";
+    : "Tell us what you need, and the Pet Share desk will route it to the person least likely to be distracted by a small face in the hallway.";
   const submitLabel = isWarranty ? "File claim" : "Send message";
   const textAreaLabel = isWarranty ? "Incident summary" : "Message";
 
@@ -104,7 +104,7 @@ export async function generateMetadata({ params }: MarketingSlugPageProps): Prom
 }
 
 /**
- * Renders CMS-authored marketing pages through starter section placeholders.
+ * Renders CMS-authored Standard Pages through shared page-builder sections.
  */
 export default async function MarketingSlugPage({ params }: MarketingSlugPageProps) {
   const { slug } = await params;

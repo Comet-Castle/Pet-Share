@@ -66,7 +66,13 @@ export function SectionCtaGroup({ group }: CtaGroupProps) {
   }
 
   return (
-    <div className={joinClassNames("mt-8 flex flex-col gap-3 sm:flex-row", group.alignment === "center" && "justify-center")}>
+    <div
+      className={joinClassNames(
+        "mt-8 flex flex-col gap-3 sm:flex-row",
+        group.alignment === "center" && "justify-center",
+        group.alignment === "right" && "justify-end"
+      )}
+    >
       <SectionCtaLink cta={group.primary} />
       <SectionCtaLink cta={group.secondary} />
     </div>

@@ -1,13 +1,15 @@
-import type { HOME_PAGE_QUERY_RESULT, MARKETING_PAGE_BY_SLUG_QUERY_RESULT } from "@/sanity.types";
+import type { HOME_PAGE_QUERY_RESULT, MARKETING_PAGE_BY_SLUG_QUERY_RESULT, SYSTEM_PAGE_BY_TYPE_QUERY_RESULT } from "@/sanity.types";
 
 type HomePageWithSections = Extract<NonNullable<HOME_PAGE_QUERY_RESULT>, { contentSections: Array<unknown> }>;
 type HomePageWithHeroCarousel = Extract<NonNullable<HOME_PAGE_QUERY_RESULT>, { heroCarousel: Array<unknown> }>;
 type MarketingPageWithSections = NonNullable<MARKETING_PAGE_BY_SLUG_QUERY_RESULT>;
+type SystemPageWithSections = Extract<NonNullable<SYSTEM_PAGE_BY_TYPE_QUERY_RESULT>, { contentSections: Array<unknown> }>;
 
 export type PageSection =
   | HomePageWithSections["contentSections"][number]
   | HomePageWithHeroCarousel["heroCarousel"][number]
-  | MarketingPageWithSections["sections"][number];
+  | MarketingPageWithSections["sections"][number]
+  | SystemPageWithSections["contentSections"][number];
 
 export type CtaLinkValue = Readonly<{
   type: "action" | "externalUrl" | "internalPath";
@@ -28,5 +30,5 @@ export type CtaValue = Readonly<{
 export type CtaGroupValue = Readonly<{
   primary: CtaValue;
   secondary: CtaValue;
-  alignment: "center" | "left" | null;
+  alignment: "center" | "left" | "right" | null;
 }> | null;

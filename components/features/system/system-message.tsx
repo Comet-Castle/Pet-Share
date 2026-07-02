@@ -1,5 +1,9 @@
 import { AlertTriangle, ArrowLeft, Home, SearchX } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { SanityImage, type SanityImageValue } from "@/components/ui/sanity-image";
+import { joinClassNames } from "@/lib/utils/class-names";
+import { PageSections } from "../sections/page-sections";
+import type { PageSection } from "../sections/section-types";
 
 type SystemMessageVariant = "empty" | "error" | "notFound";
 
@@ -13,6 +17,8 @@ type SystemMessageProps = Readonly<{
   secondaryHref?: string;
   secondaryLabel?: string;
   variant?: SystemMessageVariant;
+  image?: SanityImageValue;
+  sections?: PageSection[] | null;
 }>;
 
 const variantIcon = {
@@ -33,35 +39,68 @@ export function SystemMessage({
   primaryLabel = "Go home",
   secondaryHref,
   secondaryLabel,
-  variant = "empty"
+  variant = "empty",
+  image,
+  sections
 }: SystemMessageProps) {
   const Icon = variantIcon[variant];
+  const hasImage = Boolean(image?.image?.asset?.url);
+  const hasSections = Boolean(sections?.length);
 
   return (
-    <section className="mx-auto flex min-h-[60vh] w-full max-w-[960px] items-center px-5 py-16 sm:px-8 lg:px-10">
-      <div className="w-full rounded-[2rem] bg-white/75 p-6 text-center shadow-soft backdrop-blur sm:p-10">
-        <div className="mx-auto flex size-16 items-center justify-center rounded-full bg-pet-coral/20 text-pet-ink">
-          <Icon aria-hidden="true" size={30} />
-        </div>
-        <p className="mt-6 text-sm font-bold uppercase tracking-[0.18em] text-pet-muted">{eyebrow}</p>
-        <h1 className="mx-auto mt-3 max-w-3xl font-display text-4xl font-bold leading-tight text-pet-ink sm:text-5xl">
-          {title}
-        </h1>
-        <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-pet-muted">{message}</p>
-        {supportCopy ? (
-          <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-pet-muted">{supportCopy}</p>
-        ) : null}
-        <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-          <Button href={primaryHref} icon={<Home aria-hidden="true" size={18} />}>
-            {primaryLabel}
-          </Button>
-          {secondaryHref && secondaryLabel ? (
-            <Button href={secondaryHref} variant="secondary" icon={<ArrowLeft aria-hidden="true" size={18} />}>
-              {secondaryLabel}
-            </Button>
+    <>
+      <section className="mx-auto flex min-h-[62vh] w-full max-w-[1440px] items-center px-5 py-12 sm:px-8 lg:px-10 lg:py-16">
+        <div
+          className={joinClassNames(
+            "grid w-full gap-8 rounded-[2rem] bg-white/78 p-6 shadow-soft backdrop-blur sm:p-8 lg:p-10",
+            hasImage && "lg:grid-cols-[minmax(0,0.95fr)_minmax(22rem,0.85fr)] lg:items-center"
+          )}
+        >
+          <div className={joinClassNames("min-w-0", !hasImage && "mx-auto max-w-4xl text-center")}>
+            <div
+              className={joinClassNames(
+                "flex size-16 items-center justify-center rounded-full bg-pet-coral/16 text-pet-ink",
+                !hasImage && "mx-auto"
+              )}
+            >
+              <Icon aria-hidden="true" size={30} />
+            </div>
+            <p className="mt-6 text-sm font-bold uppercase tracking-[0.18em] text-pet-muted">{eyebrow}</p>
+            <h1 className="mt-3 text-wrap font-display text-5xl font-bold leading-[1.04] text-pet-ink sm:text-6xl lg:text-7xl">
+              {title}
+            </h1>
+            <p className={joinClassNames("mt-5 text-lg leading-8 text-pet-muted sm:text-xl", !hasImage && "mx-auto max-w-3xl")}>
+              {message}
+            </p>
+            {supportCopy ? (
+              <p className={joinClassNames("mt-4 text-sm leading-6 text-pet-muted", !hasImage && "mx-auto max-w-2xl")}>
+                {supportCopy}
+              </p>
+            ) : null}
+            <div className={joinClassNames("mt-8 flex flex-col gap-3 sm:flex-row", !hasImage && "justify-center")}>
+              <Button href={primaryHref} icon={<Home aria-hidden="true" size={18} />}>
+                {primaryLabel}
+              </Button>
+              {secondaryHref && secondaryLabel ? (
+                <Button href={secondaryHref} variant="secondary" icon={<ArrowLeft aria-hidden="true" size={18} />}>
+                  {secondaryLabel}
+                </Button>
+              ) : null}
+            </div>
+          </div>
+
+          {hasImage ? (
+            <SanityImage
+              image={image ?? null}
+              className="min-h-[22rem] rounded-[2rem] shadow-soft"
+              imageClassName="object-cover"
+              priority
+              sizes="(min-width: 1024px) 38vw, 90vw"
+            />
           ) : null}
         </div>
-      </div>
-    </section>
+      </section>
+      {hasSections ? <PageSections sections={sections} /> : null}
+    </>
   );
 }

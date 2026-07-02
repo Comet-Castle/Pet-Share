@@ -2,12 +2,11 @@ import Link from "next/link";
 import {
   AlertTriangle,
   CheckCircle2,
-  CirclePlay,
+  ChevronDown,
   Home,
   ListChecks,
-  Quote,
+  Megaphone,
   Search,
-  ShieldAlert,
   Star
 } from "lucide-react";
 import { IconBadge } from "@/components/ui/icon-badge";
@@ -26,7 +25,7 @@ type SectionHeaderValue = Readonly<{
   eyebrow?: string | null;
   headline: string;
   body?: string | null;
-  alignment?: "center" | "left" | null;
+  alignment?: "center" | "left" | "right" | null;
 }> | null;
 
 type SectionByType<Type extends PageSection["_type"]> = Extract<PageSection, { _type: Type }>;
@@ -39,13 +38,20 @@ function SectionFrame({ children, className }: Readonly<{ children: React.ReactN
   );
 }
 
-function SectionHeader({ header }: Readonly<{ header: SectionHeaderValue }>) {
+function SectionHeader({ header, className }: Readonly<{ header: SectionHeaderValue; className?: string }>) {
   if (!header) {
     return null;
   }
 
   return (
-    <div className={joinClassNames("mb-8", header.alignment === "center" && "mx-auto max-w-3xl text-center")}>
+    <div
+      className={joinClassNames(
+        "mb-8",
+        header.alignment === "center" && "mx-auto max-w-3xl text-center",
+        header.alignment === "right" && "ml-auto max-w-3xl text-right",
+        className
+      )}
+    >
       {header.eyebrow ? (
         <p className="text-sm font-bold uppercase tracking-[0.18em] text-pet-muted">{header.eyebrow}</p>
       ) : null}
@@ -56,6 +62,23 @@ function SectionHeader({ header }: Readonly<{ header: SectionHeaderValue }>) {
 }
 
 function HeroSection(section: SectionByType<"hero">) {
+  if (section.layoutHint === "centered") {
+    return (
+      <SectionFrame className="pb-8 pt-10 lg:pb-10 lg:pt-16">
+        <div className="mx-auto max-w-5xl text-center">
+          {section.eyebrow ? (
+            <p className="text-sm font-bold uppercase tracking-[0.18em] text-pet-muted">{section.eyebrow}</p>
+          ) : null}
+          <h1 className="text-wrap font-display text-5xl font-bold leading-[1.02] text-pet-ink sm:text-6xl lg:text-7xl">
+            {section.headline}
+          </h1>
+          {section.body ? <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-pet-muted sm:text-xl">{section.body}</p> : null}
+          <SectionCtaGroup group={section.ctaGroup} />
+        </div>
+      </SectionFrame>
+    );
+  }
+
   return (
     <SectionFrame>
       <div className="grid min-h-[520px] min-w-0 items-center gap-8 rounded-[2rem] bg-white/65 p-6 shadow-soft backdrop-blur sm:p-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
@@ -158,46 +181,6 @@ function CalloutBlock(section: SectionByType<"calloutBlock">) {
   );
 }
 
-function AlertBlock(section: SectionByType<"alertBlock">) {
-  const toneClass = section.tone === "warning" ? "bg-pet-coral/20" : section.tone === "success" ? "bg-pet-mint/35" : "bg-pet-blue/20";
-
-  return (
-    <SectionFrame>
-      <div className={joinClassNames("rounded-[2rem] p-6 shadow-soft sm:p-8", toneClass)}>
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
-          <IconBadge icon={section.tone === "warning" ? "warning" : "alert"} className="bg-white/75" />
-          <div className="min-w-0">
-            <h2 className="font-display text-3xl font-bold text-pet-ink">{section.title}</h2>
-            <p className="mt-3 text-lg leading-8 text-pet-muted">{section.message}</p>
-            <div className="mt-6">
-              <SectionCtaLink cta={section.cta} />
-            </div>
-          </div>
-        </div>
-      </div>
-    </SectionFrame>
-  );
-}
-
-function WarningBlock(section: SectionByType<"warningBlock">) {
-  return (
-    <SectionFrame>
-      <aside className="rounded-[2rem] bg-pet-coral/15 p-6 shadow-soft sm:p-8" aria-label="Warning">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
-          <IconBadge icon={section.icon ?? "warning"} className="bg-white/75" />
-          <div className="min-w-0">
-            <p className="text-sm font-bold uppercase tracking-[0.18em] text-pet-muted">
-              {section.severity ? `${section.severity} warning` : "warning"}
-            </p>
-            <h2 className="mt-2 font-display text-3xl font-bold text-pet-ink">{section.title}</h2>
-            <p className="mt-3 text-lg leading-8 text-pet-muted">{section.message}</p>
-          </div>
-        </div>
-      </aside>
-    </SectionFrame>
-  );
-}
-
 function StatBlock(section: SectionByType<"statBlock">) {
   return (
     <SectionFrame className="py-6">
@@ -206,32 +189,6 @@ function StatBlock(section: SectionByType<"statBlock">) {
         <p className="mt-4 font-display text-5xl font-bold text-pet-ink">{section.value}</p>
         <h2 className="mt-2 font-display text-2xl font-bold text-pet-ink">{section.label}</h2>
         {section.description ? <p className="mx-auto mt-3 max-w-2xl leading-7 text-pet-muted">{section.description}</p> : null}
-      </div>
-    </SectionFrame>
-  );
-}
-
-function TestimonialBlock(section: SectionByType<"testimonialBlock">) {
-  return (
-    <SectionFrame>
-      <SectionHeader header={section.header} />
-      <div className={joinClassNames("grid min-w-0 gap-5", section.layoutHint === "featured" ? "lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]" : "md:grid-cols-2 xl:grid-cols-3")}>
-        {section.testimonials?.map((testimonial) => (
-          <figure key={testimonial._id} className="min-w-0 rounded-[2rem] bg-white/70 p-6 shadow-soft backdrop-blur">
-            <Quote aria-hidden="true" className="text-pet-coral" size={28} />
-            <blockquote className="mt-4 text-lg leading-8 text-pet-ink">{testimonial.quote}</blockquote>
-            <figcaption className="mt-5">
-              <p className="font-display text-xl font-bold text-pet-ink">{testimonial.authorName}</p>
-              {testimonial.authorRole ? <p className="text-sm font-bold text-pet-muted">{testimonial.authorRole}</p> : null}
-              {testimonial.rating ? (
-                <p className="mt-2 inline-flex items-center gap-1 text-sm font-bold text-pet-muted">
-                  <Star aria-hidden="true" size={16} className="fill-pet-coral text-pet-coral" />
-                  {testimonial.rating}/5
-                </p>
-              ) : null}
-            </figcaption>
-          </figure>
-        ))}
       </div>
     </SectionFrame>
   );
@@ -278,42 +235,6 @@ function AccordionSection(section: SectionByType<"accordion">) {
           </details>
         ))}
       </div>
-    </SectionFrame>
-  );
-}
-
-function PricingTier(section: SectionByType<"pricingTier">) {
-  return (
-    <SectionFrame className="py-6">
-      <article
-        className={joinClassNames(
-          "rounded-[2rem] p-6 shadow-soft sm:p-8",
-          section.highlighted ? "bg-pet-coral/20 ring-2 ring-pet-coral" : "bg-white/70 backdrop-blur"
-        )}
-      >
-        <p className="text-sm font-bold uppercase tracking-[0.18em] text-pet-muted">Pricing</p>
-        <h2 className="mt-2 font-display text-3xl font-bold text-pet-ink">{section.name}</h2>
-        {section.price ? <p className="mt-4 font-display text-5xl font-bold text-pet-ink">{section.price}</p> : null}
-        {section.billingNote ? <p className="mt-2 text-sm font-bold text-pet-muted">{section.billingNote}</p> : null}
-        <ul className="mt-6 space-y-3">
-          {section.features?.map((feature) => (
-            <li key={feature._key} className="flex gap-3 text-pet-muted">
-              {feature.included === false ? (
-                <AlertTriangle aria-hidden="true" className="mt-1 shrink-0 text-pet-coral" size={18} />
-              ) : (
-                <CheckCircle2 aria-hidden="true" className="mt-1 shrink-0 text-pet-ink" size={18} />
-              )}
-              <span>
-                <strong className="text-pet-ink">{feature.label}</strong>
-                {feature.note ? ` - ${feature.note}` : ""}
-              </span>
-            </li>
-          ))}
-        </ul>
-        <div className="mt-8">
-          <SectionCtaLink cta={section.cta} />
-        </div>
-      </article>
     </SectionFrame>
   );
 }
@@ -386,17 +307,211 @@ function PricingComparisonTable(section: SectionByType<"pricingComparisonTable">
   );
 }
 
+const pricingToneClasses = {
+  coral: "bg-pet-coral/14 text-pet-coral",
+  mint: "bg-pet-mint/35 text-pet-ink",
+  blue: "bg-pet-blue/25 text-pet-ink",
+  cream: "bg-pet-cream text-pet-ink"
+} as const;
+
+function PricingValueSection(section: SectionByType<"pricingValueSection">) {
+  return (
+    <SectionFrame className="pb-16 pt-0 lg:pb-20">
+      {section.valueItems?.length ? (
+        <div className="grid gap-5 rounded-[2rem] bg-white/72 p-5 shadow-soft backdrop-blur sm:grid-cols-3 sm:p-7">
+          {section.valueItems.map((item) => (
+            <article key={item._key} className="flex min-w-0 gap-4 rounded-[1.5rem] bg-white/70 p-5">
+              <IconBadge icon={item.icon} className="size-12 bg-pet-coral/12 text-pet-coral" />
+              <div className="min-w-0">
+                <h2 className="font-display text-xl font-bold leading-tight text-pet-ink">{item.title}</h2>
+                <p className="mt-2 text-sm leading-6 text-pet-muted">{item.body}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      ) : null}
+    </SectionFrame>
+  );
+}
+
+function PricingPackageGrid(section: SectionByType<"pricingPackageGrid">) {
+  return (
+    <SectionFrame className="pb-20">
+      <div className="mb-9 flex flex-col gap-4 text-center sm:items-center">
+        <SectionHeader header={section.header} />
+      </div>
+
+      <div className="grid gap-6 lg:grid-cols-2">
+        {section.packages?.map((plan) => (
+          <article
+            key={plan._key}
+            className={joinClassNames(
+              "relative grid min-w-0 gap-5 rounded-[2rem] bg-white/86 p-6 shadow-soft backdrop-blur transition duration-200 hover:-translate-y-1 sm:grid-cols-[auto_minmax(0,1fr)] sm:p-7",
+              plan.highlighted && "ring-2 ring-pet-coral/45"
+            )}
+          >
+            {plan.badge ? (
+              <span className="absolute right-5 top-5 rounded-full bg-pet-coral px-3 py-1 text-xs font-bold text-white">
+                {plan.badge}
+              </span>
+            ) : null}
+            <IconBadge
+              icon={plan.icon}
+              className={joinClassNames("size-16", pricingToneClasses[(plan.tone ?? "mint") as keyof typeof pricingToneClasses])}
+            />
+            <div className="min-w-0 pr-0 sm:pr-24">
+              <div className="flex flex-wrap items-end gap-x-3 gap-y-1">
+                <h3 className="font-display text-2xl font-bold leading-tight text-pet-ink">{plan.name}</h3>
+                <p className="font-display text-3xl font-bold leading-none text-pet-ink">{plan.price}</p>
+                <p className="pb-1 text-sm font-bold text-pet-muted">{plan.duration}</p>
+              </div>
+              <p className="mt-3 max-w-2xl text-base leading-7 text-pet-muted">{plan.description}</p>
+              <ul className="mt-5 grid gap-3 text-sm font-bold text-pet-ink sm:grid-cols-2">
+                {plan.features?.map((feature) => (
+                  <li key={feature._key} className="flex min-w-0 items-start gap-2">
+                    <CheckCircle2 aria-hidden="true" className="mt-0.5 shrink-0 text-pet-coral" size={17} strokeWidth={3} />
+                    <span>{feature.label}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </article>
+        ))}
+      </div>
+    </SectionFrame>
+  );
+}
+
+function PricingCtaBand(section: SectionByType<"pricingCtaBand">) {
+  return (
+    <SectionFrame className="pb-4 pt-0">
+      <div className="grid gap-8 rounded-[2rem] bg-pet-coral/14 p-6 shadow-soft sm:p-10 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:p-12">
+        <div className="min-w-0">
+          <IconBadge icon={section.icon ?? "Megaphone"} className="mb-5 size-16 bg-white text-pet-coral shadow-sm" />
+          <h2 className="font-display text-4xl font-bold leading-tight text-pet-ink sm:text-5xl">{section.headline}</h2>
+          <p className="mt-4 max-w-3xl text-lg leading-8 text-pet-muted">{section.body}</p>
+          <SectionCtaGroup group={section.ctaGroup} />
+        </div>
+        {section.proofItems?.length ? (
+          <div className="grid min-w-0 gap-4 sm:grid-cols-3 lg:w-[28rem]">
+            {section.proofItems.map((item) => (
+              <div
+                key={item._key}
+                className="flex min-h-36 flex-col items-center justify-center rounded-[1.5rem] bg-white/80 p-5 text-center shadow-sm"
+              >
+                <IconBadge icon={item.icon} className="size-12 bg-transparent text-pet-coral" />
+                <p className="mt-3 text-sm font-bold leading-5 text-pet-ink">{item.label}</p>
+              </div>
+            ))}
+          </div>
+        ) : null}
+      </div>
+    </SectionFrame>
+  );
+}
+
+const warrantyToneClasses = {
+  covered: {
+    shell: "bg-pet-mint/28",
+    icon: "bg-white/80 text-pet-ink",
+    label: "text-pet-ink"
+  },
+  excluded: {
+    shell: "bg-pet-coral/14",
+    icon: "bg-white/85 text-pet-coral",
+    label: "text-pet-coral"
+  },
+  evidence: {
+    shell: "bg-pet-blue/22",
+    icon: "bg-white/85 text-pet-ink",
+    label: "text-pet-ink"
+  }
+} as const;
+
+function WarrantyConditionGrid(section: SectionByType<"warrantyConditionGrid">) {
+  return (
+    <SectionFrame className="pb-16 pt-4">
+      <SectionHeader header={section.header} />
+      <div className="grid gap-5 lg:grid-cols-3">
+        {section.items?.map((item) => {
+          const tone = warrantyToneClasses[(item.tone ?? "covered") as keyof typeof warrantyToneClasses];
+
+          return (
+            <article
+              key={item._key}
+              className={joinClassNames("min-w-0 rounded-[2rem] p-6 shadow-soft transition duration-200 hover:-translate-y-1 sm:p-7", tone.shell)}
+            >
+              <IconBadge icon={item.icon} className={joinClassNames("mb-7 size-16 shadow-sm", tone.icon)} />
+              <h2 className={joinClassNames("font-display text-2xl font-bold leading-tight", tone.label)}>{item.title}</h2>
+              <p className="mt-4 text-base leading-7 text-pet-muted">{item.body}</p>
+            </article>
+          );
+        })}
+      </div>
+    </SectionFrame>
+  );
+}
+
+function WarrantyNoticeSection(section: SectionByType<"warrantyNoticeSection">) {
+  return (
+    <SectionFrame className="py-14">
+      <section id={section.anchorId ?? undefined} className="rounded-[2rem] bg-white/78 p-6 shadow-soft backdrop-blur sm:p-8 lg:p-10">
+        <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+          <SectionHeader header={section.header} className="mb-0 lg:max-w-4xl" />
+          {section.badgeLabel ? (
+            <span className="w-fit rounded-full bg-pet-cream px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] text-pet-muted">
+              {section.badgeLabel}
+            </span>
+          ) : null}
+        </div>
+        <div className="mt-8 rounded-[1.5rem] bg-pet-cream/65 p-5 sm:p-7">
+          <RichText value={section.body} />
+        </div>
+      </section>
+    </SectionFrame>
+  );
+}
+
+function WarrantyClaimPrep(section: SectionByType<"warrantyClaimPrep">) {
+  return (
+    <SectionFrame className="pb-10 pt-8">
+      <section
+        id={section.anchorId ?? undefined}
+        className="grid gap-8 rounded-[2rem] bg-pet-coral/12 p-6 shadow-soft sm:p-8 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:p-10"
+      >
+        <div className="min-w-0">
+          <SectionHeader header={section.header} className="mb-0" />
+          <SectionCtaGroup group={section.ctaGroup} />
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2">
+          {section.items?.map((item) => (
+            <article key={item._key} className="min-w-0 rounded-[1.5rem] bg-white/78 p-5 shadow-sm">
+              <IconBadge icon={item.icon} className="mb-4 size-12 bg-pet-cream text-pet-ink" />
+              <h3 className="font-display text-xl font-bold leading-tight text-pet-ink">{item.title}</h3>
+              <p className="mt-2 text-sm leading-6 text-pet-muted">{item.body}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+    </SectionFrame>
+  );
+}
+
 function ProcessPathSection(section: SectionByType<"processPathSection">) {
   const toneClass = section.tone === "owner" ? "bg-pet-mint/25" : section.tone === "host" ? "bg-pet-blue/20" : "bg-white/70";
   const HeaderIcon = section.tone === "owner" ? Home : section.tone === "host" ? Search : ListChecks;
+  const header = section.header ?? {
+    headline: section.title ?? "Process path",
+    body: section.body ?? null,
+    alignment: "left" as const
+  };
 
   return (
     <SectionFrame>
       <section className={joinClassNames("rounded-[2rem] p-6 shadow-soft sm:p-8", toneClass)}>
         <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div className="min-w-0">
-            <h2 className="font-display text-3xl font-bold leading-tight text-pet-ink sm:text-4xl">{section.title}</h2>
-            <p className="mt-3 max-w-3xl text-base leading-7 text-pet-muted sm:text-lg">{section.body}</p>
+            <SectionHeader header={header} className="mb-0" />
           </div>
           <span className="flex size-14 shrink-0 items-center justify-center rounded-full bg-white/85 text-pet-ink shadow-sm">
             {section.icon ? <IconBadge icon={section.icon} className="size-14 bg-transparent" /> : <HeaderIcon aria-hidden="true" size={28} />}
@@ -429,49 +544,6 @@ function ProcessPathSection(section: SectionByType<"processPathSection">) {
   );
 }
 
-function getVideoEmbedUrl(section: SectionByType<"videoEmbed">) {
-  if (section.provider === "youtube") {
-    const match = section.url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+)/);
-    return match ? `https://www.youtube.com/embed/${match[1]}` : null;
-  }
-
-  if (section.provider === "vimeo") {
-    const match = section.url.match(/vimeo\.com\/(\d+)/);
-    return match ? `https://player.vimeo.com/video/${match[1]}` : null;
-  }
-
-  return null;
-}
-
-function VideoEmbed(section: SectionByType<"videoEmbed">) {
-  const embedUrl = getVideoEmbedUrl(section);
-
-  return (
-    <SectionFrame>
-      <div className="rounded-[2rem] bg-white/70 p-5 shadow-soft backdrop-blur sm:p-6">
-        <div className="relative aspect-video overflow-hidden rounded-[1.5rem] bg-pet-ink">
-          {embedUrl ? (
-            <iframe
-              src={embedUrl}
-              title={section.title}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              className="absolute inset-0 size-full"
-            />
-          ) : (
-            <Link href={section.url} className="flex size-full items-center justify-center text-white">
-              <CirclePlay aria-hidden="true" size={54} />
-              <span className="sr-only">Open video</span>
-            </Link>
-          )}
-        </div>
-        <h2 className="mt-5 font-display text-2xl font-bold text-pet-ink">{section.title}</h2>
-        {section.description ? <p className="mt-2 leading-7 text-pet-muted">{section.description}</p> : null}
-      </div>
-    </SectionFrame>
-  );
-}
-
 function CtaGroupSection(section: SectionByType<"ctaGroup">) {
   return (
     <SectionFrame>
@@ -493,26 +565,28 @@ function renderSection(section: PageSection) {
       return <ContentSection key={section._key} {...section} />;
     case "calloutBlock":
       return <CalloutBlock key={section._key} {...section} />;
-    case "alertBlock":
-      return <AlertBlock key={section._key} {...section} />;
-    case "warningBlock":
-      return <WarningBlock key={section._key} {...section} />;
     case "statBlock":
       return <StatBlock key={section._key} {...section} />;
-    case "testimonialBlock":
-      return <TestimonialBlock key={section._key} {...section} />;
     case "featureList":
       return <FeatureList key={section._key} {...section} />;
     case "accordion":
       return <AccordionSection key={section._key} {...section} />;
-    case "pricingTier":
-      return <PricingTier key={section._key} {...section} />;
     case "pricingComparisonTable":
       return <PricingComparisonTable key={section._key} {...section} />;
+    case "pricingValueSection":
+      return <PricingValueSection key={section._key} {...section} />;
+    case "pricingPackageGrid":
+      return <PricingPackageGrid key={section._key} {...section} />;
+    case "pricingCtaBand":
+      return <PricingCtaBand key={section._key} {...section} />;
     case "processPathSection":
       return <ProcessPathSection key={section._key} {...section} />;
-    case "videoEmbed":
-      return <VideoEmbed key={section._key} {...section} />;
+    case "warrantyConditionGrid":
+      return <WarrantyConditionGrid key={section._key} {...section} />;
+    case "warrantyNoticeSection":
+      return <WarrantyNoticeSection key={section._key} {...section} />;
+    case "warrantyClaimPrep":
+      return <WarrantyClaimPrep key={section._key} {...section} />;
     case "ctaGroup":
       return <CtaGroupSection key={section._key} {...section} />;
     default:

@@ -28,6 +28,8 @@ export default async function NotFoundPage() {
         primaryLabel={page.primaryCta?.label ?? "Go home"}
         secondaryHref={page.secondaryCta?.link.path ?? "/pets"}
         secondaryLabel={page.secondaryCta?.label ?? "Find a temporary pet"}
+        image={page.image}
+        sections={page.contentSections}
       />
     );
   }

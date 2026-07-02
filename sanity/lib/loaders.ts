@@ -118,7 +118,9 @@ export function loadMarketingPageBySlug(slug: string, options: LoadOptions = {})
     ...options,
     query: MARKETING_PAGE_BY_SLUG_QUERY,
     params: { slug },
-    tags: [sanityTags.marketingPage(slug)]
+    tags: [sanityTags.marketingPage(slug)],
+    revalidate: process.env.NODE_ENV === "development" ? 0 : undefined,
+    useCdn: false
   });
 }
 

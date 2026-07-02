@@ -68,7 +68,7 @@ export const structure: StructureResolver = (S) =>
                       S.documentTypeListItem("systemPage").title("All system pages")
                     ])
                 ),
-              S.documentTypeListItem("marketingPage").title("Marketing pages").icon(FileText)
+              S.documentTypeListItem("marketingPage").title("Standard Pages").icon(FileText)
             ])
         ),
       S.listItem()
