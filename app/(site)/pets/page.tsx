@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import Link from "next/link";
+import { draftMode } from "next/headers";
 import { Circle, Gauge, HeartHandshake, SlidersHorizontal, Sparkles, Zap } from "lucide-react";
 import { PetCard } from "@/components/features/pets/pet-card";
 import { PetTypeFilterPreview } from "@/components/features/pets/pet-type-filter-preview";
@@ -103,6 +104,7 @@ export async function generateMetadata(): Promise<Metadata> {
  * Renders the public pet index with URL-driven pagination and starter filters.
  */
 export default async function PetsPage({ searchParams }: PetsPageProps) {
+  const { isEnabled } = await draftMode();
   const params = await searchParams;
   const currentPage = normalizePage(params.page);
   const selectedPetTypeSlugs = normalizePetTypeSlugs(params.type);
@@ -122,10 +124,10 @@ export default async function PetsPage({ searchParams }: PetsPageProps) {
 
   try {
     [page, pets, totalPets, petTypes] = await Promise.all([
-      loadPetIndexPage(),
-      loadPetsIndex(currentPage, pageSize, petFilters),
-      loadPetsIndexCount(petFilters),
-      loadPetTypes()
+      loadPetIndexPage({ preview: isEnabled }),
+      loadPetsIndex(currentPage, pageSize, petFilters, { preview: isEnabled }),
+      loadPetsIndexCount(petFilters, { preview: isEnabled }),
+      loadPetTypes({ preview: isEnabled })
     ]);
   } catch (error) {
     loadError = true;

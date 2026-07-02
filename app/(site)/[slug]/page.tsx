@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
 import { PageSections } from "@/components/features/sections/page-sections";
 import { SystemMessage } from "@/components/features/system/system-message";
@@ -108,10 +109,11 @@ export async function generateMetadata({ params }: MarketingSlugPageProps): Prom
  */
 export default async function MarketingSlugPage({ params }: MarketingSlugPageProps) {
   const { slug } = await params;
+  const { isEnabled } = await draftMode();
   let page: Awaited<ReturnType<typeof loadMarketingPageBySlug>> | null = null;
 
   try {
-    page = await loadMarketingPageBySlug(slug);
+    page = await loadMarketingPageBySlug(slug, { preview: isEnabled });
   } catch {
     return (
       <SystemMessage

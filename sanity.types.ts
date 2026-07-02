@@ -1019,6 +1019,50 @@ export type SanityImageHotspot = {
   width: number;
 };
 
+export type SanityVideoMetadataPlayback = {
+  _type: "sanity.videoMetadata.playback";
+  policy?: string;
+};
+
+export type SanityVideoMetadata = {
+  _type: "sanity.videoMetadata";
+  duration?: number;
+  framerate?: number;
+  aspectRatio?: number;
+  hasAudio?: boolean;
+  codec?: string;
+  bitrate?: number;
+};
+
+export type SanityVideoAsset = {
+  _id: string;
+  _type: "sanity.videoAsset";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  originalFilename?: string;
+  label?: string;
+  title?: string;
+  description?: string;
+  altText?: string;
+  creditLine?: string;
+  metadata?: SanityVideoMetadata;
+  sha1hash?: string;
+  extension?: string;
+  mimeType?: string;
+  size?: number;
+  assetId?: string;
+  uploadId?: string;
+  path?: string;
+  url?: string;
+};
+
+export type SanityVideo = {
+  _type: "sanity.video";
+  asset?: unknown;
+  media?: unknown;
+};
+
 export type SanityImagePaletteSwatch = {
   _type: "sanity.imagePaletteSwatch";
   background?: string;
@@ -1177,6 +1221,10 @@ export type AllSanitySchemaTypes =
   | SiteSettings
   | SanityImageCrop
   | SanityImageHotspot
+  | SanityVideoMetadataPlayback
+  | SanityVideoMetadata
+  | SanityVideoAsset
+  | SanityVideo
   | SanityImagePaletteSwatch
   | SanityImagePalette
   | SanityImageDimensions
@@ -1230,8 +1278,221 @@ export type FORM_DEFINITION_BY_SLUG_QUERY_RESULT = {
 
 // Source: sanity/queries/owners.ts
 // Variable: OWNER_BY_SLUG_QUERY
-// Query: *[_type == "owner" && slug.current == $slug][0]{    _id,    name,    "slug": slug.current,    tagline,    bio[]{        ...    },    location,    memberSince,    portrait{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    contactCta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    },    seo{        title,  description,  noIndex,  openGraphImage{      image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption  }    },    testimonial->{      _id,      quote,      authorName,      authorRole,      rating,      tone,      authorImage{          image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption      }    },    "pets": *[      _type == "pet" &&      owner._ref == ^._id &&      submissionStatus == "approved" &&      defined(slug.current)    ] | order(name asc){        _id,  name,  "slug": slug.current,  breed,  listingHeadline,  listingSummary,  availabilityStatus,  distanceKilometers,  listingPlan,  hostPayoutAmount,  hostPayoutCurrency,  hostPayoutUnit,  temperament,  pickupUrgency,  messRisk,  chaosLevel,  energyLevel,  cuddlePolicy,  cardMedia{    image{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    lowFrameRateVideo{        provider,  url,  title,  description,  posterImage{      image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption  }    }  },  petType->{    _id,    name,    pluralName,    "slug": slug.current,    filterLabel,    icon,    category,    sortOrder  },  owner->{    _id,    name,    "slug": slug.current,    tagline  }    }  }
+// Query: *[_type == "owner" && slug.current == $slug][0]{    _id,    name,    "slug": slug.current,    tagline,    bio[]{        ...    },    location,    memberSince,    portrait{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    contactCta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    },    seo{        title,  description,  noIndex,  openGraphImage{      image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption  }    },    testimonial->{      _id,      quote,      authorName,      authorRole,      rating,      tone,      authorImage{          image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption      }    },    "pets": *[      _type == "pet" &&      owner._ref == ^._id &&      (        submissionStatus == "approved" ||        ($includeUnapproved == true && !(submissionStatus in ["rejected", "archived"]))      ) &&      defined(slug.current)    ] | order(name asc){        _id,  name,  "slug": slug.current,  breed,  listingHeadline,  listingSummary,  availabilityStatus,  distanceKilometers,  listingPlan,  hostPayoutAmount,  hostPayoutCurrency,  hostPayoutUnit,  temperament,  pickupUrgency,  messRisk,  chaosLevel,  energyLevel,  cuddlePolicy,  cardMedia{    image{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    lowFrameRateVideo{        provider,  url,  title,  description,  posterImage{      image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption  }    }  },  petType->{    _id,    name,    pluralName,    "slug": slug.current,    filterLabel,    icon,    category,    sortOrder  },  owner->{    _id,    name,    "slug": slug.current,    tagline  }    }  }
 export type OWNER_BY_SLUG_QUERY_RESULT = {
+  _id: string;
+  name: string;
+  slug: string;
+  tagline: string;
+  bio: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "blockquote" | "h2" | "h3" | "normal";
+    listItem?: "bullet" | "number";
+    markDefs?: Array<{
+      href?: string;
+      _type: "textLink";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  }>;
+  location: string | null;
+  memberSince: string | null;
+  portrait: {
+    image: {
+      asset: {
+        _id: string;
+        url: string;
+        metadata: {
+          lqip: string | null;
+          dimensions: {
+            width: number;
+            height: number;
+            aspectRatio: number;
+          } | null;
+        } | null;
+      } | null;
+      crop: SanityImageCrop | null;
+      hotspot: SanityImageHotspot | null;
+    };
+    alt: string;
+    caption: string | null;
+  };
+  contactCta: {
+    label: string;
+    style: "primary" | "secondary" | "text";
+    icon: string | null;
+    link: {
+      type: "action" | "externalUrl" | "internalPath";
+      label: string;
+      path: string | null;
+      url: string | null;
+      action: "openContactForm" | "openOwnerContactDrawer" | null;
+      openInNewTab: boolean | null;
+    };
+  } | null;
+  seo: {
+    title: string;
+    description: string;
+    noIndex: boolean | null;
+    openGraphImage: {
+      image: {
+        asset: {
+          _id: string;
+          url: string;
+          metadata: {
+            lqip: string | null;
+            dimensions: {
+              width: number;
+              height: number;
+              aspectRatio: number;
+            } | null;
+          } | null;
+        } | null;
+        crop: SanityImageCrop | null;
+        hotspot: SanityImageHotspot | null;
+      };
+      alt: string;
+      caption: string | null;
+    } | null;
+  } | null;
+  testimonial: {
+    _id: string;
+    quote: string;
+    authorName: string;
+    authorRole: string | null;
+    rating: number | null;
+    tone: "playful" | "trust" | "warning" | null;
+    authorImage: {
+      image: {
+        asset: {
+          _id: string;
+          url: string;
+          metadata: {
+            lqip: string | null;
+            dimensions: {
+              width: number;
+              height: number;
+              aspectRatio: number;
+            } | null;
+          } | null;
+        } | null;
+        crop: SanityImageCrop | null;
+        hotspot: SanityImageHotspot | null;
+      };
+      alt: string;
+      caption: string | null;
+    } | null;
+  } | null;
+  pets: Array<{
+    _id: string;
+    name: string;
+    slug: string;
+    breed: string | null;
+    listingHeadline: string;
+    listingSummary: string;
+    availabilityStatus:
+      "available" | "pendingPickup" | "retired" | "temporarilyUnavailable";
+    distanceKilometers: number | null;
+    listingPlan: "couchRecovery" | "porch" | "spotlight";
+    hostPayoutAmount: number;
+    hostPayoutCurrency: string;
+    hostPayoutUnit: "day" | "stay" | "weekend";
+    temperament:
+      "dramatic" | "friendly" | "independent" | "regal" | "suspicious";
+    pickupUrgency:
+      "anytime" | "appointmentOnly" | "immediately" | "withinSevenDays";
+    messRisk: number;
+    chaosLevel: number;
+    energyLevel: number;
+    cuddlePolicy:
+      | "afterSnacksOnly"
+      | "consentRequired"
+      | "lookDoNotCuddle"
+      | "openEnrollment";
+    cardMedia: {
+      image: {
+        image: {
+          asset: {
+            _id: string;
+            url: string;
+            metadata: {
+              lqip: string | null;
+              dimensions: {
+                width: number;
+                height: number;
+                aspectRatio: number;
+              } | null;
+            } | null;
+          } | null;
+          crop: SanityImageCrop | null;
+          hotspot: SanityImageHotspot | null;
+        };
+        alt: string;
+        caption: string | null;
+      };
+      lowFrameRateVideo: {
+        provider: "localAsset" | "other" | "vimeo" | "youtube";
+        url: string;
+        title: string;
+        description: string | null;
+        posterImage: {
+          image: {
+            asset: {
+              _id: string;
+              url: string;
+              metadata: {
+                lqip: string | null;
+                dimensions: {
+                  width: number;
+                  height: number;
+                  aspectRatio: number;
+                } | null;
+              } | null;
+            } | null;
+            crop: SanityImageCrop | null;
+            hotspot: SanityImageHotspot | null;
+          };
+          alt: string;
+          caption: string | null;
+        } | null;
+      } | null;
+    };
+    petType: {
+      _id: string;
+      name: string;
+      pluralName: string;
+      slug: string;
+      filterLabel: string;
+      icon: string;
+      category:
+        | "aquaticPets"
+        | "birds"
+        | "commonHouseholdPets"
+        | "farmAndOutdoorCompanions"
+        | "invertebrates"
+        | "reptilesAndAmphibians";
+      sortOrder: number;
+    };
+    owner: {
+      _id: string;
+      name: string;
+      slug: string;
+      tagline: string;
+    };
+  }>;
+} | null;
+
+// Source: sanity/queries/owners.ts
+// Variable: OWNER_BY_ID_QUERY
+// Query: *[_type == "owner" && _id == $id][0]{    _id,    name,    "slug": slug.current,    tagline,    bio[]{        ...    },    location,    memberSince,    portrait{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    contactCta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    },    seo{        title,  description,  noIndex,  openGraphImage{      image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption  }    },    testimonial->{      _id,      quote,      authorName,      authorRole,      rating,      tone,      authorImage{          image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption      }    },    "pets": *[      _type == "pet" &&      owner._ref == ^._id &&      (        submissionStatus == "approved" ||        ($includeUnapproved == true && !(submissionStatus in ["rejected", "archived"]))      ) &&      defined(slug.current)    ] | order(name asc){        _id,  name,  "slug": slug.current,  breed,  listingHeadline,  listingSummary,  availabilityStatus,  distanceKilometers,  listingPlan,  hostPayoutAmount,  hostPayoutCurrency,  hostPayoutUnit,  temperament,  pickupUrgency,  messRisk,  chaosLevel,  energyLevel,  cuddlePolicy,  cardMedia{    image{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    lowFrameRateVideo{        provider,  url,  title,  description,  posterImage{      image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption  }    }  },  petType->{    _id,    name,    pluralName,    "slug": slug.current,    filterLabel,    icon,    category,    sortOrder  },  owner->{    _id,    name,    "slug": slug.current,    tagline  }    }  }
+export type OWNER_BY_ID_QUERY_RESULT = {
   _id: string;
   name: string;
   slug: string;
@@ -6112,6 +6373,526 @@ export type MARKETING_PAGE_BY_SLUG_QUERY_RESULT = {
 } | null;
 
 // Source: sanity/queries/pages.ts
+// Variable: MARKETING_PAGE_BY_ID_QUERY
+// Query: *[_type == "marketingPage" && _id == $id][0]{    _id,    title,    "slug": slug.current,    seo{        title,  description,  noIndex,  openGraphImage{      image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption  }    },    sections[]{        _key,  _type,  _type == "hero" => {    eyebrow,    headline,    body,    image{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    ctaGroup{        primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment    },    layoutHint  },  _type == "heroSlide" => {    headline,    body,    image{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    },    featuredPet->{      _id,      name,      "slug": slug.current,      listingHeadline    },    featuredOwner->{      _id,      name,      "slug": slug.current,      tagline    }  },  _type == "contentSection" => {    header,    body[]{        ...    },    media{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    ctaGroup{        primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment    },    layoutHint  },  _type == "calloutBlock" => {    headline,    body,    icon,    tone,    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "statBlock" => {    value,    label,    description,    icon  },  _type == "featureList" => {    header,    iconStyle,    items[]{      _key,      title,      description,      icon,      link{          type,  label,  path,  url,  action,  openInNewTab      }    }  },  _type == "accordion" => {    header,    items[]{      _key,      title,      body[]{          ...      }    }  },  _type == "pricingComparisonTable" => {    header,    plans[]{      _key,      name,      price,      note,      highlighted    },    rows[]{      _key,      feature,      description,      values[]{        _key,        planKey,        included,        note      }    },    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "pricingValueSection" => {    valueItems[]{      _key,      title,      body,      icon    }  },  _type == "pricingPackageGrid" => {    header,    packages[]{      _key,      name,      price,      duration,      description,      icon,      tone,      badge,      highlighted,      features[]{        _key,        label      }    }  },  _type == "pricingCtaBand" => {    headline,    body,    icon,    ctaGroup{        primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment    },    proofItems[]{      _key,      label,      icon    }  },  _type == "processPathSection" => {    header,    title,    body,    tone,    icon,    steps[]{      _key,      title,      body[]{          ...      },      description,      icon,      order,      cta{          label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }      }    },    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "warrantyConditionGrid" => {    header,    items[]{      _key,      title,      body,      tone,      icon    }  },  _type == "warrantyNoticeSection" => {    anchorId,    header,    body[]{        ...    },    badgeLabel  },  _type == "warrantyClaimPrep" => {    anchorId,    header,    items[]{      _key,      title,      body,      icon    },    ctaGroup{        primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment    }  },  _type == "processStep" => {    title,    body[]{        ...    },    description,    icon,    order,    cta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    }  },  _type == "ctaGroup" => {      primary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  secondary{      label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }  },  alignment  }    },    showContactForm  }
+export type MARKETING_PAGE_BY_ID_QUERY_RESULT = {
+  _id: string;
+  title: string;
+  slug: string;
+  seo: {
+    title: string;
+    description: string;
+    noIndex: boolean | null;
+    openGraphImage: {
+      image: {
+        asset: {
+          _id: string;
+          url: string;
+          metadata: {
+            lqip: string | null;
+            dimensions: {
+              width: number;
+              height: number;
+              aspectRatio: number;
+            } | null;
+          } | null;
+        } | null;
+        crop: SanityImageCrop | null;
+        hotspot: SanityImageHotspot | null;
+      };
+      alt: string;
+      caption: string | null;
+    } | null;
+  };
+  sections: Array<
+    | {
+        _key: string;
+        _type: "accordion";
+        header: SectionHeader | null;
+        items: Array<{
+          _key: string;
+          title: string;
+          body: Array<{
+            children?: Array<{
+              marks?: Array<string>;
+              text?: string;
+              _type: "span";
+              _key: string;
+            }>;
+            style?: "blockquote" | "h2" | "h3" | "normal";
+            listItem?: "bullet" | "number";
+            markDefs?: Array<{
+              href?: string;
+              _type: "textLink";
+              _key: string;
+            }>;
+            level?: number;
+            _type: "block";
+            _key: string;
+          }>;
+        }> | null;
+      }
+    | {
+        _key: string;
+        _type: "calloutBlock";
+        headline: string;
+        body: string;
+        icon: string | null;
+        tone: "calm" | "friendly" | "playful" | null;
+        cta: {
+          label: string;
+          style: "primary" | "secondary" | "text";
+          icon: string | null;
+          link: {
+            type: "action" | "externalUrl" | "internalPath";
+            label: string;
+            path: string | null;
+            url: string | null;
+            action: "openContactForm" | "openOwnerContactDrawer" | null;
+            openInNewTab: boolean | null;
+          };
+        } | null;
+      }
+    | {
+        _key: string;
+        _type: "contentSection";
+        header: SectionHeader | null;
+        body: Array<{
+          children?: Array<{
+            marks?: Array<string>;
+            text?: string;
+            _type: "span";
+            _key: string;
+          }>;
+          style?: "blockquote" | "h2" | "h3" | "normal";
+          listItem?: "bullet" | "number";
+          markDefs?: Array<{
+            href?: string;
+            _type: "textLink";
+            _key: string;
+          }>;
+          level?: number;
+          _type: "block";
+          _key: string;
+        }>;
+        media: {
+          image: {
+            asset: {
+              _id: string;
+              url: string;
+              metadata: {
+                lqip: string | null;
+                dimensions: {
+                  width: number;
+                  height: number;
+                  aspectRatio: number;
+                } | null;
+              } | null;
+            } | null;
+            crop: SanityImageCrop | null;
+            hotspot: SanityImageHotspot | null;
+          };
+          alt: string;
+          caption: string | null;
+        } | null;
+        ctaGroup: {
+          primary: {
+            label: string;
+            style: "primary" | "secondary" | "text";
+            icon: string | null;
+            link: {
+              type: "action" | "externalUrl" | "internalPath";
+              label: string;
+              path: string | null;
+              url: string | null;
+              action: "openContactForm" | "openOwnerContactDrawer" | null;
+              openInNewTab: boolean | null;
+            };
+          } | null;
+          secondary: {
+            label: string;
+            style: "primary" | "secondary" | "text";
+            icon: string | null;
+            link: {
+              type: "action" | "externalUrl" | "internalPath";
+              label: string;
+              path: string | null;
+              url: string | null;
+              action: "openContactForm" | "openOwnerContactDrawer" | null;
+              openInNewTab: boolean | null;
+            };
+          } | null;
+          alignment: "center" | "left" | "right" | null;
+        } | null;
+        layoutHint: "mediaLeft" | "mediaRight" | "textOnly" | null;
+      }
+    | {
+        _key: string;
+        _type: "ctaGroup";
+        primary: {
+          label: string;
+          style: "primary" | "secondary" | "text";
+          icon: string | null;
+          link: {
+            type: "action" | "externalUrl" | "internalPath";
+            label: string;
+            path: string | null;
+            url: string | null;
+            action: "openContactForm" | "openOwnerContactDrawer" | null;
+            openInNewTab: boolean | null;
+          };
+        } | null;
+        secondary: {
+          label: string;
+          style: "primary" | "secondary" | "text";
+          icon: string | null;
+          link: {
+            type: "action" | "externalUrl" | "internalPath";
+            label: string;
+            path: string | null;
+            url: string | null;
+            action: "openContactForm" | "openOwnerContactDrawer" | null;
+            openInNewTab: boolean | null;
+          };
+        } | null;
+        alignment: "center" | "left" | "right" | null;
+      }
+    | {
+        _key: string;
+        _type: "featureList";
+        header: SectionHeader | null;
+        iconStyle: "filledBadge" | "outline" | null;
+        items: Array<{
+          _key: string;
+          title: string;
+          description: string | null;
+          icon: string | null;
+          link: {
+            type: "action" | "externalUrl" | "internalPath";
+            label: string;
+            path: string | null;
+            url: string | null;
+            action: "openContactForm" | "openOwnerContactDrawer" | null;
+            openInNewTab: boolean | null;
+          } | null;
+        }> | null;
+      }
+    | {
+        _key: string;
+        _type: "hero";
+        eyebrow: string | null;
+        headline: string;
+        body: string | null;
+        image: {
+          image: {
+            asset: {
+              _id: string;
+              url: string;
+              metadata: {
+                lqip: string | null;
+                dimensions: {
+                  width: number;
+                  height: number;
+                  aspectRatio: number;
+                } | null;
+              } | null;
+            } | null;
+            crop: SanityImageCrop | null;
+            hotspot: SanityImageHotspot | null;
+          };
+          alt: string;
+          caption: string | null;
+        } | null;
+        ctaGroup: {
+          primary: {
+            label: string;
+            style: "primary" | "secondary" | "text";
+            icon: string | null;
+            link: {
+              type: "action" | "externalUrl" | "internalPath";
+              label: string;
+              path: string | null;
+              url: string | null;
+              action: "openContactForm" | "openOwnerContactDrawer" | null;
+              openInNewTab: boolean | null;
+            };
+          } | null;
+          secondary: {
+            label: string;
+            style: "primary" | "secondary" | "text";
+            icon: string | null;
+            link: {
+              type: "action" | "externalUrl" | "internalPath";
+              label: string;
+              path: string | null;
+              url: string | null;
+              action: "openContactForm" | "openOwnerContactDrawer" | null;
+              openInNewTab: boolean | null;
+            };
+          } | null;
+          alignment: "center" | "left" | "right" | null;
+        } | null;
+        layoutHint: "centered" | "mediaCard" | null;
+      }
+    | {
+        _key: string;
+        _type: "pricingComparisonTable";
+        header: SectionHeader | null;
+        plans: Array<{
+          _key: string;
+          name: string;
+          price: string | null;
+          note: string | null;
+          highlighted: boolean | null;
+        }> | null;
+        rows: Array<{
+          _key: string;
+          feature: string;
+          description: string | null;
+          values: Array<{
+            _key: string;
+            planKey: string;
+            included: boolean | null;
+            note: string | null;
+          }> | null;
+        }> | null;
+        cta: {
+          label: string;
+          style: "primary" | "secondary" | "text";
+          icon: string | null;
+          link: {
+            type: "action" | "externalUrl" | "internalPath";
+            label: string;
+            path: string | null;
+            url: string | null;
+            action: "openContactForm" | "openOwnerContactDrawer" | null;
+            openInNewTab: boolean | null;
+          };
+        } | null;
+      }
+    | {
+        _key: string;
+        _type: "pricingCtaBand";
+        headline: string;
+        body: string;
+        icon: string | null;
+        ctaGroup: {
+          primary: {
+            label: string;
+            style: "primary" | "secondary" | "text";
+            icon: string | null;
+            link: {
+              type: "action" | "externalUrl" | "internalPath";
+              label: string;
+              path: string | null;
+              url: string | null;
+              action: "openContactForm" | "openOwnerContactDrawer" | null;
+              openInNewTab: boolean | null;
+            };
+          } | null;
+          secondary: {
+            label: string;
+            style: "primary" | "secondary" | "text";
+            icon: string | null;
+            link: {
+              type: "action" | "externalUrl" | "internalPath";
+              label: string;
+              path: string | null;
+              url: string | null;
+              action: "openContactForm" | "openOwnerContactDrawer" | null;
+              openInNewTab: boolean | null;
+            };
+          } | null;
+          alignment: "center" | "left" | "right" | null;
+        } | null;
+        proofItems: Array<{
+          _key: string;
+          label: string;
+          icon: string | null;
+        }> | null;
+      }
+    | {
+        _key: string;
+        _type: "pricingPackageGrid";
+        header: SectionHeader | null;
+        packages: Array<{
+          _key: string;
+          name: string;
+          price: string;
+          duration: string;
+          description: string;
+          icon: string | null;
+          tone: "blue" | "coral" | "cream" | "mint" | null;
+          badge: string | null;
+          highlighted: boolean | null;
+          features: Array<{
+            _key: string;
+            label: string;
+          }> | null;
+        }> | null;
+      }
+    | {
+        _key: string;
+        _type: "pricingValueSection";
+        valueItems: Array<{
+          _key: string;
+          title: string;
+          body: string;
+          icon: string | null;
+        }> | null;
+      }
+    | {
+        _key: string;
+        _type: "processPathSection";
+        header: SectionHeader | null;
+        title: string | null;
+        body: string | null;
+        tone: "host" | "neutral" | "owner";
+        icon: string | null;
+        steps: Array<{
+          _key: string;
+          title: string;
+          body: Array<{
+            children?: Array<{
+              marks?: Array<string>;
+              text?: string;
+              _type: "span";
+              _key: string;
+            }>;
+            style?: "blockquote" | "h2" | "h3" | "normal";
+            listItem?: "bullet" | "number";
+            markDefs?: Array<{
+              href?: string;
+              _type: "textLink";
+              _key: string;
+            }>;
+            level?: number;
+            _type: "block";
+            _key: string;
+          }> | null;
+          description: string | null;
+          icon: string | null;
+          order: number | null;
+          cta: {
+            label: string;
+            style: "primary" | "secondary" | "text";
+            icon: string | null;
+            link: {
+              type: "action" | "externalUrl" | "internalPath";
+              label: string;
+              path: string | null;
+              url: string | null;
+              action: "openContactForm" | "openOwnerContactDrawer" | null;
+              openInNewTab: boolean | null;
+            };
+          } | null;
+        }>;
+        cta: {
+          label: string;
+          style: "primary" | "secondary" | "text";
+          icon: string | null;
+          link: {
+            type: "action" | "externalUrl" | "internalPath";
+            label: string;
+            path: string | null;
+            url: string | null;
+            action: "openContactForm" | "openOwnerContactDrawer" | null;
+            openInNewTab: boolean | null;
+          };
+        } | null;
+      }
+    | {
+        _key: string;
+        _type: "statBlock";
+        value: string;
+        label: string;
+        description: string | null;
+        icon: string | null;
+      }
+    | {
+        _key: string;
+        _type: "warrantyClaimPrep";
+        anchorId: string | null;
+        header: SectionHeader | null;
+        items: Array<{
+          _key: string;
+          title: string;
+          body: string;
+          icon: string | null;
+        }>;
+        ctaGroup: {
+          primary: {
+            label: string;
+            style: "primary" | "secondary" | "text";
+            icon: string | null;
+            link: {
+              type: "action" | "externalUrl" | "internalPath";
+              label: string;
+              path: string | null;
+              url: string | null;
+              action: "openContactForm" | "openOwnerContactDrawer" | null;
+              openInNewTab: boolean | null;
+            };
+          } | null;
+          secondary: {
+            label: string;
+            style: "primary" | "secondary" | "text";
+            icon: string | null;
+            link: {
+              type: "action" | "externalUrl" | "internalPath";
+              label: string;
+              path: string | null;
+              url: string | null;
+              action: "openContactForm" | "openOwnerContactDrawer" | null;
+              openInNewTab: boolean | null;
+            };
+          } | null;
+          alignment: "center" | "left" | "right" | null;
+        } | null;
+      }
+    | {
+        _key: string;
+        _type: "warrantyConditionGrid";
+        header: SectionHeader | null;
+        items: Array<{
+          _key: string;
+          title: string;
+          body: string;
+          tone: "covered" | "evidence" | "excluded";
+          icon: string | null;
+        }>;
+      }
+    | {
+        _key: string;
+        _type: "warrantyNoticeSection";
+        anchorId: string | null;
+        header: SectionHeader | null;
+        body: Array<{
+          children?: Array<{
+            marks?: Array<string>;
+            text?: string;
+            _type: "span";
+            _key: string;
+          }>;
+          style?:
+            "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+          listItem?: "bullet" | "number";
+          markDefs?: Array<{
+            href?: string;
+            _type: "link";
+            _key: string;
+          }>;
+          level?: number;
+          _type: "block";
+          _key: string;
+        }>;
+        badgeLabel: string | null;
+      }
+  >;
+  showContactForm: boolean | null;
+} | null;
+
+// Source: sanity/queries/pages.ts
 // Variable: MARKETING_PAGE_SLUGS_QUERY
 // Query: *[_type == "marketingPage" && defined(slug.current)] | order(slug.current asc){    "slug": slug.current  }
 export type MARKETING_PAGE_SLUGS_QUERY_RESULT = Array<{
@@ -6694,7 +7475,7 @@ export type SYSTEM_PAGE_BY_TYPE_QUERY_RESULT = {
 
 // Source: sanity/queries/pets.ts
 // Variable: PETS_INDEX_QUERY
-// Query: *[    _type == "pet" &&  defined(slug.current) &&  submissionStatus == "approved" &&  (!defined($petTypeSlugs) || petType->slug.current in $petTypeSlugs) &&  (!defined($availabilityStatuses) || availabilityStatus in $availabilityStatuses) &&  (!defined($cuddlePolicies) || cuddlePolicy in $cuddlePolicies) &&  (!defined($minChaos) || chaosLevel >= $minChaos) &&  (!defined($minMess) || messRisk >= $minMess) &&  (!defined($minEnergy) || energyLevel >= $minEnergy)]  | order(name asc, _id asc)[$start...$end]{      _id,  name,  "slug": slug.current,  breed,  listingHeadline,  listingSummary,  availabilityStatus,  distanceKilometers,  listingPlan,  hostPayoutAmount,  hostPayoutCurrency,  hostPayoutUnit,  temperament,  pickupUrgency,  messRisk,  chaosLevel,  energyLevel,  cuddlePolicy,  cardMedia{    image{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    lowFrameRateVideo{        provider,  url,  title,  description,  posterImage{      image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption  }    }  },  petType->{    _id,    name,    pluralName,    "slug": slug.current,    filterLabel,    icon,    category,    sortOrder  },  owner->{    _id,    name,    "slug": slug.current,    tagline  }  }
+// Query: *[    _type == "pet" &&  defined(slug.current) &&  (    submissionStatus == "approved" ||    ($includeUnapproved == true && !(submissionStatus in ["rejected", "archived"]))  ) &&  (!defined($petTypeSlugs) || petType->slug.current in $petTypeSlugs) &&  (!defined($availabilityStatuses) || availabilityStatus in $availabilityStatuses) &&  (!defined($cuddlePolicies) || cuddlePolicy in $cuddlePolicies) &&  (!defined($minChaos) || chaosLevel >= $minChaos) &&  (!defined($minMess) || messRisk >= $minMess) &&  (!defined($minEnergy) || energyLevel >= $minEnergy)]  | order(name asc, _id asc)[$start...$end]{      _id,  name,  "slug": slug.current,  breed,  listingHeadline,  listingSummary,  availabilityStatus,  distanceKilometers,  listingPlan,  hostPayoutAmount,  hostPayoutCurrency,  hostPayoutUnit,  temperament,  pickupUrgency,  messRisk,  chaosLevel,  energyLevel,  cuddlePolicy,  cardMedia{    image{        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    lowFrameRateVideo{        provider,  url,  title,  description,  posterImage{      image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption  }    }  },  petType->{    _id,    name,    pluralName,    "slug": slug.current,    filterLabel,    icon,    category,    sortOrder  },  owner->{    _id,    name,    "slug": slug.current,    tagline  }  }
 export type PETS_INDEX_QUERY_RESULT = Array<{
   _id: string;
   name: string;
@@ -6794,12 +7575,12 @@ export type PETS_INDEX_QUERY_RESULT = Array<{
 
 // Source: sanity/queries/pets.ts
 // Variable: PETS_INDEX_COUNT_QUERY
-// Query: count(*[    _type == "pet" &&  defined(slug.current) &&  submissionStatus == "approved" &&  (!defined($petTypeSlugs) || petType->slug.current in $petTypeSlugs) &&  (!defined($availabilityStatuses) || availabilityStatus in $availabilityStatuses) &&  (!defined($cuddlePolicies) || cuddlePolicy in $cuddlePolicies) &&  (!defined($minChaos) || chaosLevel >= $minChaos) &&  (!defined($minMess) || messRisk >= $minMess) &&  (!defined($minEnergy) || energyLevel >= $minEnergy)])
+// Query: count(*[    _type == "pet" &&  defined(slug.current) &&  (    submissionStatus == "approved" ||    ($includeUnapproved == true && !(submissionStatus in ["rejected", "archived"]))  ) &&  (!defined($petTypeSlugs) || petType->slug.current in $petTypeSlugs) &&  (!defined($availabilityStatuses) || availabilityStatus in $availabilityStatuses) &&  (!defined($cuddlePolicies) || cuddlePolicy in $cuddlePolicies) &&  (!defined($minChaos) || chaosLevel >= $minChaos) &&  (!defined($minMess) || messRisk >= $minMess) &&  (!defined($minEnergy) || energyLevel >= $minEnergy)])
 export type PETS_INDEX_COUNT_QUERY_RESULT = number;
 
 // Source: sanity/queries/pets.ts
 // Variable: PET_BY_SLUG_QUERY
-// Query: *[  _type == "pet" &&  defined(slug.current) &&  submissionStatus == "approved" && slug.current == $slug][0]{    _id,    name,    "slug": slug.current,    breed,    ageYears,    dateOfBirth,    listingHeadline,    listingSummary,    availabilityStatus,    temperament,    pickupUrgency,    messRisk,    chaosLevel,    energyLevel,    cuddlePolicy,    cardMedia{      image{          image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption      },      lowFrameRateVideo{          provider,  url,  title,  description,  posterImage{      image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption  }      }    },    heroImages[]{      _key,        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    summary,    description[]{        ...    },    personalityTraits[],    careNotes[],    availability[],    borrowTerms[],    stats[],    warnings[],    videos[]{      _key,        provider,  url,  title,  description,  posterImage{      image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption  }    },    contactOwnerCta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    },    seo{        title,  description,  noIndex,  openGraphImage{      image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption  }    },    petType->{      _id,      name,      pluralName,      "slug": slug.current,      filterLabel,      icon,      category,      summary    },    owner->{      _id,      name,      "slug": slug.current,      tagline,      bio[]{          ...      },      location,      memberSince,      portrait{          image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption      },      contactCta{          label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }      }    },    testimonial->{      _id,      quote,      authorName,      authorRole,      rating,      tone,      authorImage{          image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption      }    }  }
+// Query: *[  _type == "pet" &&  defined(slug.current) &&  (    submissionStatus == "approved" ||    ($includeUnapproved == true && !(submissionStatus in ["rejected", "archived"]))  ) && slug.current == $slug][0]{    _id,    name,    "slug": slug.current,    breed,    ageYears,    dateOfBirth,    listingHeadline,    listingSummary,    availabilityStatus,    temperament,    pickupUrgency,    messRisk,    chaosLevel,    energyLevel,    cuddlePolicy,    cardMedia{      image{          image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption      },      lowFrameRateVideo{          provider,  url,  title,  description,  posterImage{      image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption  }      }    },    heroImages[]{      _key,        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    summary,    description[]{        ...    },    personalityTraits[],    careNotes[],    availability[],    borrowTerms[],    stats[],    warnings[],    videos[]{      _key,        provider,  url,  title,  description,  posterImage{      image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption  }    },    contactOwnerCta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    },    seo{        title,  description,  noIndex,  openGraphImage{      image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption  }    },    petType->{      _id,      name,      pluralName,      "slug": slug.current,      filterLabel,      icon,      category,      summary    },    owner->{      _id,      name,      "slug": slug.current,      tagline,      bio[]{          ...      },      location,      memberSince,      portrait{          image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption      },      contactCta{          label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }      }    },    testimonial->{      _id,      quote,      authorName,      authorRole,      rating,      tone,      authorImage{          image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption      }    }  }
 export type PET_BY_SLUG_QUERY_RESULT = {
   _id: string;
   name: string;
@@ -7111,8 +7892,321 @@ export type PET_BY_SLUG_QUERY_RESULT = {
 } | null;
 
 // Source: sanity/queries/pets.ts
+// Variable: PET_BY_ID_QUERY
+// Query: *[_type == "pet" && _id == $id][0]{    _id,    name,    "slug": slug.current,    breed,    ageYears,    dateOfBirth,    listingHeadline,    listingSummary,    availabilityStatus,    temperament,    pickupUrgency,    messRisk,    chaosLevel,    energyLevel,    cuddlePolicy,    cardMedia{      image{          image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption      },      lowFrameRateVideo{          provider,  url,  title,  description,  posterImage{      image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption  }      }    },    heroImages[]{      _key,        image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption    },    summary,    description[]{        ...    },    personalityTraits[],    careNotes[],    availability[],    borrowTerms[],    stats[],    warnings[],    videos[]{      _key,        provider,  url,  title,  description,  posterImage{      image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption  }    },    contactOwnerCta{        label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }    },    seo{        title,  description,  noIndex,  openGraphImage{      image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption  }    },    petType->{      _id,      name,      pluralName,      "slug": slug.current,      filterLabel,      icon,      category,      summary    },    owner->{      _id,      name,      "slug": slug.current,      tagline,      bio[]{          ...      },      location,      memberSince,      portrait{          image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption      },      contactCta{          label,  style,  icon,  link{      type,  label,  path,  url,  action,  openInNewTab  }      }    },    testimonial->{      _id,      quote,      authorName,      authorRole,      rating,      tone,      authorImage{          image{    asset->{      _id,      url,      metadata{        lqip,        dimensions{          width,          height,          aspectRatio        }      }    },    crop,    hotspot  },  alt,  caption      }    }  }
+export type PET_BY_ID_QUERY_RESULT = {
+  _id: string;
+  name: string;
+  slug: string;
+  breed: string | null;
+  ageYears: number | null;
+  dateOfBirth: string | null;
+  listingHeadline: string;
+  listingSummary: string;
+  availabilityStatus:
+    "available" | "pendingPickup" | "retired" | "temporarilyUnavailable";
+  temperament: "dramatic" | "friendly" | "independent" | "regal" | "suspicious";
+  pickupUrgency:
+    "anytime" | "appointmentOnly" | "immediately" | "withinSevenDays";
+  messRisk: number;
+  chaosLevel: number;
+  energyLevel: number;
+  cuddlePolicy:
+    | "afterSnacksOnly"
+    | "consentRequired"
+    | "lookDoNotCuddle"
+    | "openEnrollment";
+  cardMedia: {
+    image: {
+      image: {
+        asset: {
+          _id: string;
+          url: string;
+          metadata: {
+            lqip: string | null;
+            dimensions: {
+              width: number;
+              height: number;
+              aspectRatio: number;
+            } | null;
+          } | null;
+        } | null;
+        crop: SanityImageCrop | null;
+        hotspot: SanityImageHotspot | null;
+      };
+      alt: string;
+      caption: string | null;
+    };
+    lowFrameRateVideo: {
+      provider: "localAsset" | "other" | "vimeo" | "youtube";
+      url: string;
+      title: string;
+      description: string | null;
+      posterImage: {
+        image: {
+          asset: {
+            _id: string;
+            url: string;
+            metadata: {
+              lqip: string | null;
+              dimensions: {
+                width: number;
+                height: number;
+                aspectRatio: number;
+              } | null;
+            } | null;
+          } | null;
+          crop: SanityImageCrop | null;
+          hotspot: SanityImageHotspot | null;
+        };
+        alt: string;
+        caption: string | null;
+      } | null;
+    } | null;
+  };
+  heroImages: Array<{
+    _key: string;
+    image: {
+      asset: {
+        _id: string;
+        url: string;
+        metadata: {
+          lqip: string | null;
+          dimensions: {
+            width: number;
+            height: number;
+            aspectRatio: number;
+          } | null;
+        } | null;
+      } | null;
+      crop: SanityImageCrop | null;
+      hotspot: SanityImageHotspot | null;
+    };
+    alt: string;
+    caption: string | null;
+  }>;
+  summary: string | null;
+  description: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "blockquote" | "h2" | "h3" | "normal";
+    listItem?: "bullet" | "number";
+    markDefs?: Array<{
+      href?: string;
+      _type: "textLink";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  }>;
+  personalityTraits: Array<
+    {
+      _key: string;
+    } & PetTrait
+  > | null;
+  careNotes: Array<
+    {
+      _key: string;
+    } & CareNote
+  > | null;
+  availability: Array<
+    {
+      _key: string;
+    } & AvailabilityWindow
+  > | null;
+  borrowTerms: Array<
+    {
+      _key: string;
+    } & BorrowTerm
+  > | null;
+  stats: Array<
+    {
+      _key: string;
+    } & PetStat
+  > | null;
+  warnings: Array<
+    {
+      _key: string;
+    } & PetWarning
+  > | null;
+  videos: Array<{
+    _key: string;
+    provider: "localAsset" | "other" | "vimeo" | "youtube";
+    url: string;
+    title: string;
+    description: string | null;
+    posterImage: {
+      image: {
+        asset: {
+          _id: string;
+          url: string;
+          metadata: {
+            lqip: string | null;
+            dimensions: {
+              width: number;
+              height: number;
+              aspectRatio: number;
+            } | null;
+          } | null;
+        } | null;
+        crop: SanityImageCrop | null;
+        hotspot: SanityImageHotspot | null;
+      };
+      alt: string;
+      caption: string | null;
+    } | null;
+  }> | null;
+  contactOwnerCta: {
+    label: string;
+    style: "primary" | "secondary" | "text";
+    icon: string | null;
+    link: {
+      type: "action" | "externalUrl" | "internalPath";
+      label: string;
+      path: string | null;
+      url: string | null;
+      action: "openContactForm" | "openOwnerContactDrawer" | null;
+      openInNewTab: boolean | null;
+    };
+  } | null;
+  seo: {
+    title: string;
+    description: string;
+    noIndex: boolean | null;
+    openGraphImage: {
+      image: {
+        asset: {
+          _id: string;
+          url: string;
+          metadata: {
+            lqip: string | null;
+            dimensions: {
+              width: number;
+              height: number;
+              aspectRatio: number;
+            } | null;
+          } | null;
+        } | null;
+        crop: SanityImageCrop | null;
+        hotspot: SanityImageHotspot | null;
+      };
+      alt: string;
+      caption: string | null;
+    } | null;
+  };
+  petType: {
+    _id: string;
+    name: string;
+    pluralName: string;
+    slug: string;
+    filterLabel: string;
+    icon: string;
+    category:
+      | "aquaticPets"
+      | "birds"
+      | "commonHouseholdPets"
+      | "farmAndOutdoorCompanions"
+      | "invertebrates"
+      | "reptilesAndAmphibians";
+    summary: string | null;
+  };
+  owner: {
+    _id: string;
+    name: string;
+    slug: string;
+    tagline: string;
+    bio: Array<{
+      children?: Array<{
+        marks?: Array<string>;
+        text?: string;
+        _type: "span";
+        _key: string;
+      }>;
+      style?: "blockquote" | "h2" | "h3" | "normal";
+      listItem?: "bullet" | "number";
+      markDefs?: Array<{
+        href?: string;
+        _type: "textLink";
+        _key: string;
+      }>;
+      level?: number;
+      _type: "block";
+      _key: string;
+    }>;
+    location: string | null;
+    memberSince: string | null;
+    portrait: {
+      image: {
+        asset: {
+          _id: string;
+          url: string;
+          metadata: {
+            lqip: string | null;
+            dimensions: {
+              width: number;
+              height: number;
+              aspectRatio: number;
+            } | null;
+          } | null;
+        } | null;
+        crop: SanityImageCrop | null;
+        hotspot: SanityImageHotspot | null;
+      };
+      alt: string;
+      caption: string | null;
+    };
+    contactCta: {
+      label: string;
+      style: "primary" | "secondary" | "text";
+      icon: string | null;
+      link: {
+        type: "action" | "externalUrl" | "internalPath";
+        label: string;
+        path: string | null;
+        url: string | null;
+        action: "openContactForm" | "openOwnerContactDrawer" | null;
+        openInNewTab: boolean | null;
+      };
+    } | null;
+  };
+  testimonial: {
+    _id: string;
+    quote: string;
+    authorName: string;
+    authorRole: string | null;
+    rating: number | null;
+    tone: "playful" | "trust" | "warning" | null;
+    authorImage: {
+      image: {
+        asset: {
+          _id: string;
+          url: string;
+          metadata: {
+            lqip: string | null;
+            dimensions: {
+              width: number;
+              height: number;
+              aspectRatio: number;
+            } | null;
+          } | null;
+        } | null;
+        crop: SanityImageCrop | null;
+        hotspot: SanityImageHotspot | null;
+      };
+      alt: string;
+      caption: string | null;
+    } | null;
+  } | null;
+} | null;
+
+// Source: sanity/queries/pets.ts
 // Variable: PET_SLUGS_QUERY
-// Query: *[  _type == "pet" &&  defined(slug.current) &&  submissionStatus == "approved"] | order(slug.current asc){    "slug": slug.current  }
+// Query: *[_type == "pet" && defined(slug.current) && submissionStatus == "approved"] | order(slug.current asc){    "slug": slug.current  }
 export type PET_SLUGS_QUERY_RESULT = Array<{
   slug: string;
 }>;
@@ -7383,17 +8477,20 @@ import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
     '\n  *[_type == "formDefinition" && slug.current == $slug][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    description,\n    formType,\n    submitLabel,\n    successMessage{\n      headline,\n      message,\n      cta{\n        \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n      }\n    },\n    fields[]{\n      _key,\n      label,\n      name,\n      type,\n      required,\n      helpText,\n      options[]{\n        _key,\n        label,\n        value\n      }\n    }\n  }\n': FORM_DEFINITION_BY_SLUG_QUERY_RESULT;
-    '\n  *[_type == "owner" && slug.current == $slug][0]{\n    _id,\n    name,\n    "slug": slug.current,\n    tagline,\n    bio[]{\n      \n  ...\n\n    },\n    location,\n    memberSince,\n    portrait{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    contactCta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    },\n    seo{\n      \n  title,\n  description,\n  noIndex,\n  openGraphImage{\n    \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n  }\n\n    },\n    testimonial->{\n      _id,\n      quote,\n      authorName,\n      authorRole,\n      rating,\n      tone,\n      authorImage{\n        \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n      }\n    },\n    "pets": *[\n      _type == "pet" &&\n      owner._ref == ^._id &&\n      submissionStatus == "approved" &&\n      defined(slug.current)\n    ] | order(name asc){\n      \n  _id,\n  name,\n  "slug": slug.current,\n  breed,\n  listingHeadline,\n  listingSummary,\n  availabilityStatus,\n  distanceKilometers,\n  listingPlan,\n  hostPayoutAmount,\n  hostPayoutCurrency,\n  hostPayoutUnit,\n  temperament,\n  pickupUrgency,\n  messRisk,\n  chaosLevel,\n  energyLevel,\n  cuddlePolicy,\n  cardMedia{\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    lowFrameRateVideo{\n      \n  provider,\n  url,\n  title,\n  description,\n  posterImage{\n    \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n  }\n\n    }\n  },\n  petType->{\n    _id,\n    name,\n    pluralName,\n    "slug": slug.current,\n    filterLabel,\n    icon,\n    category,\n    sortOrder\n  },\n  owner->{\n    _id,\n    name,\n    "slug": slug.current,\n    tagline\n  }\n\n    }\n  }\n': OWNER_BY_SLUG_QUERY_RESULT;
+    '\n  *[_type == "owner" && slug.current == $slug][0]{\n    _id,\n    name,\n    "slug": slug.current,\n    tagline,\n    bio[]{\n      \n  ...\n\n    },\n    location,\n    memberSince,\n    portrait{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    contactCta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    },\n    seo{\n      \n  title,\n  description,\n  noIndex,\n  openGraphImage{\n    \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n  }\n\n    },\n    testimonial->{\n      _id,\n      quote,\n      authorName,\n      authorRole,\n      rating,\n      tone,\n      authorImage{\n        \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n      }\n    },\n    "pets": *[\n      _type == "pet" &&\n      owner._ref == ^._id &&\n      (\n        submissionStatus == "approved" ||\n        ($includeUnapproved == true && !(submissionStatus in ["rejected", "archived"]))\n      ) &&\n      defined(slug.current)\n    ] | order(name asc){\n      \n  _id,\n  name,\n  "slug": slug.current,\n  breed,\n  listingHeadline,\n  listingSummary,\n  availabilityStatus,\n  distanceKilometers,\n  listingPlan,\n  hostPayoutAmount,\n  hostPayoutCurrency,\n  hostPayoutUnit,\n  temperament,\n  pickupUrgency,\n  messRisk,\n  chaosLevel,\n  energyLevel,\n  cuddlePolicy,\n  cardMedia{\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    lowFrameRateVideo{\n      \n  provider,\n  url,\n  title,\n  description,\n  posterImage{\n    \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n  }\n\n    }\n  },\n  petType->{\n    _id,\n    name,\n    pluralName,\n    "slug": slug.current,\n    filterLabel,\n    icon,\n    category,\n    sortOrder\n  },\n  owner->{\n    _id,\n    name,\n    "slug": slug.current,\n    tagline\n  }\n\n    }\n  }\n': OWNER_BY_SLUG_QUERY_RESULT;
+    '\n  *[_type == "owner" && _id == $id][0]{\n    _id,\n    name,\n    "slug": slug.current,\n    tagline,\n    bio[]{\n      \n  ...\n\n    },\n    location,\n    memberSince,\n    portrait{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    contactCta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    },\n    seo{\n      \n  title,\n  description,\n  noIndex,\n  openGraphImage{\n    \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n  }\n\n    },\n    testimonial->{\n      _id,\n      quote,\n      authorName,\n      authorRole,\n      rating,\n      tone,\n      authorImage{\n        \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n      }\n    },\n    "pets": *[\n      _type == "pet" &&\n      owner._ref == ^._id &&\n      (\n        submissionStatus == "approved" ||\n        ($includeUnapproved == true && !(submissionStatus in ["rejected", "archived"]))\n      ) &&\n      defined(slug.current)\n    ] | order(name asc){\n      \n  _id,\n  name,\n  "slug": slug.current,\n  breed,\n  listingHeadline,\n  listingSummary,\n  availabilityStatus,\n  distanceKilometers,\n  listingPlan,\n  hostPayoutAmount,\n  hostPayoutCurrency,\n  hostPayoutUnit,\n  temperament,\n  pickupUrgency,\n  messRisk,\n  chaosLevel,\n  energyLevel,\n  cuddlePolicy,\n  cardMedia{\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    lowFrameRateVideo{\n      \n  provider,\n  url,\n  title,\n  description,\n  posterImage{\n    \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n  }\n\n    }\n  },\n  petType->{\n    _id,\n    name,\n    pluralName,\n    "slug": slug.current,\n    filterLabel,\n    icon,\n    category,\n    sortOrder\n  },\n  owner->{\n    _id,\n    name,\n    "slug": slug.current,\n    tagline\n  }\n\n    }\n  }\n': OWNER_BY_ID_QUERY_RESULT;
     '\n  *[_type == "owner" && defined(slug.current)] | order(slug.current asc){\n    "slug": slug.current\n  }\n': OWNER_SLUGS_QUERY_RESULT;
     '\n  *[_id == "homePage"][0]{\n    _id,\n    seo{\n      \n  title,\n  description,\n  noIndex,\n  openGraphImage{\n    \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n  }\n\n    },\n    heroCarousel[]{\n      _key,\n      _type,\n      headline,\n      body,\n      image{\n        \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n      },\n      cta{\n        \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n      },\n      featuredPet->{\n        _id,\n        name,\n        "slug": slug.current,\n        listingHeadline\n      },\n      featuredOwner->{\n        _id,\n        name,\n        "slug": slug.current,\n        tagline\n      }\n    },\n    intro{\n      \n  _key,\n  _type,\n  _type == "hero" => {\n    eyebrow,\n    headline,\n    body,\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    },\n    layoutHint\n  },\n  _type == "heroSlide" => {\n    headline,\n    body,\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    },\n    featuredPet->{\n      _id,\n      name,\n      "slug": slug.current,\n      listingHeadline\n    },\n    featuredOwner->{\n      _id,\n      name,\n      "slug": slug.current,\n      tagline\n    }\n  },\n  _type == "contentSection" => {\n    header,\n    body[]{\n      \n  ...\n\n    },\n    media{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    },\n    layoutHint\n  },\n  _type == "calloutBlock" => {\n    headline,\n    body,\n    icon,\n    tone,\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "statBlock" => {\n    value,\n    label,\n    description,\n    icon\n  },\n  _type == "featureList" => {\n    header,\n    iconStyle,\n    items[]{\n      _key,\n      title,\n      description,\n      icon,\n      link{\n        \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n      }\n    }\n  },\n  _type == "accordion" => {\n    header,\n    items[]{\n      _key,\n      title,\n      body[]{\n        \n  ...\n\n      }\n    }\n  },\n  _type == "pricingComparisonTable" => {\n    header,\n    plans[]{\n      _key,\n      name,\n      price,\n      note,\n      highlighted\n    },\n    rows[]{\n      _key,\n      feature,\n      description,\n      values[]{\n        _key,\n        planKey,\n        included,\n        note\n      }\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "pricingValueSection" => {\n    valueItems[]{\n      _key,\n      title,\n      body,\n      icon\n    }\n  },\n  _type == "pricingPackageGrid" => {\n    header,\n    packages[]{\n      _key,\n      name,\n      price,\n      duration,\n      description,\n      icon,\n      tone,\n      badge,\n      highlighted,\n      features[]{\n        _key,\n        label\n      }\n    }\n  },\n  _type == "pricingCtaBand" => {\n    headline,\n    body,\n    icon,\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    },\n    proofItems[]{\n      _key,\n      label,\n      icon\n    }\n  },\n  _type == "processPathSection" => {\n    header,\n    title,\n    body,\n    tone,\n    icon,\n    steps[]{\n      _key,\n      title,\n      body[]{\n        \n  ...\n\n      },\n      description,\n      icon,\n      order,\n      cta{\n        \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n      }\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "warrantyConditionGrid" => {\n    header,\n    items[]{\n      _key,\n      title,\n      body,\n      tone,\n      icon\n    }\n  },\n  _type == "warrantyNoticeSection" => {\n    anchorId,\n    header,\n    body[]{\n      \n  ...\n\n    },\n    badgeLabel\n  },\n  _type == "warrantyClaimPrep" => {\n    anchorId,\n    header,\n    items[]{\n      _key,\n      title,\n      body,\n      icon\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    }\n  },\n  _type == "processStep" => {\n    title,\n    body[]{\n      \n  ...\n\n    },\n    description,\n    icon,\n    order,\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "ctaGroup" => {\n    \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n  }\n\n    },\n    featuredPets[]->{\n      \n  _id,\n  name,\n  "slug": slug.current,\n  breed,\n  listingHeadline,\n  listingSummary,\n  availabilityStatus,\n  distanceKilometers,\n  listingPlan,\n  hostPayoutAmount,\n  hostPayoutCurrency,\n  hostPayoutUnit,\n  temperament,\n  pickupUrgency,\n  messRisk,\n  chaosLevel,\n  energyLevel,\n  cuddlePolicy,\n  cardMedia{\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    lowFrameRateVideo{\n      \n  provider,\n  url,\n  title,\n  description,\n  posterImage{\n    \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n  }\n\n    }\n  },\n  petType->{\n    _id,\n    name,\n    pluralName,\n    "slug": slug.current,\n    filterLabel,\n    icon,\n    category,\n    sortOrder\n  },\n  owner->{\n    _id,\n    name,\n    "slug": slug.current,\n    tagline\n  }\n\n    },\n    featuredOwners[]->{\n      _id,\n      name,\n      "slug": slug.current,\n      tagline,\n      portrait{\n        \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n      }\n    },\n    processSummary[]{\n      _key,\n      title,\n      description,\n      icon,\n      order,\n      cta{\n        \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n      }\n    },\n    testimonials[]->{\n      _id,\n      quote,\n      authorName,\n      authorRole,\n      rating,\n      tone,\n      authorImage{\n        \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n      }\n    },\n    statBlocks[]{\n      _key,\n      value,\n      label,\n      description,\n      icon\n    },\n    contentSections[]{\n      \n  _key,\n  _type,\n  _type == "hero" => {\n    eyebrow,\n    headline,\n    body,\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    },\n    layoutHint\n  },\n  _type == "heroSlide" => {\n    headline,\n    body,\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    },\n    featuredPet->{\n      _id,\n      name,\n      "slug": slug.current,\n      listingHeadline\n    },\n    featuredOwner->{\n      _id,\n      name,\n      "slug": slug.current,\n      tagline\n    }\n  },\n  _type == "contentSection" => {\n    header,\n    body[]{\n      \n  ...\n\n    },\n    media{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    },\n    layoutHint\n  },\n  _type == "calloutBlock" => {\n    headline,\n    body,\n    icon,\n    tone,\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "statBlock" => {\n    value,\n    label,\n    description,\n    icon\n  },\n  _type == "featureList" => {\n    header,\n    iconStyle,\n    items[]{\n      _key,\n      title,\n      description,\n      icon,\n      link{\n        \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n      }\n    }\n  },\n  _type == "accordion" => {\n    header,\n    items[]{\n      _key,\n      title,\n      body[]{\n        \n  ...\n\n      }\n    }\n  },\n  _type == "pricingComparisonTable" => {\n    header,\n    plans[]{\n      _key,\n      name,\n      price,\n      note,\n      highlighted\n    },\n    rows[]{\n      _key,\n      feature,\n      description,\n      values[]{\n        _key,\n        planKey,\n        included,\n        note\n      }\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "pricingValueSection" => {\n    valueItems[]{\n      _key,\n      title,\n      body,\n      icon\n    }\n  },\n  _type == "pricingPackageGrid" => {\n    header,\n    packages[]{\n      _key,\n      name,\n      price,\n      duration,\n      description,\n      icon,\n      tone,\n      badge,\n      highlighted,\n      features[]{\n        _key,\n        label\n      }\n    }\n  },\n  _type == "pricingCtaBand" => {\n    headline,\n    body,\n    icon,\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    },\n    proofItems[]{\n      _key,\n      label,\n      icon\n    }\n  },\n  _type == "processPathSection" => {\n    header,\n    title,\n    body,\n    tone,\n    icon,\n    steps[]{\n      _key,\n      title,\n      body[]{\n        \n  ...\n\n      },\n      description,\n      icon,\n      order,\n      cta{\n        \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n      }\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "warrantyConditionGrid" => {\n    header,\n    items[]{\n      _key,\n      title,\n      body,\n      tone,\n      icon\n    }\n  },\n  _type == "warrantyNoticeSection" => {\n    anchorId,\n    header,\n    body[]{\n      \n  ...\n\n    },\n    badgeLabel\n  },\n  _type == "warrantyClaimPrep" => {\n    anchorId,\n    header,\n    items[]{\n      _key,\n      title,\n      body,\n      icon\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    }\n  },\n  _type == "processStep" => {\n    title,\n    body[]{\n      \n  ...\n\n    },\n    description,\n    icon,\n    order,\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "ctaGroup" => {\n    \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n  }\n\n    },\n    primaryCta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  }\n': HOME_PAGE_QUERY_RESULT;
     '\n  *[_id == "petIndexPage"][0]{\n    _id,\n    seo{\n      \n  title,\n  description,\n  noIndex,\n  openGraphImage{\n    \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n  }\n\n    },\n    hero{\n      \n  _key,\n  _type,\n  _type == "hero" => {\n    eyebrow,\n    headline,\n    body,\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    },\n    layoutHint\n  },\n  _type == "heroSlide" => {\n    headline,\n    body,\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    },\n    featuredPet->{\n      _id,\n      name,\n      "slug": slug.current,\n      listingHeadline\n    },\n    featuredOwner->{\n      _id,\n      name,\n      "slug": slug.current,\n      tagline\n    }\n  },\n  _type == "contentSection" => {\n    header,\n    body[]{\n      \n  ...\n\n    },\n    media{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    },\n    layoutHint\n  },\n  _type == "calloutBlock" => {\n    headline,\n    body,\n    icon,\n    tone,\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "statBlock" => {\n    value,\n    label,\n    description,\n    icon\n  },\n  _type == "featureList" => {\n    header,\n    iconStyle,\n    items[]{\n      _key,\n      title,\n      description,\n      icon,\n      link{\n        \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n      }\n    }\n  },\n  _type == "accordion" => {\n    header,\n    items[]{\n      _key,\n      title,\n      body[]{\n        \n  ...\n\n      }\n    }\n  },\n  _type == "pricingComparisonTable" => {\n    header,\n    plans[]{\n      _key,\n      name,\n      price,\n      note,\n      highlighted\n    },\n    rows[]{\n      _key,\n      feature,\n      description,\n      values[]{\n        _key,\n        planKey,\n        included,\n        note\n      }\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "pricingValueSection" => {\n    valueItems[]{\n      _key,\n      title,\n      body,\n      icon\n    }\n  },\n  _type == "pricingPackageGrid" => {\n    header,\n    packages[]{\n      _key,\n      name,\n      price,\n      duration,\n      description,\n      icon,\n      tone,\n      badge,\n      highlighted,\n      features[]{\n        _key,\n        label\n      }\n    }\n  },\n  _type == "pricingCtaBand" => {\n    headline,\n    body,\n    icon,\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    },\n    proofItems[]{\n      _key,\n      label,\n      icon\n    }\n  },\n  _type == "processPathSection" => {\n    header,\n    title,\n    body,\n    tone,\n    icon,\n    steps[]{\n      _key,\n      title,\n      body[]{\n        \n  ...\n\n      },\n      description,\n      icon,\n      order,\n      cta{\n        \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n      }\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "warrantyConditionGrid" => {\n    header,\n    items[]{\n      _key,\n      title,\n      body,\n      tone,\n      icon\n    }\n  },\n  _type == "warrantyNoticeSection" => {\n    anchorId,\n    header,\n    body[]{\n      \n  ...\n\n    },\n    badgeLabel\n  },\n  _type == "warrantyClaimPrep" => {\n    anchorId,\n    header,\n    items[]{\n      _key,\n      title,\n      body,\n      icon\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    }\n  },\n  _type == "processStep" => {\n    title,\n    body[]{\n      \n  ...\n\n    },\n    description,\n    icon,\n    order,\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "ctaGroup" => {\n    \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n  }\n\n    },\n    summary,\n    filterIntro,\n    emptyState{\n      \n  _key,\n  _type,\n  _type == "hero" => {\n    eyebrow,\n    headline,\n    body,\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    },\n    layoutHint\n  },\n  _type == "heroSlide" => {\n    headline,\n    body,\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    },\n    featuredPet->{\n      _id,\n      name,\n      "slug": slug.current,\n      listingHeadline\n    },\n    featuredOwner->{\n      _id,\n      name,\n      "slug": slug.current,\n      tagline\n    }\n  },\n  _type == "contentSection" => {\n    header,\n    body[]{\n      \n  ...\n\n    },\n    media{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    },\n    layoutHint\n  },\n  _type == "calloutBlock" => {\n    headline,\n    body,\n    icon,\n    tone,\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "statBlock" => {\n    value,\n    label,\n    description,\n    icon\n  },\n  _type == "featureList" => {\n    header,\n    iconStyle,\n    items[]{\n      _key,\n      title,\n      description,\n      icon,\n      link{\n        \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n      }\n    }\n  },\n  _type == "accordion" => {\n    header,\n    items[]{\n      _key,\n      title,\n      body[]{\n        \n  ...\n\n      }\n    }\n  },\n  _type == "pricingComparisonTable" => {\n    header,\n    plans[]{\n      _key,\n      name,\n      price,\n      note,\n      highlighted\n    },\n    rows[]{\n      _key,\n      feature,\n      description,\n      values[]{\n        _key,\n        planKey,\n        included,\n        note\n      }\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "pricingValueSection" => {\n    valueItems[]{\n      _key,\n      title,\n      body,\n      icon\n    }\n  },\n  _type == "pricingPackageGrid" => {\n    header,\n    packages[]{\n      _key,\n      name,\n      price,\n      duration,\n      description,\n      icon,\n      tone,\n      badge,\n      highlighted,\n      features[]{\n        _key,\n        label\n      }\n    }\n  },\n  _type == "pricingCtaBand" => {\n    headline,\n    body,\n    icon,\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    },\n    proofItems[]{\n      _key,\n      label,\n      icon\n    }\n  },\n  _type == "processPathSection" => {\n    header,\n    title,\n    body,\n    tone,\n    icon,\n    steps[]{\n      _key,\n      title,\n      body[]{\n        \n  ...\n\n      },\n      description,\n      icon,\n      order,\n      cta{\n        \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n      }\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "warrantyConditionGrid" => {\n    header,\n    items[]{\n      _key,\n      title,\n      body,\n      tone,\n      icon\n    }\n  },\n  _type == "warrantyNoticeSection" => {\n    anchorId,\n    header,\n    body[]{\n      \n  ...\n\n    },\n    badgeLabel\n  },\n  _type == "warrantyClaimPrep" => {\n    anchorId,\n    header,\n    items[]{\n      _key,\n      title,\n      body,\n      icon\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    }\n  },\n  _type == "processStep" => {\n    title,\n    body[]{\n      \n  ...\n\n    },\n    description,\n    icon,\n    order,\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "ctaGroup" => {\n    \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n  }\n\n    },\n    featuredPets[]->{\n      \n  _id,\n  name,\n  "slug": slug.current,\n  breed,\n  listingHeadline,\n  listingSummary,\n  availabilityStatus,\n  distanceKilometers,\n  listingPlan,\n  hostPayoutAmount,\n  hostPayoutCurrency,\n  hostPayoutUnit,\n  temperament,\n  pickupUrgency,\n  messRisk,\n  chaosLevel,\n  energyLevel,\n  cuddlePolicy,\n  cardMedia{\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    lowFrameRateVideo{\n      \n  provider,\n  url,\n  title,\n  description,\n  posterImage{\n    \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n  }\n\n    }\n  },\n  petType->{\n    _id,\n    name,\n    pluralName,\n    "slug": slug.current,\n    filterLabel,\n    icon,\n    category,\n    sortOrder\n  },\n  owner->{\n    _id,\n    name,\n    "slug": slug.current,\n    tagline\n  }\n\n    },\n    contentSections[]{\n      \n  _key,\n  _type,\n  _type == "hero" => {\n    eyebrow,\n    headline,\n    body,\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    },\n    layoutHint\n  },\n  _type == "heroSlide" => {\n    headline,\n    body,\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    },\n    featuredPet->{\n      _id,\n      name,\n      "slug": slug.current,\n      listingHeadline\n    },\n    featuredOwner->{\n      _id,\n      name,\n      "slug": slug.current,\n      tagline\n    }\n  },\n  _type == "contentSection" => {\n    header,\n    body[]{\n      \n  ...\n\n    },\n    media{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    },\n    layoutHint\n  },\n  _type == "calloutBlock" => {\n    headline,\n    body,\n    icon,\n    tone,\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "statBlock" => {\n    value,\n    label,\n    description,\n    icon\n  },\n  _type == "featureList" => {\n    header,\n    iconStyle,\n    items[]{\n      _key,\n      title,\n      description,\n      icon,\n      link{\n        \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n      }\n    }\n  },\n  _type == "accordion" => {\n    header,\n    items[]{\n      _key,\n      title,\n      body[]{\n        \n  ...\n\n      }\n    }\n  },\n  _type == "pricingComparisonTable" => {\n    header,\n    plans[]{\n      _key,\n      name,\n      price,\n      note,\n      highlighted\n    },\n    rows[]{\n      _key,\n      feature,\n      description,\n      values[]{\n        _key,\n        planKey,\n        included,\n        note\n      }\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "pricingValueSection" => {\n    valueItems[]{\n      _key,\n      title,\n      body,\n      icon\n    }\n  },\n  _type == "pricingPackageGrid" => {\n    header,\n    packages[]{\n      _key,\n      name,\n      price,\n      duration,\n      description,\n      icon,\n      tone,\n      badge,\n      highlighted,\n      features[]{\n        _key,\n        label\n      }\n    }\n  },\n  _type == "pricingCtaBand" => {\n    headline,\n    body,\n    icon,\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    },\n    proofItems[]{\n      _key,\n      label,\n      icon\n    }\n  },\n  _type == "processPathSection" => {\n    header,\n    title,\n    body,\n    tone,\n    icon,\n    steps[]{\n      _key,\n      title,\n      body[]{\n        \n  ...\n\n      },\n      description,\n      icon,\n      order,\n      cta{\n        \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n      }\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "warrantyConditionGrid" => {\n    header,\n    items[]{\n      _key,\n      title,\n      body,\n      tone,\n      icon\n    }\n  },\n  _type == "warrantyNoticeSection" => {\n    anchorId,\n    header,\n    body[]{\n      \n  ...\n\n    },\n    badgeLabel\n  },\n  _type == "warrantyClaimPrep" => {\n    anchorId,\n    header,\n    items[]{\n      _key,\n      title,\n      body,\n      icon\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    }\n  },\n  _type == "processStep" => {\n    title,\n    body[]{\n      \n  ...\n\n    },\n    description,\n    icon,\n    order,\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "ctaGroup" => {\n    \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n  }\n\n    },\n    primaryCta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  }\n': PET_INDEX_PAGE_QUERY_RESULT;
     '\n  *[_type == "marketingPage" && slug.current == $slug][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    seo{\n      \n  title,\n  description,\n  noIndex,\n  openGraphImage{\n    \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n  }\n\n    },\n    sections[]{\n      \n  _key,\n  _type,\n  _type == "hero" => {\n    eyebrow,\n    headline,\n    body,\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    },\n    layoutHint\n  },\n  _type == "heroSlide" => {\n    headline,\n    body,\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    },\n    featuredPet->{\n      _id,\n      name,\n      "slug": slug.current,\n      listingHeadline\n    },\n    featuredOwner->{\n      _id,\n      name,\n      "slug": slug.current,\n      tagline\n    }\n  },\n  _type == "contentSection" => {\n    header,\n    body[]{\n      \n  ...\n\n    },\n    media{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    },\n    layoutHint\n  },\n  _type == "calloutBlock" => {\n    headline,\n    body,\n    icon,\n    tone,\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "statBlock" => {\n    value,\n    label,\n    description,\n    icon\n  },\n  _type == "featureList" => {\n    header,\n    iconStyle,\n    items[]{\n      _key,\n      title,\n      description,\n      icon,\n      link{\n        \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n      }\n    }\n  },\n  _type == "accordion" => {\n    header,\n    items[]{\n      _key,\n      title,\n      body[]{\n        \n  ...\n\n      }\n    }\n  },\n  _type == "pricingComparisonTable" => {\n    header,\n    plans[]{\n      _key,\n      name,\n      price,\n      note,\n      highlighted\n    },\n    rows[]{\n      _key,\n      feature,\n      description,\n      values[]{\n        _key,\n        planKey,\n        included,\n        note\n      }\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "pricingValueSection" => {\n    valueItems[]{\n      _key,\n      title,\n      body,\n      icon\n    }\n  },\n  _type == "pricingPackageGrid" => {\n    header,\n    packages[]{\n      _key,\n      name,\n      price,\n      duration,\n      description,\n      icon,\n      tone,\n      badge,\n      highlighted,\n      features[]{\n        _key,\n        label\n      }\n    }\n  },\n  _type == "pricingCtaBand" => {\n    headline,\n    body,\n    icon,\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    },\n    proofItems[]{\n      _key,\n      label,\n      icon\n    }\n  },\n  _type == "processPathSection" => {\n    header,\n    title,\n    body,\n    tone,\n    icon,\n    steps[]{\n      _key,\n      title,\n      body[]{\n        \n  ...\n\n      },\n      description,\n      icon,\n      order,\n      cta{\n        \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n      }\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "warrantyConditionGrid" => {\n    header,\n    items[]{\n      _key,\n      title,\n      body,\n      tone,\n      icon\n    }\n  },\n  _type == "warrantyNoticeSection" => {\n    anchorId,\n    header,\n    body[]{\n      \n  ...\n\n    },\n    badgeLabel\n  },\n  _type == "warrantyClaimPrep" => {\n    anchorId,\n    header,\n    items[]{\n      _key,\n      title,\n      body,\n      icon\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    }\n  },\n  _type == "processStep" => {\n    title,\n    body[]{\n      \n  ...\n\n    },\n    description,\n    icon,\n    order,\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "ctaGroup" => {\n    \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n  }\n\n    },\n    showContactForm\n  }\n': MARKETING_PAGE_BY_SLUG_QUERY_RESULT;
+    '\n  *[_type == "marketingPage" && _id == $id][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    seo{\n      \n  title,\n  description,\n  noIndex,\n  openGraphImage{\n    \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n  }\n\n    },\n    sections[]{\n      \n  _key,\n  _type,\n  _type == "hero" => {\n    eyebrow,\n    headline,\n    body,\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    },\n    layoutHint\n  },\n  _type == "heroSlide" => {\n    headline,\n    body,\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    },\n    featuredPet->{\n      _id,\n      name,\n      "slug": slug.current,\n      listingHeadline\n    },\n    featuredOwner->{\n      _id,\n      name,\n      "slug": slug.current,\n      tagline\n    }\n  },\n  _type == "contentSection" => {\n    header,\n    body[]{\n      \n  ...\n\n    },\n    media{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    },\n    layoutHint\n  },\n  _type == "calloutBlock" => {\n    headline,\n    body,\n    icon,\n    tone,\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "statBlock" => {\n    value,\n    label,\n    description,\n    icon\n  },\n  _type == "featureList" => {\n    header,\n    iconStyle,\n    items[]{\n      _key,\n      title,\n      description,\n      icon,\n      link{\n        \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n      }\n    }\n  },\n  _type == "accordion" => {\n    header,\n    items[]{\n      _key,\n      title,\n      body[]{\n        \n  ...\n\n      }\n    }\n  },\n  _type == "pricingComparisonTable" => {\n    header,\n    plans[]{\n      _key,\n      name,\n      price,\n      note,\n      highlighted\n    },\n    rows[]{\n      _key,\n      feature,\n      description,\n      values[]{\n        _key,\n        planKey,\n        included,\n        note\n      }\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "pricingValueSection" => {\n    valueItems[]{\n      _key,\n      title,\n      body,\n      icon\n    }\n  },\n  _type == "pricingPackageGrid" => {\n    header,\n    packages[]{\n      _key,\n      name,\n      price,\n      duration,\n      description,\n      icon,\n      tone,\n      badge,\n      highlighted,\n      features[]{\n        _key,\n        label\n      }\n    }\n  },\n  _type == "pricingCtaBand" => {\n    headline,\n    body,\n    icon,\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    },\n    proofItems[]{\n      _key,\n      label,\n      icon\n    }\n  },\n  _type == "processPathSection" => {\n    header,\n    title,\n    body,\n    tone,\n    icon,\n    steps[]{\n      _key,\n      title,\n      body[]{\n        \n  ...\n\n      },\n      description,\n      icon,\n      order,\n      cta{\n        \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n      }\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "warrantyConditionGrid" => {\n    header,\n    items[]{\n      _key,\n      title,\n      body,\n      tone,\n      icon\n    }\n  },\n  _type == "warrantyNoticeSection" => {\n    anchorId,\n    header,\n    body[]{\n      \n  ...\n\n    },\n    badgeLabel\n  },\n  _type == "warrantyClaimPrep" => {\n    anchorId,\n    header,\n    items[]{\n      _key,\n      title,\n      body,\n      icon\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    }\n  },\n  _type == "processStep" => {\n    title,\n    body[]{\n      \n  ...\n\n    },\n    description,\n    icon,\n    order,\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "ctaGroup" => {\n    \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n  }\n\n    },\n    showContactForm\n  }\n': MARKETING_PAGE_BY_ID_QUERY_RESULT;
     '\n  *[_type == "marketingPage" && defined(slug.current)] | order(slug.current asc){\n    "slug": slug.current\n  }\n': MARKETING_PAGE_SLUGS_QUERY_RESULT;
     '\n  *[_type == "systemPage" && pageType == $pageType][0]{\n    _id,\n    title,\n    pageType,\n    seo{\n      \n  title,\n  description,\n  noIndex,\n  openGraphImage{\n    \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n  }\n\n    },\n    eyebrow,\n    headline,\n    message,\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    primaryCta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    },\n    secondaryCta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    },\n    supportCopy,\n    contentSections[]{\n      \n  _key,\n  _type,\n  _type == "hero" => {\n    eyebrow,\n    headline,\n    body,\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    },\n    layoutHint\n  },\n  _type == "heroSlide" => {\n    headline,\n    body,\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    },\n    featuredPet->{\n      _id,\n      name,\n      "slug": slug.current,\n      listingHeadline\n    },\n    featuredOwner->{\n      _id,\n      name,\n      "slug": slug.current,\n      tagline\n    }\n  },\n  _type == "contentSection" => {\n    header,\n    body[]{\n      \n  ...\n\n    },\n    media{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    },\n    layoutHint\n  },\n  _type == "calloutBlock" => {\n    headline,\n    body,\n    icon,\n    tone,\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "statBlock" => {\n    value,\n    label,\n    description,\n    icon\n  },\n  _type == "featureList" => {\n    header,\n    iconStyle,\n    items[]{\n      _key,\n      title,\n      description,\n      icon,\n      link{\n        \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n      }\n    }\n  },\n  _type == "accordion" => {\n    header,\n    items[]{\n      _key,\n      title,\n      body[]{\n        \n  ...\n\n      }\n    }\n  },\n  _type == "pricingComparisonTable" => {\n    header,\n    plans[]{\n      _key,\n      name,\n      price,\n      note,\n      highlighted\n    },\n    rows[]{\n      _key,\n      feature,\n      description,\n      values[]{\n        _key,\n        planKey,\n        included,\n        note\n      }\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "pricingValueSection" => {\n    valueItems[]{\n      _key,\n      title,\n      body,\n      icon\n    }\n  },\n  _type == "pricingPackageGrid" => {\n    header,\n    packages[]{\n      _key,\n      name,\n      price,\n      duration,\n      description,\n      icon,\n      tone,\n      badge,\n      highlighted,\n      features[]{\n        _key,\n        label\n      }\n    }\n  },\n  _type == "pricingCtaBand" => {\n    headline,\n    body,\n    icon,\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    },\n    proofItems[]{\n      _key,\n      label,\n      icon\n    }\n  },\n  _type == "processPathSection" => {\n    header,\n    title,\n    body,\n    tone,\n    icon,\n    steps[]{\n      _key,\n      title,\n      body[]{\n        \n  ...\n\n      },\n      description,\n      icon,\n      order,\n      cta{\n        \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n      }\n    },\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "warrantyConditionGrid" => {\n    header,\n    items[]{\n      _key,\n      title,\n      body,\n      tone,\n      icon\n    }\n  },\n  _type == "warrantyNoticeSection" => {\n    anchorId,\n    header,\n    body[]{\n      \n  ...\n\n    },\n    badgeLabel\n  },\n  _type == "warrantyClaimPrep" => {\n    anchorId,\n    header,\n    items[]{\n      _key,\n      title,\n      body,\n      icon\n    },\n    ctaGroup{\n      \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n    }\n  },\n  _type == "processStep" => {\n    title,\n    body[]{\n      \n  ...\n\n    },\n    description,\n    icon,\n    order,\n    cta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    }\n  },\n  _type == "ctaGroup" => {\n    \n  primary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  secondary{\n    \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n  },\n  alignment\n\n  }\n\n    }\n  }\n': SYSTEM_PAGE_BY_TYPE_QUERY_RESULT;
-    '\n  *[\n  \n  _type == "pet" &&\n  defined(slug.current) &&\n  submissionStatus == "approved"\n &&\n  (!defined($petTypeSlugs) || petType->slug.current in $petTypeSlugs) &&\n  (!defined($availabilityStatuses) || availabilityStatus in $availabilityStatuses) &&\n  (!defined($cuddlePolicies) || cuddlePolicy in $cuddlePolicies) &&\n  (!defined($minChaos) || chaosLevel >= $minChaos) &&\n  (!defined($minMess) || messRisk >= $minMess) &&\n  (!defined($minEnergy) || energyLevel >= $minEnergy)\n]\n  | order(name asc, _id asc)[$start...$end]{\n    \n  _id,\n  name,\n  "slug": slug.current,\n  breed,\n  listingHeadline,\n  listingSummary,\n  availabilityStatus,\n  distanceKilometers,\n  listingPlan,\n  hostPayoutAmount,\n  hostPayoutCurrency,\n  hostPayoutUnit,\n  temperament,\n  pickupUrgency,\n  messRisk,\n  chaosLevel,\n  energyLevel,\n  cuddlePolicy,\n  cardMedia{\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    lowFrameRateVideo{\n      \n  provider,\n  url,\n  title,\n  description,\n  posterImage{\n    \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n  }\n\n    }\n  },\n  petType->{\n    _id,\n    name,\n    pluralName,\n    "slug": slug.current,\n    filterLabel,\n    icon,\n    category,\n    sortOrder\n  },\n  owner->{\n    _id,\n    name,\n    "slug": slug.current,\n    tagline\n  }\n\n  }\n': PETS_INDEX_QUERY_RESULT;
-    '\n  count(*[\n  \n  _type == "pet" &&\n  defined(slug.current) &&\n  submissionStatus == "approved"\n &&\n  (!defined($petTypeSlugs) || petType->slug.current in $petTypeSlugs) &&\n  (!defined($availabilityStatuses) || availabilityStatus in $availabilityStatuses) &&\n  (!defined($cuddlePolicies) || cuddlePolicy in $cuddlePolicies) &&\n  (!defined($minChaos) || chaosLevel >= $minChaos) &&\n  (!defined($minMess) || messRisk >= $minMess) &&\n  (!defined($minEnergy) || energyLevel >= $minEnergy)\n])\n': PETS_INDEX_COUNT_QUERY_RESULT;
-    '\n  *[\n  _type == "pet" &&\n  defined(slug.current) &&\n  submissionStatus == "approved"\n && slug.current == $slug][0]{\n    _id,\n    name,\n    "slug": slug.current,\n    breed,\n    ageYears,\n    dateOfBirth,\n    listingHeadline,\n    listingSummary,\n    availabilityStatus,\n    temperament,\n    pickupUrgency,\n    messRisk,\n    chaosLevel,\n    energyLevel,\n    cuddlePolicy,\n    cardMedia{\n      image{\n        \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n      },\n      lowFrameRateVideo{\n        \n  provider,\n  url,\n  title,\n  description,\n  posterImage{\n    \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n  }\n\n      }\n    },\n    heroImages[]{\n      _key,\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    summary,\n    description[]{\n      \n  ...\n\n    },\n    personalityTraits[],\n    careNotes[],\n    availability[],\n    borrowTerms[],\n    stats[],\n    warnings[],\n    videos[]{\n      _key,\n      \n  provider,\n  url,\n  title,\n  description,\n  posterImage{\n    \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n  }\n\n    },\n    contactOwnerCta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    },\n    seo{\n      \n  title,\n  description,\n  noIndex,\n  openGraphImage{\n    \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n  }\n\n    },\n    petType->{\n      _id,\n      name,\n      pluralName,\n      "slug": slug.current,\n      filterLabel,\n      icon,\n      category,\n      summary\n    },\n    owner->{\n      _id,\n      name,\n      "slug": slug.current,\n      tagline,\n      bio[]{\n        \n  ...\n\n      },\n      location,\n      memberSince,\n      portrait{\n        \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n      },\n      contactCta{\n        \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n      }\n    },\n    testimonial->{\n      _id,\n      quote,\n      authorName,\n      authorRole,\n      rating,\n      tone,\n      authorImage{\n        \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n      }\n    }\n  }\n': PET_BY_SLUG_QUERY_RESULT;
-    '\n  *[\n  _type == "pet" &&\n  defined(slug.current) &&\n  submissionStatus == "approved"\n] | order(slug.current asc){\n    "slug": slug.current\n  }\n': PET_SLUGS_QUERY_RESULT;
+    '\n  *[\n  \n  _type == "pet" &&\n  defined(slug.current) &&\n  (\n    submissionStatus == "approved" ||\n    ($includeUnapproved == true && !(submissionStatus in ["rejected", "archived"]))\n  )\n &&\n  (!defined($petTypeSlugs) || petType->slug.current in $petTypeSlugs) &&\n  (!defined($availabilityStatuses) || availabilityStatus in $availabilityStatuses) &&\n  (!defined($cuddlePolicies) || cuddlePolicy in $cuddlePolicies) &&\n  (!defined($minChaos) || chaosLevel >= $minChaos) &&\n  (!defined($minMess) || messRisk >= $minMess) &&\n  (!defined($minEnergy) || energyLevel >= $minEnergy)\n]\n  | order(name asc, _id asc)[$start...$end]{\n    \n  _id,\n  name,\n  "slug": slug.current,\n  breed,\n  listingHeadline,\n  listingSummary,\n  availabilityStatus,\n  distanceKilometers,\n  listingPlan,\n  hostPayoutAmount,\n  hostPayoutCurrency,\n  hostPayoutUnit,\n  temperament,\n  pickupUrgency,\n  messRisk,\n  chaosLevel,\n  energyLevel,\n  cuddlePolicy,\n  cardMedia{\n    image{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    lowFrameRateVideo{\n      \n  provider,\n  url,\n  title,\n  description,\n  posterImage{\n    \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n  }\n\n    }\n  },\n  petType->{\n    _id,\n    name,\n    pluralName,\n    "slug": slug.current,\n    filterLabel,\n    icon,\n    category,\n    sortOrder\n  },\n  owner->{\n    _id,\n    name,\n    "slug": slug.current,\n    tagline\n  }\n\n  }\n': PETS_INDEX_QUERY_RESULT;
+    '\n  count(*[\n  \n  _type == "pet" &&\n  defined(slug.current) &&\n  (\n    submissionStatus == "approved" ||\n    ($includeUnapproved == true && !(submissionStatus in ["rejected", "archived"]))\n  )\n &&\n  (!defined($petTypeSlugs) || petType->slug.current in $petTypeSlugs) &&\n  (!defined($availabilityStatuses) || availabilityStatus in $availabilityStatuses) &&\n  (!defined($cuddlePolicies) || cuddlePolicy in $cuddlePolicies) &&\n  (!defined($minChaos) || chaosLevel >= $minChaos) &&\n  (!defined($minMess) || messRisk >= $minMess) &&\n  (!defined($minEnergy) || energyLevel >= $minEnergy)\n])\n': PETS_INDEX_COUNT_QUERY_RESULT;
+    '\n  *[\n  _type == "pet" &&\n  defined(slug.current) &&\n  (\n    submissionStatus == "approved" ||\n    ($includeUnapproved == true && !(submissionStatus in ["rejected", "archived"]))\n  )\n && slug.current == $slug][0]{\n    _id,\n    name,\n    "slug": slug.current,\n    breed,\n    ageYears,\n    dateOfBirth,\n    listingHeadline,\n    listingSummary,\n    availabilityStatus,\n    temperament,\n    pickupUrgency,\n    messRisk,\n    chaosLevel,\n    energyLevel,\n    cuddlePolicy,\n    cardMedia{\n      image{\n        \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n      },\n      lowFrameRateVideo{\n        \n  provider,\n  url,\n  title,\n  description,\n  posterImage{\n    \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n  }\n\n      }\n    },\n    heroImages[]{\n      _key,\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    summary,\n    description[]{\n      \n  ...\n\n    },\n    personalityTraits[],\n    careNotes[],\n    availability[],\n    borrowTerms[],\n    stats[],\n    warnings[],\n    videos[]{\n      _key,\n      \n  provider,\n  url,\n  title,\n  description,\n  posterImage{\n    \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n  }\n\n    },\n    contactOwnerCta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    },\n    seo{\n      \n  title,\n  description,\n  noIndex,\n  openGraphImage{\n    \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n  }\n\n    },\n    petType->{\n      _id,\n      name,\n      pluralName,\n      "slug": slug.current,\n      filterLabel,\n      icon,\n      category,\n      summary\n    },\n    owner->{\n      _id,\n      name,\n      "slug": slug.current,\n      tagline,\n      bio[]{\n        \n  ...\n\n      },\n      location,\n      memberSince,\n      portrait{\n        \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n      },\n      contactCta{\n        \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n      }\n    },\n    testimonial->{\n      _id,\n      quote,\n      authorName,\n      authorRole,\n      rating,\n      tone,\n      authorImage{\n        \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n      }\n    }\n  }\n': PET_BY_SLUG_QUERY_RESULT;
+    '\n  *[_type == "pet" && _id == $id][0]{\n    _id,\n    name,\n    "slug": slug.current,\n    breed,\n    ageYears,\n    dateOfBirth,\n    listingHeadline,\n    listingSummary,\n    availabilityStatus,\n    temperament,\n    pickupUrgency,\n    messRisk,\n    chaosLevel,\n    energyLevel,\n    cuddlePolicy,\n    cardMedia{\n      image{\n        \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n      },\n      lowFrameRateVideo{\n        \n  provider,\n  url,\n  title,\n  description,\n  posterImage{\n    \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n  }\n\n      }\n    },\n    heroImages[]{\n      _key,\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    summary,\n    description[]{\n      \n  ...\n\n    },\n    personalityTraits[],\n    careNotes[],\n    availability[],\n    borrowTerms[],\n    stats[],\n    warnings[],\n    videos[]{\n      _key,\n      \n  provider,\n  url,\n  title,\n  description,\n  posterImage{\n    \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n  }\n\n    },\n    contactOwnerCta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    },\n    seo{\n      \n  title,\n  description,\n  noIndex,\n  openGraphImage{\n    \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n  }\n\n    },\n    petType->{\n      _id,\n      name,\n      pluralName,\n      "slug": slug.current,\n      filterLabel,\n      icon,\n      category,\n      summary\n    },\n    owner->{\n      _id,\n      name,\n      "slug": slug.current,\n      tagline,\n      bio[]{\n        \n  ...\n\n      },\n      location,\n      memberSince,\n      portrait{\n        \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n      },\n      contactCta{\n        \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n      }\n    },\n    testimonial->{\n      _id,\n      quote,\n      authorName,\n      authorRole,\n      rating,\n      tone,\n      authorImage{\n        \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n      }\n    }\n  }\n': PET_BY_ID_QUERY_RESULT;
+    '\n  *[_type == "pet" && defined(slug.current) && submissionStatus == "approved"] | order(slug.current asc){\n    "slug": slug.current\n  }\n': PET_SLUGS_QUERY_RESULT;
     '\n  *[_id == "siteSettings"][0]{\n    _id,\n    title,\n    description,\n    defaultSeo{\n      \n  title,\n  description,\n  noIndex,\n  openGraphImage{\n    \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n  }\n\n    },\n    logo{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    primaryNavigation[]{\n      _key,\n      label,\n      link{\n        \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n      },\n      children[]{\n        _key,\n        label,\n        link{\n          \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n        }\n      }\n    },\n    footerNavigation[]{\n      _key,\n      label,\n      link{\n        \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n      }\n    },\n    defaultCta{\n      \n  label,\n  style,\n  icon,\n  link{\n    \n  type,\n  label,\n  path,\n  url,\n  action,\n  openInNewTab\n\n  }\n\n    },\n    contactEmail\n  }\n': SITE_SETTINGS_QUERY_RESULT;
     '\n  *[_type == "petType" && defined(slug.current)]\n  | order(sortOrder asc, name asc){\n    _id,\n    name,\n    pluralName,\n    "slug": slug.current,\n    filterLabel,\n    category,\n    icon,\n    customIcon,\n    summary,\n    defaultImage{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    sortOrder,\n    featured\n  }\n': PET_TYPES_QUERY_RESULT;
     '\n  *[_type == "testimonial" && featured == true]\n  | order(_updatedAt desc){\n    _id,\n    quote,\n    authorName,\n    authorRole,\n    rating,\n    tone,\n    authorImage{\n      \n  image{\n    asset->{\n      _id,\n      url,\n      metadata{\n        lqip,\n        dimensions{\n          width,\n          height,\n          aspectRatio\n        }\n      }\n    },\n    crop,\n    hotspot\n  },\n  alt,\n  caption\n\n    },\n    relatedPet->{\n      _id,\n      name,\n      "slug": slug.current\n    },\n    relatedOwner->{\n      _id,\n      name,\n      "slug": slug.current\n    }\n  }\n': FEATURED_TESTIMONIALS_QUERY_RESULT;

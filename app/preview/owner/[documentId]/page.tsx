@@ -1,25 +1,17 @@
-import type { Metadata } from "next";
 import Image from "next/image";
 import { draftMode } from "next/headers";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { CalendarDays, MapPin, PawPrint } from "lucide-react";
 import { PetCard } from "@/components/features/pets/pet-card";
 import { SystemMessage } from "@/components/features/system/system-message";
 import { portableTextToPlainText } from "@/lib/content/plain-text";
-import { metadataFromSeo } from "@/lib/content/metadata";
-import { loadOwnerBySlug, loadOwnerSlugs } from "@/sanity/lib/loaders";
+import { loadOwnerById } from "@/sanity/lib/loaders";
 
-type OwnerSlugPageProps = Readonly<{
+type OwnerDocumentPreviewPageProps = Readonly<{
   params: Promise<{
-    slug: string;
+    documentId: string;
   }>;
 }>;
-
-export async function generateStaticParams() {
-  const owners = await loadOwnerSlugs();
-
-  return owners.map((owner) => ({ slug: owner.slug }));
-}
 
 function formatMemberSince(value: string | null | undefined) {
   if (!value) return null;
@@ -30,58 +22,34 @@ function formatMemberSince(value: string | null | undefined) {
   return new Intl.DateTimeFormat("en", { month: "long", year: "numeric" }).format(date);
 }
 
-export async function generateMetadata({ params }: OwnerSlugPageProps): Promise<Metadata> {
-  const { slug } = await params;
-  let owner: Awaited<ReturnType<typeof loadOwnerBySlug>> | null = null;
-
-  try {
-    owner = await loadOwnerBySlug(slug);
-  } catch {
-    return metadataFromSeo({
-      fallbackTitle: "Owner profile",
-      fallbackDescription: "This owner page is temporarily unavailable."
-    });
-  }
-
-  if (!owner) {
-    return metadataFromSeo({
-      fallbackTitle: "Owner not found",
-      fallbackDescription: "This owner page is not available."
-    });
-  }
-
-  return metadataFromSeo({
-    seo: owner.seo,
-    fallbackTitle: owner.name,
-    fallbackDescription: owner.tagline
-  });
-}
-
 /**
- * Renders a direct owner detail page without exposing an owner directory.
+ * Renders an unpublished owner profile draft by Sanity document ID.
  */
-export default async function OwnerSlugPage({ params }: OwnerSlugPageProps) {
-  const { slug } = await params;
+export default async function OwnerDocumentPreviewPage({ params }: OwnerDocumentPreviewPageProps) {
   const { isEnabled } = await draftMode();
-  let owner: Awaited<ReturnType<typeof loadOwnerBySlug>> | null = null;
 
-  try {
-    owner = await loadOwnerBySlug(slug, { preview: isEnabled });
-  } catch {
+  if (!isEnabled) {
     return (
       <SystemMessage
         variant="error"
-        eyebrow="Owner unavailable"
-        title="This owner stepped away from the handoff desk."
-        message="The owner profile could not be loaded right now. Try again after the handoff desk gets its papers sorted."
-        primaryHref="/pets"
-        primaryLabel="Find a temporary pet"
+        eyebrow="Preview unavailable"
+        title="This owner profile needs Draft Mode."
+        message="Open this profile from Sanity Presentation so the preview session is authorized."
+        primaryHref="/studio"
+        primaryLabel="Open Studio"
       />
     );
   }
 
+  const { documentId } = await params;
+  const owner = await loadOwnerById(decodeURIComponent(documentId), { preview: true });
+
   if (!owner) {
     notFound();
+  }
+
+  if (owner.slug) {
+    redirect(`/owners/${owner.slug}`);
   }
 
   const portraitUrl = owner.portrait?.image?.asset?.url;
@@ -109,12 +77,10 @@ export default async function OwnerSlugPage({ params }: OwnerSlugPageProps) {
         </div>
 
         <div>
-          <p className="text-sm font-bold uppercase tracking-[0.18em] text-pet-muted">Owner profile</p>
-          <h1 className="mt-3 font-display text-4xl font-bold leading-tight text-pet-ink sm:text-6xl">
-            {owner.name}
-          </h1>
+          <p className="text-sm font-bold uppercase tracking-[0.18em] text-pet-muted">Owner profile preview</p>
+          <h1 className="mt-3 font-display text-4xl font-bold leading-tight text-pet-ink sm:text-6xl">{owner.name}</h1>
           <p className="mt-4 text-xl font-bold text-pet-muted">{owner.tagline}</p>
-          <p className="mt-6 max-w-3xl whitespace-pre-line leading-8 text-pet-muted">
+          <p className="mt-6 max-w-3xl leading-8 text-pet-muted">
             {bio || "This owner has not finished filling out their profile yet."}
           </p>
           <div className="mt-6 flex flex-wrap gap-3 text-sm font-bold text-pet-muted">
@@ -149,7 +115,7 @@ export default async function OwnerSlugPage({ params }: OwnerSlugPageProps) {
           <SystemMessage
             variant="empty"
             eyebrow="No pets listed"
-            title="This owner has temporarily reclaimed all chaos."
+            title="This owner has temporarily reclaimed all responsibility."
             message="This owner does not have any pets available right now."
             primaryHref="/pets"
             primaryLabel="Find a temporary pet"

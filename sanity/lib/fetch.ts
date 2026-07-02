@@ -1,13 +1,13 @@
 import type { QueryParams } from "@sanity/client";
-import { sanityClient, uncachedSanityClient } from "./client";
-import { createPreviewClient } from "./preview-client";
+import { uncachedSanityClient } from "./client";
+import { liveSanityFetch } from "./live";
 
 type SanityFetchOptions = Readonly<{
   query: string;
   params?: QueryParams;
   tags?: string[];
   revalidate?: number | false;
-  perspective?: "published" | "previewDrafts";
+  perspective?: "published" | "drafts";
   useCdn?: boolean;
 }>;
 
@@ -40,10 +40,20 @@ export async function sanityFetch<Result>({
   revalidate = defaultRevalidateSeconds,
   useCdn = true
 }: SanityFetchOptions): Promise<Result> {
-  const client = useCdn ? sanityClient : uncachedSanityClient;
+  if (useCdn) {
+    const result = await liveSanityFetch({
+      query,
+      params,
+      perspective: "published",
+      stega: false,
+      tags
+    });
+
+    return result.data as Result;
+  }
 
   return withSanityTimeout(
-    client.fetch<Result>(query, params, {
+    uncachedSanityClient.fetch<Result>(query, params, {
       next: {
         revalidate,
         tags
@@ -60,12 +70,13 @@ export async function previewSanityFetch<Result>({
   params = {},
   tags = []
 }: Omit<SanityFetchOptions, "perspective" | "revalidate" | "useCdn">): Promise<Result> {
-  return withSanityTimeout(
-    createPreviewClient().fetch<Result>(query, params, {
-      cache: "no-store",
-      next: {
-        tags
-      }
-    })
-  );
+  const result = await liveSanityFetch({
+    query,
+    params,
+    perspective: "drafts",
+    stega: true,
+    tags
+  });
+
+  return result.data as Result;
 }

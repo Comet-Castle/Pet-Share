@@ -3,10 +3,13 @@ import type {
   FEATURED_TESTIMONIALS_QUERY_RESULT,
   FORM_DEFINITION_BY_SLUG_QUERY_RESULT,
   HOME_PAGE_QUERY_RESULT,
+  MARKETING_PAGE_BY_ID_QUERY_RESULT,
   MARKETING_PAGE_BY_SLUG_QUERY_RESULT,
   MARKETING_PAGE_SLUGS_QUERY_RESULT,
+  OWNER_BY_ID_QUERY_RESULT,
   OWNER_BY_SLUG_QUERY_RESULT,
   OWNER_SLUGS_QUERY_RESULT,
+  PET_BY_ID_QUERY_RESULT,
   PET_BY_SLUG_QUERY_RESULT,
   PET_INDEX_PAGE_QUERY_RESULT,
   PET_SLUGS_QUERY_RESULT,
@@ -20,10 +23,13 @@ import {
   FEATURED_TESTIMONIALS_QUERY,
   FORM_DEFINITION_BY_SLUG_QUERY,
   HOME_PAGE_QUERY,
+  MARKETING_PAGE_BY_ID_QUERY,
   MARKETING_PAGE_BY_SLUG_QUERY,
   MARKETING_PAGE_SLUGS_QUERY,
+  OWNER_BY_ID_QUERY,
   OWNER_BY_SLUG_QUERY,
   OWNER_SLUGS_QUERY,
+  PET_BY_ID_QUERY,
   PET_BY_SLUG_QUERY,
   PET_INDEX_PAGE_QUERY,
   PET_SLUGS_QUERY,
@@ -125,6 +131,18 @@ export function loadMarketingPageBySlug(slug: string, options: LoadOptions = {})
 }
 
 /**
+ * Loads one Standard Page by document ID for unpublished draft previews.
+ */
+export function loadMarketingPageById(id: string, options: LoadOptions = {}) {
+  return loadQuery<MARKETING_PAGE_BY_ID_QUERY_RESULT>({
+    ...options,
+    query: MARKETING_PAGE_BY_ID_QUERY,
+    params: { id },
+    tags: [sanityTags.marketingPage(id)]
+  });
+}
+
+/**
  * Loads marketing page slugs for static route generation.
  */
 export function loadMarketingPageSlugs(options: LoadOptions = {}) {
@@ -164,7 +182,7 @@ export function loadPetsIndex(
   return loadQuery<PETS_INDEX_QUERY_RESULT>({
     ...options,
     query: PETS_INDEX_QUERY,
-    params: { start, end, ...queryFilters },
+    params: { start, end, ...queryFilters, includeUnapproved: options.preview === true },
     tags: [sanityTags.petIndex]
   });
 }
@@ -178,7 +196,7 @@ export function loadPetsIndexCount(filters: PetIndexFilters = {}, options: LoadO
   return loadQuery<PETS_INDEX_COUNT_QUERY_RESULT>({
     ...options,
     query: PETS_INDEX_COUNT_QUERY,
-    params: queryFilters,
+    params: { ...queryFilters, includeUnapproved: options.preview === true },
     tags: [sanityTags.petIndex]
   });
 }
@@ -201,8 +219,20 @@ export function loadPetBySlug(slug: string, options: LoadOptions = {}) {
   return loadQuery<PET_BY_SLUG_QUERY_RESULT>({
     ...options,
     query: PET_BY_SLUG_QUERY,
-    params: { slug },
+    params: { slug, includeUnapproved: options.preview === true },
     tags: [sanityTags.pet(slug)]
+  });
+}
+
+/**
+ * Loads one pet by document ID for unpublished draft previews.
+ */
+export function loadPetById(id: string, options: LoadOptions = {}) {
+  return loadQuery<PET_BY_ID_QUERY_RESULT>({
+    ...options,
+    query: PET_BY_ID_QUERY,
+    params: { id },
+    tags: [sanityTags.pet(id)]
   });
 }
 
@@ -225,8 +255,20 @@ export function loadOwnerBySlug(slug: string, options: LoadOptions = {}) {
   return loadQuery<OWNER_BY_SLUG_QUERY_RESULT>({
     ...options,
     query: OWNER_BY_SLUG_QUERY,
-    params: { slug },
+    params: { slug, includeUnapproved: options.preview === true },
     tags: [sanityTags.owner(slug)]
+  });
+}
+
+/**
+ * Loads one owner by document ID for unpublished draft previews.
+ */
+export function loadOwnerById(id: string, options: LoadOptions = {}) {
+  return loadQuery<OWNER_BY_ID_QUERY_RESULT>({
+    ...options,
+    query: OWNER_BY_ID_QUERY,
+    params: { id, includeUnapproved: options.preview === true },
+    tags: [sanityTags.owner(id)]
   });
 }
 

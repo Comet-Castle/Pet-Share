@@ -6,21 +6,21 @@ import { SiteShell } from "@/components/layout/site-shell";
 import { logger } from "@/lib/diagnostics/logger";
 import { loadSiteSettings } from "@/sanity/lib/loaders";
 
-type SiteLayoutProps = Readonly<{
+type PreviewLayoutProps = Readonly<{
   children: ReactNode;
 }>;
 
 /**
- * Wraps public pages in the shared responsive shell and tolerates CMS downtime.
+ * Gives document-ID preview routes the same public shell as normal site pages.
  */
-export default async function SiteLayout({ children }: SiteLayoutProps) {
+export default async function PreviewLayout({ children }: PreviewLayoutProps) {
   const { isEnabled } = await draftMode();
   let settings: Awaited<ReturnType<typeof loadSiteSettings>> | undefined;
 
   try {
     settings = await loadSiteSettings({ preview: isEnabled });
   } catch (error) {
-    logger.error("Failed to load site settings for public shell.", {
+    logger.error("Failed to load site settings for preview shell.", {
       error: error instanceof Error ? error.message : "Unknown error"
     });
   }

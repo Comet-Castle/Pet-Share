@@ -36,6 +36,7 @@ Implementation work should follow `docs/milestones.md` as the controlling scope.
 - Content governance: `docs/content-governance.md`
 - Launch checklist: `docs/launch-checklist.md`
 - Implementation milestones: `docs/milestones.md`
+- Sanity Presentation and preview workflow: `docs/sanity-presentation-and-media.md`
 - Future work backlog: `docs/backlog.md`
 - Shared agent instructions: `AGENTS.md`
 - Third-party attribution log: `ATTRIBUTIONS.md`
@@ -63,6 +64,18 @@ pnpm studio
 ```
 
 The public scaffold is available at `http://localhost:3000/` during development. Sanity Studio is mounted at `http://localhost:3000/studio`.
+
+## Sanity Presentation And Draft Preview
+
+Sanity Studio includes the Presentation tool for visual page editing. Locally, set `SANITY_STUDIO_PREVIEW_ORIGIN=http://localhost:3000`, run `pnpm dev`, open `http://localhost:3000/studio`, then use the Presentation tab to preview supported documents.
+
+Draft preview uses `/api/draft-mode/enable` and Sanity's preview-secret flow. The app needs `SANITY_API_READ_TOKEN` for server-side draft reads. When Draft Mode is active, the public site shows a preview banner with an exit action.
+
+Sanity Live is mounted in the root layout so published content updates can revalidate automatically. For draft-capable live updates inside Presentation, set `SANITY_API_BROWSER_READ_TOKEN` to a least-privilege Sanity viewer token. Leave it blank if you want draft preview reads to remain server-only; click-to-edit still works, but draft changes may require a preview refresh.
+
+Supported preview locations include the homepage, pet index page, Standard Pages, system pages, pet detail pages, and owner detail pages. Unpublished Standard Pages, pets, and owners without public slugs use document-ID preview routes under `/preview/page/[documentId]`, `/preview/pet/[documentId]`, and `/preview/owner/[documentId]`.
+
+Sanity Media Library is enabled in Studio. Leave `SANITY_STUDIO_MEDIA_LIBRARY_ID` blank to let Sanity auto-detect the connected library, or set it when a specific library should be used.
 
 ## Seed Data
 

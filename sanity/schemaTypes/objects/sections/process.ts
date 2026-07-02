@@ -6,10 +6,12 @@ import { processToneOptions } from "../studio-options";
 const placeholderProcessStepBody = [
   {
     _type: "block",
+    _key: "processStepBodyBlock",
     style: "normal",
     children: [
       {
         _type: "span",
+        _key: "processStepBodyText",
         text: "Explain what happens in this step and what the editor should expect.",
         marks: []
       }

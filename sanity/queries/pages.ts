@@ -124,6 +124,21 @@ export const MARKETING_PAGE_BY_SLUG_QUERY = defineQuery(/* groq */ `
   }
 `);
 
+export const MARKETING_PAGE_BY_ID_QUERY = defineQuery(/* groq */ `
+  *[_type == "marketingPage" && _id == $id][0]{
+    _id,
+    title,
+    "slug": slug.current,
+    seo{
+      ${seoFields}
+    },
+    sections[]{
+      ${sectionFields}
+    },
+    showContactForm
+  }
+`);
+
 export const MARKETING_PAGE_SLUGS_QUERY = defineQuery(/* groq */ `
   *[_type == "marketingPage" && defined(slug.current)] | order(slug.current asc){
     "slug": slug.current

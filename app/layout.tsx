@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import { Nunito_Sans, Quicksand } from "next/font/google";
+import { draftMode } from "next/headers";
+import { VisualEditingClient } from "@/components/features/preview/visual-editing";
+import { SanityLive } from "@/sanity/lib/live";
 import "./globals.css";
 
 const nunitoSans = Nunito_Sans({
@@ -30,10 +33,16 @@ type RootLayoutProps = Readonly<{
 /**
  * Defines the global document shell and font variables for every route.
  */
-export default function RootLayout({ children }: RootLayoutProps) {
+export default async function RootLayout({ children }: RootLayoutProps) {
+  const { isEnabled } = await draftMode();
+
   return (
     <html lang="en" className={`${nunitoSans.variable} ${quicksand.variable}`}>
-      <body>{children}</body>
+      <body>
+        {children}
+        <SanityLive includeDrafts={isEnabled && Boolean(process.env.SANITY_API_BROWSER_READ_TOKEN)} />
+        {isEnabled ? <VisualEditingClient /> : null}
+      </body>
     </html>
   );
 }

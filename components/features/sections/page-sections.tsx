@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { stegaClean } from "@sanity/client/stega";
 import {
   AlertTriangle,
   CheckCircle2,
@@ -43,12 +44,14 @@ function SectionHeader({ header, className }: Readonly<{ header: SectionHeaderVa
     return null;
   }
 
+  const alignment = stegaClean(header.alignment);
+
   return (
     <div
       className={joinClassNames(
         "mb-8",
-        header.alignment === "center" && "mx-auto max-w-3xl text-center",
-        header.alignment === "right" && "ml-auto max-w-3xl text-right",
+        alignment === "center" && "mx-auto max-w-3xl text-center",
+        alignment === "right" && "ml-auto max-w-3xl text-right",
         className
       )}
     >
@@ -62,7 +65,7 @@ function SectionHeader({ header, className }: Readonly<{ header: SectionHeaderVa
 }
 
 function HeroSection(section: SectionByType<"hero">) {
-  if (section.layoutHint === "centered") {
+  if (stegaClean(section.layoutHint) === "centered") {
     return (
       <SectionFrame className="pb-8 pt-10 lg:pb-10 lg:pt-16">
         <div className="mx-auto max-w-5xl text-center">
@@ -135,7 +138,7 @@ function HeroSlideSection(section: SectionByType<"heroSlide">) {
 
 function ContentSection(section: SectionByType<"contentSection">) {
   const hasMedia = Boolean(section.media);
-  const mediaFirst = section.layoutHint === "mediaLeft";
+  const mediaFirst = stegaClean(section.layoutHint) === "mediaLeft";
 
   return (
     <SectionFrame>
@@ -195,18 +198,20 @@ function StatBlock(section: SectionByType<"statBlock">) {
 }
 
 function FeatureList(section: SectionByType<"featureList">) {
+  const iconStyle = stegaClean(section.iconStyle);
+
   return (
     <SectionFrame>
       <SectionHeader header={section.header} />
       <div className="grid min-w-0 gap-5 md:grid-cols-2 xl:grid-cols-3">
         {section.items?.map((item) => (
           <article key={item._key} className="min-w-0 rounded-[2rem] bg-white/70 p-6 shadow-soft backdrop-blur">
-            <IconBadge icon={item.icon} className={section.iconStyle === "outline" ? "bg-white ring-2 ring-pet-mint" : undefined} />
+            <IconBadge icon={item.icon} className={iconStyle === "outline" ? "bg-white ring-2 ring-pet-mint" : undefined} />
             <h3 className="mt-5 font-display text-2xl font-bold text-pet-ink">{item.title}</h3>
             {item.description ? <p className="mt-3 leading-7 text-pet-muted">{item.description}</p> : null}
             {item.link ? (
               <Link
-                href={item.link.type === "externalUrl" ? item.link.url ?? "/" : item.link.path ?? "/"}
+                href={stegaClean(item.link.type) === "externalUrl" ? item.link.url ?? "/" : item.link.path ?? "/"}
                 className="mt-5 inline-flex font-bold text-pet-ink underline decoration-pet-coral decoration-2 underline-offset-4 focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2"
               >
                 {item.link.label}
@@ -343,6 +348,7 @@ function PricingPackageGrid(section: SectionByType<"pricingPackageGrid">) {
 
       <div className="grid gap-6 lg:grid-cols-2">
         {section.packages?.map((plan) => (
+          // Clean tone before class lookup because stega strings include invisible source-map markers in Presentation.
           <article
             key={plan._key}
             className={joinClassNames(
@@ -357,7 +363,10 @@ function PricingPackageGrid(section: SectionByType<"pricingPackageGrid">) {
             ) : null}
             <IconBadge
               icon={plan.icon}
-              className={joinClassNames("size-16", pricingToneClasses[(plan.tone ?? "mint") as keyof typeof pricingToneClasses])}
+              className={joinClassNames(
+                "size-16",
+                pricingToneClasses[(stegaClean(plan.tone) || "mint") as keyof typeof pricingToneClasses]
+              )}
             />
             <div className="min-w-0 pr-0 sm:pr-24">
               <div className="flex flex-wrap items-end gap-x-3 gap-y-1">
@@ -434,7 +443,7 @@ function WarrantyConditionGrid(section: SectionByType<"warrantyConditionGrid">) 
       <SectionHeader header={section.header} />
       <div className="grid gap-5 lg:grid-cols-3">
         {section.items?.map((item) => {
-          const tone = warrantyToneClasses[(item.tone ?? "covered") as keyof typeof warrantyToneClasses];
+          const tone = warrantyToneClasses[(stegaClean(item.tone) || "covered") as keyof typeof warrantyToneClasses];
 
           return (
             <article
@@ -498,8 +507,9 @@ function WarrantyClaimPrep(section: SectionByType<"warrantyClaimPrep">) {
 }
 
 function ProcessPathSection(section: SectionByType<"processPathSection">) {
-  const toneClass = section.tone === "owner" ? "bg-pet-mint/25" : section.tone === "host" ? "bg-pet-blue/20" : "bg-white/70";
-  const HeaderIcon = section.tone === "owner" ? Home : section.tone === "host" ? Search : ListChecks;
+  const tone = stegaClean(section.tone);
+  const toneClass = tone === "owner" ? "bg-pet-mint/25" : tone === "host" ? "bg-pet-blue/20" : "bg-white/70";
+  const HeaderIcon = tone === "owner" ? Home : tone === "host" ? Search : ListChecks;
   const header = section.header ?? {
     headline: section.title ?? "Process path",
     body: section.body ?? null,

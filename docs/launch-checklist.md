@@ -15,7 +15,6 @@ Explicitly out of phase-one launch unless later reprioritized:
 - Saved/favorite pets.
 - Direct messaging.
 - AI-generated owner email replies.
-- Sanity Visual Editing or Presentation Tool.
 - Generated video binaries.
 - Owner directory.
 - Pet type landing pages.
@@ -55,7 +54,8 @@ Explicitly out of phase-one launch unless later reprioritized:
   - `NEXT_PUBLIC_SANITY_API_VERSION`
 - Required preview variables are set where preview is tested:
   - `SANITY_API_READ_TOKEN`
-  - `SANITY_PREVIEW_SECRET`
+- Optional draft live-update variable is set where live draft streaming is required:
+  - `SANITY_API_BROWSER_READ_TOKEN`
 - Required revalidation variables are set where webhooks are tested:
   - `SANITY_REVALIDATE_SECRET`
 - Required seed/upload variables are available only where needed:
@@ -121,7 +121,8 @@ Explicitly out of phase-one launch unless later reprioritized:
 ## Preview And Revalidation Readiness
 
 - Preview links originate from Sanity Studio.
-- Preview requires `SANITY_PREVIEW_SECRET`.
+- Preview uses Sanity Presentation preview URL validation with `SANITY_API_READ_TOKEN`.
+- Draft-capable browser live updates use `SANITY_API_BROWSER_READ_TOKEN` when configured.
 - Preview supports all content-backed routes planned for phase one.
 - Unpublished drafts can be previewed by document ID where planned.
 - Preview mode shows a visible banner.

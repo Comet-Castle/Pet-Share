@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { draftMode } from "next/headers";
+import { stegaClean } from "@sanity/client/stega";
 import { ArrowRight, CalendarCheck, Circle, Clock, MapPin, PawPrint, Quote, Search, ShieldCheck, Users } from "lucide-react";
 import { HomeHeroCarousel } from "@/components/features/home/home-hero-carousel";
 import type { HomeHeroSlide } from "@/components/features/home/home-hero-carousel";
@@ -37,13 +39,16 @@ type HomeProcessSection = Extract<PageSection, { _type: "processPathSection" }>;
 type HomeCalloutSection = Extract<PageSection, { _type: "calloutBlock" }>;
 
 function getAvailabilityTone(status: keyof typeof availabilityLabels) {
-  return status === "available" ? "fill-pet-mint text-pet-mint" : "fill-pet-coral text-pet-coral";
+  return stegaClean(status) === "available" ? "fill-pet-mint text-pet-mint" : "fill-pet-coral text-pet-coral";
 }
 
 function getPetChips(pet: FeaturedPet) {
+  const temperament = pet.temperament ? stegaClean(pet.temperament) as keyof typeof temperamentLabels : null;
+  const cuddlePolicy = pet.cuddlePolicy ? stegaClean(pet.cuddlePolicy) as keyof typeof cuddlePolicyLabels : null;
+
   return [
-    pet.temperament ? temperamentLabels[pet.temperament] : null,
-    pet.cuddlePolicy ? cuddlePolicyLabels[pet.cuddlePolicy] : null,
+    temperament ? temperamentLabels[temperament] : null,
+    cuddlePolicy ? cuddlePolicyLabels[cuddlePolicy] : null,
     pet.energyLevel >= 4 ? "High energy" : null
   ].filter((chip): chip is string => Boolean(chip)).slice(0, 3);
 }
@@ -57,8 +62,10 @@ function getDistanceLabel(pet: FeaturedPet, index: number) {
 
 function getHostPayoutLabel(pet: FeaturedPet, index: number) {
   const amount = typeof pet.hostPayoutAmount === "number" ? pet.hostPayoutAmount : fallbackPayouts[index % fallbackPayouts.length];
-  const unit = pet.hostPayoutUnit ? hostPayoutUnitLabels[pet.hostPayoutUnit] : "day";
-  const currency = pet.hostPayoutCurrency ?? "CAD";
+  const unitKey = pet.hostPayoutUnit ? stegaClean(pet.hostPayoutUnit) as keyof typeof hostPayoutUnitLabels : "day";
+  const unit = hostPayoutUnitLabels[unitKey] ?? "day";
+  // Stega-clean before Intl: currency codes are validated strictly and break in Draft Mode otherwise.
+  const currency = stegaClean(pet.hostPayoutCurrency) ?? "CAD";
   const formattedAmount = new Intl.NumberFormat("en-CA", {
     style: "currency",
     currency,
@@ -75,7 +82,7 @@ function getHeroMediaFallback(slide: HomeHeroSlide, featuredPets: FeaturedPet[],
 
   const slideText = `${slide.headline} ${slide.body ?? ""}`.toLowerCase();
   const matchingPet = featuredPets.find((pet) => {
-    const petType = pet.petType?.slug?.toLowerCase() ?? "";
+    const petType = stegaClean(pet.petType?.slug)?.toLowerCase() ?? "";
 
     return (slideText.includes("dog") && petType === "dog") || (slideText.includes("cat") && petType === "cat") || (slideText.includes("rabbit") && petType === "rabbit");
   });
@@ -331,10 +338,11 @@ export async function generateMetadata(): Promise<Metadata> {
  * Renders the CMS-backed homepage route with resilient starter sections.
  */
 export default async function HomePage() {
+  const { isEnabled } = await draftMode();
   let page: Awaited<ReturnType<typeof loadHomePage>> | null = null;
 
   try {
-    page = await loadHomePage();
+    page = await loadHomePage({ preview: isEnabled });
   } catch (error) {
     logger.error("Failed to load homepage content.", {
       error: error instanceof Error ? error.message : "Unknown error"
@@ -359,8 +367,8 @@ export default async function HomePage() {
   }));
   const featuredTestimonials = page?.testimonials ?? [];
   const contentSections = page?.contentSections ?? [];
-  const homepageProcess = contentSections.find((section): section is HomeProcessSection => section._type === "processPathSection");
-  const homepageRelief = contentSections.find((section): section is HomeCalloutSection => section._type === "calloutBlock");
+  const homepageProcess = contentSections.find((section): section is HomeProcessSection => stegaClean(section._type) === "processPathSection");
+  const homepageRelief = contentSections.find((section): section is HomeCalloutSection => stegaClean(section._type) === "calloutBlock");
 
   return (
     <main>
@@ -386,6 +394,7 @@ export default async function HomePage() {
         {featuredPets.length ? (
           <div className="grid min-w-0 gap-7 md:grid-cols-2 xl:grid-cols-3">
             {featuredPets.map((pet, index) => (
+              // Status values are used for class and label lookups, so clean stega markers before comparing.
               <Link
                 key={pet._id}
                 href={`/pets/${pet.slug}`}
@@ -401,7 +410,7 @@ export default async function HomePage() {
                     />
                     <span className="absolute left-4 top-4 inline-flex items-center gap-2 rounded-full bg-white/90 px-3 py-2 text-xs font-bold text-pet-ink shadow-sm backdrop-blur">
                       <Circle aria-hidden="true" size={9} className={getAvailabilityTone(pet.availabilityStatus)} />
-                      {availabilityLabels[pet.availabilityStatus]}
+                      {availabilityLabels[stegaClean(pet.availabilityStatus) as keyof typeof availabilityLabels]}
                     </span>
                     <div className="absolute inset-x-4 bottom-4 flex flex-wrap gap-2 opacity-95">
                       {getPetChips(pet).map((chip) => (

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
+import { stegaClean } from "@sanity/client/stega";
 import { CalendarDays, Gauge, HeartHandshake, MapPin, PawPrint, ShieldAlert } from "lucide-react";
 import { PetImageGallery } from "@/components/features/pets/pet-image-gallery";
 import { SystemMessage } from "@/components/features/system/system-message";
@@ -55,10 +57,11 @@ export async function generateMetadata({ params }: PetSlugPageProps): Promise<Me
  */
 export default async function PetSlugPage({ params }: PetSlugPageProps) {
   const { slug } = await params;
+  const { isEnabled } = await draftMode();
   let pet: Awaited<ReturnType<typeof loadPetBySlug>> | null = null;
 
   try {
-    pet = await loadPetBySlug(slug);
+    pet = await loadPetBySlug(slug, { preview: isEnabled });
   } catch {
     return (
       <SystemMessage
@@ -79,6 +82,10 @@ export default async function PetSlugPage({ params }: PetSlugPageProps) {
   const galleryImages = [pet.cardMedia?.image, ...(pet.heroImages ?? [])].filter((image) => image?.image?.asset?.url);
   const petTypeLabel = pet.petType?.filterLabel ?? "Pet";
   const ownerName = pet.owner?.name ?? "A very tired owner";
+  const availabilityStatus = stegaClean(pet.availabilityStatus) as keyof typeof availabilityLabels;
+  const pickupUrgency = stegaClean(pet.pickupUrgency) as keyof typeof urgencyLabels;
+  const temperament = stegaClean(pet.temperament) as keyof typeof temperamentLabels;
+  const cuddlePolicy = stegaClean(pet.cuddlePolicy) as keyof typeof cuddlePolicyLabels;
 
   return (
     <article className="mx-auto w-full max-w-[1440px] px-5 py-12 sm:px-8 lg:px-10">
@@ -100,7 +107,7 @@ export default async function PetSlugPage({ params }: PetSlugPageProps) {
                 <HeartHandshake aria-hidden="true" size={18} />
                 Status
               </dt>
-              <dd className="mt-1 font-display text-xl font-bold text-pet-ink">{availabilityLabels[pet.availabilityStatus]}</dd>
+              <dd className="mt-1 font-display text-xl font-bold text-pet-ink">{availabilityLabels[availabilityStatus]}</dd>
             </div>
             <div className="rounded-3xl bg-pet-blue/20 p-4">
               <dt className="flex items-center gap-2 text-sm font-bold text-pet-muted">
@@ -114,14 +121,14 @@ export default async function PetSlugPage({ params }: PetSlugPageProps) {
                 <CalendarDays aria-hidden="true" size={18} />
                 Pickup
               </dt>
-              <dd className="mt-1 font-display text-xl font-bold text-pet-ink">{urgencyLabels[pet.pickupUrgency]}</dd>
+              <dd className="mt-1 font-display text-xl font-bold text-pet-ink">{urgencyLabels[pickupUrgency]}</dd>
             </div>
             <div className="rounded-3xl bg-white p-4">
               <dt className="flex items-center gap-2 text-sm font-bold text-pet-muted">
                 <PawPrint aria-hidden="true" size={18} />
                 Temperament
               </dt>
-              <dd className="mt-1 font-display text-xl font-bold text-pet-ink">{temperamentLabels[pet.temperament]}</dd>
+              <dd className="mt-1 font-display text-xl font-bold text-pet-ink">{temperamentLabels[temperament]}</dd>
             </div>
           </dl>
 
@@ -188,7 +195,7 @@ export default async function PetSlugPage({ params }: PetSlugPageProps) {
           <section className="rounded-[2rem] bg-white/70 p-6 shadow-soft backdrop-blur">
             <h2 className="font-display text-2xl font-bold text-pet-ink">Borrowing terms</h2>
             <ul className="mt-4 space-y-3 text-sm leading-6 text-pet-muted">
-              <li>Cuddle policy: {cuddlePolicyLabels[pet.cuddlePolicy]}</li>
+              <li>Cuddle policy: {cuddlePolicyLabels[cuddlePolicy]}</li>
               <li>Energy level: {pet.energyLevel}/5</li>
               <li>Mess risk: {pet.messRisk}/5</li>
             </ul>

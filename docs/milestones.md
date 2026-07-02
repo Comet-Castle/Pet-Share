@@ -252,6 +252,13 @@ Exit criteria:
 - Media Library usage is documented and functional for the project workflow.
 - Any remaining limitations of Visual Editing are clearly documented.
 
+Implementation notes:
+
+- Presentation resolves home, pet index, Standard Pages, system pages, pet detail pages, and owner detail pages through `sanity/presentation/resolve.ts`.
+- Draft Mode uses `/api/draft-mode/enable` and `/api/draft-mode/disable`; active preview sessions show a public-site banner and mount `next-sanity` Visual Editing.
+- Unpublished Standard Pages, pets, and owners without slugs use document-ID preview routes under `/preview/page/[documentId]`, `/preview/pet/[documentId]`, and `/preview/owner/[documentId]`.
+- Sanity Media Library is enabled through Studio workspace configuration and documented in `docs/sanity-presentation-and-media.md`.
+
 ## Milestone 10: Pet Marketplace Page Refinement
 
 Goal:
@@ -427,3 +434,4 @@ These items should stay out of the first build unless priorities change:
 - Generated video binaries.
 - Framer Motion unless needed for animation complexity.
 - Heavy end-to-end test coverage beyond critical smoke checks.
+- Migrate the Sanity data layer to the idiomatic `next-sanity` `defineLive` auto-resolve pattern (and evaluate `strict: true`) instead of the current manual `draftMode()` branching plus separate published/preview fetch helpers. Considered because it collapses the "published works, draft breaks" stega blind spot that hid the M9 currency bug and adds compile-time draft-safety. Deferred because the current manual pattern is functionally correct, the change is broad (~15 loaders and every page), and this project still needs explicit `draftMode()` checks for non-perspective reasons (the `includeUnapproved` pet/owner preview filter and published-perspective `generateMetadata` reads), so it would not fully eliminate manual branching. Revisit as a dedicated change with a full Studio-to-Presentation verification pass, not as part of an active milestone.

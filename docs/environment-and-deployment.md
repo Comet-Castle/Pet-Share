@@ -41,8 +41,11 @@ Be careful: `vercel env pull` replaces the target file. Keep local-only custom v
 | `NEXT_PUBLIC_SANITY_API_VERSION` | Public Sanity config | Yes | Required | Required | Required | Pin to a date string when implementation begins. |
 | `SANITY_API_READ_TOKEN` | Server-only Sanity token | No | Required for preview/drafts | Required for preview/drafts | Required for preview/drafts | Use least privilege. Do not expose to Client Components. |
 | `SANITY_API_WRITE_TOKEN` | Server-only Sanity token | No | Required for seed/upload scripts | Usually not needed | Usually not needed | Needed for local seed scripts and media upload. Avoid adding to Vercel unless a server route genuinely writes to Sanity. |
-| `SANITY_PREVIEW_SECRET` | Server-only preview secret | No | Required for preview | Required | Required | Used to authorize Draft Mode enable links from Studio. |
+| `SANITY_API_BROWSER_READ_TOKEN` | Browser-readable Sanity viewer token | Yes, when Draft Mode includes live draft events | Optional | Optional | Optional | Enables draft-capable Sanity Live updates in Presentation. Use a least-privilege read token only; leave blank if click-to-edit can rely on route refreshes. |
+| `SANITY_PREVIEW_SECRET` | Server-only preview secret | No | Optional | Optional | Optional | Reserved for a future manual preview fallback. Current Sanity Presentation preview uses Sanity's generated preview URL secret validated with `SANITY_API_READ_TOKEN`. |
 | `SANITY_REVALIDATE_SECRET` | Server-only webhook secret | No | Optional | Required | Required | Used to validate Sanity webhook requests before cache revalidation. |
+| `SANITY_STUDIO_PREVIEW_ORIGIN` | Studio preview config | No | Required for Presentation | Required | Required | Origin loaded inside Sanity Presentation, such as local Next.js or a Vercel deployment URL. |
+| `SANITY_STUDIO_MEDIA_LIBRARY_ID` | Studio media config | No | Optional | Optional | Optional | Specific Sanity Media Library ID. Leave blank to let Sanity auto-detect the connected library. |
 | `MAILGUN_API_KEY` | Server-only Mailgun secret | No | Required for form testing | Required | Required | Sends phase-one forms to the master inbox. |
 | `MAILGUN_DOMAIN` | Server-only Mailgun config | No | Required for form testing | Required | Required | Mailgun sending domain. |
 | `MAILGUN_FROM_EMAIL` | Server-only Mailgun config | No | Required for form testing | Required | Required | From address used by form submissions. |
@@ -100,7 +103,7 @@ Future option:
 Current project context:
 
 - Project: `test`
-- Project ID: `la5haq3t`
+- Project ID: `u0596eb6`
 - Dataset: `production`
 - Framework: Next.js
 - Studio route: `/studio`
@@ -109,10 +112,11 @@ Sanity setup rules:
 
 - Use `NEXT_PUBLIC_SANITY_PROJECT_ID`, `NEXT_PUBLIC_SANITY_DATASET`, and `NEXT_PUBLIC_SANITY_API_VERSION` for public client configuration.
 - Use `SANITY_API_READ_TOKEN` only for draft/preview reads, authenticated preview helpers, or other server-only reads that require a token.
+- Use `SANITY_API_BROWSER_READ_TOKEN` only when Draft Mode should receive draft live-update events in the browser. It must be a least-privilege viewer token and should not have write access.
 - Use `SANITY_API_WRITE_TOKEN` only for local seed scripts, media uploads, or server-only write operations.
 - Keep Sanity tokens out of Client Components.
 - Configure Sanity CORS for local and deployed app origins.
-- Preview links should originate from Studio and use `SANITY_PREVIEW_SECRET`.
+- Preview links should originate from Studio and use Sanity's preview URL validation flow through `/api/draft-mode/enable`.
 - Sanity webhooks should include `SANITY_REVALIDATE_SECRET` and should be validated before revalidating paths or tags.
 
 Suggested CORS origins once URLs are known:

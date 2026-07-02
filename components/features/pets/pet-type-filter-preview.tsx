@@ -3,6 +3,7 @@
 import type { KeyboardEvent } from "react";
 import { useId, useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { stegaClean } from "@sanity/client/stega";
 import { Check, Search, X } from "lucide-react";
 import type { PET_TYPES_QUERY_RESULT } from "@/sanity.types";
 
@@ -24,7 +25,7 @@ export function PetTypeFilterPreview({ petTypes, selectedSlugs }: PetTypeFilterP
   const [isOpen, setIsOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
   const selectedPetTypes = selectedSlugs
-    .map((slug) => petTypes.find((type) => type.slug === slug))
+    .map((slug) => petTypes.find((type) => stegaClean(type.slug) === slug))
     .filter((type): type is PET_TYPES_QUERY_RESULT[number] => Boolean(type));
   const filteredPetTypes = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
@@ -32,7 +33,7 @@ export function PetTypeFilterPreview({ petTypes, selectedSlugs }: PetTypeFilterP
     return petTypes.filter((type) => {
       if (!normalizedQuery) return true;
 
-      return `${type.filterLabel} ${type.name} ${type.category}`.toLowerCase().includes(normalizedQuery);
+      return `${stegaClean(type.filterLabel)} ${stegaClean(type.name)} ${stegaClean(type.category)}`.toLowerCase().includes(normalizedQuery);
     });
   }, [petTypes, query]);
   const activeOptionId = filteredPetTypes[activeIndex]?._id ? `${listboxId}-${filteredPetTypes[activeIndex]._id}` : undefined;
@@ -80,7 +81,7 @@ export function PetTypeFilterPreview({ petTypes, selectedSlugs }: PetTypeFilterP
 
     if (event.key === "Enter" && isOpen && filteredPetTypes[activeIndex]) {
       event.preventDefault();
-      selectPetType(filteredPetTypes[activeIndex].slug);
+      selectPetType(stegaClean(filteredPetTypes[activeIndex].slug));
     }
 
     if (event.key === "Escape") {
@@ -121,7 +122,8 @@ export function PetTypeFilterPreview({ petTypes, selectedSlugs }: PetTypeFilterP
           >
             {filteredPetTypes.length ? (
               filteredPetTypes.map((type, index) => {
-                const isSelected = selectedSlugs.includes(type.slug);
+                const cleanSlug = stegaClean(type.slug);
+                const isSelected = selectedSlugs.includes(cleanSlug);
 
                 return (
                 <button
@@ -132,7 +134,7 @@ export function PetTypeFilterPreview({ petTypes, selectedSlugs }: PetTypeFilterP
                   aria-selected={isSelected}
                   onMouseDown={(event) => {
                     event.preventDefault();
-                    selectPetType(type.slug);
+                    selectPetType(cleanSlug);
                   }}
                   onMouseEnter={() => setActiveIndex(index)}
                   className={index === activeIndex || isSelected
@@ -157,7 +159,7 @@ export function PetTypeFilterPreview({ petTypes, selectedSlugs }: PetTypeFilterP
             <button
               key={type._id}
               type="button"
-              onClick={() => removePetType(type.slug)}
+              onClick={() => removePetType(stegaClean(type.slug))}
               className="inline-flex items-center gap-1 rounded-full bg-pet-mint/35 px-3 py-2 text-sm font-bold text-pet-ink transition hover:-rotate-1 focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2"
               aria-label={`Remove ${type.filterLabel} pet type`}
             >

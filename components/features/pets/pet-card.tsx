@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { stegaClean } from "@sanity/client/stega";
 import { Circle, Gauge, PawPrint, Sparkles } from "lucide-react";
 import type { PETS_INDEX_QUERY_RESULT } from "@/sanity.types";
 import { availabilityLabels } from "./status";
@@ -17,7 +18,8 @@ type PetCardProps = Readonly<{
 export function PetCard({ pet, showSummary = true }: PetCardProps) {
   const cardImage = pet.cardMedia?.image;
   const imageUrl = cardImage?.image?.asset?.url;
-  const availabilityLabel = availabilityLabels[pet.availabilityStatus];
+  const availabilityStatus = stegaClean(pet.availabilityStatus) as keyof typeof availabilityLabels;
+  const availabilityLabel = availabilityLabels[availabilityStatus];
   const petTypeLabel = pet.petType?.filterLabel ?? "Pet";
 
   return (
@@ -45,7 +47,7 @@ export function PetCard({ pet, showSummary = true }: PetCardProps) {
             <Circle
               aria-hidden="true"
               size={10}
-              className={pet.availabilityStatus === "available" ? "shrink-0 fill-pet-mint text-pet-mint" : "shrink-0 fill-pet-coral text-pet-coral"}
+              className={availabilityStatus === "available" ? "shrink-0 fill-pet-mint text-pet-mint" : "shrink-0 fill-pet-coral text-pet-coral"}
             />
             <span className="max-w-0 overflow-hidden whitespace-nowrap opacity-0 transition-[max-width,opacity] duration-200 ease-out group-hover/status:max-w-32 group-hover/status:opacity-100">
               {availabilityLabel}

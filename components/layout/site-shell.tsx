@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { stegaClean } from "@sanity/client/stega";
 import { ArrowRight, ExternalLink, PawPrint } from "lucide-react";
 import type { SITE_SETTINGS_QUERY_RESULT } from "@/sanity.types";
 
@@ -35,7 +36,7 @@ const fallbackFooterNavigation: NavigationLink[] = [
 ];
 
 function getLinkHref(item: NavigationLink) {
-  if (item.link.type === "externalUrl") {
+  if (stegaClean(item.link.type) === "externalUrl") {
     return item.link.url ?? "/";
   }
 
@@ -43,7 +44,7 @@ function getLinkHref(item: NavigationLink) {
 }
 
 function isExternalLink(item: NavigationLink) {
-  return item.link.type === "externalUrl" || item.link.openInNewTab === true;
+  return stegaClean(item.link.type) === "externalUrl" || item.link.openInNewTab === true;
 }
 
 /**
