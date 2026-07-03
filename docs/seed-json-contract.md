@@ -297,6 +297,39 @@ Top-level shape:
         { "label": "Regal", "value": "regal", "icon": "crown", "tone": "friendly" },
         { "label": "Suspicious", "value": "suspicious", "icon": "eye", "tone": "warning" }
       ],
+      "vibeProfile": [
+        { "label": "Charming", "descriptor": "Disarmingly so", "strength": 4.5, "tone": "coral", "icon": "sparkles" },
+        { "label": "Rule-bound", "descriptor": "The card is the law", "strength": 5, "tone": "blue", "icon": "listChecks" }
+      ],
+      "fitGuidance": {
+        "goodFitTitle": "A great fit if you",
+        "goodFitItems": [
+          { "text": "Like quiet companionship and specific instructions." },
+          { "text": "Can follow feeding rules without improvising." }
+        ],
+        "avoidTitle": "Maybe avoid if you",
+        "avoidItems": [
+          { "text": "Treat printed pet rules as casual suggestions." },
+          { "text": "Need instant affection from every animal you meet." }
+        ]
+      },
+      "dailySchedule": [
+        { "timeLabel": "07:30", "title": "Snack window opens", "description": "Read the card first. The card outranks optimism.", "tone": "mint" },
+        { "timeLabel": "22:00", "title": "Pantry inspection", "description": "Final check of the cupboards and your resolve.", "tone": "cream" }
+      ],
+      "videos": [
+        {
+          "provider": "youtube",
+          "url": "https://example.com/pip-blinks-once",
+          "title": "Pip blinks once",
+          "description": "A gentle three-second loop for the detail page.",
+          "posterImage": {
+            "assetKey": "pet-sir-nibbles-gallery-01",
+            "alt": "Sir Nibbles pausing mid-judgment on a sofa.",
+            "role": "videoPoster"
+          }
+        }
+      ],
       "careNotes": [
         {
           "title": "Compliments before breakfast",
@@ -342,6 +375,10 @@ Rules:
 - `imageTargetCount` must be between `5` and `10`.
 - Every `imagePrompts[]` item should have a unique `assetKey` and `shotPrompt`.
 - `ownerSeedId` and `submittedByOwnerSeedId` should match in phase one.
+- `vibeProfile[]`, when present, should preserve authored order.
+- `fitGuidance`, when present, should contain at least one valid item on each rendered side.
+- `dailySchedule[]`, when present, should stay in authored chronological order.
+- `videos[]`, when present, should be authored as detail-page media and should not be auto-derived from `cardMedia` loop data.
 - Public queries should only show approved/published pets outside preview mode.
 
 ## `testimonials.json`

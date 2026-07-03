@@ -16,6 +16,7 @@ import type {
   PET_TYPES_QUERY_RESULT,
   PETS_INDEX_COUNT_QUERY_RESULT,
   PETS_INDEX_QUERY_RESULT,
+  RELATED_PETS_QUERY_RESULT,
   SITE_SETTINGS_QUERY_RESULT,
   SYSTEM_PAGE_BY_TYPE_QUERY_RESULT
 } from "@/sanity.types";
@@ -35,10 +36,12 @@ import {
   PET_SLUGS_QUERY,
   PET_TYPES_QUERY,
   PETS_INDEX_COUNT_QUERY,
-  PETS_INDEX_QUERY,
+  RELATED_PETS_QUERY,
   SITE_SETTINGS_QUERY,
   SYSTEM_PAGE_BY_TYPE_QUERY
 } from "@/sanity/queries";
+import { buildPetsIndexQuery, resolvePetIndexSort } from "@/sanity/queries/pets";
+import type { PetIndexSort } from "@/sanity/queries/pets";
 import { previewSanityFetch, sanityFetch } from "./fetch";
 import { sanityTags } from "./tags";
 
@@ -47,9 +50,10 @@ type LoadOptions = Readonly<{
 }>;
 
 type PetIndexFilters = Readonly<{
+  petNameQuery?: string;
   petTypeSlugs?: string[];
   availabilityStatuses?: string[];
-  cuddlePolicies?: string[];
+  pickupUrgencies?: string[];
   minChaos?: number | null;
   minMess?: number | null;
   minEnergy?: number | null;
@@ -173,15 +177,18 @@ export function loadPetsIndex(
   page = 1,
   pageSize = defaultPageSize,
   filters: PetIndexFilters = {},
+  sort: PetIndexSort | string | undefined = "featured",
   options: LoadOptions = {}
 ) {
   const start = Math.max(page - 1, 0) * pageSize;
   const end = start + pageSize;
   const queryFilters = normalizePetIndexFilters(filters);
+  const resolvedSort = resolvePetIndexSort(sort);
 
   return loadQuery<PETS_INDEX_QUERY_RESULT>({
     ...options,
-    query: PETS_INDEX_QUERY,
+    // Built per-request so the order clause can follow the `sort` URL param.
+    query: buildPetsIndexQuery(resolvedSort),
     params: { start, end, ...queryFilters, includeUnapproved: options.preview === true },
     tags: [sanityTags.petIndex]
   });
@@ -202,14 +209,34 @@ export function loadPetsIndexCount(filters: PetIndexFilters = {}, options: LoadO
 }
 
 function normalizePetIndexFilters(filters: PetIndexFilters) {
+  const petNameQuery = filters.petNameQuery?.trim().toLowerCase() ?? "";
+
   return {
+    petNameQueryMatch: petNameQuery ? `*${petNameQuery}*` : null,
     petTypeSlugs: filters.petTypeSlugs?.length ? filters.petTypeSlugs : null,
     availabilityStatuses: filters.availabilityStatuses?.length ? filters.availabilityStatuses : null,
-    cuddlePolicies: filters.cuddlePolicies?.length ? filters.cuddlePolicies : null,
+    pickupUrgencies: filters.pickupUrgencies?.length ? filters.pickupUrgencies : null,
     minChaos: filters.minChaos ?? null,
     minMess: filters.minMess ?? null,
     minEnergy: filters.minEnergy ?? null
   };
+}
+
+/**
+ * Loads up to six related pets by shared pet type or owner for the pet detail page.
+ */
+export function loadRelatedPets(
+  petId: string,
+  petTypeId: string,
+  ownerId: string | null,
+  options: LoadOptions = {}
+) {
+  return loadQuery<RELATED_PETS_QUERY_RESULT>({
+    ...options,
+    query: RELATED_PETS_QUERY,
+    params: { petId, petTypeId, ownerId, includeUnapproved: options.preview === true },
+    tags: [sanityTags.petIndex]
+  });
 }
 
 /**

@@ -208,38 +208,81 @@ Categorical fields:
 - `pickupUrgency`
 - `cuddlePolicy`
 
-Use controlled values when schemas are implemented. Avoid one-off category strings that make filters hard to test.
+These categorical fields now have controlled values defined in `sanity/schemaTypes/documents/constants.ts` and used by the seed runner. Use exactly those values so filters and labels resolve consistently. Avoid one-off category strings that make filters hard to test.
 
-Recommended `temperament` values:
+`temperament` values:
 
-- `friendly`
-- `clingy`
-- `dramatic`
-- `judgmental`
-- `chaotic`
-- `shy`
 - `regal`
+- `friendly`
 - `suspicious`
-- `foodMotivated`
-- `couchPhilosopher`
+- `dramatic`
+- `independent`
 
-Recommended `pickupUrgency` values:
+`pickupUrgency` values:
 
-- `flexible`
-- `thisWeek`
+- `anytime`
 - `withinSevenDays`
-- `asap`
-- `beforeTheNextIncident`
+- `immediately`
+- `appointmentOnly`
 
-Recommended `cuddlePolicy` values:
+`cuddlePolicy` values:
 
-- `always`
-- `sometimes`
+- `openEnrollment`
 - `consentRequired`
-- `byAppointment`
-- `bribeRequired`
-- `lookButDontHold`
-- `unknownAndProbablyNegotiable`
+- `afterSnacksOnly`
+- `lookDoNotCuddle`
+
+## Shared browse/detail field alignment in seed data
+
+Seeded pets should use one canonical set of values across both `/pets` and `/pets/[slug]`.
+
+Shared fields that must stay aligned:
+
+- `petType`
+- `breed`
+- `availabilityStatus`
+- `pickupUrgency`
+- `temperament`
+- `cuddlePolicy`
+- `chaosLevel`
+- `messRisk`
+- `energyLevel`
+
+Alignment rules:
+
+- The same stored enum should drive both browse filters and detail labels.
+- Browse prototypes should not introduce alternate enum values that do not exist in the Sanity model.
+- Detail-page satire should live in authored modules and supporting copy, not in incompatible structured field values.
+
+## Pet detail editorial modules in seed data
+
+For the richer pet detail plan, seed data should also support authored detail-page modules rather than deriving them later in code.
+
+Recommended seed-backed fields:
+
+- `vibeProfile[]`
+- `fitGuidance`
+- `dailySchedule[]`
+- `careNotes[]`
+- `borrowTerms[]`
+- `warnings[]`
+- `videos[]`
+
+Seeder expectations:
+
+- Preserve authored array order for `vibeProfile[]` and `dailySchedule[]`.
+- Treat `fitGuidance` as authored copy, not generated copy.
+- Keep `careNotes[]`, `borrowTerms[]`, and `warnings[]` as distinct editorial groups.
+- Use `videos[]` for the dedicated detail-page video section.
+- Do not automatically promote `cardMedia.lowFrameRateVideo` into `videos[]`.
+- Omit optional modules cleanly when seed data does not provide them.
+
+Authoring guidance for seed content:
+
+- `vibeProfile[]` should usually have 2-4 items.
+- `fitGuidance` lists should usually have 3-5 items per side.
+- `dailySchedule[]` should usually have 3-6 time-ordered items.
+- `videos[]` should be rare and intentional; not every pet needs one.
 
 ## AI Media Generation
 

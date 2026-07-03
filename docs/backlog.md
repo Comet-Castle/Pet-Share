@@ -140,6 +140,40 @@ Acceptance notes:
 - The chosen approach must not commit secrets, raw provider responses, or unreviewed generated files.
 - Update `README.md`, `docs/data-seeding-plan.md`, and deployment docs when the strategy is chosen.
 
+## Prototyping Workflow Outline
+
+Goal:
+
+- Document a repeatable prototyping workflow that moves cleanly from design exploration into implementation planning and CMS build work.
+
+Status:
+
+- Backlog candidate.
+- Useful for future page and feature planning so mockups, flat HTML, data planning, and CMS implementation stay aligned.
+
+Proposed workflow to outline:
+
+1. Design
+2. Flat HTML
+3. Planning of data
+4. Consolidation
+5. Connected mockup
+6. CMS build
+
+Questions to resolve:
+
+- What artifacts are expected at each step?
+- When should mockups stop changing before data planning begins?
+- What counts as `consolidation` between prototype and connected mockup?
+- Which docs should be updated at each stage?
+- When should a prototype move from flat HTML into real CMS-backed implementation planning?
+
+Acceptance notes:
+
+- The workflow should be simple enough to reuse across homepage, pet index, pet detail, and future page-builder sections.
+- Each step should name its inputs, outputs, and handoff docs.
+- The outline should reduce drift between design mockups, flat prototypes, planning docs, and implementation.
+
 ## Targeted Seed Document Updates
 
 Goal:

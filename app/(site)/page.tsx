@@ -2,78 +2,24 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { draftMode } from "next/headers";
 import { stegaClean } from "@sanity/client/stega";
-import { ArrowRight, CalendarCheck, Circle, Clock, MapPin, PawPrint, Quote, Search, ShieldCheck, Users } from "lucide-react";
+import { ArrowRight, CalendarCheck, Clock, MapPin, PawPrint, Quote, Search, ShieldCheck, Users } from "lucide-react";
 import { HomeHeroCarousel } from "@/components/features/home/home-hero-carousel";
 import type { HomeHeroSlide } from "@/components/features/home/home-hero-carousel";
-import { availabilityLabels, cuddlePolicyLabels, temperamentLabels } from "@/components/features/pets/status";
+import { PetCard } from "@/components/features/pets/pet-card";
 import type { CtaValue, PageSection } from "@/components/features/sections/section-types";
 import { Button } from "@/components/ui/button";
 import { RichText } from "@/components/ui/portable-text";
-import { SanityImage } from "@/components/ui/sanity-image";
 import { logger } from "@/lib/diagnostics/logger";
 import { metadataFromSeo } from "@/lib/content/metadata";
 import { loadHomePage } from "@/sanity/lib/loaders";
 
 const homepageLocationLabel = "Near you in Hamilton, ON";
 
-const fallbackDistances = [2.4, 4.8, 6.7, 9.3, 12.5, 16.1] as const;
-
-const fallbackPayouts = [24, 28, 32, 21, 36, 30] as const;
-
-const hostPayoutUnitLabels = {
-  day: "day",
-  stay: "stay",
-  weekend: "weekend"
-} as const;
-
 type HomePageData = NonNullable<Awaited<ReturnType<typeof loadHomePage>>>;
-type FeaturedPet = NonNullable<HomePageData["featuredPets"]>[number] & {
-  distanceKilometers?: number | null;
-  listingPlan?: "porch" | "spotlight" | "couchRecovery" | null;
-  hostPayoutAmount?: number | null;
-  hostPayoutCurrency?: string | null;
-  hostPayoutUnit?: keyof typeof hostPayoutUnitLabels | null;
-};
+type FeaturedPet = NonNullable<HomePageData["featuredPets"]>[number];
 type FeaturedTestimonial = NonNullable<HomePageData["testimonials"]>[number];
 type HomeProcessSection = Extract<PageSection, { _type: "processPathSection" }>;
 type HomeCalloutSection = Extract<PageSection, { _type: "calloutBlock" }>;
-
-function getAvailabilityTone(status: keyof typeof availabilityLabels) {
-  return stegaClean(status) === "available" ? "fill-pet-mint text-pet-mint" : "fill-pet-coral text-pet-coral";
-}
-
-function getPetChips(pet: FeaturedPet) {
-  const temperament = pet.temperament ? stegaClean(pet.temperament) as keyof typeof temperamentLabels : null;
-  const cuddlePolicy = pet.cuddlePolicy ? stegaClean(pet.cuddlePolicy) as keyof typeof cuddlePolicyLabels : null;
-
-  return [
-    temperament ? temperamentLabels[temperament] : null,
-    cuddlePolicy ? cuddlePolicyLabels[cuddlePolicy] : null,
-    pet.energyLevel >= 4 ? "High energy" : null
-  ].filter((chip): chip is string => Boolean(chip)).slice(0, 3);
-}
-
-function getDistanceLabel(pet: FeaturedPet, index: number) {
-  const distance = typeof pet.distanceKilometers === "number" ? pet.distanceKilometers : fallbackDistances[index % fallbackDistances.length];
-  const formattedDistance = Number.isInteger(distance) ? distance.toFixed(0) : distance.toFixed(1);
-
-  return `${formattedDistance} km away`;
-}
-
-function getHostPayoutLabel(pet: FeaturedPet, index: number) {
-  const amount = typeof pet.hostPayoutAmount === "number" ? pet.hostPayoutAmount : fallbackPayouts[index % fallbackPayouts.length];
-  const unitKey = pet.hostPayoutUnit ? stegaClean(pet.hostPayoutUnit) as keyof typeof hostPayoutUnitLabels : "day";
-  const unit = hostPayoutUnitLabels[unitKey] ?? "day";
-  // Stega-clean before Intl: currency codes are validated strictly and break in Draft Mode otherwise.
-  const currency = stegaClean(pet.hostPayoutCurrency) ?? "CAD";
-  const formattedAmount = new Intl.NumberFormat("en-CA", {
-    style: "currency",
-    currency,
-    maximumFractionDigits: Number.isInteger(amount) ? 0 : 2
-  }).format(amount);
-
-  return `${formattedAmount} / ${unit}`;
-}
 
 function getHeroMediaFallback(slide: HomeHeroSlide, featuredPets: FeaturedPet[], index: number) {
   if (slide.image) {
@@ -393,47 +339,8 @@ export default async function HomePage() {
         </div>
         {featuredPets.length ? (
           <div className="grid min-w-0 gap-7 md:grid-cols-2 xl:grid-cols-3">
-            {featuredPets.map((pet, index) => (
-              // Status values are used for class and label lookups, so clean stega markers before comparing.
-              <Link
-                key={pet._id}
-                href={`/pets/${pet.slug}`}
-                aria-label={`View ${pet.name}`}
-                className="group block min-w-0 cursor-pointer rounded-[1.75rem] focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-4"
-              >
-                <article className="min-w-0 overflow-hidden rounded-[1.75rem] bg-white/86 shadow-soft backdrop-blur transition duration-200 group-hover:-translate-y-1">
-                  <div className="relative">
-                    <SanityImage
-                      image={pet.cardMedia?.image ?? null}
-                      sizes="(min-width: 1280px) 30vw, (min-width: 768px) 50vw, 100vw"
-                      className="aspect-[4/3]"
-                    />
-                    <span className="absolute left-4 top-4 inline-flex items-center gap-2 rounded-full bg-white/90 px-3 py-2 text-xs font-bold text-pet-ink shadow-sm backdrop-blur">
-                      <Circle aria-hidden="true" size={9} className={getAvailabilityTone(pet.availabilityStatus)} />
-                      {availabilityLabels[stegaClean(pet.availabilityStatus) as keyof typeof availabilityLabels]}
-                    </span>
-                    <div className="absolute inset-x-4 bottom-4 flex flex-wrap gap-2 opacity-95">
-                      {getPetChips(pet).map((chip) => (
-                        <span key={`${pet._id}-${chip}`} className="rounded-full bg-pet-mint/80 px-3 py-1 text-xs font-bold text-pet-ink shadow-sm backdrop-blur">
-                          {chip}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="min-w-0 p-5 sm:p-6">
-                    <h3 className="font-display text-[1.45rem] font-bold leading-[1.08] text-pet-ink">{pet.name}</h3>
-                    <p className="mt-1.5 text-[0.9rem] font-bold leading-5 text-pet-muted">{pet.breed ?? pet.petType?.filterLabel ?? "Pet"}</p>
-                    <p className="mt-3 text-[0.95rem] leading-6 text-pet-muted">{pet.listingHeadline}</p>
-                    <div className="mt-7 flex items-center justify-between gap-4 rounded-[1.25rem] bg-pet-cream/55 px-3 py-3">
-                      <div className="inline-flex min-w-0 items-center gap-1.5 text-sm font-bold text-pet-muted">
-                        <MapPin aria-hidden="true" size={17} className="shrink-0 text-pet-coral" />
-                        <span className="truncate">{getDistanceLabel(pet, index)}</span>
-                      </div>
-                      <p className="shrink-0 font-display text-base font-bold leading-none text-pet-ink">{getHostPayoutLabel(pet, index)}</p>
-                    </div>
-                  </div>
-                </article>
-              </Link>
+            {featuredPets.map((pet) => (
+              <PetCard key={pet._id} pet={pet} />
             ))}
           </div>
         ) : (

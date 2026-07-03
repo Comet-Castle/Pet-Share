@@ -1,9 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import type { TouchEvent } from "react";
+import type { MouseEvent, PointerEvent, TouchEvent } from "react";
 import { useRef, useState } from "react";
-import { ChevronLeft, ChevronRight, PawPrint } from "lucide-react";
+import { Camera, ChevronLeft, ChevronRight, PawPrint } from "lucide-react";
 import { joinClassNames } from "@/lib/utils/class-names";
 
 type PetGalleryImage = Readonly<{
@@ -34,7 +34,11 @@ function imageUrl(image: PetGalleryImage) {
 export function PetImageGallery({ images, petName }: PetImageGalleryProps) {
   const validImages = images.filter((image) => imageUrl(image));
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isDraggingThumbnails, setIsDraggingThumbnails] = useState(false);
   const swipeStart = useRef<{ x: number; y: number } | null>(null);
+  const thumbnailDrag = useRef<{ pointerId: number; startX: number; scrollLeft: number; distance: number } | null>(null);
+  const suppressThumbnailClick = useRef(false);
+  const thumbnailRailRef = useRef<HTMLDivElement>(null);
   const activeImage = validImages[activeIndex];
   const activeUrl = activeImage ? imageUrl(activeImage) : null;
   const hasMultipleImages = validImages.length > 1;
@@ -81,6 +85,52 @@ export function PetImageGallery({ images, petName }: PetImageGalleryProps) {
     swipeStart.current = null;
   }
 
+  function handleThumbnailPointerDown(event: PointerEvent<HTMLDivElement>) {
+    if (event.button !== 0 || !thumbnailRailRef.current) return;
+
+    thumbnailDrag.current = {
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      scrollLeft: thumbnailRailRef.current.scrollLeft,
+      distance: 0
+    };
+    setIsDraggingThumbnails(true);
+    event.currentTarget.setPointerCapture(event.pointerId);
+  }
+
+  function handleThumbnailPointerMove(event: PointerEvent<HTMLDivElement>) {
+    const drag = thumbnailDrag.current;
+    const rail = thumbnailRailRef.current;
+    if (!drag || !rail) return;
+
+    const deltaX = event.clientX - drag.startX;
+    drag.distance = Math.max(drag.distance, Math.abs(deltaX));
+    rail.scrollLeft = drag.scrollLeft - deltaX;
+  }
+
+  function finishThumbnailDrag(event: PointerEvent<HTMLDivElement>) {
+    if (!thumbnailDrag.current) return;
+
+    suppressThumbnailClick.current = thumbnailDrag.current.distance > 6;
+
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+
+    thumbnailDrag.current = null;
+    setIsDraggingThumbnails(false);
+  }
+
+  function handleThumbnailClick(index: number, event: MouseEvent<HTMLButtonElement>) {
+    if (suppressThumbnailClick.current) {
+      event.preventDefault();
+      suppressThumbnailClick.current = false;
+      return;
+    }
+
+    setActiveIndex(index);
+  }
+
   return (
     <section className="min-w-0 max-w-full" aria-label={`${petName} photos`}>
       <div
@@ -90,6 +140,13 @@ export function PetImageGallery({ images, petName }: PetImageGalleryProps) {
         onTouchCancel={handleTouchCancel}
         style={{ touchAction: "pan-y" }}
       >
+        {validImages.length ? (
+          <span className="absolute left-4 top-4 z-10 inline-flex items-center gap-1.5 rounded-full bg-white/85 px-3 py-1.5 text-xs font-bold text-pet-ink shadow-sm backdrop-blur">
+            <Camera aria-hidden="true" size={13} />
+            {activeIndex + 1} of {validImages.length}
+          </span>
+        ) : null}
+
         {activeUrl ? (
           <Image
             key={activeUrl}
@@ -129,7 +186,10 @@ export function PetImageGallery({ images, petName }: PetImageGalleryProps) {
       </div>
 
       {hasMultipleImages ? (
-        <div className="mt-3 flex h-4 items-center justify-center gap-2" aria-label={`${activeIndex + 1} of ${validImages.length}`}>
+        <div
+          className="mt-3 flex h-4 items-center justify-center gap-2"
+          aria-label={`${activeIndex + 1} of ${validImages.length}`}
+        >
           {validImages.map((image, index) => (
             <button
               key={image._key ?? imageUrl(image) ?? `${petName}-indicator-${index}`}
@@ -147,7 +207,20 @@ export function PetImageGallery({ images, petName }: PetImageGalleryProps) {
       ) : null}
 
       {validImages.length ? (
-        <div className="mt-3 flex max-w-full gap-3 overflow-x-auto overscroll-x-contain p-1 pb-3" aria-label={`${petName} individual photos`}>
+        <div
+          ref={thumbnailRailRef}
+          className={joinClassNames(
+            "mt-2 flex max-w-full gap-3 overflow-x-auto overscroll-x-contain scroll-smooth p-1 pb-3 [scrollbar-width:thin] sm:mt-3",
+            isDraggingThumbnails ? "cursor-grabbing select-none" : "cursor-grab"
+          )}
+          aria-label={`${petName} individual photos`}
+          onPointerDown={handleThumbnailPointerDown}
+          onPointerMove={handleThumbnailPointerMove}
+          onPointerUp={finishThumbnailDrag}
+          onPointerCancel={finishThumbnailDrag}
+          onPointerLeave={finishThumbnailDrag}
+          style={{ touchAction: "pan-x" }}
+        >
           {validImages.map((image, index) => {
             const url = imageUrl(image);
 
@@ -155,7 +228,7 @@ export function PetImageGallery({ images, petName }: PetImageGalleryProps) {
               <button
                 key={image._key ?? url ?? `${petName}-thumbnail-${index}`}
                 type="button"
-                onClick={() => setActiveIndex(index)}
+                onClick={(event) => handleThumbnailClick(index, event)}
                 className={joinClassNames(
                   "relative size-24 shrink-0 overflow-hidden rounded-2xl bg-pet-mint/25 transition focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2 sm:size-28",
                   index === activeIndex && "ring-2 ring-pet-ink"

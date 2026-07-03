@@ -5,7 +5,9 @@
       "seedId": "pet-sir-nibbles",
       "type": "pet",
       "name": "Sir Nibbles",
-      "slug": { "current": "sir-nibbles" },
+      "slug": {
+        "current": "sir-nibbles"
+      },
       "petTypeSeedId": "petType-rabbit",
       "breed": "Holland Lop",
       "ageYears": 3,
@@ -107,8 +109,18 @@
         }
       ],
       "personalityTraits": [
-        { "label": "Regal", "value": "regal", "icon": "crown", "tone": "friendly" },
-        { "label": "Suspicious", "value": "suspicious", "icon": "eye", "tone": "warning" }
+        {
+          "label": "Regal",
+          "value": "regal",
+          "icon": "crown",
+          "tone": "friendly"
+        },
+        {
+          "label": "Suspicious",
+          "value": "suspicious",
+          "icon": "eye",
+          "tone": "warning"
+        }
       ],
       "careNotes": [
         {
@@ -135,7 +147,10 @@
       "testimonialSeedId": "testimonial-sir-nibbles-neighbor",
       "contactOwnerCta": {
         "label": "Request temporary custody",
-        "link": { "type": "action", "action": "openOwnerContactDrawer" },
+        "link": {
+          "type": "action",
+          "action": "openOwnerContactDrawer"
+        },
         "style": "primary",
         "icon": "send"
       },
@@ -144,13 +159,103 @@
         "description": "Borrow a tiny rabbit with large opinions and a suspiciously medieval warning label.",
         "openGraphImageAssetKey": "pet-sir-nibbles-card-01",
         "noIndex": false
-      }
+      },
+      "vibeProfile": [
+        {
+          "_type": "petVibeItem",
+          "label": "Cuddle probability",
+          "descriptor": "Possible after formal snack review.",
+          "strength": 3.5,
+          "tone": "mint",
+          "icon": "heartHandshake"
+        },
+        {
+          "_type": "petVibeItem",
+          "label": "Rule flexibility",
+          "descriptor": "Low. The rules are load-bearing.",
+          "strength": 1.5,
+          "tone": "coral",
+          "icon": "clipboardCheck"
+        },
+        {
+          "_type": "petVibeItem",
+          "label": "Main-character energy",
+          "descriptor": "Small body, large agenda.",
+          "strength": 4.5,
+          "tone": "blue",
+          "icon": "sparkles"
+        }
+      ],
+      "fitGuidance": {
+        "_type": "petFitGuidance",
+        "goodFitTitle": "Good fit if...",
+        "goodFitItems": [
+          {
+            "_type": "petFitGuidanceItem",
+            "text": "You can respect a tiny rabbit with major governance energy.",
+            "tone": "mint"
+          },
+          {
+            "_type": "petFitGuidanceItem",
+            "text": "You like precise care notes and visible labels.",
+            "tone": "mint"
+          },
+          {
+            "_type": "petFitGuidanceItem",
+            "text": "You can protect cords without making it a whole speech.",
+            "tone": "mint"
+          }
+        ],
+        "avoidTitle": "Maybe avoid if...",
+        "avoidItems": [
+          {
+            "_type": "petFitGuidanceItem",
+            "text": "You leave chargers where ambitious rabbits can audit them.",
+            "tone": "coral"
+          },
+          {
+            "_type": "petFitGuidanceItem",
+            "text": "You think small pets have small opinions.",
+            "tone": "coral"
+          },
+          {
+            "_type": "petFitGuidanceItem",
+            "text": "You dislike being assessed by someone under five pounds.",
+            "tone": "coral"
+          }
+        ]
+      },
+      "dailySchedule": [
+        {
+          "_type": "petScheduleItem",
+          "timeLabel": "Morning",
+          "title": "Compliment and breakfast",
+          "description": "Begin with one sincere compliment and a neutral vegetable.",
+          "tone": "mint"
+        },
+        {
+          "_type": "petScheduleItem",
+          "timeLabel": "Afternoon",
+          "title": "Cord perimeter check",
+          "description": "Confirm the no-chew zone still exists and morale remains high.",
+          "tone": "coral"
+        },
+        {
+          "_type": "petScheduleItem",
+          "timeLabel": "Evening",
+          "title": "Return the kingdom",
+          "description": "Place blanket, bowl, and opinions back where they started.",
+          "tone": "cream"
+        }
+      ]
     },
     {
       "seedId": "pet-muffin",
       "type": "pet",
       "name": "Muffin",
-      "slug": { "current": "muffin" },
+      "slug": {
+        "current": "muffin"
+      },
       "petTypeSeedId": "petType-dog",
       "breed": "Cavalier King Charles Spaniel",
       "ageYears": 5,
@@ -166,9 +271,9 @@
       "hostPayoutAmount": 39,
       "hostPayoutCurrency": "CAD",
       "hostPayoutUnit": "day",
-      "temperament": "enthusiastic",
-      "pickupUrgency": "flexible",
-      "cuddlePolicy": "aggressivelyAvailable",
+      "temperament": "friendly",
+      "pickupUrgency": "anytime",
+      "cuddlePolicy": "openEnrollment",
       "messRisk": 3.5,
       "chaosLevel": 3,
       "energyLevel": 4,
@@ -242,8 +347,18 @@
         }
       ],
       "personalityTraits": [
-        { "label": "Affectionate", "value": "affectionate", "icon": "heart", "tone": "friendly" },
-        { "label": "Textile curious", "value": "textileCurious", "icon": "shirt", "tone": "warning" }
+        {
+          "label": "Affectionate",
+          "value": "affectionate",
+          "icon": "heart",
+          "tone": "friendly"
+        },
+        {
+          "label": "Textile curious",
+          "value": "textileCurious",
+          "icon": "shirt",
+          "tone": "warning"
+        }
       ],
       "careNotes": [
         {
@@ -270,7 +385,10 @@
       "testimonialSeedId": "testimonial-muffin-weekend",
       "contactOwnerCta": {
         "label": "Borrow this optimism",
-        "link": { "type": "action", "action": "openOwnerContactDrawer" },
+        "link": {
+          "type": "action",
+          "action": "openOwnerContactDrawer"
+        },
         "style": "primary",
         "icon": "send"
       },
@@ -279,13 +397,95 @@
         "description": "Borrow a cheerful dog with washable-rug energy and extremely persuasive eyebrows.",
         "openGraphImageAssetKey": "pet-muffin-card-01",
         "noIndex": false
-      }
+      },
+      "vibeProfile": [
+        {
+          "_type": "petVibeItem",
+          "label": "Emotional availability",
+          "descriptor": "Arrives damp, optimistic, and ready to process feelings.",
+          "strength": 4,
+          "tone": "mint",
+          "icon": "heartHandshake"
+        },
+        {
+          "_type": "petVibeItem",
+          "label": "Ball diplomacy",
+          "descriptor": "Every conversation eventually becomes about the ball.",
+          "strength": 5,
+          "tone": "blue",
+          "icon": "circle"
+        }
+      ],
+      "fitGuidance": {
+        "_type": "petFitGuidance",
+        "goodFitTitle": "Good fit if...",
+        "goodFitItems": [
+          {
+            "_type": "petFitGuidanceItem",
+            "text": "You enjoy cheerful updates and tennis-ball-based optimism.",
+            "tone": "mint"
+          },
+          {
+            "_type": "petFitGuidanceItem",
+            "text": "You can handle affectionate dampness after a walk.",
+            "tone": "mint"
+          },
+          {
+            "_type": "petFitGuidanceItem",
+            "text": "You want a companion who treats the couch like group therapy.",
+            "tone": "mint"
+          }
+        ],
+        "avoidTitle": "Maybe avoid if...",
+        "avoidItems": [
+          {
+            "_type": "petFitGuidanceItem",
+            "text": "You need personal space during emotional ball delivery.",
+            "tone": "coral"
+          },
+          {
+            "_type": "petFitGuidanceItem",
+            "text": "You consider towel management optional.",
+            "tone": "coral"
+          },
+          {
+            "_type": "petFitGuidanceItem",
+            "text": "You cannot send one reassuring check-in.",
+            "tone": "coral"
+          }
+        ]
+      },
+      "dailySchedule": [
+        {
+          "_type": "petScheduleItem",
+          "timeLabel": "Morning",
+          "title": "Optimistic greeting",
+          "description": "Expect enthusiasm, a ball, and a weather report from the hallway.",
+          "tone": "mint"
+        },
+        {
+          "_type": "petScheduleItem",
+          "timeLabel": "Midday",
+          "title": "Walk and towel reset",
+          "description": "Short walk, gentle dry-off, no emotional negotiations with puddles.",
+          "tone": "blue"
+        },
+        {
+          "_type": "petScheduleItem",
+          "timeLabel": "Evening",
+          "title": "Couch processing",
+          "description": "Provide calm company while Muffin explains the day through sighs.",
+          "tone": "cream"
+        }
+      ]
     },
     {
       "seedId": "pet-pip-after-midnight",
       "type": "pet",
       "name": "Pip After Midnight",
-      "slug": { "current": "pip-after-midnight" },
+      "slug": {
+        "current": "pip-after-midnight"
+      },
       "petTypeSeedId": "petType-cat",
       "breed": "Domestic Shorthair",
       "ageYears": 2,
@@ -295,15 +495,15 @@
       "source": "userSubmitted",
       "listingHeadline": "Cute. Rule-bound. Do not improvise.",
       "listingSummary": "Pip is sweet, tiny, and not to be fed after the printed snack window. I laminated the schedule because optimism failed.",
-      "availabilityStatus": "limited",
+      "availabilityStatus": "temporarilyUnavailable",
       "distanceKilometers": 7.2,
       "listingPlan": "porch",
       "hostPayoutAmount": 22,
       "hostPayoutCurrency": "CAD",
       "hostPayoutUnit": "stay",
-      "temperament": "sweetUntilProcedural",
-      "pickupUrgency": "scheduledOnly",
-      "cuddlePolicy": "byAppointment",
+      "temperament": "suspicious",
+      "pickupUrgency": "appointmentOnly",
+      "cuddlePolicy": "consentRequired",
       "messRisk": 2,
       "chaosLevel": 5,
       "energyLevel": 2.5,
@@ -377,8 +577,18 @@
         }
       ],
       "personalityTraits": [
-        { "label": "Charming", "value": "charming", "icon": "sparkles", "tone": "friendly" },
-        { "label": "Rule-bound", "value": "ruleBound", "icon": "listChecks", "tone": "warning" }
+        {
+          "label": "Charming",
+          "value": "charming",
+          "icon": "sparkles",
+          "tone": "friendly"
+        },
+        {
+          "label": "Rule-bound",
+          "value": "ruleBound",
+          "icon": "listChecks",
+          "tone": "warning"
+        }
       ],
       "careNotes": [
         {
@@ -405,7 +615,10 @@
       "testimonialSeedId": null,
       "contactOwnerCta": {
         "label": "Request the snack rules",
-        "link": { "type": "action", "action": "openOwnerContactDrawer" },
+        "link": {
+          "type": "action",
+          "action": "openOwnerContactDrawer"
+        },
         "style": "primary",
         "icon": "send"
       },
@@ -414,7 +627,95 @@
         "description": "Borrow a cute cat with strict snack timing and laminated care notes.",
         "openGraphImageAssetKey": "pet-pip-card-01",
         "noIndex": false
-      }
+      },
+      "vibeProfile": [
+        {
+          "_type": "petVibeItem",
+          "label": "Midnight compliance",
+          "descriptor": "Excellent if you follow the laminated snack window.",
+          "strength": 2,
+          "tone": "coral",
+          "icon": "clock"
+        },
+        {
+          "_type": "petVibeItem",
+          "label": "Quiet companionship",
+          "descriptor": "Strong silent presence from the best shelf in the room.",
+          "strength": 4,
+          "tone": "cream",
+          "icon": "moon"
+        },
+        {
+          "_type": "petVibeItem",
+          "label": "Loophole detection",
+          "descriptor": "Finds policy gaps before humans finish reading.",
+          "strength": 5,
+          "tone": "blue",
+          "icon": "search"
+        }
+      ],
+      "fitGuidance": {
+        "_type": "petFitGuidance",
+        "goodFitTitle": "Good fit if...",
+        "goodFitItems": [
+          {
+            "_type": "petFitGuidanceItem",
+            "text": "You can say no to snack-window lobbying.",
+            "tone": "mint"
+          },
+          {
+            "_type": "petFitGuidanceItem",
+            "text": "You enjoy quiet company with occasional shelf judgment.",
+            "tone": "mint"
+          },
+          {
+            "_type": "petFitGuidanceItem",
+            "text": "You follow printed routines without adding flair.",
+            "tone": "mint"
+          }
+        ],
+        "avoidTitle": "Maybe avoid if...",
+        "avoidItems": [
+          {
+            "_type": "petFitGuidanceItem",
+            "text": "You improvise feeding times to see what happens.",
+            "tone": "coral"
+          },
+          {
+            "_type": "petFitGuidanceItem",
+            "text": "You are unnerved by silent supervision from above.",
+            "tone": "coral"
+          },
+          {
+            "_type": "petFitGuidanceItem",
+            "text": "You need a pet who forgives policy experiments quickly.",
+            "tone": "coral"
+          }
+        ]
+      },
+      "dailySchedule": [
+        {
+          "_type": "petScheduleItem",
+          "timeLabel": "Morning",
+          "title": "Shelf census",
+          "description": "Pip confirms all shelves remain suspicious but acceptable.",
+          "tone": "cream"
+        },
+        {
+          "_type": "petScheduleItem",
+          "timeLabel": "Afternoon",
+          "title": "Quiet companionship",
+          "description": "Best window for reading nearby without making direct snack promises.",
+          "tone": "mint"
+        },
+        {
+          "_type": "petScheduleItem",
+          "timeLabel": "Night",
+          "title": "Snack-window enforcement",
+          "description": "Follow the printed time exactly. Do not round up emotionally.",
+          "tone": "coral"
+        }
+      ]
     }
   ]
 }

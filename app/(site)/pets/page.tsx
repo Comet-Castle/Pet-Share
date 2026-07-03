@@ -1,33 +1,42 @@
 import type { Metadata } from "next";
-import type { ReactNode } from "react";
 import Link from "next/link";
 import { draftMode } from "next/headers";
-import { Circle, Gauge, HeartHandshake, SlidersHorizontal, Sparkles, Zap } from "lucide-react";
+import { SlidersHorizontal } from "lucide-react";
 import { PetCard } from "@/components/features/pets/pet-card";
-import { PetTypeFilterPreview } from "@/components/features/pets/pet-type-filter-preview";
+import { PetFilters } from "@/components/features/pets/pet-filters";
+import { ActiveFilterChips } from "@/components/features/pets/active-filter-chips";
+import { MobileFilterDrawer } from "@/components/features/pets/mobile-filter-drawer";
+import { SortControl } from "@/components/features/pets/sort-control";
 import { PageSections } from "@/components/features/sections/page-sections";
 import { SystemMessage } from "@/components/features/system/system-message";
+import { availabilityLabels, urgencyLabels } from "@/components/features/pets/status";
 import { logger } from "@/lib/diagnostics/logger";
 import { metadataFromSeo } from "@/lib/content/metadata";
 import { loadPetIndexPage, loadPetsIndex, loadPetsIndexCount, loadPetTypes } from "@/sanity/lib/loaders";
-import { availabilityLabels, cuddlePolicyLabels } from "@/components/features/pets/status";
+import {
+  PET_PAGE_SIZE,
+  countActiveFilters,
+  normalizeMinimumRating,
+  normalizePetNameQuery,
+  normalizeStringList,
+  petsPageHref,
+  type PetFilterState
+} from "@/components/features/pets/pet-index-state";
+import { resolvePetIndexSort } from "@/sanity/queries/pets";
 
 type PetsPageProps = Readonly<{
   searchParams: Promise<{
     page?: string;
+    sort?: string;
+    name?: string;
     type?: string | string[];
     availability?: string | string[];
-    cuddle?: string | string[];
+    urgency?: string | string[];
     chaos?: string;
     mess?: string;
     energy?: string;
   }>;
 }>;
-
-const pageSize = 12;
-const availabilityOptions = Object.entries(availabilityLabels);
-const cuddlePolicyOptions = Object.entries(cuddlePolicyLabels);
-const ratingSteps = [1, 2, 3, 4, 5];
 
 function normalizePage(value: string | undefined) {
   const parsed = Number(value);
@@ -41,46 +50,8 @@ function normalizePage(value: string | undefined) {
 
 function normalizePetTypeSlugs(value: string | string[] | undefined) {
   const values = Array.isArray(value) ? value : value ? [value] : [];
+
   return Array.from(new Set(values.map((slug) => slug.trim()).filter(Boolean)));
-}
-
-function normalizeOptionList(value: string | string[] | undefined, allowedValues: string[]) {
-  const values = Array.isArray(value) ? value : value ? [value] : [];
-  return Array.from(new Set(values.filter((item) => allowedValues.includes(item))));
-}
-
-function normalizeMinimumRating(value: string | undefined) {
-  const parsed = Number(value);
-  if (!Number.isInteger(parsed) || parsed < 1 || parsed > 5) return null;
-  return parsed;
-}
-
-type PetFilterState = Readonly<{
-  petTypeSlugs: string[];
-  availabilityStatuses: string[];
-  cuddlePolicies: string[];
-  minChaos: number | null;
-  minMess: number | null;
-  minEnergy: number | null;
-}>;
-
-function petsPageHref(filters: PetFilterState, page = 1) {
-  const params = new URLSearchParams();
-  if (page > 1) {
-    params.set("page", String(page));
-  }
-  filters.petTypeSlugs.forEach((slug) => params.append("type", slug));
-  filters.availabilityStatuses.forEach((status) => params.append("availability", status));
-  filters.cuddlePolicies.forEach((policy) => params.append("cuddle", policy));
-  if (filters.minChaos) params.set("chaos", String(filters.minChaos));
-  if (filters.minMess) params.set("mess", String(filters.minMess));
-  if (filters.minEnergy) params.set("energy", String(filters.minEnergy));
-  const query = params.toString();
-  return query ? `/pets?${query}` : "/pets";
-}
-
-function toggleListValue(values: string[], value: string) {
-  return values.includes(value) ? values.filter((item) => item !== value) : [...values, value];
 }
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -101,21 +72,24 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 /**
- * Renders the public pet index with URL-driven pagination and starter filters.
+ * Renders the public pet index as a browse-first marketplace surface with
+ * URL-driven filters, sorting, result chips, and server-rendered pagination.
  */
 export default async function PetsPage({ searchParams }: PetsPageProps) {
   const { isEnabled } = await draftMode();
   const params = await searchParams;
   const currentPage = normalizePage(params.page);
-  const selectedPetTypeSlugs = normalizePetTypeSlugs(params.type);
+  const sort = resolvePetIndexSort(params.sort);
   const petFilters: PetFilterState = {
-    petTypeSlugs: selectedPetTypeSlugs,
-    availabilityStatuses: normalizeOptionList(params.availability, Object.keys(availabilityLabels)),
-    cuddlePolicies: normalizeOptionList(params.cuddle, Object.keys(cuddlePolicyLabels)),
+    petNameQuery: normalizePetNameQuery(params.name),
+    petTypeSlugs: normalizePetTypeSlugs(params.type),
+    availabilityStatuses: normalizeStringList(params.availability, Object.keys(availabilityLabels)),
+    pickupUrgencies: normalizeStringList(params.urgency, Object.keys(urgencyLabels)),
     minChaos: normalizeMinimumRating(params.chaos),
     minMess: normalizeMinimumRating(params.mess),
     minEnergy: normalizeMinimumRating(params.energy)
   };
+
   let page: Awaited<ReturnType<typeof loadPetIndexPage>> | null = null;
   let pets: Awaited<ReturnType<typeof loadPetsIndex>> = [];
   let totalPets = 0;
@@ -125,7 +99,7 @@ export default async function PetsPage({ searchParams }: PetsPageProps) {
   try {
     [page, pets, totalPets, petTypes] = await Promise.all([
       loadPetIndexPage({ preview: isEnabled }),
-      loadPetsIndex(currentPage, pageSize, petFilters, { preview: isEnabled }),
+      loadPetsIndex(currentPage, PET_PAGE_SIZE, petFilters, sort, { preview: isEnabled }),
       loadPetsIndexCount(petFilters, { preview: isEnabled }),
       loadPetTypes({ preview: isEnabled })
     ]);
@@ -149,128 +123,87 @@ export default async function PetsPage({ searchParams }: PetsPageProps) {
     );
   }
 
-  const totalPages = Math.max(Math.ceil(totalPets / pageSize), 1);
+  const totalPages = Math.max(Math.ceil(totalPets / PET_PAGE_SIZE), 1);
+  const activeCount = countActiveFilters(petFilters);
+  const clearHref = "/pets";
+  const contentSections = page?.contentSections?.filter(
+    (section) => section._key !== "pet-index-final-cta" && !("headline" in section && section.headline === "Still deciding?")
+  );
 
   return (
-    <div className="mx-auto w-full max-w-[1440px] px-5 py-12 sm:px-8 lg:px-10">
-      <section className="mb-10 rounded-[2rem] bg-white/70 p-6 shadow-soft backdrop-blur sm:p-10">
-        <p className="text-sm font-bold uppercase tracking-[0.18em] text-pet-muted">Pet marketplace</p>
-        <h1 className="mt-3 font-display text-4xl font-bold leading-tight text-pet-ink sm:text-6xl">
-          {page?.hero?.headline ?? "Find a pet to temporarily regret."}
-        </h1>
-      </section>
-
-      <div className="grid gap-8 lg:grid-cols-[300px_1fr]">
-        <aside className="h-fit rounded-[2rem] bg-white/70 p-5 shadow-soft backdrop-blur lg:sticky lg:top-6">
-          <div className="flex items-start justify-between gap-3">
-            <div className="flex items-center gap-2 text-pet-ink">
+    <main className="mx-auto w-full max-w-[1440px] min-w-0 px-5 py-6 sm:px-8 sm:py-8 lg:px-10 lg:py-10">
+      <div className="grid min-w-0 gap-8 lg:grid-cols-[330px_minmax(0,1fr)]">
+        <aside className="hidden lg:block">
+          <div className="sticky top-6 rounded-[2rem] bg-white/72 p-5 shadow-soft backdrop-blur">
+            <div className="mb-6 flex items-center gap-2 text-pet-ink">
               <SlidersHorizontal aria-hidden="true" size={20} />
               <h2 className="font-display text-xl font-bold">Filters</h2>
             </div>
-            <span className="rounded-full bg-white px-3 py-1 text-xs font-bold text-pet-muted shadow-sm">
-              {totalPets} pets
-            </span>
-          </div>
-          <p className="mt-3 text-sm leading-6 text-pet-muted">
-            {page?.filterIntro ?? "Narrow the field by species, mess risk, cuddle policy, and other warning signs."}
-          </p>
-          <Link
-            href="/pets"
-            className="mt-4 inline-flex rounded-full bg-white/75 px-4 py-2 text-sm font-bold text-pet-muted shadow-sm transition hover:-rotate-1 hover:text-pet-ink focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2"
-          >
-            Clear filters
-          </Link>
-
-          <div className="mt-6 space-y-6">
-            <PetTypeFilterPreview petTypes={petTypes} selectedSlugs={petFilters.petTypeSlugs} />
-
-            <section aria-labelledby="availability-filter-preview">
-              <h3 id="availability-filter-preview" className="text-xs font-bold uppercase tracking-[0.16em] text-pet-muted">
-                Availability
-              </h3>
-              <div className="mt-3 grid gap-2">
-                {availabilityOptions.map(([value, label]) => {
-                  const isActive = petFilters.availabilityStatuses.includes(value);
-                  return (
-                    <FilterPillLink
-                      key={value}
-                      href={petsPageHref({ ...petFilters, availabilityStatuses: toggleListValue(petFilters.availabilityStatuses, value) })}
-                      isActive={isActive}
-                      label={label}
-                      icon={<Circle aria-hidden="true" size={10} className={value === "available" ? "fill-pet-mint text-pet-mint" : "fill-pet-coral text-pet-coral"} />}
-                    />
-                  );
-                })}
-              </div>
-            </section>
-
-            <section aria-labelledby="rating-filter-preview">
-              <h3 id="rating-filter-preview" className="text-xs font-bold uppercase tracking-[0.16em] text-pet-muted">
-                Household impact
-              </h3>
-              <div className="mt-3 space-y-3">
-                <FilterScaleControl
-                  icon={<Gauge aria-hidden="true" size={16} />}
-                  label="Chaos"
-                  activeValue={petFilters.minChaos}
-                  hrefForValue={(value) => petsPageHref({ ...petFilters, minChaos: value })}
-                />
-                <FilterScaleControl
-                  icon={<Sparkles aria-hidden="true" size={16} />}
-                  label="Mess"
-                  activeValue={petFilters.minMess}
-                  hrefForValue={(value) => petsPageHref({ ...petFilters, minMess: value })}
-                />
-                <FilterScaleControl
-                  icon={<Zap aria-hidden="true" size={16} />}
-                  label="Energy"
-                  activeValue={petFilters.minEnergy}
-                  hrefForValue={(value) => petsPageHref({ ...petFilters, minEnergy: value })}
-                />
-              </div>
-            </section>
-
-            <section aria-labelledby="policy-filter-preview">
-              <h3 id="policy-filter-preview" className="text-xs font-bold uppercase tracking-[0.16em] text-pet-muted">
-                Borrowing rules
-              </h3>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {cuddlePolicyOptions.map(([value, label]) => (
-                  <FilterPillLink
-                    key={value}
-                    href={petsPageHref({ ...petFilters, cuddlePolicies: toggleListValue(petFilters.cuddlePolicies, value) })}
-                    isActive={petFilters.cuddlePolicies.includes(value)}
-                    label={label}
-                    icon={value === "consentRequired" ? <HeartHandshake aria-hidden="true" size={15} /> : undefined}
-                  />
-                ))}
-              </div>
-            </section>
+            <div className="themed-scrollbar -mr-5 max-h-[calc(100vh-8rem)] overflow-y-auto pr-5 pb-6">
+              <PetFilters
+                filters={petFilters}
+                petTypes={petTypes}
+                activeCount={activeCount}
+                totalPets={totalPets}
+                clearHref={clearHref}
+              />
+            </div>
           </div>
         </aside>
 
-        <section aria-label="Pet listings">
+        <section aria-label="Pet listings" className="min-w-0">
+          <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+            <div className="min-w-0">
+              <p className="text-sm font-bold uppercase tracking-[0.18em] text-pet-muted">Pet marketplace</p>
+              <h1 className="mt-2 text-wrap font-display text-4xl font-bold leading-[1.05] text-pet-ink sm:text-5xl">
+                Browse available pets
+              </h1>
+              <p aria-live="polite" className="mt-3 text-sm font-bold text-pet-muted">
+                {totalPets} {totalPets === 1 ? "pet" : "pets"} available
+              </p>
+            </div>
+            <div className="flex flex-wrap items-end gap-3">
+              <MobileFilterDrawer activeCount={activeCount} resultCount={totalPets}>
+                <div className="rounded-[1.5rem] bg-white/75 p-4 shadow-soft backdrop-blur">
+                  <PetFilters
+                    filters={petFilters}
+                    petTypes={petTypes}
+                    activeCount={activeCount}
+                    totalPets={totalPets}
+                    clearHref={clearHref}
+                  />
+                </div>
+              </MobileFilterDrawer>
+              <SortControl currentSort={sort} />
+            </div>
+          </div>
+
+          <div className="mt-4">
+            <ActiveFilterChips filters={petFilters} petTypes={petTypes} clearHref={clearHref} />
+          </div>
+
           {pets.length ? (
             <>
-              <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+              <div className="mt-6 grid min-w-0 gap-7 md:grid-cols-2 xl:grid-cols-3">
                 {pets.map((pet) => (
-                  <PetCard key={pet._id} pet={pet} showSummary={false} />
+                  <PetCard key={pet._id} pet={pet} />
                 ))}
               </div>
+
               <nav className="mt-8 flex flex-wrap items-center justify-between gap-3" aria-label="Pet pagination">
                 <p className="text-sm font-bold text-pet-muted">
                   Page {currentPage} of {totalPages}
                 </p>
                 <div className="flex gap-3">
                   <Link
-                    href={petsPageHref(petFilters, Math.max(currentPage - 1, 1))}
+                    href={petsPageHref(petFilters, { page: Math.max(currentPage - 1, 1), sort })}
                     aria-disabled={currentPage === 1}
                     className="rounded-full bg-white/75 px-5 py-3 text-sm font-bold text-pet-ink shadow-soft transition hover:-rotate-1 focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2 aria-disabled:pointer-events-none aria-disabled:opacity-50"
                   >
                     Previous
                   </Link>
                   <Link
-                    href={petsPageHref(petFilters, Math.min(currentPage + 1, totalPages))}
+                    href={petsPageHref(petFilters, { page: Math.min(currentPage + 1, totalPages), sort })}
                     aria-disabled={currentPage >= totalPages}
                     className="rounded-full bg-white/75 px-5 py-3 text-sm font-bold text-pet-ink shadow-soft transition hover:rotate-1 focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2 aria-disabled:pointer-events-none aria-disabled:opacity-50"
                   >
@@ -280,82 +213,35 @@ export default async function PetsPage({ searchParams }: PetsPageProps) {
               </nav>
             </>
           ) : (
-            <SystemMessage
-              variant="empty"
-              eyebrow="No pets yet"
-              title={page?.emptyState?.headline ?? "The kennels are suspiciously quiet."}
-              message={page?.emptyState?.body ?? "Seed content will populate this listing once the data milestone runs."}
-              primaryHref="/"
-              primaryLabel="Go home"
-              secondaryHref="/process"
-              secondaryLabel="Review the process"
-            />
+            <div className="mt-6">
+              <SystemMessage
+                variant="empty"
+                eyebrow={activeCount > 0 ? "No matches" : "No pets yet"}
+                title={
+                  activeCount > 0
+                    ? page?.emptyState?.headline ?? "No pets match those filters."
+                    : "The kennels are suspiciously quiet."
+                }
+                message={
+                  activeCount > 0
+                    ? page?.emptyState?.body ?? "That combination is too specific, even for us. They may be hiding."
+                    : "Seed content will populate this listing once the data milestone runs."
+                }
+                primaryHref={activeCount > 0 ? clearHref : "/"}
+                primaryLabel={activeCount > 0 ? "Clear filters" : "Go home"}
+                secondaryHref="/process"
+                secondaryLabel="Review the process"
+              />
+            </div>
           )}
         </section>
       </div>
 
-      <PageSections sections={page?.contentSections} />
-    </div>
-  );
-}
-
-type FilterPillLinkProps = Readonly<{
-  href: string;
-  isActive: boolean;
-  label: string;
-  icon?: ReactNode;
-}>;
-
-function FilterPillLink({ href, isActive, label, icon }: FilterPillLinkProps) {
-  return (
-    <Link
-      href={href}
-      aria-current={isActive ? "true" : undefined}
-      className={isActive
-        ? "inline-flex items-center gap-2 rounded-full bg-pet-blue/20 px-3 py-2 text-sm font-bold text-pet-ink shadow-sm transition hover:-rotate-1 focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2"
-        : "inline-flex items-center gap-2 rounded-full bg-white/70 px-3 py-2 text-sm font-bold text-pet-muted shadow-sm transition hover:-rotate-1 hover:text-pet-ink focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2"}
-    >
-      {icon}
-      {label}
-    </Link>
-  );
-}
-
-type FilterScaleControlProps = Readonly<{
-  icon: ReactNode;
-  label: string;
-  activeValue: number | null;
-  hrefForValue: (value: number | null) => string;
-}>;
-
-function FilterScaleControl({ icon, label, activeValue, hrefForValue }: FilterScaleControlProps) {
-  return (
-    <div className="rounded-3xl bg-white/65 p-3">
-      <div className="flex items-center justify-between gap-3">
-        <span className="inline-flex items-center gap-2 text-sm font-bold text-pet-ink">
-          {icon}
-          {label}
-        </span>
-        <Link
-          href={hrefForValue(null)}
-          className="text-xs font-bold text-pet-muted underline decoration-pet-coral decoration-2 underline-offset-4 transition hover:text-pet-ink focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2"
-        >
-          Any
-        </Link>
-      </div>
-      <div className="mt-2 flex gap-1" aria-label={`${label} minimum filter`}>
-        {ratingSteps.map((value) => (
-          <Link
-            key={`${label}-${value}`}
-            href={hrefForValue(activeValue === value ? null : value)}
-            aria-label={`${label} ${value} or higher`}
-            aria-current={activeValue === value ? "true" : undefined}
-            className={activeValue && value <= activeValue ? "h-3 flex-1 rounded-full bg-pet-coral transition hover:bg-pet-ink focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2" : "h-3 flex-1 rounded-full bg-pet-muted/15 transition hover:bg-pet-coral/60 focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2"}
-          >
-            <span className="sr-only">{value}+</span>
-          </Link>
-        ))}
-      </div>
-    </div>
+      {contentSections?.length ? (
+        <div className="mt-12">
+          <PageSections sections={contentSections} />
+        </div>
+      ) : null}
+    </main>
   );
 }

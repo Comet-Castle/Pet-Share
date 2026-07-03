@@ -25,7 +25,13 @@
 
 html {
   min-width: 320px;
-  scroll-behavior: auto;
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 body {
@@ -78,6 +84,36 @@ input[type="submit"]:not(:disabled) {
 ::selection {
   background: var(--color-pet-mint);
   color: var(--color-pet-ink);
+}
+
+.themed-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(255 143 112 / 0.32) rgb(255 255 255 / 1);
+}
+
+.themed-scrollbar::-webkit-scrollbar {
+  width: 12px;
+}
+
+.themed-scrollbar::-webkit-scrollbar-track {
+  background: rgb(255 255 255 / 1);
+  border-radius: 999px;
+  background-clip: padding-box;
+}
+
+.themed-scrollbar::-webkit-scrollbar-thumb {
+  background: rgb(255 143 112 / 0.32);
+  border: 3px solid rgb(255 255 255 / 1);
+  border-radius: 999px;
+  background-clip: padding-box;
+}
+
+.themed-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgb(255 143 112 / 0.46);
+}
+
+.themed-scrollbar::-webkit-scrollbar-corner {
+  background: transparent;
 }
 
 @keyframes pet-gallery-image-enter {

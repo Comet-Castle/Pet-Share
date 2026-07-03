@@ -1,79 +1,80 @@
-import Image from "next/image";
 import Link from "next/link";
 import { stegaClean } from "@sanity/client/stega";
-import { Circle, Gauge, PawPrint, Sparkles } from "lucide-react";
+import { Circle, MapPin } from "lucide-react";
 import type { PETS_INDEX_QUERY_RESULT } from "@/sanity.types";
+import { SanityImage } from "@/components/ui/sanity-image";
+import { joinClassNames } from "@/lib/utils/class-names";
 import { availabilityLabels } from "./status";
+import { formatDistanceKm, formatHostPayout } from "./format";
 
 type PetCardData = PETS_INDEX_QUERY_RESULT[number];
 
 type PetCardProps = Readonly<{
   pet: PetCardData;
+  /** Renders the listing summary line. Off on dense catalog grids. */
   showSummary?: boolean;
 }>;
 
-/**
- * Renders a responsive pet listing card from the shared pet card query shape.
- */
-export function PetCard({ pet, showSummary = true }: PetCardProps) {
-  const cardImage = pet.cardMedia?.image;
-  const imageUrl = cardImage?.image?.asset?.url;
-  const availabilityStatus = stegaClean(pet.availabilityStatus) as keyof typeof availabilityLabels;
-  const availabilityLabel = availabilityLabels[availabilityStatus];
-  const petTypeLabel = pet.petType?.filterLabel ?? "Pet";
+function getAvailabilityTone(status: keyof typeof availabilityLabels) {
+  return stegaClean(status) === "available" ? "fill-pet-mint text-pet-mint" : "fill-pet-coral text-pet-coral";
+}
 
+/**
+ * Renders a responsive marketplace pet card aligned with the homepage card family.
+ * The entire card is a single link to the pet detail page.
+ */
+export function PetCard({ pet, showSummary = false }: PetCardProps) {
+  const cardImage = pet.cardMedia?.image;
+  const availabilityStatus = stegaClean(pet.availabilityStatus) as keyof typeof availabilityLabels;
+  const availabilityLabel = availabilityLabels[availabilityStatus] ?? "Pet";
+  const petTypeLabel = stegaClean(pet.petType?.filterLabel) ?? "Pet";
+  const distanceLabel = formatDistanceKm(pet.distanceKilometers ?? null);
+  const payoutLabel = formatHostPayout({
+    amount: pet.hostPayoutAmount ?? null,
+    currency: pet.hostPayoutCurrency ?? null,
+    unit: pet.hostPayoutUnit ?? null
+  });
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-[2rem] bg-white/70 shadow-soft backdrop-blur transition duration-200 hover:-translate-y-1">
-      <Link href={`/pets/${pet.slug}`} className="block focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2">
-        <div className="relative aspect-[4/3] overflow-hidden bg-pet-mint/25">
-          {imageUrl ? (
-            <Image
-              src={imageUrl}
-              alt={cardImage?.alt ?? ""}
-              fill
-              sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 100vw"
-              className="object-cover transition duration-300 group-hover:scale-[1.03]"
-            />
-          ) : (
-            <div className="flex h-full items-center justify-center text-pet-muted">
-              <PawPrint aria-hidden="true" size={44} />
+    <Link
+      href={`/pets/${pet.slug}`}
+      aria-label={`View ${pet.name}`}
+      className="group block min-w-0 cursor-pointer rounded-[1.75rem] focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-4"
+    >
+      <article className="min-w-0 overflow-hidden rounded-[1.75rem] bg-white/86 shadow-soft backdrop-blur transition duration-200 group-hover:-translate-y-1">
+        <div className="relative">
+          <SanityImage
+            image={cardImage ?? null}
+            sizes="(min-width: 1280px) 30vw, (min-width: 768px) 50vw, 100vw"
+            className="aspect-[4/3]"
+            imageClassName="transition duration-300 group-hover:scale-[1.03]"
+          />
+          <span className="absolute left-4 top-4 inline-flex items-center gap-2 rounded-full bg-white/90 px-3 py-2 text-xs font-bold text-pet-ink shadow-sm backdrop-blur">
+            <Circle aria-hidden="true" size={9} className={getAvailabilityTone(availabilityStatus)} />
+            {availabilityLabel}
+          </span>
+        </div>
+
+        <div className="min-w-0 p-5 sm:p-6">
+          <h2 className="font-display text-[1.45rem] font-bold leading-[1.08] text-pet-ink">{pet.name}</h2>
+          <p className="mt-1.5 text-[0.9rem] font-bold leading-5 text-pet-muted">{pet.breed ?? petTypeLabel}</p>
+          <p className="mt-3 text-[0.95rem] leading-6 text-pet-muted">{pet.listingHeadline}</p>
+          {showSummary && pet.listingSummary ? (
+            <p className="mt-2 text-sm leading-6 text-pet-muted line-clamp-3">{pet.listingSummary}</p>
+          ) : null}
+
+          <div className="mt-7 flex items-center justify-between gap-4 rounded-[1.25rem] bg-pet-cream/55 px-3 py-3">
+            <div className="inline-flex min-w-0 items-center gap-1.5 text-sm font-bold text-pet-muted">
+              <MapPin aria-hidden="true" size={17} className="shrink-0 text-pet-coral" />
+              <span className={joinClassNames("truncate", !distanceLabel && "text-pet-muted/70")}>
+                {distanceLabel ?? "Distance TBD"}
+              </span>
             </div>
-          )}
-          <div
-            className="group/status absolute left-4 top-4 inline-flex h-7 max-w-7 items-center justify-center overflow-hidden rounded-full bg-white px-[9px] text-xs font-bold text-pet-ink shadow-soft backdrop-blur transition-[max-width,padding] duration-200 ease-out hover:max-w-40 hover:justify-start hover:gap-2 hover:px-3"
-            aria-label={availabilityLabel}
-            title={availabilityLabel}
-          >
-            <Circle
-              aria-hidden="true"
-              size={10}
-              className={availabilityStatus === "available" ? "shrink-0 fill-pet-mint text-pet-mint" : "shrink-0 fill-pet-coral text-pet-coral"}
-            />
-            <span className="max-w-0 overflow-hidden whitespace-nowrap opacity-0 transition-[max-width,opacity] duration-200 ease-out group-hover/status:max-w-32 group-hover/status:opacity-100">
-              {availabilityLabel}
-            </span>
+            <p className={joinClassNames("shrink-0 font-display text-base font-bold leading-none text-pet-ink", !payoutLabel && "text-pet-muted/70")}>
+              {payoutLabel ?? "Price TBD"}
+            </p>
           </div>
         </div>
-      </Link>
-      <div className="flex flex-1 flex-col p-5">
-        <div className="flex flex-wrap gap-2">
-          <span className="inline-flex items-center gap-1 rounded-full bg-pet-blue/25 px-3 py-1 text-xs font-bold text-pet-ink">
-            <Sparkles aria-hidden="true" size={14} />
-            {petTypeLabel}
-          </span>
-          <span className="inline-flex items-center gap-1 rounded-full bg-pet-mint/30 px-3 py-1 text-xs font-bold text-pet-ink">
-            <Gauge aria-hidden="true" size={14} />
-            Chaos {pet.chaosLevel}/5
-          </span>
-        </div>
-        <h2 className="mt-4 font-display text-2xl font-bold text-pet-ink">
-          <Link href={`/pets/${pet.slug}`} className="focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2">
-            {pet.name}
-          </Link>
-        </h2>
-        <p className="mt-2 text-sm font-bold text-pet-muted">{pet.listingHeadline}</p>
-        {showSummary ? <p className="mt-3 flex-1 text-sm leading-6 text-pet-muted">{pet.listingSummary}</p> : null}
-      </div>
-    </article>
+      </article>
+    </Link>
   );
 }

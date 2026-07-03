@@ -269,6 +269,7 @@ Scope:
 
 - Refine `/pets` layout, filters, sorting, pagination, URL state, empty states, and pet card presentation.
 - Refine `/pets/[slug]` layout, gallery behavior, pet facts, owner summary, availability/status display, care notes, CTA surfaces, and optional pet video support.
+- Treat pet detail video as authored `videos[]` content only; do not auto-promote `cardMedia.lowFrameRateVideo` into the detail-page video section.
 - Keep the pet index and pet detail pages more structured than Standard Pages; do not turn pet records into generic page-builder content.
 - Improve Sanity schemas, Studio previews, field grouping, and validation for pet, pet type, owner, and pet index content where the editing workflow is unclear.
 - Align pet cards, galleries, status indicators, owner summaries, and marketplace CTA components with the polished component patterns established in milestones 8 and 9.
@@ -280,6 +281,7 @@ Exit criteria:
 
 - `/pets` feels like a polished, responsive marketplace index with shareable server-driven filters and pagination.
 - `/pets/[slug]` presents the selected pet, gallery, structured facts, owner context, and contact CTA clearly on mobile and desktop.
+- If the dedicated pet detail video renderer is not completed in this milestone, the schema/query/seed contract remains documented and the renderer is explicitly carried into Milestone 12 polish rather than treated as missing scope.
 - Pet marketplace schemas are editor-friendly, with clear previews, validation, grouping, and reusable objects where appropriate.
 - Seeded pet, owner, pet type, and pet index content matches the current schema and renderer contracts.
 - No marketplace page depends on deprecated page-builder or legacy pet fields unless it is explicitly in a compatibility fallback.
@@ -322,6 +324,7 @@ Scope:
 - Respect `prefers-reduced-motion`.
 - Keep Framer Motion deferred unless Tailwind/CSS animation becomes awkward enough to justify it.
 - Polish pet index filters, carousels, galleries, drawer behavior, video embeds, forms, and page-builder sections.
+- Add or finalize the dedicated `/pets/[slug]` video renderer for authored `videos[]` content if it was deferred from Milestone 10; render the first usable detail video and keep card-loop media separate.
 
 Exit criteria:
 

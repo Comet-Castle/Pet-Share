@@ -91,6 +91,10 @@ Initial reusable objects:
 - `processStep`
 - `petTrait`
 - `petStat`
+- `petVibeItem`
+- `petFitGuidanceItem`
+- `petFitGuidance`
+- `petScheduleItem`
 - `availabilityWindow`
 - `borrowTerm`
 - `careNote`
@@ -330,13 +334,20 @@ Suggested Sanity fields:
 - `heroImages`: reusable `gallery` object or array of `imageWithAlt` objects.
 - `summary`: short listing-card summary.
 - `description`: portable text or constrained rich text, usually one or two short paragraphs for pet detail pages.
-- `personalityTraits`: array of reusable `petTrait` objects.
+- `personalityTraits`: array of reusable `petTrait` objects, primarily for short trait chips or supporting tags.
+- `vibeProfile`: optional array of reusable `petVibeItem` objects for authored label + descriptor + strength rows on the pet detail page.
 - `careNotes`: array of reusable `careNote` objects.
 - `availability`: array of reusable `availabilityWindow` objects.
 - `borrowTerms`: array of reusable `borrowTerm` objects.
+- `fitGuidance`: optional reusable `petFitGuidance` object for `good fit` and `maybe avoid` lists on the pet detail page.
+- `dailySchedule`: optional array of reusable `petScheduleItem` objects for the day-with-the-pet timeline.
 - `stats`: array of reusable `petStat` objects.
 - `warnings`: array of reusable `petWarning` objects.
-- `videos`: array of reusable `videoEmbed` objects for pet-specific media.
+- `videos`: array of reusable `videoEmbed` objects for pet-specific media. Use these for the dedicated detail-page video section; do not automatically reuse `cardMedia.lowFrameRateVideo` as a detail-section fallback.
+
+Editor experience note:
+
+- In the Studio, these optional editorial arrays and objects should be grouped clearly below the core listing fields, with concise help text and scannable previews so editors can tell at a glance what will appear on the detail page.
 - `testimonial`: optional reference to `testimonial`.
 - `contactOwnerCta`: reusable `cta` object that triggers the owner contact form.
 - `seo`: reusable `seo` object.
@@ -657,6 +668,10 @@ Early implementation objects:
 - `processPathSection`
 - `processStep`
 - `petTrait`
+- `petVibeItem`
+- `petFitGuidance`
+- `petFitGuidanceItem`
+- `petScheduleItem`
 - `petStat`
 - `availabilityWindow`
 - `borrowTerm`
@@ -739,11 +754,15 @@ Planned objects:
 
 - `petTypeSelector`: reference or selector metadata for a `petType` document.
 - `petTrait`: label, value, icon, tone.
+- `petVibeItem`: label, descriptor, strength, optional tone, optional icon. Tone values should come from a controlled set such as `coral`, `blue`, `mint`, `cream`.
+- `petFitGuidance`: optional good-fit title, good-fit items, avoid title, avoid items.
+- `petFitGuidanceItem`: short bullet text, optional emphasis or tone. Preferred semantic tones: good-fit content `mint`, avoid content `coral`.
+- `petScheduleItem`: time label, title, description, optional tone. Tone is editorial/decorative, not warning severity.
 - `petStat`: label, value, description, icon.
 - `availabilityWindow`: start date, end date, note, status.
-- `borrowTerm`: title, description, icon.
-- `careNote`: title, description, severity.
-- `petWarning`: title, description, severity, icon.
+- `borrowTerm`: title, description, icon, optional future priority only if needed.
+- `careNote`: title, description, severity, optional future icon if the frontend needs it. Preferred section tone is `mint`.
+- `petWarning`: title, description, severity, icon. Preferred section tone is `coral`.
 - `petFact`: label, value, icon, display priority.
 - `petFilterOption`: label, value, description.
 - `petCategoryValue`: category type, label, value, icon, tone, sort order.

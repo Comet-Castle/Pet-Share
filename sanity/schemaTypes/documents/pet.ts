@@ -26,11 +26,20 @@ export const pet = defineType({
   title: "Pet",
   type: "document",
   icon: PawPrint,
+  groups: [
+    { name: "core", title: "Core listing", default: true },
+    { name: "facts", title: "Structured facts" },
+    { name: "media", title: "Media" },
+    { name: "detail", title: "Detail modules" },
+    { name: "owner", title: "Owner & CTA" },
+    { name: "seo", title: "SEO" }
+  ],
   fields: [
     defineField({
       name: "seedKey",
       title: "Seed key",
       type: "string",
+      group: "core",
       readOnly: true,
       hidden: ({ value }) => value === undefined
     }),
@@ -38,12 +47,14 @@ export const pet = defineType({
       name: "name",
       title: "Name",
       type: "string",
+      group: "core",
       validation: (rule) => rule.required()
     }),
     defineField({
       name: "slug",
       title: "Slug",
       type: "slug",
+      group: "core",
       options: { source: "name" },
       validation: (rule) =>
         rule.required().custom((slug) => {
@@ -57,15 +68,18 @@ export const pet = defineType({
       name: "petType",
       title: "Pet type",
       type: "reference",
+      group: "core",
       to: [{ type: "petType" }],
       validation: (rule) => rule.required()
     }),
-    defineField({ name: "breed", title: "Breed", type: "string" }),
+    defineField({ name: "breed", title: "Breed", type: "string", group: "facts" }),
     defineField({
       name: "visualIdentity",
       title: "Visual identity",
       type: "object",
+      group: "media",
       description: "Stable visual details used to keep generated pet images consistent across shots.",
+      options: { collapsible: true, collapsed: true },
       fields: [
         defineField({ name: "primaryColor", title: "Primary color", type: "string" }),
         defineField({ name: "secondaryColor", title: "Secondary detail", type: "string" }),
@@ -77,18 +91,21 @@ export const pet = defineType({
       name: "ageYears",
       title: "Age in years",
       type: "number",
+      group: "facts",
       validation: (rule) => rule.min(0).max(100)
     }),
     defineField({
       name: "dateOfBirth",
       title: "Date of birth",
       type: "date",
+      group: "facts",
       description: "Use this instead of age in years only if exact date matters."
     }),
     defineField({
       name: "owner",
       title: "Owner",
       type: "reference",
+      group: "owner",
       to: [{ type: "owner" }],
       validation: (rule) => rule.required()
     }),
@@ -96,6 +113,7 @@ export const pet = defineType({
       name: "submittedBy",
       title: "Submitted by",
       type: "reference",
+      group: "owner",
       to: [{ type: "owner" }],
       validation: (rule) => rule.required()
     }),
@@ -103,6 +121,7 @@ export const pet = defineType({
       name: "submissionStatus",
       title: "Submission status",
       type: "string",
+      group: "core",
       options: { list: submissionStatusOptions, layout: "radio" },
       initialValue: "approved",
       validation: (rule) => rule.required()
@@ -111,6 +130,7 @@ export const pet = defineType({
       name: "source",
       title: "Source",
       type: "string",
+      group: "core",
       options: { list: sourceOptions, layout: "radio" },
       initialValue: "editorial",
       validation: (rule) => rule.required()
@@ -119,12 +139,14 @@ export const pet = defineType({
       name: "listingHeadline",
       title: "Listing headline",
       type: "string",
+      group: "core",
       validation: (rule) => rule.required().max(120)
     }),
     defineField({
       name: "listingSummary",
       title: "Listing summary",
       type: "text",
+      group: "core",
       rows: 3,
       validation: (rule) => rule.required().max(260)
     }),
@@ -132,6 +154,7 @@ export const pet = defineType({
       name: "availabilityStatus",
       title: "Availability status",
       type: "string",
+      group: "facts",
       options: { list: availabilityStatusOptions, layout: "radio" },
       initialValue: "available",
       validation: (rule) => rule.required()
@@ -140,6 +163,7 @@ export const pet = defineType({
       name: "distanceKilometers",
       title: "Distance from viewer (km)",
       type: "number",
+      group: "core",
       description: "Seed/demo distance used for local listing cards until real geo search exists.",
       validation: (rule) => rule.min(0).precision(1)
     }),
@@ -147,6 +171,7 @@ export const pet = defineType({
       name: "listingPlan",
       title: "Listing plan",
       type: "string",
+      group: "core",
       description: "Owner-paid listing plan attached to this pet listing.",
       options: { list: listingPlanOptions, layout: "radio" },
       validation: (rule) => rule.required()
@@ -155,6 +180,7 @@ export const pet = defineType({
       name: "hostPayoutAmount",
       title: "Host payout amount",
       type: "number",
+      group: "core",
       description: "Amount the temporary host is paid for taking this pet for a short stay.",
       validation: (rule) => rule.required().min(0).precision(2)
     }),
@@ -162,6 +188,7 @@ export const pet = defineType({
       name: "hostPayoutCurrency",
       title: "Host payout currency",
       type: "string",
+      group: "core",
       initialValue: "CAD",
       validation: (rule) =>
         rule.required().custom((currency) => {
@@ -173,6 +200,7 @@ export const pet = defineType({
       name: "hostPayoutUnit",
       title: "Host payout unit",
       type: "string",
+      group: "core",
       options: { list: hostPayoutUnitOptions, layout: "radio" },
       initialValue: "day",
       validation: (rule) => rule.required()
@@ -181,6 +209,7 @@ export const pet = defineType({
       name: "temperament",
       title: "Temperament",
       type: "string",
+      group: "facts",
       options: { list: temperamentOptions },
       validation: (rule) => rule.required()
     }),
@@ -188,6 +217,7 @@ export const pet = defineType({
       name: "pickupUrgency",
       title: "Pickup urgency",
       type: "string",
+      group: "facts",
       options: { list: pickupUrgencyOptions },
       validation: (rule) => rule.required()
     }),
@@ -195,24 +225,28 @@ export const pet = defineType({
       name: "messRisk",
       title: "Mess risk",
       type: "number",
+      group: "facts",
       validation: (rule) => rule.required().min(0).max(5).precision(1)
     }),
     defineField({
       name: "chaosLevel",
       title: "Chaos level",
       type: "number",
+      group: "facts",
       validation: (rule) => rule.required().min(0).max(5).precision(1)
     }),
     defineField({
       name: "energyLevel",
       title: "Energy level",
       type: "number",
+      group: "facts",
       validation: (rule) => rule.required().min(0).max(5).precision(1)
     }),
     defineField({
       name: "cuddlePolicy",
       title: "Cuddle policy",
       type: "string",
+      group: "facts",
       options: { list: cuddlePolicyOptions },
       validation: (rule) => rule.required()
     }),
@@ -220,6 +254,7 @@ export const pet = defineType({
       name: "cardMedia",
       title: "Card media",
       type: "object",
+      group: "media",
       fields: [
         defineField({
           name: "image",
@@ -240,69 +275,123 @@ export const pet = defineType({
       name: "heroImages",
       title: "Hero images",
       type: "array",
+      group: "media",
+      description: "Detail-page gallery images shown after the card image.",
       of: [defineArrayMember({ type: "imageWithAlt" })],
       validation: (rule) => rule.required().min(1)
     }),
-    defineField({ name: "summary", title: "Short summary", type: "text", rows: 3 }),
+    defineField({ name: "summary", title: "Short summary", type: "text", rows: 3, group: "detail" }),
     defineField({
       name: "description",
       title: "Description",
       type: "portableText",
+      group: "detail",
       validation: (rule) => rule.required()
     }),
     defineField({
       name: "personalityTraits",
       title: "Personality traits",
       type: "array",
-      of: [defineArrayMember({ type: "petTrait" })]
+      group: "detail",
+      description: "Short chips shown below the pet description.",
+      of: [defineArrayMember({ type: "petTrait" })],
+      validation: (rule) => rule.max(8).warning("Prefer no more than 8 personality chips.")
+    }),
+    defineField({
+      name: "vibeProfile",
+      title: "Vibe profile",
+      type: "array",
+      group: "detail",
+      description: "Optional detail-page personality rows with a label, descriptor, and 0-5 strength.",
+      of: [defineArrayMember({ type: "petVibeItem" })],
+      validation: (rule) => rule.max(4).warning("Prefer 2-4 vibe rows.")
+    }),
+    defineField({
+      name: "fitGuidance",
+      title: "Fit guidance",
+      type: "petFitGuidance",
+      group: "detail",
+      description: "Optional good-fit and maybe-avoid guidance for the pet detail page.",
+      options: { collapsible: true, collapsed: true }
     }),
     defineField({
       name: "careNotes",
       title: "Care notes",
       type: "array",
-      of: [defineArrayMember({ type: "careNote" })]
+      group: "detail",
+      description: "Day-to-day handling guidance. One to four notes is ideal.",
+      of: [defineArrayMember({ type: "careNote" })],
+      validation: (rule) => rule.max(4).warning("Prefer 1-4 care notes.")
     }),
     defineField({
       name: "availability",
       title: "Availability windows",
       type: "array",
+      group: "facts",
       of: [defineArrayMember({ type: "availabilityWindow" })]
     }),
     defineField({
       name: "borrowTerms",
       title: "Borrow terms",
       type: "array",
-      of: [defineArrayMember({ type: "borrowTerm" })]
+      group: "detail",
+      description: "Rules that come with the handoff. One to four terms is ideal.",
+      of: [defineArrayMember({ type: "borrowTerm" })],
+      validation: (rule) => rule.max(4).warning("Prefer 1-4 borrow terms.")
     }),
     defineField({
       name: "stats",
       title: "Stats",
       type: "array",
+      group: "facts",
       of: [defineArrayMember({ type: "petStat" })]
     }),
     defineField({
       name: "warnings",
       title: "Warnings",
       type: "array",
-      of: [defineArrayMember({ type: "petWarning" })]
+      group: "detail",
+      description: "Important caution notes or mismatch risks. One to four warnings is ideal.",
+      of: [defineArrayMember({ type: "petWarning" })],
+      validation: (rule) => rule.max(4).warning("Prefer 1-4 warnings.")
+    }),
+    defineField({
+      name: "dailySchedule",
+      title: "Day with this pet",
+      type: "array",
+      group: "detail",
+      description: "Optional time-based routine. Only use when the pet has a meaningful schedule worth showing.",
+      of: [defineArrayMember({ type: "petScheduleItem" })],
+      validation: (rule) => rule.max(6).warning("Prefer 3-6 schedule items.")
     }),
     defineField({
       name: "videos",
       title: "Videos",
       type: "array",
-      of: [defineArrayMember({ type: "videoEmbed" })]
+      group: "media",
+      description: "Optional detail-page media. Do not use card-loop media here unless it is intentionally promoted.",
+      of: [defineArrayMember({ type: "videoEmbed" })],
+      validation: (rule) => rule.max(1).warning("Phase one usually needs at most one detail video.")
     }),
     defineField({
       name: "testimonial",
       title: "Testimonial",
       type: "reference",
+      group: "detail",
       to: [{ type: "testimonial" }]
     }),
-    defineField({ name: "contactOwnerCta", title: "Contact owner CTA", type: "cta" }),
+    defineField({
+      name: "contactOwnerCta",
+      title: "Contact owner CTA",
+      type: "cta",
+      group: "owner",
+      description: "Primary borrowing CTA. Prefer clear copy like Borrow this pet."
+    }),
     defineField({
       name: "seo",
       title: "SEO",
       type: "seo",
+      group: "seo",
       validation: (rule) => rule.required()
     })
   ],

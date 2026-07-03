@@ -546,6 +546,39 @@ const borrowTermOptions = [
   ["Respect the exit plan", "Pickup timing matters. Some pets become legally indistinguishable from household fixtures after day seven.", "calendarCheck"]
 ];
 
+const vibeProfileOptions = [
+  ["Cuddle probability", "Technically possible after the correct paperwork and snacks.", 3.5, "mint", "heartHandshake"],
+  ["Rule flexibility", "Low enough that improvising becomes a household incident.", 1.5, "coral", "clipboardCheck"],
+  ["Main-character energy", "Immediately finds the best lighting and emotional leverage.", 4.5, "blue", "sparkles"],
+  ["Nap reliability", "Can become furniture if the room respects the vibe.", 4, "cream", "moon"],
+  ["Snack diplomacy", "Negotiates like the treaty has already been breached.", 5, "mint", "cookie"],
+  ["Doorway curiosity", "Interested in thresholds, exits, and everyone else's business.", 3, "coral", "doorOpen"]
+];
+
+const goodFitOptions = [
+  "You like detailed instructions and consider labels a kindness.",
+  "You can keep a routine boring without taking it personally.",
+  "You enjoy quiet companionship with occasional formal inspection.",
+  "You send reassuring updates before anyone has to ask twice.",
+  "You understand that cute does not always mean uncomplicated."
+];
+
+const avoidFitOptions = [
+  "You prefer to freestyle snacks, doors, or bedtime policy.",
+  "You need a pet who loves surprise guests and loud entrances.",
+  "You are offended by judgmental eye contact from a small animal.",
+  "You cannot return borrowed items with their original emotional meaning.",
+  "You think warnings are mostly decorative."
+];
+
+const scheduleOptions = [
+  ["Morning", "Status inspection", "A slow room patrol followed by a pointed look at the breakfast area.", "cream"],
+  ["Late morning", "Supervised lounging", "Ideal window for calm company, soft surfaces, and no sudden policy experiments.", "mint"],
+  ["Afternoon", "Snack-adjacent diplomacy", "Offer approved treats only. This is where many households become too creative.", "coral"],
+  ["Evening", "Debrief and reset", "Return toys, bowls, towels, and the household mood to their documented locations.", "blue"],
+  ["Bedtime", "Quiet closing ceremony", "Low lights, familiar comfort item, and absolutely no bonus traditions.", "cream"]
+];
+
 const ownerBioOpeners = [
   ({ name }) => `${name} filled out this profile at 11:42 p.m. after deciding the pet situation had become "more of a community opportunity." Replies are usually fast unless someone is standing on the router.`,
   ({ name }) => `${name} uses Pet Share the way other people use a neighborhood group: a little too honestly, with several photos and one apology typed before breakfast.`,
@@ -989,6 +1022,8 @@ function buildPets(targetCount = DEFAULT_PET_COUNT) {
       }),
       description: detailParagraphs.map((paragraph) => block(paragraph)),
       personalityTraits: buildPetTraits(index),
+      vibeProfile: buildVibeProfile(index),
+      fitGuidance: buildFitGuidance(index),
       careNotes: buildCareNotes(index),
       availability: [
         { _key: key("availability"), _type: "availabilityWindow", startDate: "2026-07-01", endDate: "2026-12-31", note: pickAvailabilityNote(index), status: ["available", "available", "temporarilyUnavailable", "pendingPickup"][index % 4] }
@@ -996,6 +1031,7 @@ function buildPets(targetCount = DEFAULT_PET_COUNT) {
       borrowTerms: buildBorrowTerms(index),
       stats: buildPetStats(index, chaosLevel, messRisk, energyLevel),
       warnings: buildWarnings(index),
+      dailySchedule: buildDailySchedule(index),
       contactOwnerCta: cta({ label: "Ask about this pet", link: { type: "action", action: "openOwnerContactDrawer" }, style: "primary" }),
       seo: seo(null, `${name} | Pet Share`, `Borrow ${name}, a ${breed} with care notes, owner instructions, and a few practical warnings.`)
     };
@@ -1035,6 +1071,42 @@ function buildPetTraits(index) {
   return Array.from({ length: count }, (_, offset) => {
     const [label, value, icon, tone] = pick(traitOptions, index + offset * 3);
     return { _key: key("trait"), _type: "petTrait", label, value, icon, tone };
+  });
+}
+
+function buildVibeProfile(index) {
+  const count = 2 + (index % 3 === 0 ? 1 : 0);
+  return Array.from({ length: count }, (_, offset) => {
+    const [label, descriptor, strength, tone, icon] = pick(vibeProfileOptions, index + offset * 2);
+    return { _key: key("vibe"), _type: "petVibeItem", label, descriptor, strength, tone, icon };
+  });
+}
+
+function buildFitGuidance(index) {
+  return {
+    _type: "petFitGuidance",
+    goodFitTitle: "Good fit if...",
+    goodFitItems: Array.from({ length: 3 }, (_, offset) => ({
+      _key: key("goodFit"),
+      _type: "petFitGuidanceItem",
+      text: pick(goodFitOptions, index + offset),
+      tone: "mint"
+    })),
+    avoidTitle: "Maybe avoid if...",
+    avoidItems: Array.from({ length: 3 }, (_, offset) => ({
+      _key: key("avoidFit"),
+      _type: "petFitGuidanceItem",
+      text: pick(avoidFitOptions, index + offset),
+      tone: "coral"
+    }))
+  };
+}
+
+function buildDailySchedule(index) {
+  const count = 3 + (index % 2);
+  return Array.from({ length: count }, (_, offset) => {
+    const [timeLabel, title, description, tone] = pick(scheduleOptions, index + offset);
+    return { _key: key("schedule"), _type: "petScheduleItem", timeLabel, title, description, tone };
   });
 }
 
