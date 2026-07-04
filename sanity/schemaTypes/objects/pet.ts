@@ -9,19 +9,98 @@ import {
   Star
 } from "lucide-react";
 import { defineArrayMember, defineField, defineType } from "sanity";
+import { getLucideIcon } from "@/lib/icons/lucide-icons";
+import { IconPickerInput, VisualStringOptionsInput } from "@/sanity/components/studio-string-inputs";
+import type { VisualStringOption } from "./studio-options";
 
 const severityOptions = [
-  { title: "Low", value: "low" },
-  { title: "Medium", value: "medium" },
-  { title: "High", value: "high" }
-];
+  {
+    title: "Low",
+    value: "low",
+    description: "Useful note, low urgency.",
+    color: "#26343b",
+    background: "#dff5ec",
+    border: "#a9dfca"
+  },
+  {
+    title: "Medium",
+    value: "medium",
+    description: "Important handling context.",
+    color: "#26343b",
+    background: "#e2f1fb",
+    border: "#b8dff3"
+  },
+  {
+    title: "High",
+    value: "high",
+    description: "Real mismatch or safety concern.",
+    color: "#26343b",
+    background: "#ffe4dd",
+    border: "#ffb49f"
+  }
+] satisfies VisualStringOption[];
 
 const detailToneOptions = [
-  { title: "Supportive mint", value: "mint" },
-  { title: "Caution coral", value: "coral" },
-  { title: "Editorial blue", value: "blue" },
-  { title: "Neutral cream", value: "cream" }
-];
+  {
+    title: "Supportive mint",
+    value: "mint",
+    description: "Helpful, safe, approved, or good-fit guidance.",
+    color: "#26343b",
+    background: "#dff5ec",
+    border: "#a9dfca"
+  },
+  {
+    title: "Caution coral",
+    value: "coral",
+    description: "Warnings, mismatch risks, or extra-attention details.",
+    color: "#26343b",
+    background: "#ffe4dd",
+    border: "#ffb49f"
+  },
+  {
+    title: "Editorial blue",
+    value: "blue",
+    description: "Neutral contrast for personality/editorial notes.",
+    color: "#26343b",
+    background: "#e2f1fb",
+    border: "#b8dff3"
+  },
+  {
+    title: "Neutral cream",
+    value: "cream",
+    description: "Quiet support copy or routine timeline moments.",
+    color: "#26343b",
+    background: "#fff7ef",
+    border: "#efe7dc"
+  }
+] satisfies VisualStringOption[];
+
+const traitToneOptions = [
+  {
+    title: "Friendly",
+    value: "friendly",
+    description: "Warm, useful personality chip.",
+    color: "#26343b",
+    background: "#dff5ec",
+    border: "#a9dfca"
+  },
+  {
+    title: "Warning",
+    value: "warning",
+    description: "Playful warning or boundary trait.",
+    color: "#26343b",
+    background: "#ffe4dd",
+    border: "#ffb49f"
+  },
+  {
+    title: "Playful",
+    value: "playful",
+    description: "Silly, high-character trait.",
+    color: "#26343b",
+    background: "#fff7ef",
+    border: "#efe7dc"
+  }
+] satisfies VisualStringOption[];
 
 function excerpt(text: string | undefined, fallback: string) {
   if (!text) return fallback;
@@ -38,34 +117,30 @@ export const petTrait = defineType({
       name: "label",
       title: "Label",
       type: "string",
-      validation: (rule) => rule.required()
+      description: "The chip text shown on pet detail pages.",
+      validation: (rule) => rule.required().max(48)
     }),
     defineField({
-      name: "value",
-      title: "Value",
+      name: "icon",
+      title: "Icon",
       type: "string",
-      validation: (rule) => rule.required()
+      description: "Optional Lucide icon shown with this trait when a renderer supports it.",
+      components: { input: IconPickerInput }
     }),
-    defineField({ name: "icon", title: "Icon name", type: "string" }),
     defineField({
       name: "tone",
       title: "Tone",
       type: "string",
-      options: {
-        list: [
-          { title: "Friendly", value: "friendly" },
-          { title: "Warning", value: "warning" },
-          { title: "Playful", value: "playful" }
-        ],
-        layout: "radio"
-      },
+      options: { list: traitToneOptions },
+      components: { input: VisualStringOptionsInput },
       initialValue: "friendly"
     })
   ],
   preview: {
-    select: { title: "label", subtitle: "value" },
-    prepare({ title, subtitle }) {
-      return { title: title || "Pet trait", subtitle, media: Sparkle };
+    select: { title: "label", tone: "tone", icon: "icon" },
+    prepare({ title, tone, icon }) {
+      const toneLabel = traitToneOptions.find((option) => option.value === tone)?.title ?? tone;
+      return { title: title || "Pet trait", subtitle: toneLabel, media: icon ? getLucideIcon(icon) : Sparkle };
     }
   }
 });
@@ -89,12 +164,18 @@ export const petStat = defineType({
       validation: (rule) => rule.required()
     }),
     defineField({ name: "description", title: "Description", type: "text", rows: 2 }),
-    defineField({ name: "icon", title: "Icon name", type: "string" })
+    defineField({
+      name: "icon",
+      title: "Icon",
+      type: "string",
+      description: "Optional Lucide icon used when this stat is rendered.",
+      components: { input: IconPickerInput }
+    })
   ],
   preview: {
-    select: { title: "label", subtitle: "value" },
-    prepare({ title, subtitle }) {
-      return { title: title || "Pet stat", subtitle, media: Star };
+    select: { title: "label", subtitle: "value", icon: "icon" },
+    prepare({ title, subtitle, icon }) {
+      return { title: title || "Pet stat", subtitle, media: icon ? getLucideIcon(icon) : Star };
     }
   }
 });
@@ -131,16 +212,23 @@ export const petVibeItem = defineType({
       name: "tone",
       title: "Tone",
       type: "string",
-      options: { list: detailToneOptions, layout: "radio" },
+      options: { list: detailToneOptions },
+      components: { input: VisualStringOptionsInput },
       initialValue: "blue"
     }),
-    defineField({ name: "icon", title: "Icon name", type: "string" })
+    defineField({
+      name: "icon",
+      title: "Icon",
+      type: "string",
+      description: "Optional Lucide icon for this vibe row.",
+      components: { input: IconPickerInput }
+    })
   ],
   preview: {
-    select: { title: "label", subtitle: "descriptor", strength: "strength" },
-    prepare({ title, subtitle, strength }) {
+    select: { title: "label", subtitle: "descriptor", strength: "strength", icon: "icon" },
+    prepare({ title, subtitle, strength, icon }) {
       const meter = typeof strength === "number" ? ` · ${strength}/5` : "";
-      return { title: title || "Vibe item", subtitle: `${subtitle || "No descriptor"}${meter}`, media: Sparkle };
+      return { title: title || "Vibe item", subtitle: `${subtitle || "No descriptor"}${meter}`, media: icon ? getLucideIcon(icon) : Sparkle };
     }
   }
 });
@@ -162,7 +250,8 @@ export const petFitGuidanceItem = defineType({
       name: "tone",
       title: "Tone",
       type: "string",
-      options: { list: detailToneOptions, layout: "radio" }
+      options: { list: detailToneOptions },
+      components: { input: VisualStringOptionsInput }
     })
   ],
   preview: {
@@ -266,7 +355,8 @@ export const petScheduleItem = defineType({
       name: "tone",
       title: "Tone",
       type: "string",
-      options: { list: detailToneOptions, layout: "radio" },
+      options: { list: detailToneOptions },
+      components: { input: VisualStringOptionsInput },
       initialValue: "cream"
     })
   ],
@@ -354,12 +444,18 @@ export const borrowTerm = defineType({
       rows: 3,
       validation: (rule) => rule.required().max(220)
     }),
-    defineField({ name: "icon", title: "Icon name", type: "string" })
+    defineField({
+      name: "icon",
+      title: "Icon",
+      type: "string",
+      description: "Optional Lucide icon for this borrowing term.",
+      components: { input: IconPickerInput }
+    })
   ],
   preview: {
-    select: { title: "title", subtitle: "description" },
-    prepare({ title, subtitle }) {
-      return { title: title || "Borrow term", subtitle: excerpt(subtitle, "No description"), media: ClipboardCheck };
+    select: { title: "title", subtitle: "description", icon: "icon" },
+    prepare({ title, subtitle, icon }) {
+      return { title: title || "Borrow term", subtitle: excerpt(subtitle, "No description"), media: icon ? getLucideIcon(icon) : ClipboardCheck };
     }
   }
 });
@@ -388,7 +484,8 @@ export const careNote = defineType({
       title: "Severity",
       type: "string",
       description: "Use high only for genuinely important handling notes.",
-      options: { list: severityOptions, layout: "radio" },
+      options: { list: severityOptions },
+      components: { input: VisualStringOptionsInput },
       initialValue: "low"
     })
   ],
@@ -424,15 +521,22 @@ export const petWarning = defineType({
       title: "Severity",
       type: "string",
       description: "High severity should be reserved for real mismatch or safety concerns.",
-      options: { list: severityOptions, layout: "radio" },
+      options: { list: severityOptions },
+      components: { input: VisualStringOptionsInput },
       initialValue: "medium"
     }),
-    defineField({ name: "icon", title: "Icon name", type: "string" })
+    defineField({
+      name: "icon",
+      title: "Icon",
+      type: "string",
+      description: "Optional Lucide icon for this warning.",
+      components: { input: IconPickerInput }
+    })
   ],
   preview: {
-    select: { title: "title", subtitle: "severity" },
-    prepare({ title, subtitle }) {
-      return { title: title || "Pet warning", subtitle: subtitle ? `Severity: ${subtitle}` : undefined, media: ShieldAlert };
+    select: { title: "title", subtitle: "severity", icon: "icon" },
+    prepare({ title, subtitle, icon }) {
+      return { title: title || "Pet warning", subtitle: subtitle ? `Severity: ${subtitle}` : undefined, media: icon ? getLucideIcon(icon) : ShieldAlert };
     }
   }
 });

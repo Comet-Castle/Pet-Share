@@ -46,7 +46,7 @@ export const siteSettings = defineType({
       name: "contactEmail",
       title: "Public contact email",
       type: "string",
-      description: "Display-only email. Server delivery uses CONTACT_TO_EMAIL.",
+      description: "Display-only email shown on the public site.",
       validation: (rule) => rule.required().email()
     })
   ],

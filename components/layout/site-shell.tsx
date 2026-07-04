@@ -145,6 +145,20 @@ export function SiteShell({ children, settings }: SiteShellProps) {
             </Link>
           </div>
         </div>
+        <div className="mx-auto mt-10 w-full max-w-[1440px]">
+          <p className="text-center text-xs leading-6 text-pet-muted">
+            {siteTitle} is a satirical demo site built to showcase Sanity and Next.js. Want a website built for your business?{" "}
+            <a
+              href="https://cometcastle.ca"
+              target="_blank"
+              rel="noreferrer"
+              className="font-bold text-pet-ink underline decoration-pet-coral/40 underline-offset-2 transition hover:text-pet-coral"
+            >
+              Visit cometcastle.ca
+            </a>
+            .
+          </p>
+        </div>
       </footer>
     </div>
   );

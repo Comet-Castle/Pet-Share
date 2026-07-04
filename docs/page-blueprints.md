@@ -557,7 +557,7 @@ Behavior:
 
 Recommended copy:
 
-- CTA: "Request temporary custody."
+- CTA: "Ask about this pet."
 - Success: "Your request made it through the chew-proof tunnel."
 - Error: "The dog ate the email. Please try again."
 

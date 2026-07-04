@@ -227,10 +227,10 @@ Slugged published preview links can target their eventual public route when the 
 ## Forms And Email
 
 - Form submissions should flow through server-only route handlers or server actions.
-- Use Mailgun for phase-one delivery to a single master project inbox.
+- Use Mailgun to send a branded do-not-reply acknowledgement email to the person who submitted the form. Pet Share does not send a separate internal notification email for submissions.
 - Do not route owner contact forms to individual owners in phase one.
-- Keep Mailgun credentials, destination emails, and any anti-abuse checks server-only.
-- Preserve page context for owner contact submissions so emails can identify the source pet and owner.
+- Keep Mailgun credentials and any anti-abuse checks server-only.
+- Preserve page context for owner contact submissions so the acknowledgement email can reference the source pet and owner.
 - Validate form payload shape at the server boundary before calling Mailgun.
 - Return friendly, CMS-compatible success and error states where practical.
 
@@ -239,7 +239,7 @@ Slugged published preview links can target their eventual public route when the 
 - Keep `.env.example` updated as the source of truth for required variables.
 - Browser-safe variables must use the `NEXT_PUBLIC_` prefix.
 - Sanity write tokens, preview secrets, webhook secrets, and authenticated API credentials must remain server-only.
-- Mailgun credentials and destination inbox settings must remain server-only.
+- Mailgun credentials must remain server-only.
 - Use Vercel platform tooling when available to inspect or configure deployment environment variables, but never copy secret values into docs or chat.
 - Validate required env vars at startup or before first use.
 

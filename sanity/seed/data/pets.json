@@ -111,13 +111,11 @@
       "personalityTraits": [
         {
           "label": "Regal",
-          "value": "regal",
           "icon": "crown",
           "tone": "friendly"
         },
         {
           "label": "Suspicious",
-          "value": "suspicious",
           "icon": "eye",
           "tone": "warning"
         }
@@ -146,7 +144,7 @@
       ],
       "testimonialSeedId": "testimonial-sir-nibbles-neighbor",
       "contactOwnerCta": {
-        "label": "Request temporary custody",
+        "label": "Ask about this pet",
         "link": {
           "type": "action",
           "action": "openOwnerContactDrawer"
@@ -349,13 +347,11 @@
       "personalityTraits": [
         {
           "label": "Affectionate",
-          "value": "affectionate",
           "icon": "heart",
           "tone": "friendly"
         },
         {
           "label": "Textile curious",
-          "value": "textileCurious",
           "icon": "shirt",
           "tone": "warning"
         }
@@ -579,13 +575,11 @@
       "personalityTraits": [
         {
           "label": "Charming",
-          "value": "charming",
           "icon": "sparkles",
           "tone": "friendly"
         },
         {
           "label": "Rule-bound",
-          "value": "ruleBound",
           "icon": "listChecks",
           "tone": "warning"
         }

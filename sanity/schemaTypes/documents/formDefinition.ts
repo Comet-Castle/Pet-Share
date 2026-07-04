@@ -41,6 +41,12 @@ export const formDefinition = defineType({
       validation: (rule) => rule.required()
     }),
     defineField({
+      name: "errorMessage",
+      title: "Error message",
+      type: "formSuccessState",
+      description: "Fallback copy shown when delivery fails. Keep it clear and non-technical."
+    }),
+    defineField({
       name: "fields",
       title: "Fields",
       type: "array",

@@ -46,10 +46,10 @@ Be careful: `vercel env pull` replaces the target file. Keep local-only custom v
 | `SANITY_REVALIDATE_SECRET` | Server-only webhook secret | No | Optional | Required | Required | Used to validate Sanity webhook requests before cache revalidation. |
 | `SANITY_STUDIO_PREVIEW_ORIGIN` | Studio preview config | No | Required for Presentation | Required | Required | Origin loaded inside Sanity Presentation, such as local Next.js or a Vercel deployment URL. |
 | `SANITY_STUDIO_MEDIA_LIBRARY_ID` | Studio media config | No | Optional | Optional | Optional | Specific Sanity Media Library ID. Leave blank to let Sanity auto-detect the connected library. |
-| `MAILGUN_API_KEY` | Server-only Mailgun secret | No | Required for form testing | Required | Required | Sends phase-one forms to the master inbox. |
+| `MAILGUN_API_KEY` | Server-only Mailgun secret | No | Required for form testing | Required | Required | Sends the branded acknowledgement email to form submitters. |
 | `MAILGUN_DOMAIN` | Server-only Mailgun config | No | Required for form testing | Required | Required | Mailgun sending domain. |
 | `MAILGUN_FROM_EMAIL` | Server-only Mailgun config | No | Required for form testing | Required | Required | From address used by form submissions. |
-| `CONTACT_TO_EMAIL` | Server-only app config | No | Required for form testing | Required | Required | Master inbox for contact, owner-contact, and warranty forms. |
+| `MAILGUN_CC_EMAIL` | Server-only Mailgun config | No | Optional | Optional | Optional | Internal oversight address CC'd on outgoing form emails. Leave blank to disable. |
 | `GEMINI_API_KEY` | Server-only local generation secret | No | Optional, human-run only | Do not set by default | Do not set by default | Used only by intentional local seed media generation commands run by a human. |
 
 ## Public Versus Server-Only

@@ -506,16 +506,16 @@ const detailTemplates = [
 ];
 
 const traitOptions = [
-  ["Snack negotiator", "snackNegotiator", "cookie", "playful"],
-  ["Doorway analyst", "doorwayAnalyst", "doorOpen", "friendly"],
-  ["Blanket loyalist", "blanketLoyalist", "bed", "friendly"],
-  ["Tiny supervisor", "tinySupervisor", "clipboardList", "playful"],
-  ["Emotionally aerodynamic", "emotionallyAerodynamic", "wind", "playful"],
-  ["Suspicious of baskets", "basketSkeptic", "shoppingBasket", "warning"],
-  ["Nap opportunist", "napOpportunist", "moon", "friendly"],
-  ["Treat-motivated scholar", "treatScholar", "graduationCap", "friendly"],
-  ["Drama adjacent", "dramaAdjacent", "theater", "warning"],
-  ["Couch philosopher", "couchPhilosopher", "sofa", "playful"]
+  ["Snack negotiator", "cookie", "playful"],
+  ["Doorway analyst", "doorOpen", "friendly"],
+  ["Blanket loyalist", "bed", "friendly"],
+  ["Tiny supervisor", "clipboardList", "playful"],
+  ["Emotionally aerodynamic", "wind", "playful"],
+  ["Suspicious of baskets", "shoppingBasket", "warning"],
+  ["Nap opportunist", "moon", "friendly"],
+  ["Treat-motivated scholar", "graduationCap", "friendly"],
+  ["Drama adjacent", "theater", "warning"],
+  ["Couch philosopher", "sofa", "playful"]
 ];
 
 const careNoteOptions = [
@@ -1069,8 +1069,8 @@ function buildPetVisualIdentity(seedKey, index) {
 function buildPetTraits(index) {
   const count = 2 + (index % 3 === 0 ? 1 : 0);
   return Array.from({ length: count }, (_, offset) => {
-    const [label, value, icon, tone] = pick(traitOptions, index + offset * 3);
-    return { _key: key("trait"), _type: "petTrait", label, value, icon, tone };
+    const [label, icon, tone] = pick(traitOptions, index + offset * 3);
+    return { _key: key("trait"), _type: "petTrait", label, icon, tone };
   });
 }
 
@@ -1220,6 +1220,7 @@ function transformForm(form) {
     slug: { _type: "slug", current: form.slug.current },
     description: form.description,
     successMessage: { _type: "formSuccessState", ...form.successMessage, cta: cta(form.successMessage.cta) },
+    errorMessage: form.errorMessage ? { _type: "formSuccessState", ...form.errorMessage, cta: cta(form.errorMessage.cta) } : undefined,
     fields: form.fields.map((field) => ({
       _key: key("field"),
       _type: "formField",

@@ -16,6 +16,13 @@ export const FORM_DEFINITION_BY_SLUG_QUERY = defineQuery(/* groq */ `
         ${ctaFields}
       }
     },
+    errorMessage{
+      headline,
+      message,
+      cta{
+        ${ctaFields}
+      }
+    },
     fields[]{
       _key,
       label,

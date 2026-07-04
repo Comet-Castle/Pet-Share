@@ -123,7 +123,7 @@ Suggested Sanity fields:
 - `footerNavigation`: array of reusable `navigationItem` objects.
 - `socialLinks`: array of reusable `socialLink` objects.
 - `defaultCta`: reusable `cta` object.
-- `contactEmail`: public contact email for display copy only. Server-side form delivery should use `CONTACT_TO_EMAIL`.
+- `contactEmail`: public contact email for display copy only.
 
 Used by:
 
@@ -313,7 +313,7 @@ Suggested Sanity fields:
 - `petType`: reference to a `petType` document.
 - `breed`: open plain-English breed, species, or variety label. Use realistic values such as "Golden Retriever", "Holland Lop", "Ball python", or "Cherry shrimp"; do not use fake content-type-like labels here.
 - `visualIdentity`: stable media-generation details for primary color, secondary color/detail, distinctive markings, and eye color. Use this to keep generated images of the same pet visually consistent across card, gallery, and future video prompts.
-- `ageYears`: numeric age value for display and future filtering, or `dateOfBirth` if the project later needs exact age calculation. Do not store pet age as a prose string.
+- `ageYears`: required whole-year numeric age value for display and future filtering. Do not store exact date of birth or prose age strings in phase one.
 - `owner`: reference to the primary `owner` document.
 - `submittedBy`: reference to `owner`, initially useful for editor-created content and later useful for authenticated user submissions.
 - `submissionStatus`: status selector such as draft, pending, approved, rejected, or archived.
@@ -537,8 +537,8 @@ Notes:
 
 - The site can include silly form framing, such as a pet warranty form or owner contact form.
 - Form submissions can be mocked or handled by a lightweight route later. Avoid paid form services unless the project direction changes.
-- Phase one forms should submit by email to a single master project email address through Mailgun rather than individual owners.
-- The master form destination should come from the server-only `CONTACT_TO_EMAIL` environment variable, not from CMS-authored `siteSettings.contactEmail`.
+- Phase one forms send a branded do-not-reply acknowledgement email to the submitter through Mailgun. There is no internal notification email or master project inbox.
+- Form submissions are not routed to individual owners in phase one.
 - Form failures should support friendly, satirical error copy, such as "The dog ate the email."
 
 Revalidation:
@@ -753,7 +753,7 @@ Planned objects:
 ### Pet-Specific Objects
 
 - `petTypeSelector`: reference or selector metadata for a `petType` document.
-- `petTrait`: label, value, icon, tone.
+- `petTrait`: label, optional icon, tone. Do not require a separate machine value unless a future filter/search feature needs it.
 - `petVibeItem`: label, descriptor, strength, optional tone, optional icon. Tone values should come from a controlled set such as `coral`, `blue`, `mint`, `cream`.
 - `petFitGuidance`: optional good-fit title, good-fit items, avoid title, avoid items.
 - `petFitGuidanceItem`: short bullet text, optional emphasis or tone. Preferred semantic tones: good-fit content `mint`, avoid content `coral`.
@@ -1013,7 +1013,7 @@ Seed data is expected to change as the site is properly written and designed, bu
 
 Initial seed content:
 
-- Site settings with navigation, footer links, default SEO, and public contact email. Server-side form delivery still uses `CONTACT_TO_EMAIL`.
+- Site settings with navigation, footer links, default SEO, and public contact email.
 - Home page with multiple hero carousel slides, a process summary, featured pets, testimonials, stats, and CTA content.
 - Pet index page with hero copy, filter intro, empty-state copy, featured pets, and a CTA.
 - System pages for not found, server error, and generic error states with clear recovery CTAs.

@@ -182,7 +182,7 @@ Not every page section is owned by the generic page-builder renderer.
 - Associate every input with a label.
 - Render validation messages in a way assistive technology can announce.
 - Keep form submission routes server-only.
-- Send phase-one form emails through Mailgun to the master inbox.
+- Send phase-one form acknowledgement emails through Mailgun to the submitter, with an optional CC to an internal oversight address. Do not send a separate internal notification email.
 - Never expose Mailgun credentials or destination routing logic to Client Components.
 - Keep satirical form copy clear enough that users still understand success and failure states.
 

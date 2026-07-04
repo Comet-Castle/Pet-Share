@@ -354,7 +354,7 @@ Top-level shape:
       ],
       "testimonialSeedId": "testimonial-sir-nibbles-neighbor",
       "contactOwnerCta": {
-        "label": "Request temporary custody",
+        "label": "Ask about this pet",
         "link": { "type": "action", "action": "openOwnerContactDrawer" },
         "style": "primary",
         "icon": "send"
@@ -413,7 +413,7 @@ Rules:
     {
       "seedId": "form-owner-contact",
       "type": "formDefinition",
-      "title": "Request Temporary Custody",
+      "title": "Ask About This Pet",
       "slug": { "current": "owner-contact" },
       "description": "Tell us why you are prepared for this very specific responsibility.",
       "formType": "ownerContact",
@@ -688,7 +688,7 @@ Before writing to Sanity:
 - Every `seedId` is unique within its file.
 - Every reference by `seedId` resolves.
 - Every singleton has the expected explicit `sanityId`.
-- Every pet uses a numeric `ageYears` value or an exact `dateOfBirth`, not a prose age string.
+- Every pet uses a numeric whole-year `ageYears` value, not an exact `dateOfBirth` or prose age string.
 - Every pet has `imageTargetCount` between `5` and `10`.
 - Every image reference has a matching `assetKey` in `media-manifest.json`.
 - Every meaningful image has alt text.

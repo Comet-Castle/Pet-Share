@@ -64,7 +64,6 @@ Explicitly out of phase-one launch unless later reprioritized:
   - `MAILGUN_API_KEY`
   - `MAILGUN_DOMAIN`
   - `MAILGUN_FROM_EMAIL`
-  - `CONTACT_TO_EMAIL`
 - `GEMINI_API_KEY` is local-only by default and not configured in Vercel unless a later workflow genuinely requires it.
 - `APP_DEBUG` defaults to false outside intentional debugging.
 - No real secrets are committed.

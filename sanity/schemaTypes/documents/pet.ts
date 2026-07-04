@@ -92,14 +92,8 @@ export const pet = defineType({
       title: "Age in years",
       type: "number",
       group: "facts",
-      validation: (rule) => rule.min(0).max(100)
-    }),
-    defineField({
-      name: "dateOfBirth",
-      title: "Date of birth",
-      type: "date",
-      group: "facts",
-      description: "Use this instead of age in years only if exact date matters."
+      description: "Whole-year public age shown in pet facts and the detail summary. Do not use exact birth dates for phase one.",
+      validation: (rule) => rule.required().min(0).max(100).integer()
     }),
     defineField({
       name: "owner",
@@ -395,13 +389,6 @@ export const pet = defineType({
       validation: (rule) => rule.required()
     })
   ],
-  validation: (rule) =>
-    rule.custom((document) => {
-      if (!document?.ageYears && !document?.dateOfBirth) {
-        return "Add either age in years or date of birth.";
-      }
-      return true;
-    }),
   preview: {
     select: {
       title: "name",

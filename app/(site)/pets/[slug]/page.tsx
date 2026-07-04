@@ -3,7 +3,8 @@ import Link from "next/link";
 import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
-import { ArrowLeft, ClipboardCheck, HeartHandshake, MapPin, ShieldAlert, Sparkles } from "lucide-react";
+import { stegaClean } from "@sanity/client/stega";
+import { ArrowLeft, ClipboardCheck, HeartHandshake, MapPin, ShieldAlert } from "lucide-react";
 import { OwnerContactDrawer } from "@/components/features/pets/owner-contact-drawer";
 import { PetDayTimeline } from "@/components/features/pets/pet-day-timeline";
 import { PetFitGuidance } from "@/components/features/pets/pet-fit-guidance";
@@ -17,7 +18,7 @@ import { RichText } from "@/components/ui/portable-text";
 import { SanityImage } from "@/components/ui/sanity-image";
 import { metadataFromSeo } from "@/lib/content/metadata";
 import { logger } from "@/lib/diagnostics/logger";
-import { loadPetBySlug, loadPetSlugs, loadRelatedPets } from "@/sanity/lib/loaders";
+import { loadFormDefinitionBySlug, loadPetBySlug, loadPetSlugs, loadRelatedPets } from "@/sanity/lib/loaders";
 import { formatPetAge } from "@/components/features/pets/format";
 import { availabilityLabels } from "@/components/features/pets/status";
 
@@ -150,17 +151,28 @@ export default async function PetSlugPage({ params }: PetSlugPageProps) {
   const galleryImages = [pet.cardMedia?.image, ...(pet.heroImages ?? [])].filter(
     (image) => image?.image?.asset?.url
   );
-  const petTypeLabel = pet.petType?.filterLabel ?? "Pet";
+  const petTypeLabel = pet.petType?.filterLabel ?? pet.petType?.name ?? "Pet";
   const ownerName = pet.owner?.name ?? "A very tired owner";
-  const availabilityLabel = availabilityLabels[pet.availabilityStatus as keyof typeof availabilityLabels] ?? "Pet";
-  const ageLabel = formatPetAge(pet.ageYears ?? null, pet.dateOfBirth ?? null);
-  const isAvailable = pet.availabilityStatus === "available";
+  const availabilityStatus = stegaClean(pet.availabilityStatus) as keyof typeof availabilityLabels;
+  const availabilityLabel = availabilityLabels[availabilityStatus] ?? "Availability pending";
+  const ageLabel = formatPetAge(pet.ageYears ?? null);
+  const isAvailable = availabilityStatus === "available";
   const contactLabel = pet.contactOwnerCta?.label ?? "Ask about this pet";
   const ownerHref = pet.owner?.slug ? `/owners/${pet.owner.slug}` : null;
   const hasVibeContent = Boolean(pet.vibeProfile?.length);
   const hasFitContent = Boolean(pet.fitGuidance?.goodFitItems?.length && pet.fitGuidance.avoidItems?.length);
   const hasTimelineContent = Boolean(pet.dailySchedule?.length);
   const hasCareContent = Boolean(pet.careNotes?.length || pet.borrowTerms?.length || pet.warnings?.length);
+
+  let ownerContactForm: Awaited<ReturnType<typeof loadFormDefinitionBySlug>> | null = null;
+  try {
+    ownerContactForm = await loadFormDefinitionBySlug("owner-contact", { preview: isEnabled });
+  } catch (error) {
+    logger.error("Failed to load owner contact form definition.", {
+      petId: pet._id,
+      error: error instanceof Error ? error.message : "Unknown error"
+    });
+  }
 
   let relatedPets: Awaited<ReturnType<typeof loadRelatedPets>> = [];
   try {
@@ -185,17 +197,7 @@ export default async function PetSlugPage({ params }: PetSlugPageProps) {
           <ArrowLeft aria-hidden="true" size={15} />
           Back to pets
         </Link>
-        <span className="inline-flex items-center gap-2 rounded-full bg-white/70 px-4 py-2 shadow-sm backdrop-blur">
-          <Sparkles aria-hidden="true" size={14} className="text-pet-coral" />
-          {petTypeLabel}
-        </span>
-        <span className="inline-flex items-center gap-2 rounded-full bg-white/70 px-4 py-2 shadow-sm backdrop-blur">
-          <span
-            aria-hidden="true"
-            className={`size-2.5 rounded-full ${isAvailable ? "bg-pet-mint" : "bg-pet-coral"}`}
-          />
-          {availabilityLabel}
-        </span>
+
       </div>
 
       {/* Hero gallery + sticky about panel. */}
@@ -214,13 +216,21 @@ export default async function PetSlugPage({ params }: PetSlugPageProps) {
                 aria-hidden="true"
                 className={`size-3 shrink-0 rounded-full ${isAvailable ? "bg-pet-mint" : "bg-pet-coral"}`}
               />
-              <span>{availabilityLabel}</span>
+              <span>{petTypeLabel}</span>
               {pet.breed ? <span className="text-pet-muted">· {pet.breed}</span> : null}
               {ageLabel !== "Age not listed" ? <span className="text-pet-muted">· {ageLabel}</span> : null}
             </div>
 
             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-              <OwnerContactDrawer petName={pet.name} ownerName={ownerName} ctaLabel={contactLabel} ownerHref={ownerHref} />
+              <OwnerContactDrawer
+                petId={pet._id}
+                petName={pet.name}
+                ownerId={pet.owner?._id ?? null}
+                ownerName={ownerName}
+                ctaLabel={contactLabel}
+                ownerHref={ownerHref}
+                form={ownerContactForm}
+              />
               <Button href={ownerHref ?? "#owner"} variant="secondary">
                 Meet the owner
               </Button>
@@ -406,7 +416,15 @@ export default async function PetSlugPage({ params }: PetSlugPageProps) {
               ) : null}
 
               <div className="mt-5 flex flex-col gap-3 sm:flex-row">
-                <OwnerContactDrawer petName={pet.name} ownerName={ownerName} ctaLabel={contactLabel} ownerHref={ownerHref} />
+                <OwnerContactDrawer
+                  petId={pet._id}
+                  petName={pet.name}
+                  ownerId={pet.owner?._id ?? null}
+                  ownerName={ownerName}
+                  ctaLabel={contactLabel}
+                  ownerHref={ownerHref}
+                  form={ownerContactForm}
+                />
                 {ownerHref ? (
                   <Button href={ownerHref} variant="secondary">
                     View owner page

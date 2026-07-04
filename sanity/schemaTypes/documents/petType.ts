@@ -1,5 +1,7 @@
 import { PawPrint } from "lucide-react";
 import { defineArrayMember, defineField, defineType } from "sanity";
+import { getLucideIcon } from "@/lib/icons/lucide-icons";
+import { IconPickerInput } from "@/sanity/components/studio-string-inputs";
 import { petTypeCategoryOptions } from "./constants";
 
 export const petType = defineType({
@@ -55,8 +57,10 @@ export const petType = defineType({
     }),
     defineField({
       name: "icon",
-      title: "Lucide fallback icon name",
+      title: "Lucide fallback icon",
       type: "string",
+      description: "Fallback icon used in filters and labels when a custom SVG is not available.",
+      components: { input: IconPickerInput },
       validation: (rule) => rule.required()
     }),
     defineField({
@@ -96,9 +100,9 @@ export const petType = defineType({
     defineField({ name: "seo", title: "SEO", type: "seo" })
   ],
   preview: {
-    select: { title: "name", subtitle: "category" },
-    prepare({ title, subtitle }) {
-      return { title: title || "Pet type", subtitle, media: PawPrint };
+    select: { title: "name", subtitle: "category", icon: "icon" },
+    prepare({ title, subtitle, icon }) {
+      return { title: title || "Pet type", subtitle, media: icon ? getLucideIcon(icon) : PawPrint };
     }
   }
 });

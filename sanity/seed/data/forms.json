@@ -27,14 +27,14 @@
     {
       "seedId": "form-owner-contact",
       "type": "formDefinition",
-      "title": "Request Temporary Custody",
+      "title": "Ask About This Pet",
       "slug": { "current": "owner-contact" },
-      "description": "Tell us why you are prepared for this very specific responsibility.",
+      "description": "Tell us why this temporary pet stay is a good fit.",
       "formType": "ownerContact",
       "submitLabel": "Send request",
       "successMessage": {
-        "headline": "Request sent",
-        "message": "Your message made it through the chew-proof tunnel.",
+        "headline": "Tail wags confirmed",
+        "message": "Your message made it through the chew-proof tunnel and is headed straight for the master inbox.",
         "cta": null
       },
       "errorMessage": {
@@ -44,6 +44,11 @@
       "fields": [
         { "name": "name", "label": "Your name", "type": "text", "required": true, "helpText": null, "options": [] },
         { "name": "email", "label": "Email", "type": "email", "required": true, "helpText": "We will only use this to reply about your pet inquiry.", "options": [] },
+        { "name": "pickupWindow", "label": "Preferred pickup window", "type": "select", "required": true, "helpText": null, "options": [
+          { "label": "Appointment only", "value": "appointmentOnly" },
+          { "label": "Within seven days", "value": "withinSevenDays" },
+          { "label": "Anytime", "value": "anytime" }
+        ] },
         { "name": "message", "label": "Message", "type": "textarea", "required": true, "helpText": "Mention any relevant slipper insurance.", "options": [] }
       ]
     },

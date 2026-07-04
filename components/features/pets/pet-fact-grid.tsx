@@ -30,7 +30,7 @@ export function PetFactGrid({ pet }: Readonly<{ pet: Pet }>) {
       key: "age",
       label: "Age",
       icon: <Cake aria-hidden="true" size={16} />,
-      value: formatPetAge(pet.ageYears ?? null, pet.dateOfBirth ?? null)
+      value: formatPetAge(pet.ageYears ?? null)
     },
     {
       key: "breed",

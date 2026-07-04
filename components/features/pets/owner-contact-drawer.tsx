@@ -3,23 +3,28 @@
 import Link from "next/link";
 import { useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
-import { CalendarClock, Mail, Send, X } from "lucide-react";
+import { Mail, Send, X } from "lucide-react";
+import { CmsForm } from "@/components/features/forms/cms-form";
 import { joinClassNames } from "@/lib/utils/class-names";
+import type { FORM_DEFINITION_BY_SLUG_QUERY_RESULT } from "@/sanity.types";
 
 type OwnerContactDrawerProps = Readonly<{
+  petId: string;
   petName: string;
+  ownerId?: string | null;
   ownerName?: string | null;
   ctaLabel: string;
   ownerHref?: string | null;
+  form?: FORM_DEFINITION_BY_SLUG_QUERY_RESULT;
 }>;
 
 const triggerClass = "bg-pet-coral text-white shadow-soft hover:-rotate-1 hover:bg-[#f37f61]";
 
 /**
- * Renders the pet owner contact drawer shell without submission plumbing. The
- * delivery form/server action is intentionally deferred to the form milestone.
+ * Renders the pet owner contact drawer with the Sanity-authored owner-contact
+ * form and preserves pet/owner context for server-side delivery.
  */
-export function OwnerContactDrawer({ petName, ownerName, ctaLabel, ownerHref }: OwnerContactDrawerProps) {
+export function OwnerContactDrawer({ petId, petName, ownerId, ownerName, ctaLabel, ownerHref, form }: OwnerContactDrawerProps) {
   const [isOpen, setIsOpen] = useState(false);
   const isMounted = useSyncExternalStore(
     () => () => undefined,
@@ -29,6 +34,7 @@ export function OwnerContactDrawer({ petName, ownerName, ctaLabel, ownerHref }: 
   const titleId = useId();
   const descriptionId = useId();
   const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const panelRef = useRef<HTMLElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
 
   function openDrawer() {
@@ -51,6 +57,27 @@ export function OwnerContactDrawer({ petName, ownerName, ctaLabel, ownerHref }: 
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
         closeDrawer();
+        return;
+      }
+
+      if (event.key !== "Tab" || !panelRef.current) return;
+
+      const focusableElements = Array.from(
+        panelRef.current.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]):not([type="hidden"]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        )
+      ).filter((element) => !element.hasAttribute("aria-hidden") && element.tabIndex >= 0 && element.offsetParent !== null);
+
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements.at(-1);
+      if (!firstElement || !lastElement) return;
+
+      if (event.shiftKey && document.activeElement === firstElement) {
+        event.preventDefault();
+        lastElement.focus();
+      } else if (!event.shiftKey && document.activeElement === lastElement) {
+        event.preventDefault();
+        firstElement.focus();
       }
     }
 
@@ -83,13 +110,14 @@ export function OwnerContactDrawer({ petName, ownerName, ctaLabel, ownerHref }: 
       />
 
       <aside
+        ref={panelRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
         aria-describedby={descriptionId}
         className={joinClassNames(
-          "absolute right-0 top-0 flex h-full w-full max-w-[460px] flex-col overflow-y-auto bg-[#fffdf9] shadow-soft transition-transform duration-300 ease-out",
-          isOpen ? "translate-x-0" : "translate-x-full"
+          "fixed inset-y-0 right-0 flex h-dvh w-full max-w-[460px] flex-col overflow-y-auto bg-[#fffdf9] shadow-soft transition-transform duration-300 ease-out will-change-transform motion-reduce:transition-none",
+          isOpen ? "translate-x-0" : "translate-x-[calc(100%+1rem)]"
         )}
       >
         <div className="flex items-start justify-between gap-4 border-b border-pet-muted/10 p-6">
@@ -110,58 +138,47 @@ export function OwnerContactDrawer({ petName, ownerName, ctaLabel, ownerHref }: 
           </button>
         </div>
 
-        <div className="grid gap-5 p-6">
+        <div className="grid min-w-0 gap-5 p-4 sm:p-6">
           <p id={descriptionId} className="text-sm leading-6 text-pet-muted">
-            This drawer is ready for the Pet Share contact flow. Submission delivery is intentionally not wired yet, so no message is sent from this panel.
+            Send a request through the Pet Share team. Owner contact routes to the master inbox, not a personal owner address.
           </p>
 
-          <div className="rounded-[1.5rem] bg-white/80 p-5 shadow-sm">
-            <h3 className="font-display text-xl font-bold text-pet-ink">Request context</h3>
-            <dl className="mt-4 grid gap-3 text-sm">
-              <div>
-                <dt className="font-bold text-pet-muted">Pet</dt>
-                <dd className="mt-1 text-pet-ink">{petName}</dd>
-              </div>
-              <div>
-                <dt className="font-bold text-pet-muted">Owner</dt>
-                <dd className="mt-1 text-pet-ink">{ownerName ?? "Owner details pending"}</dd>
-              </div>
-              <div>
-                <dt className="font-bold text-pet-muted">Pickup window</dt>
-                <dd className="mt-1 inline-flex items-center gap-2 text-pet-ink">
-                  <CalendarClock aria-hidden="true" size={16} className="text-pet-coral" />
-                  Confirmed during follow-up
-                </dd>
-              </div>
-            </dl>
-          </div>
-
-          <div className="rounded-[1.5rem] bg-pet-mint/25 p-5 shadow-sm">
-            <h3 className="font-display text-xl font-bold text-pet-ink">Next implementation step</h3>
-            <p className="mt-2 text-sm leading-6 text-pet-muted">
-              Milestone 11 should add the actual contact form fields, validation, server submission, and email delivery. Until then, use the contact page as the safe fallback.
-            </p>
-          </div>
-
-          <div className="mt-auto flex flex-col gap-3 sm:flex-row">
-            <Link
-              href="/contact"
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-pet-coral px-6 py-3 text-center font-bold text-white shadow-soft transition hover:-rotate-1 hover:bg-[#f37f61] focus:outline-none focus:ring-2 focus:ring-pet-blue focus:ring-offset-2"
-              onClick={closeDrawer}
-            >
-              <Mail aria-hidden="true" size={16} />
-              Go to contact page
-            </Link>
-            {ownerHref ? (
+          {form ? (
+            <CmsForm
+              form={form}
+              variant="compact"
+              context={{
+                petId,
+                petName,
+                ownerId,
+                ownerName,
+                currentUrl: typeof window === "undefined" ? undefined : window.location.href
+              }}
+            />
+          ) : (
+            <div className="rounded-[1.5rem] bg-pet-coral/12 p-5 shadow-sm">
+              <h3 className="font-display text-xl font-bold text-pet-ink">Contact form unavailable</h3>
+              <p className="mt-2 text-sm leading-6 text-pet-muted">Use the contact page while this pet request form is being fetched.</p>
               <Link
-                href={ownerHref}
-                className="inline-flex min-h-12 items-center justify-center rounded-full bg-white/75 px-6 py-3 text-center font-bold text-pet-ink shadow-soft backdrop-blur transition hover:rotate-1 hover:bg-white focus:outline-none focus:ring-2 focus:ring-pet-blue focus:ring-offset-2"
+                href="/contact"
+                className="mt-4 inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-pet-coral px-6 py-3 text-center font-bold text-white shadow-soft transition hover:-rotate-1 hover:bg-[#f37f61] focus:outline-none focus:ring-2 focus:ring-pet-blue focus:ring-offset-2"
                 onClick={closeDrawer}
               >
-                View owner page
+                <Mail aria-hidden="true" size={16} />
+                Go to contact page
               </Link>
-            ) : null}
-          </div>
+            </div>
+          )}
+
+          {ownerHref ? (
+            <Link
+              href={ownerHref}
+              className="inline-flex min-h-12 items-center justify-center rounded-full bg-white/75 px-6 py-3 text-center font-bold text-pet-ink shadow-soft backdrop-blur transition hover:rotate-1 hover:bg-white focus:outline-none focus:ring-2 focus:ring-pet-blue focus:ring-offset-2"
+              onClick={closeDrawer}
+            >
+              View owner page
+            </Link>
+          ) : null}
         </div>
       </aside>
     </div>

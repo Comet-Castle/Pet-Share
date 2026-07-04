@@ -296,7 +296,7 @@ Scope:
 
 - Add server-only form route handler or server action.
 - Validate form payloads.
-- Send email through Mailgun to the master project inbox.
+- Send a branded do-not-reply acknowledgement email through Mailgun to the person who submitted the form, with an optional server-only `MAILGUN_CC_EMAIL` address CC'd for internal oversight. There is no separate internal notification email or master project inbox.
 - Preserve pet and owner context for owner contact drawer submissions.
 - Add friendly success and error handling.
 - Log server-side failures with safe, non-sensitive context.
@@ -306,7 +306,7 @@ Exit criteria:
 
 - No Mailgun credentials are exposed to the browser.
 - Form failures return usable error messages.
-- Owner contact still routes to the master inbox, not individual owners.
+- Owner contact submissions are not routed to individual owner addresses; only the submitter and the optional CC oversight address receive email.
 - Contact and warranty forms work with the current page/content structure.
 
 ## Milestone 12: Full Visual QA, Responsive Polish, And Animation

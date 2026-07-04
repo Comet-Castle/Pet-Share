@@ -531,7 +531,7 @@ Initial form definitions:
 
 Form behavior:
 
-- Phase one sends to `CONTACT_TO_EMAIL` through Mailgun.
+- Phase one sends a branded acknowledgement email to the submitter through Mailgun. There is no internal notification email.
 - Do not send emails directly to individual owners in phase one.
 - Include hidden context fields where useful, such as pet ID, pet name, owner ID, source page, and form type.
 - Success and error copy should use the Pet Share voice.

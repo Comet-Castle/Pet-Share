@@ -7,36 +7,19 @@ export const hostPayoutUnitLabels = {
 } as const;
 
 /**
- * Formats a pet's age from a stored year value or a birth date. Falls back to a
- * neutral label when neither is available so the fact panel never shows "null".
+ * Formats a pet's public whole-year age. Falls back to a neutral label when the
+ * value is unavailable so the fact panel never shows "null".
  */
-export function formatPetAge(ageYears: number | null | undefined, dateOfBirth: string | null | undefined): string {
-  if (typeof ageYears === "number" && ageYears >= 0) {
-    if (ageYears < 1) {
-      return "Under 1 year old";
-    }
-
-    return `${ageYears} ${ageYears === 1 ? "year" : "years"} old`;
+export function formatPetAge(ageYears: number | null | undefined): string {
+  if (typeof ageYears !== "number" || ageYears < 0) {
+    return "Age not listed";
   }
 
-  if (dateOfBirth) {
-    const birth = new Date(dateOfBirth);
-    const now = new Date();
-    let years = now.getFullYear() - birth.getFullYear();
-    const monthDiff = now.getMonth() - birth.getMonth();
-
-    if (monthDiff < 0 || (monthDiff === 0 && now.getDate() < birth.getDate())) {
-      years -= 1;
-    }
-
-    if (years <= 0) {
-      return "Under 1 year old";
-    }
-
-    return `${years} ${years === 1 ? "year" : "years"} old`;
+  if (ageYears < 1) {
+    return "Under 1 year old";
   }
 
-  return "Age not listed";
+  return `${ageYears} ${ageYears === 1 ? "year" : "years"} old`;
 }
 
 /**
