@@ -225,30 +225,14 @@ If a check is unavailable, blocked, or too broad for the change, say so in the f
 
 ## Iteration Workflow
 
-- Complete the requested implementation work first.
-- Prepare the worktree for user review without committing changes.
-- Provide a suggested conventional commit message only when the user asks for one.
-- Do not run `git commit` or create commits. The user owns all commits.
-- Do not stage changes with `git add` unless the user explicitly asks.
-- Before handing work to the user for review, summarize changed files, main behavior changes, known tradeoffs, and anything intentionally left unfinished.
-- Let the user review the work and request refinements before treating the stage as final.
-- Cheap checks may be run before review when useful, but the formal lint, typecheck, and test pass happens after the user approves the implementation direction.
-- After the user gives approval for the stage, run the relevant linting, type checking, and tests.
-- Add or update tests for the feature after the user approves the implementation direction, keeping the test scope proportional to the change.
-- If checks fail, identify whether the failure appears related to the current changes or pre-existing/unrelated project state.
-- If the work is blocked by credentials, network access, package installs, unclear product decisions, or external services, state exactly what is blocked and what input is needed.
-- When adding dependencies, copied code, external assets, icons, fonts, or tooling, update `ATTRIBUTIONS.md` in the same stage when attribution is required.
-- When adding or changing environment variables, update `.env.example` and note whether each variable is public or server-only.
-- When implementation changes setup, architecture, content modeling, or workflow, update the relevant docs in the same stage.
-- Report completion clearly, including checks run, tests added or updated, docs updated, and any roadblocks.
+- Complete the requested implementation first. You may `git add` and `git commit` with a strong conventional commit message once the work is in good shape. Never `git push` — the user owns all pushes.
+- Before handoff, summarize changed files, main behavior changes, known tradeoffs, and anything left unfinished.
+- Cheap checks may run before review; the formal lint/typecheck/test pass happens after the user approves the direction. Add or update tests then, scoped proportional to the change.
+- If checks fail, say whether the failure relates to the current change or pre-existing state. If blocked (credentials, network, installs, unclear product decisions, external services), state exactly what is blocked and what input is needed.
+- In the same stage, update `ATTRIBUTIONS.md` (when attribution is required), `.env.example` (noting public vs server-only), and any docs affected by setup/architecture/content-model/workflow changes.
 
 ## Git And Collaboration
 
-- Assume the worktree may contain user changes. Do not overwrite or revert them without explicit instruction.
-- Keep commits and diffs focused on the requested task.
-- Use conventional commit style when writing commit messages, such as `feat:`, `fix:`, `docs:`, `refactor:`, `test:`, `chore:`, and `build:`.
-- Prepare changes so they are ready for the user to review and commit.
-- Provide a suggested commit message only when the user asks for one.
-- Do not commit changes. The user is the only person who should create commits unless they explicitly instruct otherwise.
-- Document required environment variables in an example env file or README when adding features that depend on them.
-- Do not commit secrets, generated build output, or local machine-specific files.
+- Assume the worktree may contain user changes; do not overwrite or revert them without instruction. Keep commits and diffs focused on the requested task.
+- Use conventional commit style (`feat:`, `fix:`, `docs:`, `refactor:`, `test:`, `chore:`, `build:`) with a clear, specific message. Committing is allowed; pushing is not — never run `git push`.
+- Never commit secrets, generated build output, or local machine-specific files.

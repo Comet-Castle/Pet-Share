@@ -27,7 +27,7 @@ Current model preparation:
 - `owner` should remain a real Sanity document so future account profiles can connect to owner pages.
 - Public pet pages should render from the same `pet` schema regardless of whether content is editor-created, demo-seeded, or user-submitted.
 - Public queries should only show approved/published pets.
-- Phase one owner contact forms should send to the master project inbox, but this will need rework if authenticated owners later receive their own messages or dashboard notifications.
+- Phase one owner contact forms acknowledge the submitter via Mailgun (with an optional `MAILGUN_CC_EMAIL` oversight CC) and are not routed to individual owners; this will need rework if authenticated owners later receive their own messages or dashboard notifications.
 
 Likely future phases:
 
@@ -73,7 +73,7 @@ Status:
 
 Notes:
 
-- Phase one uses contact forms that send to the master project inbox through Mailgun.
+- Phase one uses contact forms that acknowledge the submitter through Mailgun (with an optional oversight CC), not direct owner messaging.
 - Direct owner messaging would require authentication, authorization, spam controls, notification rules, and a privacy model.
 - Do not add chat or direct message UI to phase-one pet, owner, or listing pages.
 
@@ -91,7 +91,7 @@ Status:
 
 Notes:
 
-- Phase one should still send real form emails to the master project inbox through Mailgun.
+- Phase one should still send real form acknowledgement emails to the submitter through Mailgun (with an optional oversight CC).
 - A later phase could process incoming form context, selected pet, owner profile, and site voice rules to draft or send a silly reply.
 - If a pet is inspired by a pop-culture archetype, the reply can echo that same parody direction without using official copyrighted dialogue, exact character likenesses, franchise marks, or implying endorsement.
 - Replies should reference pet-specific details such as warnings, care notes, mess risk, chaos level, cuddle policy, and owner bio when useful.

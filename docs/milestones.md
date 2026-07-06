@@ -4,6 +4,8 @@ This document breaks the first Pet Share build into reviewable implementation st
 
 Treat this file as the controlling scope for implementation. The other planning docs define standards and constraints, but they should be applied only to the parts of the product touched by the current milestone. Do not expand a milestone just because a supporting doc mentions related future work.
 
+Milestone status is tracked by which folder a milestone's plan file sits in under [`docs/plans/`](plans/README.md) (`pending/`, `active/`, `completed/`). The icons on the headings below are a reader convenience — ✅ done, 🟢 active, ⚪ pending — and mirror the plan folder, which is the source of truth if they ever disagree. Plan files exist from M12 onward; earlier milestones shipped before the plans folder existed.
+
 Supporting docs:
 
 - Use `docs/implementation-conventions.md` for component-first React and Next.js implementation patterns.
@@ -20,8 +22,7 @@ Each milestone should follow the workflow in `AGENTS.md`:
 - Complete the implementation work.
 - Update relevant docs, `.env.example`, and `ATTRIBUTIONS.md` when needed.
 - Suggest helpful packages when they materially reduce complexity or risk, but include the reason, milestone fit, license/attribution impact, and whether the dependency is runtime or development-only. Record the decision in `docs/dependency-decision-log.md` before adding the package.
-- Provide a suggested conventional commit message only when the user asks for one.
-- Do not stage or commit changes unless the user explicitly asks.
+- Commit completed work with a strong conventional commit message; never `git push` (the user owns all pushes). See `AGENTS.md` for the current commit policy.
 - Let the user review and request refinements.
 - After approval, run the relevant lint, typecheck, tests, and build checks for that milestone.
 
@@ -42,8 +43,7 @@ Before handing a milestone back for review:
 - Update relevant docs if setup, architecture, content modeling, or workflow changed.
 - Confirm relevant implementation convention and accessibility checklist items for the touched surfaces.
 - Note known gaps, tradeoffs, and any intentionally deferred work.
-- Provide a suggested conventional commit message only when the user asks for one.
-- Do not commit or stage changes unless explicitly asked.
+- Commit the milestone work with a strong conventional commit message; never `git push`.
 
 After user approval:
 
@@ -51,7 +51,7 @@ After user approval:
 - Add or update tests proportional to the risk of the milestone.
 - Report failures clearly and identify whether they appear related to the current milestone or pre-existing project state.
 
-## Milestone 1: Seed JSON Shape And Sample Data Contract
+## ✅ Milestone 1: Seed JSON Shape And Sample Data Contract
 
 Goal:
 
@@ -75,7 +75,7 @@ Exit criteria:
 - The full 50-pet seed set remains deferred until after schemas and scaffolded seed tooling exist.
 - Any unresolved schema or seed-data questions are documented before app scaffolding begins.
 
-## Milestone 2: Scaffold App And Tooling
+## ✅ Milestone 2: Scaffold App And Tooling
 
 Goal:
 
@@ -101,7 +101,7 @@ Exit criteria:
 - Dependency choices are documented.
 - Basic project docs still match the scaffolded commands and structure.
 
-## Milestone 3: Sanity Schema Foundation
+## ✅ Milestone 3: Sanity Schema Foundation
 
 Goal:
 
@@ -122,7 +122,7 @@ Exit criteria:
 - Core schemas can be created or edited without obvious validation dead ends.
 - Schema names and field names align with the content model.
 
-## Milestone 4: Sanity Client, Queries, And Types
+## ✅ Milestone 4: Sanity Client, Queries, And Types
 
 Goal:
 
@@ -142,7 +142,7 @@ Exit criteria:
 - Preview helpers are clearly separate from published helpers.
 - Query projections return only the fields needed by route and component renderers.
 
-## Milestone 5: Public Route Skeletons
+## ✅ Milestone 5: Public Route Skeletons
 
 Goal:
 
@@ -163,7 +163,7 @@ Exit criteria:
 - Error boundaries render clear Pet Share copy without exposing technical details, even when CMS content cannot be fetched.
 - Route-level metadata can be generated from Sanity content.
 
-## Milestone 6: Section Renderers And Core UI
+## ✅ Milestone 6: Section Renderers And Core UI
 
 Goal:
 
@@ -183,7 +183,7 @@ Exit criteria:
 - Sections do not break mobile layouts or create horizontal overflow.
 - Client components are limited to interactive UI that needs browser behavior.
 
-## Milestone 7: Seed Content
+## ✅ Milestone 7: Seed Content
 
 Goal:
 
@@ -205,7 +205,7 @@ Exit criteria:
 - The recommended seed command is `pnpm seed:wizard`, and it is documented as covering the full demo dataset rather than only pet listings.
 - Normal seed replay does not call AI generation providers.
 
-## Milestone 8: Process And Pricing Page Builder Refinement
+## ✅ Milestone 8: Process And Pricing Page Builder Refinement
 
 Goal:
 
@@ -229,7 +229,7 @@ Exit criteria:
 - Frontend rendering matches the current approved direction for polished marketing pages.
 - Seed data for these pages matches the current schema shape and does not rely on deprecated fields.
 
-## Milestone 9: Sanity Visual Builder And Media Library
+## ✅ Milestone 9: Sanity Visual Builder And Media Library
 
 Goal:
 
@@ -259,7 +259,7 @@ Implementation notes:
 - Unpublished Standard Pages, pets, and owners without slugs use document-ID preview routes under `/preview/page/[documentId]`, `/preview/pet/[documentId]`, and `/preview/owner/[documentId]`.
 - Sanity Media Library is enabled through Studio workspace configuration and documented in `docs/sanity-presentation-and-media.md`.
 
-## Milestone 10: Pet Marketplace Page Refinement
+## ✅ Milestone 10: Pet Marketplace Page Refinement
 
 Goal:
 
@@ -286,7 +286,7 @@ Exit criteria:
 - Seeded pet, owner, pet type, and pet index content matches the current schema and renderer contracts.
 - No marketplace page depends on deprecated page-builder or legacy pet fields unless it is explicitly in a compatibility fallback.
 
-## Milestone 11: Forms And Mailgun
+## ✅ Milestone 11: Forms And Mailgun
 
 Goal:
 
@@ -309,7 +309,7 @@ Exit criteria:
 - Owner contact submissions are not routed to individual owner addresses; only the submitter and the optional CC oversight address receive email.
 - Contact and warranty forms work with the current page/content structure.
 
-## Milestone 12: Full Visual QA, Responsive Polish, And Animation
+## 🟢 Milestone 12: Full Visual QA, Responsive Polish, And Animation
 
 Goal:
 
@@ -332,7 +332,9 @@ Exit criteria:
 - Motion feels restrained and does not block content usability.
 - The site visually matches `docs/project-brief.md` and approved design references.
 
-## Milestone 13: Seeding Workflow Refactor
+Working plan and detailed checklist: [`docs/plans/active/m12.md`](plans/active/m12.md). The static-read audit findings and entry-animation scoping that were previously inlined here now live in that plan file so this roadmap stays scannable.
+
+## ⚪ Milestone 13: Seeding Workflow Refactor
 
 Goal:
 
@@ -357,7 +359,7 @@ Exit criteria:
 - Seed scripts do not unexpectedly call paid or quota-limited AI providers.
 - The media storage approach is documented, including any remaining production deployment concerns.
 
-## Milestone 14: Final Seed Dataset
+## ⚪ Milestone 14: Final Seed Dataset
 
 Goal:
 
@@ -378,7 +380,7 @@ Exit criteria:
 - The full demo site has enough final content to feel complete.
 - Final seed data is committed where appropriate, while unapproved/generated working files remain ignored.
 
-## Milestone 15: Final Content And UI Review
+## ⚪ Milestone 15: Final Content And UI Review
 
 Goal:
 
@@ -399,7 +401,7 @@ Exit criteria:
 - Known non-launch-blocking issues are documented in backlog.
 - No obvious placeholder copy, broken references, or missing critical images remain.
 
-## Milestone 16: Deployment Readiness And Go Live
+## ⚪ Milestone 16: Deployment Readiness And Go Live
 
 Goal:
 

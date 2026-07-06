@@ -114,7 +114,7 @@ AI agents may draft content and seed data, but generated content should be treat
 
 ## Form Content Rules
 
-- Phase one form submissions go to the master project inbox through Mailgun.
+- Phase one form submissions send a branded do-not-reply acknowledgement to the submitter through Mailgun, with an optional server-only `MAILGUN_CC_EMAIL` address CC'd for oversight. There is no master project inbox.
 - Form copy should not imply messages go directly to a real owner.
 - Pet contact forms should preserve pet and owner context in the submitted payload.
 - Form success and error states should be clear, satirical, and user-safe.

@@ -275,7 +275,7 @@ Recommended seed copy:
 
 Behavior:
 
-- Route to the contact/warranty form page or open a form experience that sends to the master project inbox through Mailgun.
+- Route to the contact/warranty form page or open a form experience that acknowledges the submitter through Mailgun (with an optional oversight CC).
 - Avoid implying the user can submit or list a pet directly until the future account/submission flow exists.
 
 ## `/pets` Sanity Query Needs
@@ -551,7 +551,7 @@ Behavior:
 - Opens a drawer, not a centered modal or separate route.
 - Drawer should preserve pet page context.
 - Reuse the same `formDefinition` model as the contact/warranty forms where practical, with an owner-contact `formType`.
-- Form submission sends to the master project inbox through Mailgun in phase one.
+- Form submission sends a branded acknowledgement to the submitter through Mailgun (with an optional oversight CC) in phase one.
 - Include hidden/server-side context such as pet ID, pet name, owner ID, owner name, and current URL.
 - Success and error states should use CMS-authored or product-voice copy where practical.
 
@@ -831,7 +831,7 @@ Content:
 Behavior:
 
 - Prefer routing users into a pet-specific contact drawer from an associated pet.
-- If a general owner contact CTA is shown, make clear it is a general inquiry and still sends to the master project inbox.
+- If a general owner contact CTA is shown, make clear it is a general inquiry that acknowledges the submitter via Mailgun and is not routed to individual owners.
 - Do not imply direct owner email delivery in phase one.
 
 Recommended copy:

@@ -32,7 +32,7 @@ This document captures the intended technical shape for Pet Share before the app
 - Deployment: Vercel free tier for the Next.js app, with Sanity CMS as the content backend.
 - Preview: basic Draft Mode first from Sanity Studio preview links only; Sanity Visual Editing is a strong post-launch goal.
 - Caching: use cached/static public pages with Sanity webhook-driven revalidation.
-- Email: use Mailgun for phase-one form delivery to a single master project inbox.
+- Email: use Mailgun for phase-one form delivery. Submissions send a branded do-not-reply acknowledgement to the submitter, with an optional server-only `MAILGUN_CC_EMAIL` address CC'd for oversight. There is no separate internal notification email or master project inbox.
 - Testing: keep the stack light with linting, type checking, targeted Vitest tests, and optional Playwright smoke tests later.
 - Platform tooling: use the local Vercel plugin and `sanity-best-practices` skill when available for platform-specific implementation guidance; do not treat either as an app dependency.
 
