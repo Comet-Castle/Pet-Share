@@ -12,6 +12,7 @@ import { PetImageGallery } from "@/components/features/pets/pet-image-gallery";
 import { PetCard } from "@/components/features/pets/pet-card";
 import { PetFactGrid } from "@/components/features/pets/pet-fact-grid";
 import { PetVibeProfile } from "@/components/features/pets/pet-vibe-profile";
+import { PetVideo } from "@/components/features/pets/pet-video";
 import { SystemMessage } from "@/components/features/system/system-message";
 import { Button } from "@/components/ui/button";
 import { RichText } from "@/components/ui/portable-text";
@@ -163,6 +164,9 @@ export default async function PetSlugPage({ params }: PetSlugPageProps) {
   const hasFitContent = Boolean(pet.fitGuidance?.goodFitItems?.length && pet.fitGuidance.avoidItems?.length);
   const hasTimelineContent = Boolean(pet.dailySchedule?.length);
   const hasCareContent = Boolean(pet.careNotes?.length || pet.borrowTerms?.length || pet.warnings?.length);
+  // Only authored detail videos render here; card-loop media (cardMedia.lowFrameRateVideo)
+  // stays separate per the marketplace media contract. Phase one surfaces the first video.
+  const detailVideo = pet.videos?.find((video) => video?.url) ?? null;
 
   let ownerContactForm: Awaited<ReturnType<typeof loadFormDefinitionBySlug>> | null = null;
   try {
@@ -247,6 +251,11 @@ export default async function PetSlugPage({ params }: PetSlugPageProps) {
               <a href="#about" className="inline-flex rounded-full bg-pet-blue/25 px-3 py-1.5 text-pet-ink transition hover:-rotate-1 focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2">
                 About
               </a>
+              {detailVideo ? (
+                <a href="#video" className="inline-flex rounded-full bg-pet-coral/16 px-3 py-1.5 text-pet-ink transition hover:-rotate-1 focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2">
+                  Video
+                </a>
+              ) : null}
               {hasVibeContent ? (
                 <a href="#vibe" className="inline-flex rounded-full bg-pet-mint/30 px-3 py-1.5 text-pet-ink transition hover:-rotate-1 focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2">
                   Vibe
@@ -306,6 +315,12 @@ export default async function PetSlugPage({ params }: PetSlugPageProps) {
           ) : null}
         </section>
       </div>
+
+      {detailVideo ? (
+        <div className="mt-8">
+          <PetVideo video={detailVideo} petName={pet.name} />
+        </div>
+      ) : null}
 
       {hasVibeContent ? (
         <div id="vibe" className="mt-8 scroll-mt-8">

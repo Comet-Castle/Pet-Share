@@ -1,22 +1,13 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { stegaClean } from "@sanity/client/stega";
 import { ArrowRight, ExternalLink, PawPrint } from "lucide-react";
 import type { SITE_SETTINGS_QUERY_RESULT } from "@/sanity.types";
+import { SiteNavLinks } from "./site-nav-links";
+import { resolveNavLinks, type NavigationLink } from "./nav-links";
 
 type SiteShellProps = Readonly<{
   children: ReactNode;
   settings?: SITE_SETTINGS_QUERY_RESULT;
-}>;
-
-type NavigationLink = Readonly<{
-  label: string;
-  link: {
-    type: "action" | "externalUrl" | "internalPath";
-    path: string | null;
-    url: string | null;
-    openInNewTab: boolean | null;
-  };
 }>;
 
 const fallbackPrimaryNavigation: NavigationLink[] = [
@@ -35,18 +26,6 @@ const fallbackFooterNavigation: NavigationLink[] = [
   { label: "Warranty", link: { type: "internalPath", path: "/warranty", url: null, openInNewTab: null } }
 ];
 
-function getLinkHref(item: NavigationLink) {
-  if (stegaClean(item.link.type) === "externalUrl") {
-    return item.link.url ?? "/";
-  }
-
-  return item.link.path ?? "/";
-}
-
-function isExternalLink(item: NavigationLink) {
-  return stegaClean(item.link.type) === "externalUrl" || item.link.openInNewTab === true;
-}
-
 /**
  * Provides the public site shell with CMS-driven navigation and safe fallbacks.
  */
@@ -58,6 +37,7 @@ export function SiteShell({ children, settings }: SiteShellProps) {
   const footerNavigation = settings?.footerNavigation?.length
     ? settings.footerNavigation
     : fallbackFooterNavigation;
+  const footerLinks = resolveNavLinks(footerNavigation);
 
   return (
     <div className="pet-site-background min-h-screen">
@@ -76,20 +56,7 @@ export function SiteShell({ children, settings }: SiteShellProps) {
             {siteTitle}
           </Link>
           <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between xl:justify-end">
-            <div className="flex flex-wrap items-center gap-4 lg:gap-7">
-              {primaryNavigation.map((item) => (
-                <Link
-                  key={`${item.label}-${getLinkHref(item)}`}
-                  href={getLinkHref(item)}
-                  target={isExternalLink(item) ? "_blank" : undefined}
-                  rel={isExternalLink(item) ? "noreferrer" : undefined}
-                  className="inline-flex min-h-10 items-center gap-1 rounded-full px-1 py-2 text-sm font-bold text-pet-ink transition hover:-rotate-1 hover:text-pet-coral focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2"
-                >
-                  {item.label}
-                  {isExternalLink(item) ? <ExternalLink aria-hidden="true" size={14} /> : null}
-                </Link>
-              ))}
-            </div>
+            <SiteNavLinks items={primaryNavigation} />
             <Link
               href="/pricing"
               className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-pet-coral px-5 py-2.5 text-sm font-bold text-white shadow-sm transition hover:-rotate-1 hover:bg-[#f37f61] focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2"
@@ -119,15 +86,16 @@ export function SiteShell({ children, settings }: SiteShellProps) {
           </div>
           <nav aria-label="Footer navigation" className="grid gap-2">
             <p className="font-display text-base font-bold text-pet-ink">Explore</p>
-            {footerNavigation.map((item) => (
+            {footerLinks.map((item) => (
               <Link
-                key={`${item.label}-${getLinkHref(item)}`}
-                href={getLinkHref(item)}
-                target={isExternalLink(item) ? "_blank" : undefined}
-                rel={isExternalLink(item) ? "noreferrer" : undefined}
-                className="inline-flex w-fit rounded-full py-1 text-sm font-bold transition hover:-rotate-1 hover:text-pet-coral focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2"
+                key={`${item.label}-${item.href}`}
+                href={item.href}
+                target={item.external ? "_blank" : undefined}
+                rel={item.external ? "noreferrer" : undefined}
+                className="inline-flex w-fit items-center gap-1 rounded-full py-1 text-sm font-bold transition hover:-rotate-1 hover:text-pet-coral focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2"
               >
                 {item.label}
+                {item.external ? <ExternalLink aria-hidden="true" size={13} /> : null}
               </Link>
             ))}
           </nav>

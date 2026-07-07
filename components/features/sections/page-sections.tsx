@@ -11,6 +11,7 @@ import {
   Star
 } from "lucide-react";
 import { IconBadge } from "@/components/ui/icon-badge";
+import { Reveal } from "@/components/ui/reveal";
 import { RichText } from "@/components/ui/portable-text";
 import { SanityImage } from "@/components/ui/sanity-image";
 import { joinClassNames } from "@/lib/utils/class-names";
@@ -618,5 +619,17 @@ export function PageSections({ sections, emptyLabel = "This section is still bei
     );
   }
 
-  return <>{sections.map(renderSection)}</>;
+  return (
+    <>
+      {sections.map((section, index) =>
+        // The first section is above the fold, so it renders without an entry
+        // transition; later sections fade/slide up as they scroll into view.
+        index === 0 ? (
+          renderSection(section)
+        ) : (
+          <Reveal key={section._key}>{renderSection(section)}</Reveal>
+        )
+      )}
+    </>
+  );
 }

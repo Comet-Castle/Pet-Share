@@ -8,6 +8,7 @@ import type { HomeHeroSlide } from "@/components/features/home/home-hero-carouse
 import { PetCard } from "@/components/features/pets/pet-card";
 import type { CtaValue, PageSection } from "@/components/features/sections/section-types";
 import { Button } from "@/components/ui/button";
+import { Reveal } from "@/components/ui/reveal";
 import { RichText } from "@/components/ui/portable-text";
 import { logger } from "@/lib/diagnostics/logger";
 import { metadataFromSeo } from "@/lib/content/metadata";
@@ -339,8 +340,10 @@ export default async function HomePage() {
         </div>
         {featuredPets.length ? (
           <div className="grid min-w-0 gap-7 md:grid-cols-2 xl:grid-cols-3">
-            {featuredPets.map((pet) => (
-              <PetCard key={pet._id} pet={pet} />
+            {featuredPets.map((pet, index) => (
+              <Reveal key={pet._id} index={index % 3} className="min-w-0">
+                <PetCard pet={pet} />
+              </Reveal>
             ))}
           </div>
         ) : (
@@ -350,9 +353,15 @@ export default async function HomePage() {
         )}
       </section>
 
-      <HomepageProcessSection section={homepageProcess} />
-      <HomepageReliefSection section={homepageRelief} />
-      <HomepageTestimonialsSection testimonials={featuredTestimonials} />
+      <Reveal>
+        <HomepageProcessSection section={homepageProcess} />
+      </Reveal>
+      <Reveal>
+        <HomepageReliefSection section={homepageRelief} />
+      </Reveal>
+      <Reveal>
+        <HomepageTestimonialsSection testimonials={featuredTestimonials} />
+      </Reveal>
     </main>
   );
 }

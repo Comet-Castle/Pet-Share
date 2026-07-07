@@ -3,6 +3,7 @@ import Link from "next/link";
 import { draftMode } from "next/headers";
 import { SlidersHorizontal } from "lucide-react";
 import { PetCard } from "@/components/features/pets/pet-card";
+import { Reveal } from "@/components/ui/reveal";
 import { PetFilters } from "@/components/features/pets/pet-filters";
 import { ActiveFilterChips } from "@/components/features/pets/active-filter-chips";
 import { MobileFilterDrawer } from "@/components/features/pets/mobile-filter-drawer";
@@ -185,8 +186,10 @@ export default async function PetsPage({ searchParams }: PetsPageProps) {
           {pets.length ? (
             <>
               <div className="mt-6 grid min-w-0 gap-7 md:grid-cols-2 xl:grid-cols-3">
-                {pets.map((pet) => (
-                  <PetCard key={pet._id} pet={pet} />
+                {pets.map((pet, index) => (
+                  <Reveal key={pet._id} index={index % 3} className="min-w-0">
+                    <PetCard pet={pet} />
+                  </Reveal>
                 ))}
               </div>
 
