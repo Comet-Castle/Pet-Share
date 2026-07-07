@@ -22,7 +22,7 @@ Each milestone should follow the workflow in `AGENTS.md`:
 - Complete the implementation work.
 - Update relevant docs, `.env.example`, and `ATTRIBUTIONS.md` when needed.
 - Suggest helpful packages when they materially reduce complexity or risk, but include the reason, milestone fit, license/attribution impact, and whether the dependency is runtime or development-only. Record the decision in `docs/dependency-decision-log.md` before adding the package.
-- Commit completed work with a strong conventional commit message; never `git push` (the user owns all pushes). See `AGENTS.md` for the current commit policy.
+- After the user reviews the work and asks you to commit, commit it with a strong conventional commit message; never `git push` (the user owns all pushes). See `AGENTS.md` for the current commit policy.
 - Let the user review and request refinements.
 - After approval, run the relevant lint, typecheck, tests, and build checks for that milestone.
 
@@ -43,7 +43,7 @@ Before handing a milestone back for review:
 - Update relevant docs if setup, architecture, content modeling, or workflow changed.
 - Confirm relevant implementation convention and accessibility checklist items for the touched surfaces.
 - Note known gaps, tradeoffs, and any intentionally deferred work.
-- Commit the milestone work with a strong conventional commit message; never `git push`.
+- Leave the milestone work uncommitted for the user to review; commit it only after they ask, with a strong conventional commit message; never `git push`.
 
 After user approval:
 
@@ -309,7 +309,7 @@ Exit criteria:
 - Owner contact submissions are not routed to individual owner addresses; only the submitter and the optional CC oversight address receive email.
 - Contact and warranty forms work with the current page/content structure.
 
-## 🟢 Milestone 12: Full Visual QA, Responsive Polish, And Animation
+## ✅ Milestone 12: Full Visual QA, Responsive Polish, And Animation
 
 Goal:
 
@@ -325,6 +325,7 @@ Scope:
 - Keep Framer Motion deferred unless Tailwind/CSS animation becomes awkward enough to justify it.
 - Polish pet index filters, carousels, galleries, drawer behavior, video embeds, forms, and page-builder sections.
 - Add or finalize the dedicated `/pets/[slug]` video renderer for authored `videos[]` content if it was deferred from Milestone 10; render the first usable detail video and keep card-loop media separate.
+- Ensure SEO/metadata support on all public pages, including Open Graph and Twitter tags with a branded `.png` OG image (page-authored → site default → static fallback), canonical URLs, and a resolved `metadataBase`.
 
 Exit criteria:
 
@@ -332,7 +333,7 @@ Exit criteria:
 - Motion feels restrained and does not block content usability.
 - The site visually matches `docs/project-brief.md` and approved design references.
 
-Working plan and detailed checklist: [`docs/plans/active/m12.md`](plans/active/m12.md). The static-read audit findings and entry-animation scoping that were previously inlined here now live in that plan file so this roadmap stays scannable.
+Working plan and detailed checklist: [`docs/plans/completed/m12.md`](plans/completed/m12.md). The static-read audit findings and entry-animation scoping that were previously inlined here now live in that plan file so this roadmap stays scannable.
 
 ## ⚪ Milestone 13: Seeding Workflow Refactor
 
@@ -359,6 +360,8 @@ Exit criteria:
 - Seed scripts do not unexpectedly call paid or quota-limited AI providers.
 - The media storage approach is documented, including any remaining production deployment concerns.
 
+Working plan and detailed checklist: [`docs/plans/pending/m13.md`](plans/pending/m13.md).
+
 ## ⚪ Milestone 14: Final Seed Dataset
 
 Goal:
@@ -379,6 +382,8 @@ Exit criteria:
 - A clean Sanity dataset can be populated from the saved seed data.
 - The full demo site has enough final content to feel complete.
 - Final seed data is committed where appropriate, while unapproved/generated working files remain ignored.
+
+Working plan and detailed checklist: [`docs/plans/pending/m14.md`](plans/pending/m14.md).
 
 ## ⚪ Milestone 15: Final Content And UI Review
 
@@ -425,6 +430,8 @@ Exit criteria:
 - Production deployment renders the expected Sanity-backed content.
 - Known limitations and post-launch backlog items are documented.
 - Launch checklist items that are in scope for phase one are complete or explicitly documented as caveats.
+
+Working plan and detailed checklist: [`docs/plans/pending/m16.md`](plans/pending/m16.md).
 
 ## Deferred Work
 
