@@ -225,8 +225,9 @@ If a check is unavailable, blocked, or too broad for the change, say so in the f
 
 ## Iteration Workflow
 
-- Complete the requested implementation first. You may `git add` and `git commit` with a strong conventional commit message once the work is in good shape. Never `git push` — the user owns all pushes.
-- Before handoff, summarize changed files, main behavior changes, known tradeoffs, and anything left unfinished.
+- Complete the requested implementation first, then hand it back for review. Do not `git add` or `git commit` until the user has reviewed the work and explicitly asked you to commit. Never `git push` — the user owns all pushes.
+- Before handoff, summarize changed files, main behavior changes, known tradeoffs, and anything left unfinished so the user can review before authorizing a commit.
+- When the user approves and asks you to commit, use a strong conventional commit message. Leave the work staged/uncommitted until then.
 - Cheap checks may run before review; the formal lint/typecheck/test pass happens after the user approves the direction. Add or update tests then, scoped proportional to the change.
 - If checks fail, say whether the failure relates to the current change or pre-existing state. If blocked (credentials, network, installs, unclear product decisions, external services), state exactly what is blocked and what input is needed.
 - In the same stage, update `ATTRIBUTIONS.md` (when attribution is required), `.env.example` (noting public vs server-only), and any docs affected by setup/architecture/content-model/workflow changes.
@@ -234,5 +235,5 @@ If a check is unavailable, blocked, or too broad for the change, say so in the f
 ## Git And Collaboration
 
 - Assume the worktree may contain user changes; do not overwrite or revert them without instruction. Keep commits and diffs focused on the requested task.
-- Use conventional commit style (`feat:`, `fix:`, `docs:`, `refactor:`, `test:`, `chore:`, `build:`) with a clear, specific message. Committing is allowed; pushing is not — never run `git push`.
+- Use conventional commit style (`feat:`, `fix:`, `docs:`, `refactor:`, `test:`, `chore:`, `build:`) with a clear, specific message. Commit only after the user has reviewed the work and asked you to commit; pushing is never allowed — never run `git push`.
 - Never commit secrets, generated build output, or local machine-specific files.

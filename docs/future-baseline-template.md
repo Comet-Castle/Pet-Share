@@ -24,6 +24,10 @@ High-level future workflow (to be detailed later):
 5. Push that content structure to Sanity and organize it (desk structure, document types, relationships).
 6. Populate the organized structure with real data.
 
+Tooling to include in the baseline (to be detailed later):
+
+- Set up Playwright in the baseline template (install, config, an example e2e test, a package script, and a CI step) so future projects start with browser/e2e verification wired up instead of adding it per project. See `docs/frontend-qa.md` for the browser-verification approach this project already uses.
+
 Open questions to resolve when this work is scheduled:
 
 - Which parts are truly project-agnostic (routing conventions, component conventions, Sanity setup patterns, doc structure) versus Pet-Share-specific (pet marketplace content model, satirical copy, seed data)?
