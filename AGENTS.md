@@ -157,7 +157,7 @@ Use the repo's actual structure once it exists. Do not introduce a parallel orga
 - Seed media generation commands, including `pnpm seed:media -- --mode preview` and `pnpm seed:media -- --mode batch`, must be run by a human.
 - AI agents may help prepare prompts, review configuration, inspect generated files, update manifests, and process approved local assets after the human has run generation.
 - Keep unreviewed generated files under `sanity/seed/generated/`, which is ignored by Git.
-- Only approved files copied into `sanity/seed/media/` should be committed or uploaded to Sanity.
+- Only approved files copied into `sanity/seed/media/` should be uploaded to Sanity. `sanity/seed/` in full is gitignored and not committed; once content is written to Sanity it is the source of truth, and local seed files are disposable per-machine scratch space.
 
 ## Security Standards
 

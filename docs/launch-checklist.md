@@ -96,8 +96,8 @@ Explicitly out of phase-one launch unless later reprioritized:
 - Singleton IDs match the documented explicit IDs.
 - Public pet visibility fields are correct.
 - Generated media has been reviewed before being moved into `sanity/seed/media/`.
-- No files under `sanity/seed/generated/` are committed.
-- Media manifest points approved assets to committed media paths.
+- No files under `sanity/seed/generated/` are treated as approved (all of `sanity/seed/` is gitignored and not committed).
+- Media manifest points approved assets to local media paths under `sanity/seed/media/`.
 - Media manifest includes provenance and review metadata.
 - Normal `pnpm seed` does not call AI providers.
 - Seed upload can upload approved local media to Sanity assets.

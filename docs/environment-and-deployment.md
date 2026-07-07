@@ -184,7 +184,7 @@ Rules:
 - Provider-backed media commands such as `pnpm seed:media -- --mode preview` and `pnpm seed:media -- --mode batch` must be run by a human when they are implemented.
 - `GEMINI_API_KEY` is for local human-run generation only by default.
 - Generated review files go to `sanity/seed/generated/`, which is ignored by Git.
-- Approved files are copied into `sanity/seed/media/` before commit or Sanity upload.
+- Approved files are copied into `sanity/seed/media/` before Sanity upload. `sanity/seed/` in full is gitignored, so approved media stays local rather than committed.
 - Normal Sanity seed replay should use saved seed data and approved media; it should not call Gemini or any other AI media provider.
 
 ## Open Questions

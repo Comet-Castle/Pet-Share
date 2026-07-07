@@ -108,37 +108,22 @@ Constraints:
 - Do not expose Sanity write tokens to the browser.
 - Do not require this flow for the initial CMS demo launch.
 
-## Production Seed Media Strategy
+## Production Seed Media Strategy (Resolved)
 
-Goal:
+Decision:
 
-- Keep approved seed media available in the repo for deterministic reseeding, while avoiding unnecessary media payload in production deployments.
+- `sanity/seed/` (data JSON, media manifest, and approved local media) is gitignored in full and never committed. Once content has been written to Sanity, Sanity is the source of truth for that content; the local seed files are disposable, per-machine scratch space used to generate and replay seed content, not a durable artifact of the repo.
+- This removes the media-payload-in-production concern entirely, since none of `sanity/seed/` is ever committed or deployed.
+- Trade-off accepted: a fresh clone of this repo does not include a bootstrapped demo dataset and cannot reseed from scratch without first regenerating (or otherwise separately obtaining) the local seed files. Reseeding from a clean checkout is intentionally not preserved.
+- Updated: `README.md`, `CLAUDE.md`/`CODEX.md`/`GEMINI.md`, `docs/data-seeding-plan.md`, `docs/content-governance.md`, `docs/seed-json-contract.md`, and `sanity/seed/README.md` reflect this decision.
 
-Status:
-
-- Backlog candidate.
-- Should be resolved before deployment readiness if the committed media set grows materially beyond the current demo set.
-
-Problem:
-
-- Approved images under `sanity/seed/media/` are useful source assets for reseeding Sanity.
-- Production Vercel deployments do not need to serve those source files directly once they have been uploaded to Sanity assets.
-- Carrying large seed media directories into production builds can increase checkout size, upload time, cache pressure, and deployment noise.
-
-Options to evaluate:
+Options considered but not chosen:
 
 - Keep `sanity/seed/media/` committed, but exclude it from deployment output if Vercel/build tooling supports a clean project-level ignore path.
 - Move approved seed media into a separate repository, release artifact, or storage bucket and document how to fetch it before reseeding.
 - Keep lightweight manifests in Git and store binaries externally, with a script that verifies media availability before seed uploads.
 - Keep only a smaller representative media set in Git and document a full-media seed package as optional.
-- Use Git LFS only if the project accepts the hosting, bandwidth, cloning, and contributor workflow tradeoffs.
-
-Acceptance notes:
-
-- Normal website builds should not depend on local seed media after Sanity has been populated.
-- Reseeding should remain possible from a clean checkout plus documented media retrieval steps.
-- The chosen approach must not commit secrets, raw provider responses, or unreviewed generated files.
-- Update `README.md`, `docs/data-seeding-plan.md`, and deployment docs when the strategy is chosen.
+- Use Git LFS.
 
 ## Prototyping Workflow Outline
 

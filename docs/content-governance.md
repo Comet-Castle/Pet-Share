@@ -17,8 +17,8 @@ Use this alongside `docs/content-model.md`, `docs/data-seeding-plan.md`, `docs/s
 
 Content can come from:
 
-- Seed JSON committed under the planned `sanity/seed/data/` directory.
-- Approved media committed under the planned `sanity/seed/media/` directory.
+- Seed JSON stored locally (gitignored, not committed) under `sanity/seed/data/`.
+- Approved media stored locally (gitignored, not committed) under `sanity/seed/media/`.
 - Sanity Studio editorial edits.
 - Future user-submitted content, only after the post-launch account/submission flow is implemented.
 
@@ -44,7 +44,7 @@ AI agents may draft content and seed data, but generated content should be treat
 - Normal seed runs must not call AI text, image, or video providers.
 - Full seed generation should be a deliberate workflow, not part of app startup or routine seeding.
 - The representative Milestone 1 seed set is not the final 50-pet seed set.
-- The final seed pass should be generated once, reviewed, saved, and replayed from committed seed artifacts.
+- The final seed pass should be generated once, reviewed, saved, and replayed from local seed artifacts (`sanity/seed/`, gitignored, not committed).
 - Do not delete editor-created Sanity content during normal seed runs.
 - Destructive seed reset commands, if implemented, must be explicitly named and limited to known seed documents.
 
@@ -53,10 +53,10 @@ AI agents may draft content and seed data, but generated content should be treat
 - A human must run AI media generation commands.
 - AI agents must not run paid or provider-calling media generation commands.
 - Generated review files belong under `sanity/seed/generated/`, which is ignored by Git.
-- Approved media belongs under `sanity/seed/media/` and may be committed.
+- Approved media belongs under `sanity/seed/media/`. `sanity/seed/` in full is gitignored, so approved media stays local rather than committed.
 - Approved media should keep the same logical folder structure as generated review files.
 - Media manifest entries must identify provenance, prompt summary, provider, model, review status, and intended usage.
-- Do not commit rejected, draft, or unreviewed generated media.
+- Do not treat rejected, draft, or unreviewed generated media as approved; keep it under `sanity/seed/generated/` only.
 - Do not upload unreviewed media to Sanity.
 
 ## Sanity Publishing Rules

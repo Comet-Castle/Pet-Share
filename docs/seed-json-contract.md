@@ -675,11 +675,11 @@ The manifest maps planned or approved local media files to seed records and, aft
 Rules:
 
 - `assetKey` is the stable link between seed JSON and manifest entries.
-- `localPath` points to the intended approved file under `sanity/seed/media/`. For `planned` entries the file may not exist yet; for `approved` entries it must exist and be committed.
+- `localPath` points to the intended approved file under `sanity/seed/media/`. For `planned` entries the file may not exist yet; for `approved` entries it must exist locally (`sanity/seed/` is gitignored, not committed).
 - `sourceGeneratedPath` is optional and must point only to the gitignored `sanity/seed/generated/` review workspace.
 - `sanityAssetId` and `sanityAssetRef` are filled after upload.
 - `status` can be `planned`, `generated`, `approved`, `rejected`, or `deferred`.
-- Only `approved` assets should be committed or uploaded.
+- Only `approved` assets should be uploaded to Sanity.
 
 ## Validation Before Seeding
 

@@ -4,6 +4,8 @@ This document defines how Pet Share demo content should be seeded into Sanity. I
 
 Seed data is expected to evolve as the site is designed and built. The preferred workflow is to do one strong generation pass for all content, review and curate that output, save it as project seed data, then replay the saved seed data into Sanity rather than regenerating everything from scratch on every run.
 
+**Storage policy:** `sanity/seed/` (data JSON, media manifest, and approved local media) is gitignored and not committed. Once content has been written to Sanity, Sanity is the source of truth and the local seed files are disposable, machine-local scratch space for regenerating or reseeding content. A fresh clone of this repo does not include a bootstrapped demo dataset and cannot reseed from scratch without first regenerating or otherwise obtaining these files locally. References below to seed files being "committed" describe the prior policy and are being phased out; treat any remaining mentions as local file conventions, not Git commit requirements.
+
 ## Goals
 
 - Make the demo usable immediately after setup.
@@ -297,7 +299,7 @@ Recommended provider direction:
 - Use hosted free tiers only for experiments unless their terms, rate limits, and output rights are confirmed. Free tiers can change and may not be reliable enough for the final one-time seed pass.
 - Avoid high-end paid image models unless a cheaper model cannot produce acceptable final assets. The seed set needs coherent, friendly demo imagery more than maximum photorealism.
 - Keep the provider behind a small seed-media generation wrapper so it can be swapped without changing saved seed data shape.
-- Normal `pnpm seed` should never call the image provider; it should use committed local media files and the media manifest.
+- Normal `pnpm seed` should never call the image provider; it should use approved local media files and the media manifest (both gitignored, machine-local).
 
 Budget guidance:
 
@@ -427,13 +429,13 @@ Required metadata:
 
 Storage strategy:
 
-- Save curated generated seed images locally in the repo and commit them as project seed assets.
-- Save unreviewed generated images under `sanity/seed/generated/`, which is ignored by Git.
+- Save curated generated seed images locally in the repo under `sanity/seed/media/` as project seed assets. This directory is gitignored, not committed; it is local scratch space for reseeding.
+- Save unreviewed generated images under `sanity/seed/generated/`, which is also ignored by Git.
 - Mirror the approved media folder structure inside `sanity/seed/generated/` so approved files can be moved or copied into `sanity/seed/media/` without renaming.
 - Upload those same curated local images to Sanity assets during the seed operation.
-- Treat the committed local image files and media manifest as the repeatable source of truth for image seeding.
+- Treat the local approved image files and media manifest as the repeatable source for image seeding on this machine; Sanity itself is the source of truth for already-seeded content.
 - Store references on `heroImages`, `cardMedia`, owner portraits, page heroes, reusable content images, banner backgrounds, and SEO/open graph images as appropriate.
-- Keep unreviewed raw generations out of Git; commit only curated images approved for the demo seed set.
+- Keep unreviewed raw generations out of `sanity/seed/media/`; only move curated images approved for the demo seed set there.
 
 ## Video Generation Planning
 
@@ -613,7 +615,7 @@ The wizard should start with these workflow choices:
 
 The quick replace choices should be the simplest path for generating X pets and all content pages. They must not call AI media providers. The final Sanity write must still require explicit confirmation and `SANITY_API_WRITE_TOKEN`.
 
-The start fresh reset choice should be clearly destructive, require a typed confirmation such as `RESET`, and preserve the committed seed templates under `sanity/seed/data/`.
+The start fresh reset choice should be clearly destructive, require a typed confirmation such as `RESET`, and preserve the local seed template files under `sanity/seed/data/` (gitignored, not committed).
 
 The detailed wizard path should proceed through the full workflow in one run, asking for `y/N` confirmation before each step:
 
@@ -700,7 +702,7 @@ sanity/
 
 Saved seed data rules:
 
-- Commit curated text/JSON seed data when it is approved for the demo.
+- Save curated text/JSON seed data locally when it is approved for the demo (`sanity/seed/data/`, gitignored, not committed).
 - Keep stable IDs in the saved data.
 - Keep stable seed IDs, slugs, and indexes out of human-facing display names, titles, and testimonial author names.
 - Keep breed fields plain English and realistic, such as "Golden Retriever", "Holland Lop", or "Ball python"; satire belongs in summaries, warnings, and care notes instead of fake content-type-like breed values.
@@ -710,13 +712,13 @@ Saved seed data rules:
 - Keep singleton and marketing page section content explicit in the saved data.
 - Keep page image and page video metadata inside the relevant page or section object in `pages.json`.
 - Include generation metadata and provenance notes for AI-generated text and images where useful.
-- Do not commit secrets, API responses containing private metadata, or unreviewed raw generation dumps.
-- Commit curated generated image binaries under `sanity/seed/media/`.
-- Do not commit anything under `sanity/seed/generated/`.
-- Before deployment readiness, resolve the production seed media strategy in `docs/backlog.md` so approved media remains available for reseeding without unnecessarily bloating production deployments.
-- Commit approved generated video binaries only after file size review, using the same pet-owned or page-owned media folders as the related images.
-- Upload committed seed images to Sanity from the local files so asset IDs can be recreated or remapped through `media-manifest.json`.
-- Upload committed seed videos to Sanity from local files only when video support is implemented.
+- Do not save secrets, API responses containing private metadata, or unreviewed raw generation dumps under `sanity/seed/`.
+- Keep curated generated image binaries under `sanity/seed/media/` (gitignored, not committed).
+- Do not keep anything under `sanity/seed/generated/` as approved; that directory is unreviewed scratch space only.
+- Resolved: `sanity/seed/` (data, media, and manifest) is gitignored in full and never committed, so it never reaches a production deployment. See `docs/backlog.md` for the prior options considered.
+- Keep approved generated video binaries locally only after file size review, using the same pet-owned or page-owned media folders as the related images.
+- Upload approved local seed images to Sanity from the local files so asset IDs can be recreated or remapped through `media-manifest.json`.
+- Upload approved local seed videos from local files only when video support is implemented.
 
 Recommended `media-manifest.json` shape:
 
@@ -755,12 +757,12 @@ Recommended `media-manifest.json` shape:
 
 Manifest rules:
 
-- `localPath` points to the approved, committed file used by deterministic seed runs.
+- `localPath` points to the approved local file (gitignored, not committed) used by deterministic seed runs.
 - `sourceGeneratedPath` is optional and points to the gitignored review file when known.
 - `sanityAssetId` and `sanityAssetRef` can be filled after upload so repeated seed runs can reuse or remap assets.
 - `fieldPath` identifies where the media belongs in the seed document.
 - `mediaRole` should use stable values such as `card`, `hero`, `gallery`, `ownerPortrait`, `pageHero`, `sectionImage`, `ogImage`, or `plannedVideoFallback`.
-- `status` should be `approved` for committed media; rejected or draft media should remain in `sanity/seed/generated/`.
+- `status` should be `approved` for approved local media; rejected or draft media should remain in `sanity/seed/generated/`.
 
 AI attribution rules:
 

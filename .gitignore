@@ -15,7 +15,11 @@ dist/
 # Sanity
 .sanity/
 schema.json
-sanity/seed/generated/
+
+# Seed data, media, and manifests are local-only scratch space once content has
+# been written to Sanity; they are not committed, so a fresh clone does not have
+# a bootstrapped demo dataset available. See docs/data-seeding-plan.md.
+sanity/seed/
 
 # Environment files
 .env
