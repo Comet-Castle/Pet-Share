@@ -10,6 +10,9 @@ const dataDir = join(seedDir, "data");
 const mediaDir = join(seedDir, "media");
 const generatedDir = join(seedDir, "generated");
 const DEFAULT_PET_COUNT = 50;
+const MAX_OWNER_COUNT = 12;
+const DEFAULT_OWNER_COUNT = MAX_OWNER_COUNT;
+const DEFAULT_TESTIMONIAL_COUNT = 18;
 const args = parseArgs(process.argv.slice(2));
 const isConfirmed = args.flags.has("confirm");
 const isPreview = args.flags.has("preview");
@@ -17,10 +20,13 @@ const shouldPurge = args.flags.has("purge");
 const isPurgeOnly = args.flags.has("purge-only");
 const shouldSkipMediaUpload = args.flags.has("skip-media-upload");
 const petCount = parsePetCount(args.values.get("pet-count") ?? args.values.get("pets"));
+const ownerCount = parseOwnerCount(args.values.get("owner-count") ?? args.values.get("owners"));
+const testimonialCount = parseTestimonialCount(args.values.get("testimonial-count") ?? args.values.get("testimonials"));
 const mediaScope = parseMediaScope(args.values.get("media-scope"));
 const onlyTarget = parseOnlyTarget(args.values.get("only") ?? args.values.get("only-page"));
 const documentMutationChunkSize = 25;
 const deleteMutationChunkSize = 50;
+const assetUploadChunkSize = 8;
 const listingPlans = [
   { value: "porch", label: "Porch Listing", basePayout: 20 },
   { value: "spotlight", label: "Neighbourhood Spotlight", basePayout: 28 },
@@ -618,18 +624,19 @@ async function main() {
   }
 
   const seed = loadSeedData();
-  const documents = buildDocuments(seed, { petCount });
+  const documents = buildDocuments(seed, { petCount, ownerCount, testimonialCount });
   const selectedDocuments = onlyTarget ? selectDocumentsByTarget(documents, onlyTarget) : documents;
 
   if (isPreview) {
-    writePreviewFiles(selectedDocuments, { petCount, mediaScope });
+    writePreviewFiles(selectedDocuments, { petCount, ownerCount, testimonialCount, mediaScope });
     return;
   }
 
   if (!isConfirmed) {
-    console.log(`${color.heading("Dry run:")} prepared ${color.success(String(selectedDocuments.length))} documents${onlyTarget ? ` for target ${color.path(onlyTarget)}` : `, including ${color.success(String(petCount))} pets`}.`);
+    console.log(`${color.heading("Dry run:")} prepared ${color.success(String(selectedDocuments.length))} documents${onlyTarget ? ` for target ${color.path(onlyTarget)}` : `, including ${color.success(String(petCount))} pets, ${color.success(String(ownerCount))} owners, and up to ${color.success(String(testimonialCount))} generated testimonials`}.`);
     console.log(`Run ${color.path("pnpm seed:sanity -- --preview")} to write local review files.`);
     console.log(`Run ${color.path("pnpm seed:sanity -- --preview --pet-count 25")} to preview a custom pet count.`);
+    console.log(`Run ${color.path("pnpm seed:sanity -- --preview --owner-count 6 --testimonial-count 10")} to preview custom owner and generated testimonial counts.`);
     console.log(`Run ${color.path("pnpm seed:sanity -- --preview --only homePage")} to preview only the homepage document.`);
     console.log(`Run ${color.path("pnpm seed:sanity -- --preview --media-scope pets")} to preview all content with pet-only media prompts.`);
     console.log(`Run ${color.path("pnpm seed:sanity -- --confirm")} to write to Sanity.`);
@@ -702,6 +709,35 @@ function parsePetCount(value) {
   const count = Number(value);
   if (!Number.isInteger(count) || count < 1) {
     console.error(color.error(`Invalid pet count "${value}". Use a positive whole number, such as --pet-count 50.`));
+    process.exit(1);
+  }
+
+  return count;
+}
+
+function parseOwnerCount(value) {
+  if (value === undefined) return DEFAULT_OWNER_COUNT;
+
+  const count = Number(value);
+  if (!Number.isInteger(count) || count < 1) {
+    console.error(color.error(`Invalid owner count "${value}". Use a positive whole number, such as --owner-count 6.`));
+    process.exit(1);
+  }
+
+  if (count > MAX_OWNER_COUNT) {
+    console.log(color.warning(`Requested owner count ${count} exceeds the fixed owner list size (${MAX_OWNER_COUNT}). Clamping to ${MAX_OWNER_COUNT}.`));
+    return MAX_OWNER_COUNT;
+  }
+
+  return count;
+}
+
+function parseTestimonialCount(value) {
+  if (value === undefined) return DEFAULT_TESTIMONIAL_COUNT;
+
+  const count = Number(value);
+  if (!Number.isInteger(count) || count < 1) {
+    console.error(color.error(`Invalid testimonial count "${value}". Use a positive whole number, such as --testimonial-count 10.`));
     process.exit(1);
   }
 
@@ -889,9 +925,9 @@ function ref(seedKey, context) {
 
 function buildDocuments(seed, options = {}) {
   const petTypes = buildPetTypes();
-  const owners = buildOwners();
-  const pets = buildPets(options.petCount ?? DEFAULT_PET_COUNT);
-  const testimonials = buildTestimonials(seed.testimonials.items, pets, owners);
+  const owners = buildOwners(options.ownerCount ?? DEFAULT_OWNER_COUNT);
+  const pets = buildPets(options.petCount ?? DEFAULT_PET_COUNT, owners);
+  const testimonials = buildTestimonials(seed.testimonials.items, pets, owners, options.testimonialCount ?? DEFAULT_TESTIMONIAL_COUNT);
   const forms = seed.forms.items.map(transformForm);
   const pages = buildPages(seed.pages, pets, owners, testimonials);
 
@@ -929,8 +965,8 @@ function buildPetTypes() {
   return docs;
 }
 
-function buildOwners() {
-  return ownerSeeds.map(({ seedKey, name, tagline, location, memberSince }, index) => ({
+function buildOwners(ownerCount = DEFAULT_OWNER_COUNT) {
+  return ownerSeeds.slice(0, ownerCount).map(({ seedKey, name, tagline, location, memberSince }, index) => ({
     _type: "owner",
     seedKey,
     name,
@@ -948,9 +984,10 @@ function buildOwners() {
   }));
 }
 
-function buildPets(targetCount = DEFAULT_PET_COUNT) {
+function buildPets(targetCount = DEFAULT_PET_COUNT, owners = ownerSeeds) {
   const seeds = [...petNameSeeds];
   const typeKeys = Object.values(petTypeCategories).flat().map(([seedKey]) => seedKey);
+  const selectedOwnerSeedKeys = new Set(owners.map((owner) => owner.seedKey));
 
   while (seeds.length < targetCount) {
     const index = seeds.length;
@@ -960,7 +997,7 @@ function buildPets(targetCount = DEFAULT_PET_COUNT) {
       `pet-${slug}`,
       title,
       typeKeys[index % typeKeys.length],
-      ownerSeeds[index % ownerSeeds.length].seedKey,
+      owners[index % owners.length].seedKey,
       pick(headlineTemplates, index)(title),
       ["friendly", "dramatic", "independent", "regal", "suspicious"][index % 5],
       ["anytime", "withinSevenDays", "immediately", "appointmentOnly"][index % 4],
@@ -971,7 +1008,9 @@ function buildPets(targetCount = DEFAULT_PET_COUNT) {
     ]);
   }
 
-  return seeds.slice(0, targetCount).map(([seedKey, name, petTypeSeedKey, ownerSeedKey, headline, temperament, pickupUrgency, cuddlePolicy, messRisk, chaosLevel, energyLevel], index) => {
+  return seeds.slice(0, targetCount).map(([seedKey, name, petTypeSeedKey, seedOwnerSeedKey, headline, temperament, pickupUrgency, cuddlePolicy, messRisk, chaosLevel, energyLevel], index) => {
+    // Curated pet seeds hardcode an ownerSeedKey; reassign to a selected owner when --owner-count trims the fixed owner list below what the curated data references, so no pet ever points at a non-existent owner document.
+    const ownerSeedKey = selectedOwnerSeedKeys.has(seedOwnerSeedKey) ? seedOwnerSeedKey : owners[index % owners.length].seedKey;
     const breed = pick(breedOptionsByPetType[petTypeSeedKey] ?? ["Mixed breed"], index);
     const owner = ownersBySeedKey.get(ownerSeedKey) ?? { name: "A very tired owner" };
     const petContentContext = { seedKey, name, breed, headline, ownerName: owner.name, petTypeSeedKey };
@@ -1166,7 +1205,7 @@ function pickAvailabilityNote(index) {
   ], index);
 }
 
-function buildTestimonials(seedTestimonials, pets, owners) {
+function buildTestimonials(seedTestimonials, pets, owners, testimonialCount = DEFAULT_TESTIMONIAL_COUNT) {
   const seeded = seedTestimonials.map((item) => ({
     _type: "testimonial",
     seedKey: item.seedId,
@@ -1180,7 +1219,8 @@ function buildTestimonials(seedTestimonials, pets, owners) {
     featured: item.featured
   }));
 
-  const generated = pets.slice(0, 18).map((pet, index) => ({
+  const generatedTestimonialCount = Math.min(testimonialCount, pets.length, 18);
+  const generated = pets.slice(0, generatedTestimonialCount).map((pet, index) => ({
     _type: "testimonial",
     seedKey: `testimonial-${pet.seedKey.replace("pet-", "")}`,
     quote: `${pet.name} stayed for one weekend and left behind better photos, one new household rule, and a strong case for reading care notes twice.`,
@@ -1544,13 +1584,15 @@ async function uploadKnownAssets() {
   const existingFiles = [...knownFiles, ...discoverApprovedMediaAssets()].filter(([, filePath]) => existsSync(filePath));
   const progress = createProgress("Known media assets", existingFiles.length);
 
-  for (const [assetKey, filePath, assetType] of existingFiles) {
-    const asset = await client.assets.upload(assetType, createReadStream(filePath), {
-      filename: `${assetKey}${extensionFromPath(filePath)}`,
-      contentType: contentTypeFromPath(filePath)
-    });
-    refs.set(assetKey, asset._id);
-    progress.tick(`Uploaded ${assetKey}`);
+  for (const chunk of chunkArray(existingFiles, assetUploadChunkSize)) {
+    await Promise.all(chunk.map(async ([assetKey, filePath, assetType]) => {
+      const asset = await client.assets.upload(assetType, createReadStream(filePath), {
+        filename: `${assetKey}${extensionFromPath(filePath)}`,
+        contentType: contentTypeFromPath(filePath)
+      });
+      refs.set(assetKey, asset._id);
+      progress.tick(`Uploaded ${assetKey}`);
+    }));
   }
 
   return refs;
@@ -1775,11 +1817,22 @@ function writePreviewFiles(documents, options = {}) {
   const previewDir = join(generatedDir, "preview");
   mkdirSync(previewDir, { recursive: true });
   const actualPetCount = documents.filter((doc) => doc._type === "pet").length;
+  const actualOwnerCount = documents.filter((doc) => doc._type === "owner").length;
+  const actualTestimonialCount = documents.filter((doc) => doc._type === "testimonial").length;
+  const requestedTestimonialCount = options.testimonialCount ?? DEFAULT_TESTIMONIAL_COUNT;
+  const generatedTestimonialCount = Math.min(requestedTestimonialCount, actualPetCount, 18);
+  const authoredTestimonialCount = actualTestimonialCount - generatedTestimonialCount;
 
   const summary = {
     generatedAt: new Date().toISOString(),
     requestedPetCount: options.petCount ?? actualPetCount,
     actualPetCount,
+    requestedOwnerCount: options.ownerCount ?? actualOwnerCount,
+    actualOwnerCount,
+    requestedTestimonialCount,
+    actualTestimonialCount,
+    authoredTestimonialCount,
+    generatedTestimonialCount,
     mediaScope: options.mediaScope ?? "all",
     totalDocuments: documents.length,
     documentsByType: documents.reduce((counts, doc) => {
@@ -1804,7 +1857,7 @@ function writePreviewFiles(documents, options = {}) {
   writeJson(join(previewDir, "media-prompts.json"), buildMediaPrompts(documents, { mediaScope: options.mediaScope }));
 
   console.log(`Preview files written to ${color.path(previewDir)}`);
-  console.log(`Prepared ${color.success(String(documents.length))} documents for review, including ${color.success(String(actualPetCount))} pets.`);
+  console.log(`Prepared ${color.success(String(documents.length))} documents for review, including ${color.success(String(actualPetCount))} pets, ${color.success(String(actualOwnerCount))} owners, and ${color.success(String(actualTestimonialCount))} testimonials (${authoredTestimonialCount} authored + ${generatedTestimonialCount} generated).`);
   console.log(`Prepared media prompts with ${color.success(options.mediaScope ?? "all")} scope.`);
 }
 

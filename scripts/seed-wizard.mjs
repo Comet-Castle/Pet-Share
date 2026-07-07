@@ -12,6 +12,8 @@ const previewDir = join(generatedDir, "preview");
 const approvalsDir = join(generatedDir, "approvals");
 const mediaDir = join(generatedDir, "media");
 const DEFAULT_PET_COUNT = 50;
+const DEFAULT_OWNER_COUNT = 12;
+const DEFAULT_TESTIMONIAL_COUNT = 18;
 const runModes = {
   quickContent: "quick-content",
   quickApprovedMedia: "quick-approved-media",
@@ -56,10 +58,14 @@ async function main() {
 
 async function runQuickReplace({ includeApprovedMedia }) {
   const petCount = await askPetCount();
+  const ownerCount = await askOwnerCount();
+  const testimonialCount = await askTestimonialCount();
   const mediaScope = includeApprovedMedia ? "all" : "pets";
 
   console.log(`\n${color.heading("Quick replace plan")}`);
   console.log(`- Pet count: ${color.success(String(petCount))}`);
+  console.log(`- Owner count: ${color.success(String(ownerCount))}`);
+  console.log(`- Generated testimonial count: ${color.success(String(testimonialCount))}`);
   console.log(`- Media: ${includeApprovedMedia ? "use approved local media from sanity/seed/media/ when available" : "skip media approval and local media upload"}`);
   console.log("- Sanity write: purge existing seeded documents, then write fresh seed content");
 
@@ -68,7 +74,7 @@ async function runQuickReplace({ includeApprovedMedia }) {
     return;
   }
 
-  generateDataPreview({ petCount, mediaScope });
+  generateDataPreview({ petCount, ownerCount, testimonialCount, mediaScope });
   approveLatestDataPreview({ reason: includeApprovedMedia ? "quick-approved-media" : "quick-content" });
 
   if (includeApprovedMedia) {
@@ -78,6 +84,8 @@ async function runQuickReplace({ includeApprovedMedia }) {
   await populateSanity({
     purgeFirst: true,
     petCount,
+    ownerCount,
+    testimonialCount,
     requireImageApproval: includeApprovedMedia,
     skipMediaUpload: !includeApprovedMedia
   });
@@ -109,6 +117,8 @@ async function runStartFreshReset() {
 async function runStepWizard() {
   console.log('Answer "y" to run a step, "n" to skip it, or "q" to quit.');
   const petCount = await askPetCount();
+  const ownerCount = await askOwnerCount();
+  const testimonialCount = await askTestimonialCount();
   const mediaScope = await askYesNo("Prepare pet image prompts only and skip owner/page/marketing media?") ? "pets" : "all";
   console.log(`${color.heading("Media scope")}: ${mediaScope === "pets" ? "pet images only" : "all media prompts"}`);
 
@@ -120,14 +130,14 @@ async function runStepWizard() {
     mediaBranchSkipReason: null
   };
 
-  await runPreviewSteps({ petCount, mediaScope, state });
+  await runPreviewSteps({ petCount, ownerCount, testimonialCount, mediaScope, state });
   await runMediaSteps({ petCount, mediaScope, state });
-  await runSanityWriteStep({ petCount });
+  await runSanityWriteStep({ petCount, ownerCount, testimonialCount });
 }
 
-async function runPreviewSteps({ petCount, mediaScope, state }) {
+async function runPreviewSteps({ petCount, ownerCount, testimonialCount, mediaScope, state }) {
   if (await askYesNo("\nStep 1: Generate or refresh full data preview files?")) {
-    generateDataPreview({ petCount, mediaScope });
+    generateDataPreview({ petCount, ownerCount, testimonialCount, mediaScope });
     state.dataPreviewReady = true;
     state.dataPreviewApproved = false;
   }
@@ -177,10 +187,10 @@ async function runMediaSteps({ petCount, mediaScope, state }) {
   }
 }
 
-async function runSanityWriteStep({ petCount }) {
+async function runSanityWriteStep({ petCount, ownerCount, testimonialCount }) {
   if (await askYesNo("\nStep 6: Populate Sanity from approved seed content and approved local media?")) {
     const purgeFirst = await askYesNo("Purge existing seeded Sanity documents before writing fresh seed data?");
-    await populateSanity({ purgeFirst, petCount });
+    await populateSanity({ purgeFirst, petCount, ownerCount, testimonialCount });
   }
 }
 
@@ -233,8 +243,8 @@ function printStatus() {
   console.log(`- Image approval: ${statusLabel(Boolean(readApproval("images")), "approved", "not approved")}`);
 }
 
-function generateDataPreview({ petCount, mediaScope = "all" }) {
-  const result = spawnSync(process.execPath, [join(rootDir, "scripts", "seed-sanity.mjs"), "--preview", "--pet-count", String(petCount), "--media-scope", mediaScope], {
+function generateDataPreview({ petCount, ownerCount = DEFAULT_OWNER_COUNT, testimonialCount = DEFAULT_TESTIMONIAL_COUNT, mediaScope = "all" }) {
+  const result = spawnSync(process.execPath, [join(rootDir, "scripts", "seed-sanity.mjs"), "--preview", "--pet-count", String(petCount), "--owner-count", String(ownerCount), "--testimonial-count", String(testimonialCount), "--media-scope", mediaScope], {
     cwd: rootDir,
     stdio: "inherit"
   });
@@ -448,7 +458,7 @@ function approveExistingMediaIfAvailable() {
   return true;
 }
 
-async function populateSanity({ purgeFirst = false, petCount = DEFAULT_PET_COUNT, requireImageApproval = true, skipMediaUpload = false } = {}) {
+async function populateSanity({ purgeFirst = false, petCount = DEFAULT_PET_COUNT, ownerCount = DEFAULT_OWNER_COUNT, testimonialCount = DEFAULT_TESTIMONIAL_COUNT, requireImageApproval = true, skipMediaUpload = false } = {}) {
   const environment = validateSeedEnvironment({ requireWriteToken: true });
   if (!environment.ok) {
     printSeedEnvironmentReport(environment, { requireWriteToken: true });
@@ -483,7 +493,7 @@ async function populateSanity({ purgeFirst = false, petCount = DEFAULT_PET_COUNT
     return;
   }
 
-  const args = [join(rootDir, "scripts", "seed-sanity.mjs"), "--confirm", "--pet-count", String(petCount)];
+  const args = [join(rootDir, "scripts", "seed-sanity.mjs"), "--confirm", "--pet-count", String(petCount), "--owner-count", String(ownerCount), "--testimonial-count", String(testimonialCount)];
   if (purgeFirst) args.push("--purge");
   if (skipMediaUpload) args.push("--skip-media-upload");
 
@@ -522,6 +532,30 @@ async function askPetCount() {
   while (true) {
     const answer = (await rl.question(`${color.heading("Pet count for generated seed data")} ${color.muted(`(default ${DEFAULT_PET_COUNT}):`)} `)).trim();
     if (!answer) return DEFAULT_PET_COUNT;
+
+    const count = Number(answer);
+    if (Number.isInteger(count) && count > 0) return count;
+
+    console.log(color.warning("Enter a positive whole number, or leave blank for the default."));
+  }
+}
+
+async function askOwnerCount() {
+  while (true) {
+    const answer = (await rl.question(`${color.heading("Owner count")} ${color.muted(`(default ${DEFAULT_OWNER_COUNT}, max ${DEFAULT_OWNER_COUNT} from the fixed owner list):`)} `)).trim();
+    if (!answer) return DEFAULT_OWNER_COUNT;
+
+    const count = Number(answer);
+    if (Number.isInteger(count) && count > 0) return count;
+
+    console.log(color.warning("Enter a positive whole number, or leave blank for the default."));
+  }
+}
+
+async function askTestimonialCount() {
+  while (true) {
+    const answer = (await rl.question(`${color.heading("Generated testimonial count")} ${color.muted(`(default ${DEFAULT_TESTIMONIAL_COUNT}, authored testimonials are always included in full):`)} `)).trim();
+    if (!answer) return DEFAULT_TESTIMONIAL_COUNT;
 
     const count = Number(answer);
     if (Number.isInteger(count) && count > 0) return count;

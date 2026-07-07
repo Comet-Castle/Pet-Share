@@ -335,32 +335,28 @@ Exit criteria:
 
 Working plan and detailed checklist: [`docs/plans/completed/m12.md`](plans/completed/m12.md). The static-read audit findings and entry-animation scoping that were previously inlined here now live in that plan file so this roadmap stays scannable.
 
-## ⚪ Milestone 13: Seeding Workflow Refactor
+## ✅ Milestone 13: Seeding Progress, Quantities, And Batching
 
 Goal:
 
-- Refine seed tooling so content generation, content upload, and media generation/upload are clear separate phases.
+- Make the existing seed tooling clearer to operate: show real progress while it runs, let quantities be configured per content type, and batch network-bound steps where that meaningfully reduces wall-clock time. This is a lightweight usability pass on a single-operator, internal-only tool, not a phase redesign.
 
 Scope:
 
-- Update seed scripts and README docs around three distinct phases:
-  1. Generate or refresh all saved content and media prompts.
-  2. Upload content to Sanity.
-  3. Generate approved media and upload media to Sanity.
-- Reduce the scope of the wizard so it guides phase selection without becoming an opaque all-purpose flow.
-- Keep direct commands documented as manual/debug alternatives.
-- Ensure the seed data shape matches the current Sanity schemas and page-builder configuration.
-- Review how approved seed media is stored in Git and document options or follow-up decisions.
-- Keep AI media provider calls human-run only.
+- Add progress output to seed steps that currently have none, starting with asset upload (`uploadKnownAssets` in `scripts/seed-sanity.mjs` uploads files one at a time with zero progress output today). Reuse the existing `createProgress` processed/total/remaining pattern already used for document upserts, purge, and media generation.
+- Add independently configurable counts for pets, owners, and testimonials (today only `--pet-count` exists; owners and testimonials are fixed-size from their seed JSON). Keep pages/forms/site settings fixed since they are not repeated per-item content.
+- Batch or parallelize network-bound steps where it reduces real processing time (e.g. asset uploads, which currently run strictly sequentially). Do not add progress or batching to synchronous in-memory steps like page-builder section construction, since there is no real wait to reduce there.
+- Keep the existing quick-replace and step-wizard modes in `scripts/seed-wizard.mjs`; this milestone does not restructure the wizard into separate phases.
+- Keep AI media provider calls human-run only; no change to that boundary.
 
 Exit criteria:
 
-- Seed tooling clearly separates content/prompt generation, content upload, and media generation/upload.
-- README points users to the preferred seed workflow.
-- Seed scripts do not unexpectedly call paid or quota-limited AI providers.
-- The media storage approach is documented, including any remaining production deployment concerns.
+- Every seed step that makes network calls (document writes, asset uploads, media generation) prints live processed/total/remaining progress.
+- Pet, owner, and testimonial counts can each be set independently via CLI flags and/or wizard prompts.
+- Asset upload and other previously fully-sequential network steps are batched or parallelized where it safely reduces run time.
+- No new AI provider calls are introduced, and no existing safety gate (approval, human-run media generation) is weakened.
 
-Working plan and detailed checklist: [`docs/plans/pending/m13.md`](plans/pending/m13.md).
+Working plan and detailed checklist: [`docs/plans/active/m13.md`](plans/active/m13.md).
 
 ## ⚪ Milestone 14: Final Seed Dataset
 

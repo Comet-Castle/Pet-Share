@@ -79,7 +79,7 @@ Sanity Media Library is enabled in Studio. Leave `SANITY_STUDIO_MEDIA_LIBRARY_ID
 
 ## Seed Data
 
-Seed data lives under `sanity/seed/`. The recommended seed workflow is the wizard. It covers the full demo dataset, including site settings, homepage, pet index page, system pages, Standard Pages, pet types, owners, pets, testimonials, forms, and media prompts.
+Seed data lives under `sanity/seed/`. This directory is gitignored and not committed — once content has been written to Sanity, Sanity is the source of truth, and the local seed files are disposable scratch space for regenerating or reseeding on this machine. A fresh clone does not include a bootstrapped demo dataset. The recommended seed workflow is the wizard. It covers the full demo dataset, including site settings, homepage, pet index page, system pages, Standard Pages, pet types, owners, pets, testimonials, forms, and media prompts.
 
 ```bash
 pnpm seed:wizard
@@ -94,7 +94,7 @@ The wizard validates required local environment values up front and then offers 
 
 The quick replace paths are meant for normal reseeding when you want to generate X pets and all content pages with minimal prompts. They do not call AI media providers. The final Sanity write still requires explicit confirmation and `SANITY_API_WRITE_TOKEN`.
 
-The start fresh reset path is intentionally destructive and requires a typed `RESET` confirmation. It preserves the committed seed template files under `sanity/seed/data/`.
+The start fresh reset path is intentionally destructive and requires a typed `RESET` confirmation. It preserves the local seed template files under `sanity/seed/data/` (gitignored, not committed).
 
 The detailed wizard path asks for `y/N` confirmation before each step:
 
@@ -137,6 +137,12 @@ To preview a different number of generated pets:
 pnpm seed:sanity -- --preview --pet-count 25
 ```
 
+To preview a different owner count (clamped to the fixed 12-owner list) and a different generated testimonial count (authored testimonials are always included in full):
+
+```bash
+pnpm seed:sanity -- --preview --owner-count 6 --testimonial-count 10
+```
+
 To preview the full content dataset while preparing only pet image media prompts:
 
 ```bash
@@ -155,7 +161,7 @@ To write seed content to the configured Sanity dataset, set `SANITY_API_WRITE_TO
 pnpm seed:sanity -- --confirm
 ```
 
-Use the same `--pet-count` value for preview and confirm when running direct commands manually.
+Use the same `--pet-count`, `--owner-count`, and `--testimonial-count` values for preview and confirm when running direct commands manually.
 
 To purge existing seeded documents before writing fresh seed content:
 
@@ -223,7 +229,7 @@ If a Gemini image model has no available quota, retry with a small preview first
 pnpm seed:media -- --mode preview --count 1 --model gemini-2.5-flash-image --confirm
 ```
 
-Generated review files should be written to `sanity/seed/generated/`, which is ignored by Git. Approved files must be copied into `sanity/seed/media/` before they are committed or uploaded to Sanity. The wizard can copy reviewed generated media during the media approval step.
+Generated review files should be written to `sanity/seed/generated/`, which is ignored by Git. Approved files must be copied into `sanity/seed/media/` before they are uploaded to Sanity. `sanity/seed/` in full is gitignored, so approved media stays local rather than committed. The wizard can copy reviewed generated media during the media approval step.
 
 ## Environment Variables
 
