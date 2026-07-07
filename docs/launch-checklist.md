@@ -116,6 +116,9 @@ Explicitly out of phase-one launch unless later reprioritized:
 - Custom 404, 500, and generic error states render clear Pet Share copy.
 - Error pages have static fallback copy if Sanity is unavailable.
 - Route metadata is generated from Sanity content where applicable.
+- OG/Twitter tags render on all public pages with a branded `.png` OG image and canonical URLs (implemented in M12).
+- `robots.txt`/`robots.ts`, a `sitemap.xml`/`sitemap.ts`, and a branded favicon/app-icon set exist. (Deferred out of M12 — add during launch readiness.)
+- Structured data (JSON-LD: Organization on home, product-like markup on pet detail) considered. (Deferred out of M12.)
 
 ## Preview And Revalidation Readiness
 

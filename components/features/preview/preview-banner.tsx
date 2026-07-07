@@ -23,7 +23,7 @@ export function PreviewBanner() {
             App Router client navigator. */}
         <a
           href={exitHref}
-          className="inline-flex min-h-10 cursor-pointer items-center justify-center rounded-full bg-white px-4 py-2 text-sm font-bold text-pet-ink transition hover:-rotate-1 focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2 focus:ring-offset-pet-ink"
+          className="inline-flex min-h-10 cursor-pointer items-center justify-center rounded-full bg-white px-4 py-2 text-sm font-bold text-pet-ink transition hover:-rotate-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-coral focus-visible:ring-offset-2 focus-visible:ring-offset-pet-ink"
         >
           Exit preview
         </a>

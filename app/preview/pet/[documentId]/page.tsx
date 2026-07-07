@@ -119,7 +119,7 @@ export default async function PetDocumentPreviewPage({ params }: PetDocumentPrev
           {pet.owner.slug ? (
             <Link
               href={`/owners/${pet.owner.slug}`}
-              className="mt-5 inline-flex cursor-pointer rounded-full bg-pet-ink px-5 py-3 text-sm font-bold text-white transition hover:-rotate-1 focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2"
+              className="mt-5 inline-flex cursor-pointer rounded-full bg-pet-ink px-5 py-3 text-sm font-bold text-white transition hover:-rotate-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-coral focus-visible:ring-offset-2"
             >
               View owner page
             </Link>

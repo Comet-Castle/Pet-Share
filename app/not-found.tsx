@@ -1,6 +1,14 @@
+import type { Metadata } from "next";
 import { SystemMessage } from "@/components/features/system/system-message";
 import { logger } from "@/lib/diagnostics/logger";
 import { loadSystemPageByType } from "@/sanity/lib/loaders";
+
+// 404 is a system page — keep it out of search indexes while still inheriting the
+// root layout's title template and OG defaults (branded fallback image).
+export const metadata: Metadata = {
+  title: "Page not found",
+  robots: { index: false, follow: false }
+};
 
 /**
  * Renders the global 404 page with optional CMS-authored system copy.

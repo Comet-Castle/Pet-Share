@@ -61,7 +61,7 @@ export function PetVideo({ video, petName }: PetVideoProps) {
             href={src}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-full bg-pet-ink px-5 py-2.5 text-sm font-bold text-white transition hover:-rotate-1 focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2"
+            className="inline-flex items-center gap-2 rounded-full bg-pet-ink px-5 py-2.5 text-sm font-bold text-white transition hover:-rotate-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-coral focus-visible:ring-offset-2"
           >
             Watch {petName}
             <ExternalLink aria-hidden="true" size={16} />
@@ -99,7 +99,7 @@ export function PetVideo({ video, petName }: PetVideoProps) {
           <button
             type="button"
             onClick={() => setIsPlaying(true)}
-            className="group relative block h-full w-full focus:outline-none focus-visible:ring-4 focus-visible:ring-pet-coral focus-visible:ring-offset-2"
+            className="group relative block h-full w-full focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-pet-coral focus-visible:ring-offset-2"
             aria-label={`Play video: ${title}`}
           >
             {posterUrl ? (

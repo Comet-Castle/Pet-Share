@@ -79,13 +79,13 @@ export function PetNameFilter({ currentValue, hideLabel = false }: PetNameFilter
           value={value}
           onChange={(event) => setValue(event.target.value)}
           placeholder="Search by pet name"
-          className="w-full rounded-[1.25rem] bg-white/92 py-3 pl-11 pr-11 text-sm font-bold text-pet-ink shadow-sm outline-none transition placeholder:text-pet-muted/70 focus:ring-2 focus:ring-pet-coral focus:ring-inset"
+          className="w-full rounded-[1.25rem] bg-white/92 py-3 pl-11 pr-11 text-sm font-bold text-pet-ink shadow-sm outline-none transition placeholder:text-pet-muted/70 focus-visible:ring-2 focus-visible:ring-pet-coral focus-visible:ring-inset"
         />
         {value ? (
           <button
             type="button"
             onClick={clearValue}
-            className="absolute right-3 top-1/2 inline-flex -translate-y-1/2 items-center justify-center rounded-full p-1 text-pet-muted transition hover:text-pet-ink focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-inset"
+            className="absolute right-3 top-1/2 inline-flex -translate-y-1/2 items-center justify-center rounded-full p-1 text-pet-muted transition hover:text-pet-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-coral focus-visible:ring-inset"
             aria-label="Clear pet name search"
           >
             <X aria-hidden="true" size={15} />

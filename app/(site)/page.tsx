@@ -125,7 +125,10 @@ function HomepageProcessSection({ section }: Readonly<{ section?: HomeProcessSec
               const Icon = step.icon;
 
               return (
-                <li key={cmsStep?._key ?? step.title} className="min-w-0 text-center">
+                // Each step reveals sequentially (index-driven stagger) as the
+                // section scrolls into view. Reduced-motion users see all four
+                // immediately — Reveal gates the transform/fade behind motion-safe.
+                <Reveal as="li" key={cmsStep?._key ?? step.title} index={index} className="min-w-0 text-center">
                   <span className="mx-auto flex size-28 items-center justify-center rounded-full bg-pet-cream text-pet-ink shadow-sm">
                     <Icon aria-hidden="true" size={42} strokeWidth={2.25} />
                   </span>
@@ -140,7 +143,7 @@ function HomepageProcessSection({ section }: Readonly<{ section?: HomeProcessSec
                       <p>{cmsStep?.description ?? step.body}</p>
                     )}
                   </div>
-                </li>
+                </Reveal>
               );
             })}
           </ol>
@@ -231,7 +234,7 @@ function HomepageTestimonialsSection({ testimonials }: Readonly<{ testimonials: 
         </div>
         <Link
           href="/pets"
-          className="inline-flex items-center gap-2 font-bold text-pet-ink underline decoration-pet-coral decoration-2 underline-offset-4 transition hover:-rotate-1 focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2"
+          className="inline-flex items-center gap-2 font-bold text-pet-ink underline decoration-pet-coral decoration-2 underline-offset-4 transition hover:-rotate-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-coral focus-visible:ring-offset-2"
         >
           Browse listings
           <ArrowRight aria-hidden="true" size={18} />
@@ -271,12 +274,14 @@ export async function generateMetadata(): Promise<Metadata> {
     return metadataFromSeo({
       seo: page?.seo,
       fallbackTitle: "Pet Share",
-      fallbackDescription: "A bright marketplace for temporary pet relief."
+      fallbackDescription: "A bright marketplace for temporary pet relief.",
+      path: "/"
     });
   } catch {
     return metadataFromSeo({
       fallbackTitle: "Pet Share",
-      fallbackDescription: "A bright marketplace for temporary pet relief."
+      fallbackDescription: "A bright marketplace for temporary pet relief.",
+      path: "/"
     });
   }
 }
@@ -332,7 +337,7 @@ export default async function HomePage() {
           </div>
           <Link
             href="/pets"
-            className="inline-flex items-center gap-2 font-bold text-pet-ink underline decoration-pet-coral decoration-2 underline-offset-4 transition hover:-rotate-1 focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2"
+            className="inline-flex items-center gap-2 font-bold text-pet-ink underline decoration-pet-coral decoration-2 underline-offset-4 transition hover:-rotate-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-coral focus-visible:ring-offset-2"
           >
             View all pets
             <ArrowRight aria-hidden="true" size={18} />

@@ -126,7 +126,7 @@ export function PetTypeFilterPreview({
           aria-controls={listboxId}
           aria-activedescendant={isOpen ? activeOptionId : undefined}
           placeholder="Search pet types"
-          className="w-full rounded-[1.25rem] bg-white/92 py-3 pl-11 pr-4 text-sm font-bold text-pet-ink shadow-sm outline-none transition placeholder:text-pet-muted/70 focus:ring-2 focus:ring-pet-coral focus:ring-inset"
+          className="w-full rounded-[1.25rem] bg-white/92 py-3 pl-11 pr-4 text-sm font-bold text-pet-ink shadow-sm outline-none transition placeholder:text-pet-muted/70 focus-visible:ring-2 focus-visible:ring-pet-coral focus-visible:ring-inset"
         />
 
         {isOpen ? (
@@ -154,8 +154,8 @@ export function PetTypeFilterPreview({
                     }}
                     onMouseEnter={() => setActiveIndex(index)}
                     className={isSelected || index === activeIndex
-                      ? "flex w-full items-center justify-between gap-3 rounded-xl bg-pet-mint/25 px-3 py-2 text-left text-sm font-bold text-pet-ink transition hover:bg-pet-mint/30 focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-inset"
-                      : "flex w-full items-center justify-between gap-3 rounded-xl px-3 py-2 text-left text-sm font-bold text-pet-ink transition hover:bg-pet-mint/25 focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-inset"}
+                      ? "flex w-full items-center justify-between gap-3 rounded-xl bg-pet-mint/25 px-3 py-2 text-left text-sm font-bold text-pet-ink transition hover:bg-pet-mint/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-coral focus-visible:ring-inset"
+                      : "flex w-full items-center justify-between gap-3 rounded-xl px-3 py-2 text-left text-sm font-bold text-pet-ink transition hover:bg-pet-mint/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-coral focus-visible:ring-inset"}
                   >
                     {type.filterLabel}
                     {isSelected ? <Check aria-hidden="true" size={16} className="text-pet-coral" /> : null}
@@ -176,7 +176,7 @@ export function PetTypeFilterPreview({
               key={type._id}
               type="button"
               onClick={() => removePetType(stegaClean(type.slug))}
-              className="inline-flex items-center gap-1 rounded-full bg-pet-mint/35 px-3 py-2 text-sm font-bold text-pet-ink transition hover:-rotate-1 focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-inset"
+              className="inline-flex items-center gap-1 rounded-full bg-pet-mint/35 px-3 py-2 text-sm font-bold text-pet-ink transition hover:-rotate-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-coral focus-visible:ring-inset"
               aria-label={`Remove ${type.filterLabel} pet type`}
             >
               {type.filterLabel}

@@ -21,7 +21,9 @@ export function requireServerEnv(name: string) {
 }
 
 export const publicEnv = {
-  siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+  // Treat an unset OR empty NEXT_PUBLIC_SITE_URL as "use localhost" — `??` alone
+  // keeps an empty string, which then breaks `new URL(...)` (metadataBase).
+  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
   sanityProjectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ?? "",
   sanityDataset: process.env.NEXT_PUBLIC_SANITY_DATASET ?? "production",
   sanityApiVersion: process.env.NEXT_PUBLIC_SANITY_API_VERSION ?? "2025-02-19"

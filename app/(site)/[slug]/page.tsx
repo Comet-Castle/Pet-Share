@@ -43,7 +43,8 @@ export async function generateMetadata({ params }: MarketingSlugPageProps): Prom
   return metadataFromSeo({
     seo: page.seo,
     fallbackTitle: page.title,
-    fallbackDescription: `${page.title} from Pet Share.`
+    fallbackDescription: `${page.title} from Pet Share.`,
+    path: `/${slug}`
   });
 }
 

@@ -19,7 +19,7 @@ export function SiteNavLinks({ items }: SiteNavLinksProps) {
   const links = resolveNavLinks(items);
 
   return (
-    <div className="flex flex-wrap items-center gap-4 lg:gap-7">
+    <div className="flex flex-wrap items-center gap-5 lg:gap-8">
       {links.map((item) => {
         const active = isActiveNavLink(pathname, item.href);
 
@@ -31,8 +31,10 @@ export function SiteNavLinks({ items }: SiteNavLinksProps) {
             rel={item.external ? "noreferrer" : undefined}
             aria-current={active ? "page" : undefined}
             className={joinClassNames(
-              "inline-flex min-h-10 items-center gap-1 rounded-full px-1 py-2 text-sm font-bold transition hover:-rotate-1 hover:text-pet-coral focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2",
-              active ? "text-pet-coral underline decoration-pet-coral decoration-2 underline-offset-8" : "text-pet-ink"
+              // Active state is conveyed by orange text (paired with aria-current for
+              // assistive tech). The keyboard focus ring is separate and still applies.
+              "inline-flex min-h-11 items-center gap-1 rounded-full px-2 py-2.5 text-base font-bold transition hover:-rotate-1 hover:text-pet-coral focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-coral focus-visible:ring-offset-2",
+              active ? "text-pet-coral" : "text-pet-ink"
             )}
           >
             {item.label}

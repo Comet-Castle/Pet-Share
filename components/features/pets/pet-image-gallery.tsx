@@ -1,9 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import type { MouseEvent, PointerEvent, TouchEvent } from "react";
+import type { PointerEvent, TouchEvent } from "react";
 import { useRef, useState } from "react";
 import { Camera, ChevronLeft, ChevronRight, PawPrint } from "lucide-react";
+import { CarouselDots } from "@/components/ui/carousel-dots";
 import { joinClassNames } from "@/lib/utils/class-names";
 
 type PetGalleryImage = Readonly<{
@@ -11,6 +12,9 @@ type PetGalleryImage = Readonly<{
   image?: {
     asset?: {
       url?: string | null;
+      metadata?: {
+        lqip?: string | null;
+      } | null;
     } | null;
   } | null;
   alt?: string | null;
@@ -23,9 +27,16 @@ type PetImageGalleryProps = Readonly<{
 
 const swipeThreshold = 44;
 const verticalTolerance = 32;
+// Drag distance (px) separating a plain thumbnail tap from a rail drag. Below this
+// the click fires and swaps the image; above it we treat the gesture as a drag.
+const dragThreshold = 6;
 
 function imageUrl(image: PetGalleryImage) {
   return image.image?.asset?.url ?? null;
+}
+
+function imageBlur(image: PetGalleryImage) {
+  return image.image?.asset?.metadata?.lqip ?? undefined;
 }
 
 /**
@@ -36,11 +47,8 @@ export function PetImageGallery({ images, petName }: PetImageGalleryProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isDraggingThumbnails, setIsDraggingThumbnails] = useState(false);
   const swipeStart = useRef<{ x: number; y: number } | null>(null);
-  const thumbnailDrag = useRef<{ pointerId: number; startX: number; scrollLeft: number; distance: number } | null>(null);
-  const suppressThumbnailClick = useRef(false);
+  const thumbnailDrag = useRef<{ pointerId: number; startX: number; scrollLeft: number; distance: number; capturing: boolean } | null>(null);
   const thumbnailRailRef = useRef<HTMLDivElement>(null);
-  const activeImage = validImages[activeIndex];
-  const activeUrl = activeImage ? imageUrl(activeImage) : null;
   const hasMultipleImages = validImages.length > 1;
 
   function showPreviousImage() {
@@ -88,14 +96,17 @@ export function PetImageGallery({ images, petName }: PetImageGalleryProps) {
   function handleThumbnailPointerDown(event: PointerEvent<HTMLDivElement>) {
     if (event.button !== 0 || !thumbnailRailRef.current) return;
 
+    // Do NOT capture the pointer on down: capturing here retargets the synthetic
+    // click away from the thumbnail button, so a plain tap never fires its click
+    // and the main image never swaps. Capture is deferred to pointermove once the
+    // drag exceeds `dragThreshold`, so taps click normally.
     thumbnailDrag.current = {
       pointerId: event.pointerId,
       startX: event.clientX,
       scrollLeft: thumbnailRailRef.current.scrollLeft,
-      distance: 0
+      distance: 0,
+      capturing: false
     };
-    setIsDraggingThumbnails(true);
-    event.currentTarget.setPointerCapture(event.pointerId);
   }
 
   function handleThumbnailPointerMove(event: PointerEvent<HTMLDivElement>) {
@@ -105,30 +116,31 @@ export function PetImageGallery({ images, petName }: PetImageGalleryProps) {
 
     const deltaX = event.clientX - drag.startX;
     drag.distance = Math.max(drag.distance, Math.abs(deltaX));
-    rail.scrollLeft = drag.scrollLeft - deltaX;
+
+    // Promote to a real drag only once movement passes the threshold. Capturing
+    // now keeps the drag smooth while plain taps (which never cross the threshold)
+    // still fire their click and swap the image.
+    if (!drag.capturing && drag.distance > dragThreshold) {
+      drag.capturing = true;
+      setIsDraggingThumbnails(true);
+      event.currentTarget.setPointerCapture(drag.pointerId);
+    }
+
+    if (drag.capturing) {
+      rail.scrollLeft = drag.scrollLeft - deltaX;
+    }
   }
 
   function finishThumbnailDrag(event: PointerEvent<HTMLDivElement>) {
-    if (!thumbnailDrag.current) return;
+    const drag = thumbnailDrag.current;
+    if (!drag) return;
 
-    suppressThumbnailClick.current = thumbnailDrag.current.distance > 6;
-
-    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
-      event.currentTarget.releasePointerCapture(event.pointerId);
+    if (drag.capturing && event.currentTarget.hasPointerCapture(drag.pointerId)) {
+      event.currentTarget.releasePointerCapture(drag.pointerId);
     }
 
     thumbnailDrag.current = null;
     setIsDraggingThumbnails(false);
-  }
-
-  function handleThumbnailClick(index: number, event: MouseEvent<HTMLButtonElement>) {
-    if (suppressThumbnailClick.current) {
-      event.preventDefault();
-      suppressThumbnailClick.current = false;
-      return;
-    }
-
-    setActiveIndex(index);
   }
 
   return (
@@ -147,16 +159,35 @@ export function PetImageGallery({ images, petName }: PetImageGalleryProps) {
           </span>
         ) : null}
 
-        {activeUrl ? (
-          <Image
-            key={activeUrl}
-            src={activeUrl}
-            alt={activeImage?.alt ?? `${petName} photo ${activeIndex + 1}`}
-            fill
-            priority
-            sizes="(min-width: 1024px) 55vw, 100vw"
-            className="object-cover motion-safe:animate-[pet-gallery-image-enter_120ms_ease-out]"
-          />
+        {validImages.length ? (
+          // Stacked images cross-fade on swap: all stay mounted, only the active
+          // one is opaque. Avoids the flash from unmounting the outgoing image.
+          // The blur `lqip` placeholder shows while an un-cached image decodes.
+          // Gated behind motion-reduce so reduced-motion users get an instant swap.
+          validImages.map((image, index) => {
+            const url = imageUrl(image);
+            if (!url) return null;
+
+            const blur = imageBlur(image);
+
+            return (
+              <Image
+                key={image._key ?? url}
+                src={url}
+                alt={image.alt ?? `${petName} photo ${index + 1}`}
+                fill
+                priority={index === 0}
+                sizes="(min-width: 1024px) 55vw, 100vw"
+                placeholder={blur ? "blur" : undefined}
+                blurDataURL={blur}
+                aria-hidden={index !== activeIndex}
+                className={joinClassNames(
+                  "object-cover transition-opacity duration-300 ease-out motion-reduce:transition-none",
+                  index === activeIndex ? "opacity-100" : "opacity-0"
+                )}
+              />
+            );
+          })
         ) : (
           <div className="flex size-full items-center justify-center text-pet-muted">
             <PawPrint aria-hidden="true" size={64} />
@@ -168,7 +199,7 @@ export function PetImageGallery({ images, petName }: PetImageGalleryProps) {
             <button
               type="button"
               onClick={showPreviousImage}
-              className="absolute left-3 top-1/2 flex size-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/80 text-pet-ink shadow-soft backdrop-blur transition hover:-rotate-6 hover:bg-white focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2"
+              className="absolute left-3 top-1/2 z-10 flex size-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/80 text-pet-ink shadow-soft backdrop-blur transition hover:-rotate-6 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-coral focus-visible:ring-offset-2"
               aria-label="Show previous pet photo"
             >
               <ChevronLeft aria-hidden="true" size={22} />
@@ -176,7 +207,7 @@ export function PetImageGallery({ images, petName }: PetImageGalleryProps) {
             <button
               type="button"
               onClick={showNextImage}
-              className="absolute right-3 top-1/2 flex size-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/80 text-pet-ink shadow-soft backdrop-blur transition hover:rotate-6 hover:bg-white focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2"
+              className="absolute right-3 top-1/2 z-10 flex size-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/80 text-pet-ink shadow-soft backdrop-blur transition hover:rotate-6 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-coral focus-visible:ring-offset-2"
               aria-label="Show next pet photo"
             >
               <ChevronRight aria-hidden="true" size={22} />
@@ -186,23 +217,15 @@ export function PetImageGallery({ images, petName }: PetImageGalleryProps) {
       </div>
 
       {hasMultipleImages ? (
-        <div
-          className="mt-3 flex h-4 items-center justify-center gap-2"
-          aria-label={`${activeIndex + 1} of ${validImages.length}`}
-        >
-          {validImages.map((image, index) => (
-            <button
-              key={image._key ?? imageUrl(image) ?? `${petName}-indicator-${index}`}
-              type="button"
-              onClick={() => setActiveIndex(index)}
-              className={joinClassNames(
-                "size-2 rounded-full transition focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2",
-                index === activeIndex ? "w-6 bg-pet-ink" : "bg-pet-muted/35 hover:bg-pet-muted"
-              )}
-              aria-label={`Show pet photo ${index + 1}`}
-              aria-current={index === activeIndex ? "true" : undefined}
-            />
-          ))}
+        <div className="mt-3 flex h-4 items-center justify-center">
+          <CarouselDots
+            count={validImages.length}
+            activeIndex={activeIndex}
+            onSelect={setActiveIndex}
+            variant="bare"
+            label={`${activeIndex + 1} of ${validImages.length}`}
+            dotLabel={(index) => `Show pet photo ${index + 1}`}
+          />
         </div>
       ) : null}
 
@@ -223,15 +246,17 @@ export function PetImageGallery({ images, petName }: PetImageGalleryProps) {
         >
           {validImages.map((image, index) => {
             const url = imageUrl(image);
+            const blur = imageBlur(image);
 
             return (
               <button
                 key={image._key ?? url ?? `${petName}-thumbnail-${index}`}
                 type="button"
-                onClick={(event) => handleThumbnailClick(index, event)}
+                onClick={() => setActiveIndex(index)}
                 className={joinClassNames(
-                  "relative size-24 shrink-0 overflow-hidden rounded-2xl bg-pet-mint/25 transition focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2 sm:size-28",
-                  index === activeIndex && "ring-2 ring-pet-ink"
+                  "relative size-24 shrink-0 overflow-hidden rounded-2xl bg-pet-mint/25 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-coral focus-visible:ring-offset-2 sm:size-28",
+                  // Active thumbnail is branded orange to match the carousel dots.
+                  index === activeIndex && "ring-2 ring-pet-coral ring-offset-2"
                 )}
                 aria-label={`Show ${petName} photo ${index + 1}`}
               >
@@ -241,6 +266,8 @@ export function PetImageGallery({ images, petName }: PetImageGalleryProps) {
                     alt=""
                     fill
                     sizes="112px"
+                    placeholder={blur ? "blur" : undefined}
+                    blurDataURL={blur}
                     className="object-cover"
                   />
                 ) : null}

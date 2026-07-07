@@ -53,7 +53,8 @@ export async function generateMetadata({ params }: OwnerSlugPageProps): Promise<
   return metadataFromSeo({
     seo: owner.seo,
     fallbackTitle: owner.name,
-    fallbackDescription: owner.tagline
+    fallbackDescription: owner.tagline,
+    path: `/owners/${slug}`
   });
 }
 

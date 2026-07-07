@@ -21,13 +21,28 @@ type SubmitState =
   | Readonly<{ status: "success"; headline: string; message: string }>
   | Readonly<{ status: "error"; message: string; errors?: Record<string, string> }>;
 
-const inputClass = "min-h-12 w-full min-w-0 rounded-2xl border-0 bg-white/85 px-4 text-base font-normal text-pet-ink shadow-inner outline-none ring-1 ring-pet-blue/20 transition focus:ring-2 focus:ring-pet-coral";
+/**
+ * Drives the animated form → success swap:
+ * - `form`: the form is interactive.
+ * - `exiting`: submission succeeded; the form plays a small grow-then-collapse
+ *   while reserving its space, before the success card mounts.
+ * - `success`: the success card is mounted (with role="status" for announcement).
+ * Reduced-motion users skip `exiting` entirely and jump straight to `success`.
+ */
+type SuccessPhase = "form" | "exiting" | "success";
+
+function prefersReducedMotion() {
+  return typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+}
+
+const inputClass = "min-h-12 w-full min-w-0 rounded-2xl border-0 bg-white/85 px-4 text-base font-normal text-pet-ink shadow-inner outline-none ring-1 ring-pet-blue/20 transition focus-visible:ring-2 focus-visible:ring-pet-coral";
 
 /**
  * Renders a Sanity-authored form and posts it to the server-only form endpoint.
  */
 export function CmsForm({ form, eyebrow, context, variant = "default" }: CmsFormProps) {
   const [submitState, setSubmitState] = useState<SubmitState>({ status: "idle" });
+  const [successPhase, setSuccessPhase] = useState<SuccessPhase>("form");
   const errors = submitState.status === "error" ? submitState.errors ?? {} : {};
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -57,6 +72,9 @@ export function CmsForm({ form, eyebrow, context, variant = "default" }: CmsForm
         headline: payload.headline ?? form.successMessage?.headline ?? "Message sent",
         message: payload.message ?? form.successMessage?.message ?? "Your message was sent."
       });
+      // Reduced-motion users jump straight to the success card; everyone else sees
+      // the form grow-then-collapse first (onAnimationEnd advances to "success").
+      setSuccessPhase(prefersReducedMotion() ? "success" : "exiting");
     } catch {
       setSubmitState({ status: "error", message: "The pets could not deliver this message. Please try again." });
     }
@@ -77,20 +95,38 @@ export function CmsForm({ form, eyebrow, context, variant = "default" }: CmsForm
         {form.description ? <p className={joinClassNames("mt-4 text-pet-muted", variant === "compact" ? "text-sm leading-6" : "text-lg leading-8")}>{form.description}</p> : null}
       </div>
 
-      {submitState.status === "success" ? (
-        <div className="min-w-0 rounded-[1.5rem] bg-pet-mint/25 p-6 shadow-sm" role="status">
+      {submitState.status === "success" && successPhase === "success" ? (
+        <div
+          className="min-w-0 rounded-[1.5rem] bg-pet-mint/25 p-6 shadow-sm motion-safe:animate-[form-success-enter_360ms_ease-out]"
+          role="status"
+        >
           <h3 className="font-display text-2xl font-bold text-pet-ink">{submitState.headline}</h3>
           <p className="mt-2 leading-7 text-pet-muted">{submitState.message}</p>
           {form.successMessage?.cta?.link ? (
             <Link
               href={form.successMessage.cta.link.path ?? form.successMessage.cta.link.url ?? "/"}
-              className="mt-5 inline-flex min-h-11 items-center justify-center rounded-full bg-white/85 px-5 py-2.5 text-sm font-bold text-pet-ink shadow-sm transition hover:-rotate-1 focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2"
+              className="mt-5 inline-flex min-h-11 items-center justify-center rounded-full bg-white/85 px-5 py-2.5 text-sm font-bold text-pet-ink shadow-sm transition hover:-rotate-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-coral focus-visible:ring-offset-2"
             >
               {form.successMessage.cta.label}
             </Link>
           ) : null}
         </div>
       ) : (
+        // During "exiting" the form plays a grow-then-collapse (reserving its
+        // space) before onAnimationEnd swaps in the success card. `pointer-events-none`
+        // + tabIndex removal keep it inert while it animates out.
+        <div
+          className={joinClassNames(
+            "min-w-0",
+            successPhase === "exiting" && "pointer-events-none overflow-hidden motion-safe:animate-[form-grow-collapse_620ms_ease-in-out_forwards]"
+          )}
+          onAnimationEnd={() => {
+            if (successPhase === "exiting") {
+              setSuccessPhase("success");
+            }
+          }}
+          aria-hidden={successPhase === "exiting"}
+        >
         <form className="grid min-w-0 gap-4" onSubmit={handleSubmit} aria-label={form.title} noValidate>
           <label className="sr-only" aria-hidden="true">
             Company
@@ -129,7 +165,7 @@ export function CmsForm({ form, eyebrow, context, variant = "default" }: CmsForm
                   <input
                     aria-describedby={describedBy}
                     aria-invalid={Boolean(error)}
-                    className="size-5 rounded border-0 text-pet-coral shadow-sm ring-1 ring-pet-blue/20 focus:ring-2 focus:ring-pet-coral"
+                    className="size-5 rounded border-0 text-pet-coral shadow-sm ring-1 ring-pet-blue/20 focus-visible:ring-2 focus-visible:ring-pet-coral"
                     name={field.name}
                     required={field.required}
                     type="checkbox"
@@ -158,13 +194,14 @@ export function CmsForm({ form, eyebrow, context, variant = "default" }: CmsForm
           ) : null}
 
           <button
-            className="inline-flex min-h-12 items-center justify-center rounded-full bg-pet-coral px-6 py-3 text-center font-bold text-white shadow-soft transition hover:-rotate-1 hover:bg-[#f37f61] focus:outline-none focus:ring-2 focus:ring-pet-blue focus:ring-offset-2 disabled:cursor-wait disabled:opacity-70"
+            className="inline-flex min-h-12 items-center justify-center rounded-full bg-pet-coral px-6 py-3 text-center font-bold text-white shadow-soft transition hover:-rotate-1 hover:bg-[#f37f61] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-blue focus-visible:ring-offset-2 disabled:cursor-wait disabled:opacity-70"
             disabled={submitState.status === "submitting"}
             type="submit"
           >
             {submitState.status === "submitting" ? "Sending..." : form.submitLabel}
           </button>
         </form>
+        </div>
       )}
     </div>
   );

@@ -38,7 +38,7 @@ export function PetCard({ pet, showSummary = false }: PetCardProps) {
     <Link
       href={`/pets/${pet.slug}`}
       aria-label={`View ${pet.name}`}
-      className="group block min-w-0 cursor-pointer rounded-[1.75rem] focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-4"
+      className="group block min-w-0 cursor-pointer rounded-[1.75rem] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-coral focus-visible:ring-offset-4"
     >
       <article className="min-w-0 overflow-hidden rounded-[1.75rem] bg-white/86 shadow-soft backdrop-blur transition duration-200 group-hover:-translate-y-1">
         <div className="relative">

@@ -25,7 +25,7 @@ export function Button({ children, href, icon, variant = "primary" }: ButtonProp
     <Link
       href={href}
       className={joinClassNames(
-        "inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-6 py-3 text-center font-bold transition duration-200 focus:outline-none focus:ring-2 focus:ring-pet-blue focus:ring-offset-2",
+        "inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-6 py-3 text-center font-bold transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-blue focus-visible:ring-offset-2",
         variantClasses[variant]
       )}
     >

@@ -55,7 +55,7 @@ export function SelectField({
         aria-invalid={invalid}
         onClick={() => setIsOpen((current) => !current)}
         className={joinClassNames(
-          "flex min-h-12 w-full items-center justify-between gap-3 rounded-2xl bg-white/85 px-4 text-left text-base font-normal shadow-inner outline-none ring-1 ring-pet-blue/20 transition focus:ring-2 focus:ring-pet-coral",
+          "flex min-h-12 w-full items-center justify-between gap-3 rounded-2xl bg-white/85 px-4 text-left text-base font-normal shadow-inner outline-none ring-1 ring-pet-blue/20 transition focus-visible:ring-2 focus-visible:ring-pet-coral",
           selectedOption ? "text-pet-ink" : "text-pet-muted"
         )}
       >
@@ -88,7 +88,7 @@ export function SelectField({
                   setIsOpen(false);
                 }}
                 className={joinClassNames(
-                  "flex w-full items-center justify-between gap-3 rounded-xl px-3 py-2 text-left text-sm font-bold text-pet-ink transition hover:bg-pet-mint/25 focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-inset",
+                  "flex w-full items-center justify-between gap-3 rounded-xl px-3 py-2 text-left text-sm font-bold text-pet-ink transition hover:bg-pet-mint/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-coral focus-visible:ring-inset",
                   isSelected && "bg-pet-mint/25"
                 )}
               >

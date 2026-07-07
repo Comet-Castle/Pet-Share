@@ -93,7 +93,7 @@ export function MobileFilterDrawer({ children, activeCount, resultCount }: Mobil
         ref={openBtnRef}
         type="button"
         onClick={() => setIsOpen(true)}
-        className="inline-flex items-center gap-2 rounded-full bg-white/80 px-4 py-2.5 text-sm font-bold text-pet-ink shadow-soft backdrop-blur transition hover:-rotate-1 focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2 lg:hidden"
+        className="inline-flex items-center gap-2 rounded-full bg-white/80 px-4 py-2.5 text-sm font-bold text-pet-ink shadow-soft backdrop-blur transition hover:-rotate-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-coral focus-visible:ring-offset-2 lg:hidden"
       >
         <SlidersHorizontal aria-hidden="true" size={16} />
         Filters
@@ -124,7 +124,9 @@ export function MobileFilterDrawer({ children, activeCount, resultCount }: Mobil
           aria-modal="true"
           aria-labelledby={titleId}
           className={joinClassNames(
-            "absolute inset-y-0 left-0 flex w-[88%] max-w-sm flex-col bg-pet-cream shadow-soft transition-transform duration-200 ease-out motion-reduce:transition-none",
+            // Full-width takeover on mobile: the drawer fills the whole screen
+            // rather than leaving a sliver of the page behind it.
+            "absolute inset-y-0 left-0 flex w-full flex-col bg-pet-cream shadow-soft transition-transform duration-200 ease-out motion-reduce:transition-none",
             isOpen ? "translate-x-0" : "-translate-x-full"
           )}
         >
@@ -136,7 +138,7 @@ export function MobileFilterDrawer({ children, activeCount, resultCount }: Mobil
             <button
               type="button"
               onClick={() => setIsOpen(false)}
-              className="inline-flex size-9 items-center justify-center rounded-full bg-white/80 text-pet-ink shadow-sm transition hover:-rotate-6 focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2"
+              className="inline-flex size-9 items-center justify-center rounded-full bg-white/80 text-pet-ink shadow-sm transition hover:-rotate-6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-coral focus-visible:ring-offset-2"
               aria-label="Close filters"
             >
               <X aria-hidden="true" size={18} />
@@ -147,7 +149,7 @@ export function MobileFilterDrawer({ children, activeCount, resultCount }: Mobil
             <button
               type="button"
               onClick={() => setIsOpen(false)}
-              className="inline-flex w-full items-center justify-center rounded-full bg-pet-coral px-5 py-3 text-center font-bold text-white shadow-soft transition hover:-rotate-1 focus:outline-none focus:ring-2 focus:ring-pet-blue focus:ring-offset-2"
+              className="inline-flex w-full items-center justify-center rounded-full bg-pet-coral px-5 py-3 text-center font-bold text-white shadow-soft transition hover:-rotate-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-blue focus-visible:ring-offset-2"
             >
               Show {resultCount} {resultCount === 1 ? "pet" : "pets"}
             </button>

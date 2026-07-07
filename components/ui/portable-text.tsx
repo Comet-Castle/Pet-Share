@@ -34,7 +34,7 @@ const richTextComponents: PortableTextComponents = {
           href={href}
           target={isExternal ? "_blank" : undefined}
           rel={isExternal ? "noreferrer" : undefined}
-          className="font-bold text-pet-ink underline decoration-pet-coral decoration-2 underline-offset-4 focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2"
+          className="font-bold text-pet-ink underline decoration-pet-coral decoration-2 underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-coral focus-visible:ring-offset-2"
         >
           {children}
         </Link>

@@ -89,7 +89,7 @@ export function ActiveFilterChips({ filters, petTypes, clearHref }: ActiveFilter
         <Link
           key={chip.key}
           href={chip.href}
-          className="inline-flex items-center gap-1.5 rounded-full bg-white/80 px-3 py-1.5 text-sm font-bold text-pet-ink shadow-sm backdrop-blur transition hover:-rotate-1 focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2"
+          className="inline-flex items-center gap-1.5 rounded-full bg-white/80 px-3 py-1.5 text-sm font-bold text-pet-ink shadow-sm backdrop-blur transition hover:-rotate-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-coral focus-visible:ring-offset-2"
           aria-label={`Remove filter: ${chip.label}`}
         >
           {chip.label}
@@ -98,7 +98,7 @@ export function ActiveFilterChips({ filters, petTypes, clearHref }: ActiveFilter
       ))}
       <Link
         href={clearHref}
-        className="inline-flex items-center rounded-full px-3 py-1.5 text-sm font-bold text-pet-muted underline decoration-pet-coral decoration-2 underline-offset-4 transition hover:text-pet-ink focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2"
+        className="inline-flex items-center rounded-full px-3 py-1.5 text-sm font-bold text-pet-muted underline decoration-pet-coral decoration-2 underline-offset-4 transition hover:text-pet-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-coral focus-visible:ring-offset-2"
       >
         Clear all
       </Link>

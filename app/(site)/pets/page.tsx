@@ -62,12 +62,14 @@ export async function generateMetadata(): Promise<Metadata> {
     return metadataFromSeo({
       seo: page?.seo,
       fallbackTitle: "Pets",
-      fallbackDescription: "Find pets currently available for temporary stays."
+      fallbackDescription: "Find pets currently available for temporary stays.",
+      path: "/pets"
     });
   } catch {
     return metadataFromSeo({
       fallbackTitle: "Pets",
-      fallbackDescription: "Find pets currently available for temporary stays."
+      fallbackDescription: "Find pets currently available for temporary stays.",
+      path: "/pets"
     });
   }
 }
@@ -201,14 +203,14 @@ export default async function PetsPage({ searchParams }: PetsPageProps) {
                   <Link
                     href={petsPageHref(petFilters, { page: Math.max(currentPage - 1, 1), sort })}
                     aria-disabled={currentPage === 1}
-                    className="rounded-full bg-white/75 px-5 py-3 text-sm font-bold text-pet-ink shadow-soft transition hover:-rotate-1 focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2 aria-disabled:pointer-events-none aria-disabled:opacity-50"
+                    className="rounded-full bg-white/75 px-5 py-3 text-sm font-bold text-pet-ink shadow-soft transition hover:-rotate-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-coral focus-visible:ring-offset-2 aria-disabled:pointer-events-none aria-disabled:opacity-50"
                   >
                     Previous
                   </Link>
                   <Link
                     href={petsPageHref(petFilters, { page: Math.min(currentPage + 1, totalPages), sort })}
                     aria-disabled={currentPage >= totalPages}
-                    className="rounded-full bg-white/75 px-5 py-3 text-sm font-bold text-pet-ink shadow-soft transition hover:rotate-1 focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2 aria-disabled:pointer-events-none aria-disabled:opacity-50"
+                    className="rounded-full bg-white/75 px-5 py-3 text-sm font-bold text-pet-ink shadow-soft transition hover:rotate-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-coral focus-visible:ring-offset-2 aria-disabled:pointer-events-none aria-disabled:opacity-50"
                   >
                     Next
                   </Link>

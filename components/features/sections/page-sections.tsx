@@ -7,6 +7,7 @@ import {
   Home,
   ListChecks,
   Megaphone,
+  PawPrint,
   Search,
   Star
 } from "lucide-react";
@@ -31,6 +32,11 @@ type SectionHeaderValue = Readonly<{
 }> | null;
 
 type SectionByType<Type extends PageSection["_type"]> = Extract<PageSection, { _type: Type }>;
+
+// Fallback leading icon for standard-page hero CTAs that have no authored icon,
+// so hero button icon presence stays consistent across marketing pages (warranty,
+// contact, pricing, process, …). Authored `cta.icon` values still take priority.
+const heroCtaDefaultIcon = <PawPrint aria-hidden="true" size={20} />;
 
 function SectionFrame({ children, className }: Readonly<{ children: React.ReactNode; className?: string }>) {
   return (
@@ -77,7 +83,7 @@ function HeroSection(section: SectionByType<"hero">) {
             {section.headline}
           </h1>
           {section.body ? <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-pet-muted sm:text-xl">{section.body}</p> : null}
-          <SectionCtaGroup group={section.ctaGroup} />
+          <SectionCtaGroup group={section.ctaGroup} defaultIcon={heroCtaDefaultIcon} />
         </div>
       </SectionFrame>
     );
@@ -94,7 +100,7 @@ function HeroSection(section: SectionByType<"hero">) {
             {section.headline}
           </h1>
           {section.body ? <p className="mt-6 max-w-2xl text-lg leading-8 text-pet-muted">{section.body}</p> : null}
-          <SectionCtaGroup group={section.ctaGroup} />
+          <SectionCtaGroup group={section.ctaGroup} defaultIcon={heroCtaDefaultIcon} />
         </div>
         <SanityImage
           image={section.image}
@@ -129,7 +135,7 @@ function HeroSlideSection(section: SectionByType<"heroSlide">) {
             ) : null}
           </div>
           <div className="mt-8">
-            <SectionCtaLink cta={section.cta} />
+            <SectionCtaLink cta={section.cta} defaultIcon={heroCtaDefaultIcon} />
           </div>
         </div>
       </div>
@@ -213,7 +219,7 @@ function FeatureList(section: SectionByType<"featureList">) {
             {item.link ? (
               <Link
                 href={stegaClean(item.link.type) === "externalUrl" ? item.link.url ?? "/" : item.link.path ?? "/"}
-                className="mt-5 inline-flex font-bold text-pet-ink underline decoration-pet-coral decoration-2 underline-offset-4 focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2"
+                className="mt-5 inline-flex font-bold text-pet-ink underline decoration-pet-coral decoration-2 underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-coral focus-visible:ring-offset-2"
               >
                 {item.link.label}
               </Link>
@@ -232,7 +238,7 @@ function AccordionSection(section: SectionByType<"accordion">) {
       <div className="space-y-3">
         {section.items?.map((item) => (
           <details key={item._key} className="rounded-[1.5rem] bg-white/70 p-5 shadow-soft backdrop-blur">
-            <summary className="cursor-pointer font-display text-xl font-bold text-pet-ink focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2">
+            <summary className="cursor-pointer font-display text-xl font-bold text-pet-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-coral focus-visible:ring-offset-2">
               {item.title}
             </summary>
             <div className="mt-4">

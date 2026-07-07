@@ -131,7 +131,7 @@ export function OwnerContactDrawer({ petId, petName, ownerId, ownerName, ctaLabe
             ref={closeButtonRef}
             type="button"
             onClick={closeDrawer}
-            className="inline-flex size-11 shrink-0 items-center justify-center rounded-full bg-white text-pet-ink shadow-sm transition hover:rotate-6 focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2"
+            className="inline-flex size-11 shrink-0 items-center justify-center rounded-full bg-white text-pet-ink shadow-sm transition hover:rotate-6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-coral focus-visible:ring-offset-2"
             aria-label="Close contact drawer"
           >
             <X aria-hidden="true" size={20} />
@@ -161,7 +161,7 @@ export function OwnerContactDrawer({ petId, petName, ownerId, ownerName, ctaLabe
               <p className="mt-2 text-sm leading-6 text-pet-muted">Use the contact page while this pet request form is being fetched.</p>
               <Link
                 href="/contact"
-                className="mt-4 inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-pet-coral px-6 py-3 text-center font-bold text-white shadow-soft transition hover:-rotate-1 hover:bg-[#f37f61] focus:outline-none focus:ring-2 focus:ring-pet-blue focus:ring-offset-2"
+                className="mt-4 inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-pet-coral px-6 py-3 text-center font-bold text-white shadow-soft transition hover:-rotate-1 hover:bg-[#f37f61] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-blue focus-visible:ring-offset-2"
                 onClick={closeDrawer}
               >
                 <Mail aria-hidden="true" size={16} />
@@ -173,7 +173,7 @@ export function OwnerContactDrawer({ petId, petName, ownerId, ownerName, ctaLabe
           {ownerHref ? (
             <Link
               href={ownerHref}
-              className="inline-flex min-h-12 items-center justify-center rounded-full bg-white/75 px-6 py-3 text-center font-bold text-pet-ink shadow-soft backdrop-blur transition hover:rotate-1 hover:bg-white focus:outline-none focus:ring-2 focus:ring-pet-blue focus:ring-offset-2"
+              className="inline-flex min-h-12 items-center justify-center rounded-full bg-white/75 px-6 py-3 text-center font-bold text-pet-ink shadow-soft backdrop-blur transition hover:rotate-1 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-blue focus-visible:ring-offset-2"
               onClick={closeDrawer}
             >
               View owner page
@@ -190,7 +190,7 @@ export function OwnerContactDrawer({ petId, petName, ownerId, ownerName, ctaLabe
         type="button"
         onClick={openDrawer}
         className={joinClassNames(
-          "inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-6 py-3 text-center font-bold transition duration-200 focus:outline-none focus:ring-2 focus:ring-pet-blue focus:ring-offset-2",
+          "inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-6 py-3 text-center font-bold transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-blue focus-visible:ring-offset-2",
           triggerClass
         )}
       >

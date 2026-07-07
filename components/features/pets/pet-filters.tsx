@@ -35,7 +35,7 @@ export function PetFilters({ filters, petTypes, activeCount, totalPets, clearHre
         {activeCount > 0 ? (
           <Link
             href={clearHref}
-            className="rounded-sm text-xs font-bold text-pet-muted underline decoration-pet-coral decoration-2 underline-offset-4 transition hover:text-pet-ink focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-inset"
+            className="rounded-sm text-xs font-bold text-pet-muted underline decoration-pet-coral decoration-2 underline-offset-4 transition hover:text-pet-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-coral focus-visible:ring-inset"
           >
             Clear all ({activeCount})
           </Link>
@@ -117,7 +117,7 @@ function FilterGroup({
         type="button"
         onClick={() => setIsOpen((current) => !current)}
         aria-expanded={isOpen}
-        className="flex w-full items-center justify-between gap-2.5 rounded-md py-0.5 text-left font-display text-[0.95rem] font-bold text-pet-ink/88 transition-colors hover:text-pet-ink focus:outline-none focus:text-pet-ink"
+        className="flex w-full items-center justify-between gap-2.5 rounded-md py-0.5 text-left font-display text-[0.95rem] font-bold text-pet-ink/88 transition-colors hover:text-pet-ink focus-visible:outline-none focus:text-pet-ink"
       >
         <span className="inline-flex items-center gap-1.25">
           {icon}
@@ -163,7 +163,7 @@ function FilterButtonLink({ href, isActive, label, icon }: FilterButtonLinkProps
       href={href}
       aria-current={isActive ? "true" : undefined}
       className={joinClassNames(
-        "flex w-full items-center gap-3 rounded-[1.15rem] px-4 py-2.5 text-sm font-bold shadow-sm transition hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-inset",
+        "flex w-full items-center gap-3 rounded-[1.15rem] px-4 py-2.5 text-sm font-bold shadow-sm transition hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-coral focus-visible:ring-inset",
         isActive
           ? "bg-pet-blue/20 text-pet-ink ring-1 ring-pet-blue/35"
           : "bg-white/78 text-pet-muted hover:bg-white hover:text-pet-ink"
@@ -202,7 +202,7 @@ function FilterScaleControl({ emoji, label, activeValue, hrefForValue }: FilterS
         {activeValue ? (
           <Link
             href={hrefForValue(null)}
-            className="rounded-sm text-xs font-bold text-pet-muted underline decoration-pet-coral decoration-2 underline-offset-4 transition hover:text-pet-ink focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-inset"
+            className="rounded-sm text-xs font-bold text-pet-muted underline decoration-pet-coral decoration-2 underline-offset-4 transition hover:text-pet-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-coral focus-visible:ring-inset"
           >
             Reset
           </Link>
@@ -220,7 +220,7 @@ function FilterScaleControl({ emoji, label, activeValue, hrefForValue }: FilterS
               aria-label={`${label} ${value} or higher`}
               aria-current={isSelected ? "true" : undefined}
               className={joinClassNames(
-                "flex aspect-square min-h-12 items-center justify-center rounded-[0.9rem] border text-center transition focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-inset",
+                "flex aspect-square min-h-12 items-center justify-center rounded-[0.9rem] border text-center transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-coral focus-visible:ring-inset",
                 isSelected && "border-pet-coral bg-pet-coral/14 text-pet-ink",
                 !isSelected && isFilled && "border-pet-blue/35 bg-pet-blue/12 text-pet-ink",
                 !isSelected && !isFilled && "border-transparent bg-pet-cream/65 text-pet-muted hover:bg-pet-mint/25 hover:text-pet-ink"

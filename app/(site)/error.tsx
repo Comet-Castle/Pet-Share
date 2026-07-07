@@ -34,14 +34,14 @@ export default function SiteError({ error, reset }: SiteErrorProps) {
           <button
             type="button"
             onClick={reset}
-            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-pet-coral px-6 py-3 text-center font-bold text-white shadow-soft transition duration-200 hover:-rotate-1 hover:bg-[#f37f61] focus:outline-none focus:ring-2 focus:ring-pet-blue focus:ring-offset-2"
+            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-pet-coral px-6 py-3 text-center font-bold text-white shadow-soft transition duration-200 hover:-rotate-1 hover:bg-[#f37f61] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-blue focus-visible:ring-offset-2"
           >
             <RotateCcw aria-hidden="true" size={18} />
             Try again
           </button>
           <Link
             href="/"
-            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-white/80 px-6 py-3 text-center font-bold text-pet-ink shadow-soft backdrop-blur transition duration-200 hover:rotate-1 hover:bg-white focus:outline-none focus:ring-2 focus:ring-pet-blue focus:ring-offset-2"
+            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-white/80 px-6 py-3 text-center font-bold text-pet-ink shadow-soft backdrop-blur transition duration-200 hover:rotate-1 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-blue focus-visible:ring-offset-2"
           >
             <Home aria-hidden="true" size={18} />
             Go home

@@ -53,7 +53,7 @@ export function SortControl({ currentSort }: SortControlProps) {
             setIsOpen(false);
           }
         }}
-        className="flex w-full items-center justify-between gap-3 rounded-[1.25rem] bg-white/92 py-3 pl-4 pr-4 text-left text-sm font-bold text-pet-ink shadow-sm outline-none transition hover:bg-white focus:ring-2 focus:ring-pet-coral focus:ring-inset"
+        className="flex w-full items-center justify-between gap-3 rounded-[1.25rem] bg-white/92 py-3 pl-4 pr-4 text-left text-sm font-bold text-pet-ink shadow-sm outline-none transition hover:bg-white focus-visible:ring-2 focus-visible:ring-pet-coral focus-visible:ring-inset"
       >
         <span className="inline-flex items-center gap-2.5">
           <ArrowDownUp aria-hidden="true" size={16} className="text-pet-muted" />
@@ -85,7 +85,7 @@ export function SortControl({ currentSort }: SortControlProps) {
                 onMouseDown={(event) => event.preventDefault()}
                 onClick={() => handleChange(option.value)}
                 className={joinClassNames(
-                  "flex w-full items-center justify-between gap-3 rounded-xl px-3 py-2 text-left text-sm font-bold text-pet-ink transition hover:bg-pet-mint/25 focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-inset",
+                  "flex w-full items-center justify-between gap-3 rounded-xl px-3 py-2 text-left text-sm font-bold text-pet-ink transition hover:bg-pet-mint/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-coral focus-visible:ring-inset",
                   isSelected && "bg-pet-mint/25"
                 )}
               >

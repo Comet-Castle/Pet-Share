@@ -1,8 +1,9 @@
 "use client";
 
-import { ChevronLeft, ChevronRight, PawPrint } from "lucide-react";
+import { ChevronLeft, ChevronRight, Info, PawPrint } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { CarouselDots } from "@/components/ui/carousel-dots";
 import { SanityImage } from "@/components/ui/sanity-image";
 import type { SanityImageValue } from "@/components/ui/sanity-image";
 import { joinClassNames } from "@/lib/utils/class-names";
@@ -82,85 +83,138 @@ export function HomeHeroCarousel({ slides }: HomeHeroCarouselProps) {
 
   return (
     <section className="mx-auto w-full max-w-[1440px] min-w-0 px-5 pb-12 pt-0 sm:px-8 lg:px-10">
-      <div
-        className="relative isolate overflow-hidden rounded-[2rem] bg-pet-cream shadow-soft"
-        aria-roledescription="carousel"
-        aria-label="Pet Share highlights"
-        onMouseEnter={() => setIsPaused(true)}
-        onMouseLeave={() => setIsPaused(false)}
-        onFocus={() => setIsPaused(true)}
-        onBlur={() => setIsPaused(false)}
-        onTouchStart={(event) => setTouchStartX(event.changedTouches[0]?.clientX ?? null)}
-        onTouchEnd={(event) => handleTouchEnd(event.changedTouches[0]?.clientX ?? 0)}
-      >
-        <div className="absolute inset-0 z-0">
-          <SanityImage
-            image={activeSlide.image ?? null}
-            sizes="(min-width: 1024px) 1440px, 100vw"
-            priority={activeIndex === 0}
-            className="size-full bg-pet-mint/20"
-            imageClassName="object-[62%_50%] sm:object-[68%_50%]"
-          />
-        </div>
-        <div className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-b from-white/92 via-white/70 to-white/18 sm:bg-gradient-to-r sm:from-white/96 sm:via-white/74 sm:to-white/0" />
-        <article
-          key={activeSlide._key ?? activeIndex}
-          className="relative z-20 grid min-h-[520px] min-w-0 animate-pet-hero-slide items-center gap-8 p-7 sm:min-h-[560px] sm:p-14 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,0.65fr)] lg:p-16"
-        >
-          <div className="min-w-0 max-w-5xl">
-            <h1 className="text-wrap font-display text-4xl font-bold leading-[1.05] text-pet-ink sm:text-6xl lg:text-7xl xl:text-[5.25rem]">
-              {activeSlide.headline}
-            </h1>
-            {activeSlide.body ? <p className="mt-6 max-w-3xl text-lg leading-8 text-pet-muted">{activeSlide.body}</p> : null}
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Button href={getCtaHref(activeSlide)} icon={<PawPrint aria-hidden="true" size={20} />}>
-                {activeSlide.cta?.label ?? "Find a temporary pet"}
-              </Button>
-              <Button href="/process" variant="secondary">
-                Lend your pet
-              </Button>
-            </div>
-          </div>
-
-          <div aria-hidden="true" />
-        </article>
-
+      {/* The banner spans the full content width. Once the viewport is wide enough
+          to clear the banner's 1440px cap plus room for a 44px control on each side
+          (~1560px), the arrows sit in the outer gutters *outside* the banner. Below
+          that they collapse onto the image so they never overrun the page edge.
+          `relative` (not overflow-hidden) so the outside arrows are not clipped —
+          the inner media wrapper keeps its own overflow-hidden for the image. */}
+      <div className="relative">
         {hasMultipleSlides ? (
-          <>
-            <button
-              type="button"
-              onClick={() => goToSlide(activeIndex - 1)}
-              className="absolute left-3 top-1/2 z-30 hidden size-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-pet-ink shadow-soft backdrop-blur transition hover:-rotate-6 hover:bg-white focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2 md:inline-flex"
-              aria-label="Show previous hero slide"
-            >
-              <ChevronLeft aria-hidden="true" size={24} />
-            </button>
-            <button
-              type="button"
-              onClick={() => goToSlide(activeIndex + 1)}
-              className="absolute right-3 top-1/2 z-30 hidden size-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-pet-ink shadow-soft backdrop-blur transition hover:rotate-6 hover:bg-white focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2 md:inline-flex"
-              aria-label="Show next hero slide"
-            >
-              <ChevronRight aria-hidden="true" size={24} />
-            </button>
-            <div className="absolute bottom-5 left-1/2 z-30 flex -translate-x-1/2 gap-2 rounded-full bg-white/75 px-3 py-2 shadow-soft backdrop-blur" aria-label="Hero slide navigation">
-              {safeSlides.map((slide, index) => (
-                <button
-                  key={slide._key ?? `hero-dot-${index}`}
-                  type="button"
-                  onClick={() => goToSlide(index)}
-                  className={joinClassNames(
-                    "size-3 rounded-full transition focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2",
-                    index === activeIndex ? "bg-pet-coral" : "bg-pet-ink/25 hover:bg-pet-ink/45"
-                  )}
-                  aria-label={`Show hero slide ${index + 1}`}
-                  aria-current={index === activeIndex ? "true" : undefined}
-                />
-              ))}
-            </div>
-          </>
+          <div className="absolute left-0 top-1/2 z-30 hidden -translate-x-[calc(100%+0.75rem)] -translate-y-1/2 min-[1560px]:block">
+            <HeroArrow direction="prev" onClick={() => goToSlide(activeIndex - 1)} />
+          </div>
         ) : null}
+        {hasMultipleSlides ? (
+          <div className="absolute right-0 top-1/2 z-30 hidden translate-x-[calc(100%+0.75rem)] -translate-y-1/2 min-[1560px]:block">
+            <HeroArrow direction="next" onClick={() => goToSlide(activeIndex + 1)} />
+          </div>
+        ) : null}
+
+        <div
+          className="relative isolate min-w-0 overflow-hidden rounded-[2rem] bg-pet-cream shadow-soft"
+          aria-roledescription="carousel"
+          aria-label="Pet Share highlights"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+          onFocus={() => setIsPaused(true)}
+          onBlur={() => setIsPaused(false)}
+          onTouchStart={(event) => setTouchStartX(event.changedTouches[0]?.clientX ?? null)}
+          onTouchEnd={(event) => handleTouchEnd(event.changedTouches[0]?.clientX ?? 0)}
+        >
+          {/* Stacked background images cross-fade between slides. All slide images
+              stay mounted absolutely; only the active one is opaque. Gated behind
+              motion-reduce so reduced-motion users get an instant swap. */}
+          <div className="absolute inset-0 z-0">
+            {safeSlides.map((slide, index) => (
+              <div
+                key={slide._key ?? `hero-bg-${index}`}
+                aria-hidden={index !== activeIndex}
+                className={joinClassNames(
+                  "absolute inset-0 transition-opacity duration-700 ease-out motion-reduce:transition-none",
+                  index === activeIndex ? "opacity-100" : "opacity-0"
+                )}
+              >
+                <SanityImage
+                  image={slide.image ?? null}
+                  sizes="(min-width: 1024px) 1440px, 100vw"
+                  priority={index === 0}
+                  className="size-full bg-pet-mint/20"
+                  imageClassName="object-[62%_50%] sm:object-[68%_50%]"
+                />
+              </div>
+            ))}
+          </div>
+          <div className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-b from-white/92 via-white/70 to-white/18 sm:bg-gradient-to-r sm:from-white/96 sm:via-white/74 sm:to-white/0" />
+          <article
+            key={activeSlide._key ?? activeIndex}
+            className="relative z-20 grid min-h-[520px] min-w-0 animate-pet-hero-content-swap items-center gap-8 p-7 text-center sm:min-h-[560px] sm:p-14 sm:text-left lg:grid-cols-[minmax(0,1.35fr)_minmax(0,0.65fr)] lg:p-16"
+          >
+            <div className="mx-auto min-w-0 max-w-5xl sm:mx-0">
+              <h1 className="animate-pet-hero-title text-wrap font-display text-4xl font-bold leading-[1.05] text-pet-ink sm:text-6xl lg:text-7xl xl:text-[5.25rem]">
+                {activeSlide.headline}
+              </h1>
+              {activeSlide.body ? (
+                <p className="mx-auto mt-6 max-w-3xl animate-pet-hero-body text-lg leading-8 text-pet-muted sm:mx-0">
+                  {activeSlide.body}
+                </p>
+              ) : null}
+              <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:items-start">
+                <span className="animate-pet-hero-cta-primary">
+                  <Button href={getCtaHref(activeSlide)} icon={<PawPrint aria-hidden="true" size={20} />}>
+                    {activeSlide.cta?.label ?? "Find a temporary pet"}
+                  </Button>
+                </span>
+                <span className="animate-pet-hero-cta-secondary">
+                  <Button href="/process" variant="secondary" icon={<Info aria-hidden="true" size={20} />}>
+                    Lend your pet
+                  </Button>
+                </span>
+              </div>
+            </div>
+
+            <div aria-hidden="true" />
+          </article>
+
+          {/* Below the outside-arrow breakpoint the arrows live on the media frame. */}
+          {hasMultipleSlides ? (
+            <>
+              <div className="absolute left-3 top-1/2 z-30 -translate-y-1/2 min-[1560px]:hidden">
+                <HeroArrow direction="prev" onClick={() => goToSlide(activeIndex - 1)} />
+              </div>
+              <div className="absolute right-3 top-1/2 z-30 -translate-y-1/2 min-[1560px]:hidden">
+                <HeroArrow direction="next" onClick={() => goToSlide(activeIndex + 1)} />
+              </div>
+              <CarouselDots
+                count={safeSlides.length}
+                activeIndex={activeIndex}
+                onSelect={goToSlide}
+                variant="pill"
+                label="Hero slide navigation"
+                dotLabel={(index) => `Show hero slide ${index + 1}`}
+                className="absolute bottom-5 left-1/2 z-30 -translate-x-1/2"
+              />
+            </>
+          ) : null}
+        </div>
       </div>
     </section>
+  );
+}
+
+type HeroArrowProps = Readonly<{
+  direction: "prev" | "next";
+  onClick: () => void;
+}>;
+
+/**
+ * Orange prev/next control for the hero carousel. Visible on all viewports;
+ * placed in side gutters on lg+ and inside the media frame below lg.
+ */
+function HeroArrow({ direction, onClick }: HeroArrowProps) {
+  const isPrev = direction === "prev";
+
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={joinClassNames(
+        "inline-flex size-11 items-center justify-center rounded-full bg-pet-coral text-white shadow-soft transition hover:bg-[#f37f61] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-coral focus-visible:ring-offset-2",
+        isPrev ? "hover:-rotate-6" : "hover:rotate-6"
+      )}
+      aria-label={isPrev ? "Show previous hero slide" : "Show next hero slide"}
+    >
+      {isPrev ? <ChevronLeft aria-hidden="true" size={24} /> : <ChevronRight aria-hidden="true" size={24} />}
+    </button>
   );
 }

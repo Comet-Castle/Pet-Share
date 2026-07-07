@@ -4,7 +4,7 @@ import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 import { stegaClean } from "@sanity/client/stega";
-import { ArrowLeft, ClipboardCheck, HeartHandshake, MapPin, ShieldAlert } from "lucide-react";
+import { ArrowLeft, ClipboardCheck, HeartHandshake, MapPin, ShieldAlert, User } from "lucide-react";
 import { OwnerContactDrawer } from "@/components/features/pets/owner-contact-drawer";
 import { PetDayTimeline } from "@/components/features/pets/pet-day-timeline";
 import { PetFitGuidance } from "@/components/features/pets/pet-fit-guidance";
@@ -58,7 +58,8 @@ export async function generateMetadata({ params }: PetSlugPageProps): Promise<Me
   return metadataFromSeo({
     seo: pet.seo,
     fallbackTitle: pet.name,
-    fallbackDescription: pet.listingSummary
+    fallbackDescription: pet.listingSummary,
+    path: `/pets/${slug}`
   });
 }
 
@@ -196,7 +197,7 @@ export default async function PetSlugPage({ params }: PetSlugPageProps) {
       <div className="mb-6 flex flex-wrap items-center gap-3 text-sm font-bold text-pet-muted">
         <Link
           href="/pets"
-          className="inline-flex items-center gap-1.5 rounded-full bg-white/70 px-4 py-2 shadow-sm backdrop-blur transition hover:-rotate-1 hover:text-pet-ink focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2"
+          className="inline-flex items-center gap-1.5 rounded-full bg-white/70 px-4 py-2 shadow-sm backdrop-blur transition hover:-rotate-1 hover:text-pet-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-coral focus-visible:ring-offset-2"
         >
           <ArrowLeft aria-hidden="true" size={15} />
           Back to pets
@@ -235,7 +236,7 @@ export default async function PetSlugPage({ params }: PetSlugPageProps) {
                 ownerHref={ownerHref}
                 form={ownerContactForm}
               />
-              <Button href={ownerHref ?? "#owner"} variant="secondary">
+              <Button href={ownerHref ?? "#owner"} variant="secondary" icon={<User aria-hidden="true" size={20} />}>
                 Meet the owner
               </Button>
             </div>
@@ -245,38 +246,38 @@ export default async function PetSlugPage({ params }: PetSlugPageProps) {
 
             <nav className="mt-5 flex flex-wrap items-center gap-2 text-xs font-bold text-pet-muted" aria-label="Pet detail sections">
               <span className="mr-1">Quick jumps</span>
-              <a href="#facts" className="inline-flex rounded-full bg-pet-mint/30 px-3 py-1.5 text-pet-ink transition hover:-rotate-1 focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2">
+              <a href="#facts" className="inline-flex rounded-full bg-pet-mint/30 px-3 py-1.5 text-pet-ink transition hover:-rotate-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-coral focus-visible:ring-offset-2">
                 Facts
               </a>
-              <a href="#about" className="inline-flex rounded-full bg-pet-blue/25 px-3 py-1.5 text-pet-ink transition hover:-rotate-1 focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2">
+              <a href="#about" className="inline-flex rounded-full bg-pet-blue/25 px-3 py-1.5 text-pet-ink transition hover:-rotate-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-coral focus-visible:ring-offset-2">
                 About
               </a>
               {detailVideo ? (
-                <a href="#video" className="inline-flex rounded-full bg-pet-coral/16 px-3 py-1.5 text-pet-ink transition hover:-rotate-1 focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2">
+                <a href="#video" className="inline-flex rounded-full bg-pet-coral/16 px-3 py-1.5 text-pet-ink transition hover:-rotate-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-coral focus-visible:ring-offset-2">
                   Video
                 </a>
               ) : null}
               {hasVibeContent ? (
-                <a href="#vibe" className="inline-flex rounded-full bg-pet-mint/30 px-3 py-1.5 text-pet-ink transition hover:-rotate-1 focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2">
+                <a href="#vibe" className="inline-flex rounded-full bg-pet-mint/30 px-3 py-1.5 text-pet-ink transition hover:-rotate-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-coral focus-visible:ring-offset-2">
                   Vibe
                 </a>
               ) : null}
               {hasFitContent ? (
-                <a href="#fit" className="inline-flex rounded-full bg-pet-blue/25 px-3 py-1.5 text-pet-ink transition hover:-rotate-1 focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2">
+                <a href="#fit" className="inline-flex rounded-full bg-pet-blue/25 px-3 py-1.5 text-pet-ink transition hover:-rotate-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-coral focus-visible:ring-offset-2">
                   Fit
                 </a>
               ) : null}
               {hasTimelineContent ? (
-                <a href="#timeline" className="inline-flex rounded-full bg-pet-cream px-3 py-1.5 text-pet-ink transition hover:-rotate-1 focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2">
+                <a href="#timeline" className="inline-flex rounded-full bg-pet-cream px-3 py-1.5 text-pet-ink transition hover:-rotate-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-coral focus-visible:ring-offset-2">
                   Timeline
                 </a>
               ) : null}
               {hasCareContent ? (
-                <a href="#care" className="inline-flex rounded-full bg-pet-cream px-3 py-1.5 text-pet-ink transition hover:-rotate-1 focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2">
+                <a href="#care" className="inline-flex rounded-full bg-pet-cream px-3 py-1.5 text-pet-ink transition hover:-rotate-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-coral focus-visible:ring-offset-2">
                   Care
                 </a>
               ) : null}
-              <a href="#owner" className="inline-flex rounded-full bg-white/75 px-3 py-1.5 text-pet-ink shadow-sm transition hover:-rotate-1 focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2">
+              <a href="#owner" className="inline-flex rounded-full bg-white/75 px-3 py-1.5 text-pet-ink shadow-sm transition hover:-rotate-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-coral focus-visible:ring-offset-2">
                 Owner
               </a>
             </nav>
@@ -461,7 +462,7 @@ export default async function PetSlugPage({ params }: PetSlugPageProps) {
             <h2 className="font-display text-3xl font-bold text-pet-ink">More pets like {pet.name}</h2>
             <Link
               href="/pets"
-              className="inline-flex items-center gap-1.5 font-bold text-pet-ink underline decoration-pet-coral decoration-2 underline-offset-4 transition hover:-rotate-1 focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2"
+              className="inline-flex items-center gap-1.5 font-bold text-pet-ink underline decoration-pet-coral decoration-2 underline-offset-4 transition hover:-rotate-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-coral focus-visible:ring-offset-2"
             >
               Browse all
               <ArrowLeft aria-hidden="true" size={16} className="rotate-180" />

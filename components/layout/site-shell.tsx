@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { ArrowRight, ExternalLink, PawPrint } from "lucide-react";
 import type { SITE_SETTINGS_QUERY_RESULT } from "@/sanity.types";
 import { SiteNavLinks } from "./site-nav-links";
+import { MobileNav } from "./mobile-nav";
 import { resolveNavLinks, type NavigationLink } from "./nav-links";
 
 type SiteShellProps = Readonly<{
@@ -41,25 +42,30 @@ export function SiteShell({ children, settings }: SiteShellProps) {
 
   return (
     <div className="pet-site-background min-h-screen">
-      <header className="px-5 py-6 sm:px-8 lg:px-10">
+      <header className="py-6">
         <nav
           aria-label="Primary navigation"
-          className="mx-auto flex w-full max-w-[1440px] flex-col gap-5 xl:flex-row xl:items-center xl:justify-between"
+          className="mx-auto flex w-full min-w-0 max-w-[1440px] items-center justify-between gap-5 px-5 sm:px-8 lg:px-10 md:flex-col md:items-stretch md:justify-normal xl:flex-row xl:items-center xl:justify-between"
         >
           <Link
             href="/"
-            className="flex items-center gap-3 font-display text-2xl font-bold text-pet-ink transition hover:-rotate-1 focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2"
+            className="flex items-center gap-3 font-display text-2xl font-bold text-pet-ink transition hover:-rotate-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-coral focus-visible:ring-offset-2"
           >
             <span className="flex size-10 items-center justify-center rounded-full bg-pet-coral text-white shadow-sm">
               <PawPrint aria-hidden="true" size={25} />
             </span>
             {siteTitle}
           </Link>
-          <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between xl:justify-end">
+
+          {/* Below md the primary nav collapses into a hamburger menu. */}
+          <MobileNav items={primaryNavigation} />
+
+          {/* From md up the inline nav links + CTA are shown. */}
+          <div className="hidden flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between md:flex xl:justify-end">
             <SiteNavLinks items={primaryNavigation} />
             <Link
               href="/pricing"
-              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-pet-coral px-5 py-2.5 text-sm font-bold text-white shadow-sm transition hover:-rotate-1 hover:bg-[#f37f61] focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2"
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-pet-coral px-5 py-2.5 text-sm font-bold text-white shadow-sm transition hover:-rotate-1 hover:bg-[#f37f61] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-coral focus-visible:ring-offset-2"
             >
               List your pet
               <ArrowRight aria-hidden="true" size={16} />
@@ -68,12 +74,12 @@ export function SiteShell({ children, settings }: SiteShellProps) {
         </nav>
       </header>
       <main>{children}</main>
-      <footer className="mt-16 bg-pet-cream/70 px-5 py-12 sm:px-8 lg:px-10">
-        <div className="mx-auto grid w-full max-w-[1440px] gap-10 text-pet-muted md:grid-cols-[minmax(0,1.3fr)_minmax(0,0.7fr)_minmax(0,0.8fr)] md:items-start">
+      <footer className="mt-16 bg-pet-cream/70 py-12">
+        <div className="mx-auto grid w-full max-w-[1440px] gap-10 px-5 text-pet-muted sm:px-8 md:grid-cols-[minmax(0,1.3fr)_minmax(0,0.7fr)_minmax(0,0.8fr)] md:items-start lg:px-10">
           <div className="min-w-0">
             <Link
               href="/"
-              className="inline-flex items-center gap-3 font-display text-2xl font-bold text-pet-ink transition hover:-rotate-1 focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2"
+              className="inline-flex items-center gap-3 font-display text-2xl font-bold text-pet-ink transition hover:-rotate-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-coral focus-visible:ring-offset-2"
             >
               <span className="flex size-10 items-center justify-center rounded-full bg-pet-coral text-white shadow-sm">
                 <PawPrint aria-hidden="true" size={25} />
@@ -92,7 +98,7 @@ export function SiteShell({ children, settings }: SiteShellProps) {
                 href={item.href}
                 target={item.external ? "_blank" : undefined}
                 rel={item.external ? "noreferrer" : undefined}
-                className="inline-flex w-fit items-center gap-1 rounded-full py-1 text-sm font-bold transition hover:-rotate-1 hover:text-pet-coral focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2"
+                className="inline-flex w-fit items-center gap-1 rounded-full py-1 text-sm font-bold transition hover:-rotate-1 hover:text-pet-coral focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-coral focus-visible:ring-offset-2"
               >
                 {item.label}
                 {item.external ? <ExternalLink aria-hidden="true" size={13} /> : null}
@@ -106,14 +112,14 @@ export function SiteShell({ children, settings }: SiteShellProps) {
             </p>
             <Link
               href="/pricing"
-              className="mt-5 inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-bold text-pet-ink shadow-sm transition hover:-rotate-1 hover:text-pet-coral focus:outline-none focus:ring-2 focus:ring-pet-coral focus:ring-offset-2"
+              className="mt-5 inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-bold text-pet-ink shadow-sm transition hover:-rotate-1 hover:text-pet-coral focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pet-coral focus-visible:ring-offset-2"
             >
               List your pet
               <ArrowRight aria-hidden="true" size={16} />
             </Link>
           </div>
         </div>
-        <div className="mx-auto mt-10 w-full max-w-[1440px]">
+        <div className="mx-auto mt-10 w-full max-w-[1440px] px-5 sm:px-8 lg:px-10">
           <p className="text-center text-xs leading-6 text-pet-muted">
             {siteTitle} is a satirical demo site built to showcase Sanity and Next.js. Want a website built for your business?{" "}
             <a
