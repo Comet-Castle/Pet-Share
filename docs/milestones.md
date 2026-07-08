@@ -358,7 +358,7 @@ Exit criteria:
 
 Working plan and detailed checklist: [`docs/plans/completed/m13.md`](plans/completed/m13.md).
 
-## ⚪ Milestone 14: Final Seed Dataset
+## ✅ Milestone 14: Final Seed Dataset
 
 Goal:
 
@@ -379,7 +379,7 @@ Exit criteria:
 - The full demo site has enough final content to feel complete.
 - Final seed data is committed where appropriate, while unapproved/generated working files remain ignored.
 
-Working plan and detailed checklist: [`docs/plans/pending/m14.md`](plans/pending/m14.md).
+Working plan and detailed checklist: [`docs/plans/completed/m14.md`](plans/completed/m14.md).
 
 ## ⚪ Milestone 15: Final Content And UI Review
 

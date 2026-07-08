@@ -77,7 +77,7 @@ export default async function MarketingSlugPage({ params }: MarketingSlugPagePro
     notFound();
   }
 
-  const formSlug = page.showContactForm ? (page.slug === "warranty" ? "warranty" : "contact") : null;
+  const formSlug = page.showContactForm ? (page.slug === "guarantee" ? "guarantee" : "contact") : null;
   let form: Awaited<ReturnType<typeof loadFormDefinitionBySlug>> | null = null;
 
   if (formSlug) {
@@ -97,9 +97,9 @@ export default async function MarketingSlugPage({ params }: MarketingSlugPagePro
       <PageSections sections={page.sections} />
 
       {page.showContactForm ? (
-        <section className="mx-auto mt-8 w-full max-w-[1440px] min-w-0 px-5 sm:px-8 lg:px-10" id={page.slug === "warranty" ? "claim-form" : "contact-form"}>
+        <section className="mx-auto mt-8 w-full max-w-[1440px] min-w-0 px-5 sm:px-8 lg:px-10" id={page.slug === "guarantee" ? "claim-form" : "contact-form"}>
           {form ? (
-            <CmsForm form={form} eyebrow={page.slug === "warranty" ? "Warranty desk" : "Contact form"} />
+            <CmsForm form={form} eyebrow={page.slug === "guarantee" ? "Guarantee desk" : "Contact form"} />
           ) : (
             <div className="rounded-[2rem] bg-white/70 p-6 shadow-soft backdrop-blur sm:p-8">
               <p className="text-sm font-bold uppercase tracking-[0.18em] text-pet-muted">Form unavailable</p>

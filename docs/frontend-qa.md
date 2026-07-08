@@ -78,7 +78,7 @@ The homepage is partly code-composed from Sanity data rather than rendered only 
 - If homepage tone changes, check curated and generated testimonial sources before assuming one seed file controls all visible copy.
 - Recent homepage marketplace polish has been code-first in `app/(site)/page.tsx`. Small copy/layout refinements there do not need Sanity pushes unless the visible content is CMS-authored or seed defaults must change for future reseeds.
 - The homepage pet cards intentionally show a simplified marketplace footer: distance on the left and host payout on the right. Do not reintroduce labels such as `Distance`, `Host earns`, pricing-plan text, dividers, or explicit card buttons unless the design direction changes.
-- The `How Pet Share works` homepage section is currently host-focused only. The owner/list-your-pet path is represented as a CTA to `/process`, not as a second parallel process panel on the homepage.
+- The `How Pet Share works` homepage section is currently host-focused only. The owner/list-your-pet path is represented as a CTA to `/how-it-works`, not as a second parallel process panel on the homepage.
 
 ## QA Evidence
 

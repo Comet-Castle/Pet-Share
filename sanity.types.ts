@@ -521,7 +521,7 @@ export type FormDefinition = {
     } & FormField
   >;
   submitLabel: string;
-  formType: "contact" | "ownerContact" | "warranty" | "submitPet";
+  formType: "contact" | "ownerContact" | "guarantee" | "submitPet";
 };
 
 export type Slug = {
@@ -1295,7 +1295,7 @@ export type FORM_DEFINITION_BY_SLUG_QUERY_RESULT = {
   title: string;
   slug: string;
   description: string | null;
-  formType: "contact" | "ownerContact" | "submitPet" | "warranty";
+  formType: "contact" | "guarantee" | "ownerContact" | "submitPet";
   submitLabel: string;
   successMessage: {
     headline: string;

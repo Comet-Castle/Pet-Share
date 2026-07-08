@@ -68,9 +68,9 @@ Recommended seed ID patterns:
 - Owners: `owner-dana-muffins`, `owner-graham-pelton`
 - Pets: `pet-sir-nibbles`, `pet-pip-after-midnight`
 - Testimonials: `testimonial-sir-nibbles-neighbor`
-- Forms: `form-contact`, `form-owner-contact`, `form-warranty`
+- Forms: `form-contact`, `form-owner-contact`, `form-guarantee`
 - System pages: `systemPage-notFound`, `systemPage-serverError`, `systemPage-genericError`
-- Marketing pages: `marketingPage-about`, `marketingPage-process`, `marketingPage-pricing`, `marketingPage-contact`, `marketingPage-warranty`
+- Marketing pages: `marketingPage-process` (How It Works), `marketingPage-pricing`, `marketingPage-contact`, `marketingPage-warranty` (Guarantee)
 
 Reference rules:
 
@@ -315,7 +315,7 @@ Generation modes:
 
 - `preview`: generate one or two images for one or two selected pets so art direction, prompt shape, output size, and provider behavior can be reviewed before paying for a larger generation pass.
 - `inline`: generate the selected prompt set one prompt at a time, write each generated image immediately, and print request, response, parse, write, processed, and remaining status as it runs.
-- `upload`: upload approved local files from `sanity/seed/media/` to Sanity and update `media-manifest.json`, without calling an AI provider.
+- `upload`: upload approved local files from `sanity/seed/media/` to Sanity, without calling an AI provider.
 
 Generation configuration:
 
@@ -359,7 +359,7 @@ Pet prompt strategy:
 - Pet image prompts should produce photorealistic candid phone-camera pet photos only: full-bleed, edge-to-edge, owner-snapped, informal, slightly imperfect, not professionally staged, no animated style, no cartoon, no illustration, no 3D render, no vector, no mascot, no card, no border, no frame, no UI layout, no poster, no caption, no labels, no logo, and no watermark.
 - Each pet should have a stable visual identity used across all generated images, including primary color, secondary color/detail, distinctive markings, and eye color. Every prompt for that pet must repeat those details so the pet does not change color or markings between gallery shots.
 - Do not pass satirical listing copy, warning copy, legal jokes, waiver jokes, or other text-heavy content into pet image prompts. Those phrases can cause image models to render unwanted readable props. Prefer neutral constraints such as "no readable items" and "no flat rectangular props" instead of repeating legal or paperwork-related words.
-- Store the pet base prompt and image-level shot prompts directly with the relevant pet seed record in `pets.json`.
+- Store the pet base prompt and image-level shot prompts directly with the relevant pet seed record in the generated pet object (see `docs/seed-json-contract.md`; pets are generated in `scripts/seed-sanity.mjs`, not loaded from `pets.json`).
 
 Example pet prompt shape:
 
@@ -389,7 +389,7 @@ Pet image count:
 - Assign pet-specific image targets arbitrarily during seed content planning, such as `5`, `6`, `7`, `8`, `9`, or `10`, based on how visually important or feature-worthy the pet is.
 - Use one primary card image, several detail-gallery images, and optional alternate crops where useful.
 - Keep the pet visually consistent across its approved image set.
-- Store pet image metadata directly with the relevant pet seed record in `pets.json`.
+- Store pet image metadata directly with the relevant pet seed record in the generated pet object.
 
 Owner portrait generation inputs:
 
@@ -443,7 +443,7 @@ Video is optional for phase one, but seed data should be prepared so video can b
 
 Recommended direction:
 
-- Store pet video generation details directly on the relevant pet seed record in `pets.json`, near the card media or gallery media it would enhance.
+- Store pet video generation details directly on the relevant pet seed record, near the card media or gallery media it would enhance.
 - Store page/banner video generation details directly in `pages.json` with the relevant page or section.
 - Treat video generation as a separate intentional workflow, not part of normal `pnpm seed`.
 - Do not generate or commit video binaries for the initial seed pass.
@@ -529,7 +529,7 @@ Initial form definitions:
 
 - Contact form: general project contact.
 - Owner contact form: used by pet detail owner contact drawer.
-- Warranty/compatibility inquiry form: used by the pet index final CTA and contact/warranty page.
+- Guarantee/compatibility inquiry form: used by the pet index final CTA and contact/guarantee page.
 
 Form behavior:
 
@@ -674,9 +674,6 @@ Recommended saved seed artifact layout:
 sanity/
   seed/
     data/
-      petTypes.json
-      owners.json
-      pets.json
       testimonials.json
       forms.json
       pages.json
@@ -696,7 +693,6 @@ sanity/
           images/
       owners/
       pages/
-    media-manifest.json
     README.md
 ```
 
@@ -708,7 +704,7 @@ Saved seed data rules:
 - Keep breed fields plain English and realistic, such as "Golden Retriever", "Holland Lop", or "Ball python"; satire belongs in summaries, warnings, and care notes instead of fake content-type-like breed values.
 - Pet image and video prompts must include the pet's selected breed, species, or variety so generated media visually matches the structured pet data.
 - Keep owner-pet-testimonial relationships explicit in the saved data.
-- Keep pet image and pet video metadata inside the relevant pet object in `pets.json`.
+- Keep pet image and pet video metadata inside the relevant generated pet object.
 - Keep singleton and marketing page section content explicit in the saved data.
 - Keep page image and page video metadata inside the relevant page or section object in `pages.json`.
 - Include generation metadata and provenance notes for AI-generated text and images where useful.
@@ -717,59 +713,17 @@ Saved seed data rules:
 - Do not keep anything under `sanity/seed/generated/` as approved; that directory is unreviewed scratch space only.
 - Resolved: `sanity/seed/` (data, media, and manifest) is gitignored in full and never committed, so it never reaches a production deployment. See `docs/backlog.md` for the prior options considered.
 - Keep approved generated video binaries locally only after file size review, using the same pet-owned or page-owned media folders as the related images.
-- Upload approved local seed images to Sanity from the local files so asset IDs can be recreated or remapped through `media-manifest.json`.
+- Upload approved local seed images to Sanity from the local files; asset discovery uses the `sanity/seed/media/` folder convention (see `docs/seed-json-contract.md`).
 - Upload approved local seed videos from local files only when video support is implemented.
 
-Recommended `media-manifest.json` shape:
-
-```json
-{
-  "version": 1,
-  "generatedAt": "2026-06-27T00:00:00.000Z",
-  "assets": [
-    {
-      "localPath": "sanity/seed/media/pets/pet-sir-nibbles/images/hero-01.webp",
-      "sourceGeneratedPath": "sanity/seed/generated/pets/pet-sir-nibbles/images/hero-01.webp",
-      "ownerType": "pet",
-      "ownerId": "pet-sir-nibbles",
-      "ownerSlug": "sir-nibbles",
-      "fieldPath": "heroImages[0]",
-      "mediaRole": "hero",
-      "mimeType": "image/webp",
-      "alt": "Sir Nibbles sitting politely in a sunny room despite obvious medieval danger warnings.",
-      "caption": "Available for brave households with reinforced slippers.",
-      "sanityAssetId": null,
-      "sanityAssetRef": null,
-      "status": "approved",
-      "attribution": {
-        "sourceType": "aiGenerated",
-        "provider": "gemini",
-        "model": "to-be-confirmed",
-        "promptSummary": "Bright friendly marketplace pet portrait of a tiny white rabbit with playful danger cues.",
-        "generatedAt": "2026-06-27T00:00:00.000Z",
-        "reviewedBy": "project-owner",
-        "usageNote": "Fictional AI-generated seed image for the Pet Share demo."
-      }
-    }
-  ]
-}
-```
-
-Manifest rules:
-
-- `localPath` points to the approved local file (gitignored, not committed) used by deterministic seed runs.
-- `sourceGeneratedPath` is optional and points to the gitignored review file when known.
-- `sanityAssetId` and `sanityAssetRef` can be filled after upload so repeated seed runs can reuse or remap assets.
-- `fieldPath` identifies where the media belongs in the seed document.
-- `mediaRole` should use stable values such as `card`, `hero`, `gallery`, `ownerPortrait`, `pageHero`, `sectionImage`, `ogImage`, or `plannedVideoFallback`.
-- `status` should be `approved` for approved local media; rejected or draft media should remain in `sanity/seed/generated/`.
+**Implemented behavior (no manifest file):** `scripts/seed-sanity.mjs`'s `discoverApprovedMediaAssets()` finds approved media by scanning `sanity/seed/media/` directly and deriving each `assetKey` from the folder/file naming convention (see `docs/seed-json-contract.md`'s "Media discovery" section for the exact path rules). Moving a reviewed file from `sanity/seed/generated/` into `sanity/seed/media/` at the conventional path is the approval step — there is no separate manifest recording `status`, `sanityAssetId`, or attribution metadata per asset.
 
 AI attribution rules:
 
-- Store attribution metadata for each approved generated image in the media manifest.
-- Store a short prompt summary rather than full private prompt logs unless the full prompt is useful for deterministic regeneration.
+- Store a short prompt summary alongside generated media where useful for deterministic regeneration, rather than full private prompt logs.
 - Do not store API keys, raw provider responses, account IDs, billing IDs, or other private metadata.
-- Store future video prompts in `pets.json` or `pages.json`, but mark them as `planned` until an actual approved video file exists.
+- Store future video prompts on the generated pet object or in `pages.json`, but mark them as `planned` until an actual approved video file exists.
+- Known gap: since there is no manifest, per-asset attribution (provider, model, prompt summary, reviewer) is not tracked in a structured file today. If that tracking becomes necessary, revisit whether to reintroduce a manifest or record attribution in a lighter-weight form.
 
 Preferred behavior:
 
@@ -796,10 +750,11 @@ Direct commands:
 - `pnpm seed:sanity -- --confirm --purge-only`: purge existing seeded documents without writing replacement content.
 - `pnpm seed:sanity -- --confirm --skip-media-upload`: write approved seed content without uploading approved local media.
 - `pnpm seed:sanity -- --confirm --only homePage --skip-media-upload`: replace only the homepage in Sanity while preserving existing page media fields where possible.
-- `pnpm seed:media -- --mode preview --pet pet-sir-nibbles --confirm`: generate a tiny image sample for review using default provider, model, count, and size.
+- `pnpm seed:media -- --mode preview --pet sir-nibbles --confirm`: generate a tiny image sample for review using default provider, model, count, and size.
 - `pnpm seed:media -- --mode inline --provider gemini --model gemini-2.5-flash-image --count 5 --size 1024x1024 --confirm`: generate five selected prompts inline using the chosen provider, model, and size.
 - `pnpm seed:media -- --mode inline --confirm`: generate the selected prompt set inline using default provider, model, count, and size.
-- `pnpm seed:media -- --mode upload`: upload approved media from `sanity/seed/media/` and update `media-manifest.json`, if implemented separately from `seed:sanity`.
+- `pnpm seed:media -- --mode inline --page homePage --confirm`: regenerate only the homepage hero carousel's images (currently 5), instead of the full prompt set. `--owner <owner-slug>` narrows to a single owner's portrait the same way.
+- `pnpm seed:media -- --mode upload`: upload approved media from `sanity/seed/media/`, if implemented separately from `seed:sanity`.
 - `pnpm seed:video`: intentionally generate or upload approved seed video assets, if implemented later.
 
 Generation and destructive seed operations should be clearly named and should not run by accident.

@@ -234,8 +234,8 @@ export default async function PetsPage({ searchParams }: PetsPageProps) {
                 }
                 primaryHref={activeCount > 0 ? clearHref : "/"}
                 primaryLabel={activeCount > 0 ? "Clear filters" : "Go home"}
-                secondaryHref="/process"
-                secondaryLabel="Review the process"
+                secondaryHref="/how-it-works"
+                secondaryLabel="Review how it works"
               />
             </div>
           )}

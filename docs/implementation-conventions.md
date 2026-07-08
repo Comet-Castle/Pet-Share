@@ -174,7 +174,7 @@ Not every page section is owned by the generic page-builder renderer.
 - Before changing homepage copy or layout, check whether the visible content comes from `homePage`, related referenced documents such as testimonials, generated seed logic, or hardcoded fallback copy.
 - For small homepage visual refinements, prefer direct component changes in `app/(site)/page.tsx` and a focused rendered screenshot. Do not push Sanity content unless the changed copy or data is actually CMS-authored.
 - Keep the homepage marketplace cards visually simple and close to the approved references. Avoid adding extra labels, dividers, badges, buttons, or explanatory UI unless the user asks for them.
-- Keep homepage process content focused. The current homepage explains the temporary host flow; the owner/listing flow belongs on `/process` and is linked from a CTA.
+- Keep homepage process content focused. The current homepage explains the temporary host flow; the owner/listing flow belongs on `/how-it-works` and is linked from a CTA.
 
 ## Forms
 

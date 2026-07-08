@@ -108,6 +108,139 @@ const petTypeCategories = {
   ]
 };
 
+const petTypeCategoryBySeedKey = Object.fromEntries(
+  Object.entries(petTypeCategories).flatMap(([category, items]) => items.map(([seedKey]) => [seedKey, category]))
+);
+
+// Habitat context keeps generated pet photography believable per pet type: an aquatic pet must always
+// appear in water, a barn animal should never appear indoors on a couch, and so on.
+const habitatByCategory = {
+  commonHouseholdPets: {
+    environment:
+      "a normal home environment (living room, hallway, bedroom, or kitchen) with everyday furniture such as a couch, rug, blanket, or doorway",
+    sceneVariants: [
+      "three-quarter front angle in a lived-in living room with soft window light",
+      "clean side profile near a doorway, showing the full body shape",
+      "slight high-angle three-quarter view like the owner quickly snapped the photo from above",
+      "low-angle full-body standing shot with the pet turned slightly away from camera",
+      "off-center side angle during a candid household moment",
+      "relaxed side-lying pose on a couch, rug, blanket, or floor",
+      "full-body side angle near a simple blanket or leash",
+      "three-quarter seated pose looking just off camera",
+      "casual close-up from a slight side angle, not straight-on",
+      "wider candid environmental snapshot in a real home setting"
+    ]
+  },
+  birds: {
+    environment: "a normal home environment with a perch, open cage, windowsill, or bird stand, plus ordinary household furniture nearby",
+    sceneVariants: [
+      "three-quarter angle perched on an open cage stand near a bright window",
+      "side profile perched on a wooden dowel or curtain rod, wings relaxed",
+      "slight high-angle candid shot looking down from a perch",
+      "full-body shot mid-preen on a perch near soft daylight",
+      "three-quarter angle standing on a windowsill with a home interior visible behind",
+      "low-angle shot looking up at the bird on an elevated perch",
+      "casual close-up from the side while perched, alert and curious",
+      "wider candid shot showing the perch, cage, and a lived-in room around it"
+    ]
+  },
+  aquaticPets: {
+    environment:
+      "the pet fully submerged or swimming in clear water at all times \u2014 inside a home aquarium tank, a glass bowl, or an outdoor garden pond, with visible water, water surface reflections, and appropriate tank or pond furnishings such as gravel, plants, or rocks",
+    sceneVariants: [
+      "three-quarter angle swimming through a planted home aquarium with soft aquarium lighting",
+      "side profile gliding past decorative rocks or driftwood inside a glass tank",
+      "slight high-angle view looking down through the water surface of a tank or bowl",
+      "low-angle shot from outside the glass looking up at the pet mid-swim",
+      "close-up through the glass with visible water clarity and gentle light refraction",
+      "wider tank shot showing plants, substrate, and the pet swimming naturally",
+      "outdoor garden pond shot with the pet near the water surface and lily pads or pond plants visible",
+      "candid bowl shot with visible water meniscus and soft indoor light"
+    ],
+    negativePromptAddition:
+      "The pet must never be shown out of water, on land, on furniture, or against a dry backdrop \u2014 water must be visible in every image."
+  },
+  reptilesAndAmphibians: {
+    environment:
+      "an appropriately humid or warm terrarium or vivarium enclosure with terrarium glass, naturalistic substrate, basking rock or branch, and terrarium plants or a water dish as needed for the species",
+    sceneVariants: [
+      "three-quarter angle basking on a rock or branch inside a naturalistic terrarium",
+      "side profile shot through the terrarium glass with visible substrate and foliage",
+      "slight high-angle view looking down into the enclosure from above the basking spot",
+      "low-angle shot from outside the glass looking up toward a branch or hide",
+      "close-up on textured skin or scales with terrarium foliage softly blurred behind",
+      "wider enclosure shot showing substrate, plants, and a water dish or humidity feature",
+      "candid shot near a shallow water dish or damp substrate for amphibious species",
+      "casual shot half-emerged from a hide or burrow within the terrarium"
+    ]
+  },
+  farmAndOutdoorCompanions: {
+    environment:
+      "an outdoor farm or pasture setting such as a barn interior, a fenced paddock, an open field, or a stable doorway, with straw, fencing, or pasture grass visible",
+    sceneVariants: [
+      "three-quarter angle standing in an open pasture with soft daylight",
+      "side profile shot near a wooden barn doorway with straw visible",
+      "slight high-angle view over a paddock fence",
+      "low-angle full-body shot in a grassy field with a barn softly visible in the background",
+      "close-up candid shot near a fence line with pasture grass in the foreground",
+      "wider environmental shot showing the barn, fencing, and open field together",
+      "casual shot standing on straw bedding inside a barn stall",
+      "outdoor shot grazing or standing near a water trough in the paddock"
+    ],
+    negativePromptAddition: "The pet must never be shown indoors on household furniture such as a couch, bed, or living room rug."
+  },
+  invertebrates: {
+    environment:
+      "a naturalistic terrarium or enclosure appropriate to the species, with substrate, hides, and terrarium-safe decor such as bark, moss, or a shallow dish",
+    sceneVariants: [
+      "three-quarter angle on textured substrate inside a naturalistic terrarium",
+      "side profile shot near a piece of bark or a hide within the enclosure",
+      "slight high-angle view looking down into the terrarium",
+      "close-up on texture and detail with terrarium substrate softly blurred behind",
+      "wider enclosure shot showing substrate, decor, and enrichment items",
+      "candid shot mid-movement across the terrarium floor"
+    ]
+  }
+};
+
+function habitatForPetType(petTypeSeedKey) {
+  const category = petTypeCategoryBySeedKey[petTypeSeedKey] ?? "commonHouseholdPets";
+  return habitatByCategory[category] ?? habitatByCategory.commonHouseholdPets;
+}
+
+// The hero carousel renders these as a full-bleed landscape banner (roughly 1440x520 at
+// desktop widths) cropped with object-position around 62-68% from the left — the left side
+// stays under a white gradient for overlaid text, and only the right two-thirds of the frame
+// is reliably visible after crop. A square 1024x1024 source loses most of its useful area at
+// that aspect ratio, so these prompts explicitly request a wide landscape composition with
+// the subject placed toward the right side and open negative space on the left.
+const heroSlideImageSize = "1600x900";
+const heroSlideCompositionNote =
+  "Wide 16:9 landscape composition, not square or portrait. Position the main subject in the right half to two-thirds of the frame, with open, uncluttered negative space on the left third of the image so text can be legibly overlaid there.";
+
+const heroSlideMediaDetails = {
+  "home-hero-dog-01": {
+    alt: "A dog sitting on a rumpled, hastily remade bed, avoiding eye contact.",
+    prompt: `Create a photorealistic candid phone-camera snapshot of a dog sitting on a rumpled, hastily remade bed in a bright bedroom, looking away from the camera with a sheepish, guilty expression, one corner of the blanket still crooked. ${heroSlideCompositionNote} Natural window light, believable phone-camera perspective, warm and funny but not gross or graphic, no mess, stains, or vomit visible, just the guilty body language and the rumpled bedding as the joke. No text, logo, watermark, border, frame, or poster styling.`
+  },
+  "home-hero-cat-01": {
+    alt: "A cat sitting upright on a kitchen counter beside a snack cabinet, looking sternly at the camera.",
+    prompt: `Create a photorealistic candid phone-camera snapshot of a cat sitting bolt upright on a kitchen counter beside an open snack cabinet or pantry shelf, staring directly at the camera with a stern, authoritative expression, as if enforcing a rule. ${heroSlideCompositionNote} Natural kitchen lighting, believable phone-camera perspective, playful and funny tone. No text, logo, watermark, border, frame, or poster styling.`
+  },
+  "home-hero-dog-02": {
+    alt: "A dog sitting proudly beside a couch with one cushion knocked askew.",
+    prompt: `Create a photorealistic candid phone-camera snapshot of a dog sitting beside a living room couch with one cushion knocked slightly askew and a bit of fabric texture visibly worn, the dog looking proud and unbothered rather than guilty. ${heroSlideCompositionNote} Natural window light, believable phone-camera perspective, warm and funny household tone. No text, logo, watermark, border, frame, or poster styling.`
+  },
+  "home-hero-living-room-01": {
+    alt: "A person sitting on a cozy living room couch happily holding a small pet, like trying it out for the afternoon.",
+    prompt: `Create a photorealistic candid phone-camera snapshot of a person sitting on a cozy, sunlit living room couch, happily holding or petting a small friendly pet on their lap, both looking relaxed and content, like a trial afternoon together. ${heroSlideCompositionNote} Natural window light, believable phone-camera perspective, warm inviting domestic mood. No text, logo, watermark, border, frame, or poster styling.`
+  },
+  "home-hero-plants-01": {
+    alt: "A cat sitting beside a row of houseplants, staring at them with a judgmental expression.",
+    prompt: `Create a photorealistic candid phone-camera snapshot of a cat sitting very close beside a row of houseplants on a windowsill or plant stand, staring at the plants with an intensely judgmental, evaluating expression, ears slightly forward. ${heroSlideCompositionNote} Natural window light, believable phone-camera perspective, playful funny tone. No text, logo, watermark, border, frame, or poster styling.`
+  }
+};
+
 const ownerSeeds = [
   {
     seedKey: "owner-brother-maynard",
@@ -462,7 +595,13 @@ const headlineTemplates = [
   (name) => `${name} is ready for a short stay and a long explanation.`,
   (name) => `${name} may improve morale or reorganize the hallway.`,
   (name) => `${name} travels light, emotionally speaking.`,
-  (name) => `${name} is technically manageable with the correct clipboard.`
+  (name) => `${name} is technically manageable with the correct clipboard.`,
+  (name) => `${name} is between adventures and could use a temporary sponsor.`,
+  (name) => `${name} comes pre-loaded with opinions and a light snack surcharge.`,
+  (name) => `${name} is looking for someone to witness this era of their life.`,
+  (name) => `${name} is calm now, but the paperwork remembers everything.`,
+  (name) => `${name} is available for a weekend of mutual character growth.`,
+  (name) => `${name} needs a change of scenery and a witness who owns a mop.`
 ];
 
 const detailTemplates = [
@@ -508,6 +647,30 @@ const detailTemplates = [
   ({ name }) => [
     `${name} needs a temporary change of scenery. I need the kind of quiet where you can hear the fridge and not immediately wonder what the pet has learned.`,
     `Give them time, keep the routine boring, and resist the urge to negotiate with the eyes. The eyes have legal training, emotionally speaking.`
+  ],
+  ({ name }) => [
+    `${name} is between chapters, and so am I. A short stay somewhere calm would do us both some good.`,
+    `No tricks required. Just consistent snack timing, a door that closes properly, and someone willing to narrate their own footsteps so nothing is a surprise.`
+  ],
+  ({ name }) => [
+    `Confession: ${name} is delightful, and I have simply run out of new things to say about the couch cushions.`,
+    `Bring reasonable expectations and one backup towel. ${name} will handle the rest, mostly by deciding the rest is now their responsibility.`
+  ],
+  ({ name }) => [
+    `${name} is available on short notice because the household schedule briefly aligned with sanity.`,
+    `Expect a short adjustment period, a strong opinion about mealtime, and the occasional dramatic sigh that means nothing is actually wrong.`
+  ],
+  ({ name }) => [
+    `This is ${name}'s first listing, so please be patient while we both figure out what a normal handoff looks like.`,
+    `They travel with the essentials, a laminated care note, and a level of confidence that has not yet been earned but is fully committed to.`
+  ],
+  ({ name }) => [
+    `${name} does best with routine, gentle narration, and someone who does not take the initial suspicion personally.`,
+    `By day two, most hosts report a full personality reveal. By day three, most hosts report missing them slightly in advance.`
+  ],
+  ({ name }) => [
+    `Short version: ${name} is a good houseguest who occasionally forgets they are a guest.`,
+    `Longer version: bring the patience, respect the snack schedule, and expect at least one moment of unexplainable pride from a small animal who did nothing you can prove.`
   ]
 ];
 
@@ -1303,8 +1466,9 @@ function transformPage(page, pets, owners) {
   if (page._id) base._id = page._id;
 
   if (page._type === "siteSettings") {
+    const { seo: _unusedSeo, ...baseWithoutSeo } = base;
     return {
-      ...base,
+      ...baseWithoutSeo,
       title: page.title,
       description: page.description,
       defaultSeo: seo(page.defaultSeo, "Pet Share", "Temporary pets, questionable peace of mind."),
@@ -1399,12 +1563,13 @@ function transformSection(section, options = {}) {
     };
   }
   if (section._type === "heroSlide") {
+    const heroDetails = heroSlideMediaDetails[imageAssetKey];
     return {
       _key: section._key ?? key("section"),
       _type: "heroSlide",
       headline: section.headline,
       body: section.body,
-      image: imageWithAlt(imageAssetKey, `${section.headline} slide image.`),
+      image: imageWithAlt(imageAssetKey, heroDetails?.alt ?? `${section.headline} slide image.`),
       cta: cta(section.cta),
       featuredPet: null,
       featuredOwner: null
@@ -1781,12 +1946,42 @@ async function purgeSeedDocuments() {
 
   console.log(color.warning(`Purging ${orderedDocs.length} existing seeded documents before writing fresh seed data.`));
 
-  for (const chunk of chunkArray(orderedDocs, deleteMutationChunkSize)) {
-    await client.mutate(chunk.map((doc) => ({ delete: { id: doc._id } })));
+  // Chunk strictly within each type, in purgeOrder, and await every chunk before starting the next type.
+  // Sanity validates references against already-committed state, not other deletes in the same transaction,
+  // so a referencing document (e.g. homePage) must be fully deleted before the documents it references (e.g. pet)
+  // are attempted, or the mutation is rejected with a documentHasExistingReferencesError.
+  for (const docType of purgeOrder) {
+    const docsOfType = orderedDocs.filter((doc) => doc._type === docType);
 
-    chunk.forEach((doc) => {
-      progress.tick(`Deleted ${doc._type}: ${doc.seedKey ?? doc._id}`);
-    });
+    for (const chunk of chunkArray(docsOfType, deleteMutationChunkSize)) {
+      await mutateWithReferenceRetry(client, chunk.map((doc) => ({ delete: { id: doc._id } })));
+
+      chunk.forEach((doc) => {
+        progress.tick(`Deleted ${doc._type}: ${doc.seedKey ?? doc._id}`);
+      });
+    }
+  }
+}
+
+// Sanity's reference-integrity index can briefly lag behind a delete it just committed, so an immediately
+// following delete of a document that was (correctly) referenced only by the just-deleted document can be
+// rejected with a stale documentHasExistingReferencesError. Retry a few times with a short delay before
+// surfacing the error, since this is a transient consistency issue rather than a real dangling reference.
+async function mutateWithReferenceRetry(client, mutations, attempt = 1) {
+  try {
+    return await client.mutate(mutations);
+  } catch (error) {
+    const isReferenceError = error?.details?.type === "mutationError" &&
+      error?.details?.items?.some((item) => item.error?.type === "documentHasExistingReferencesError");
+
+    if (isReferenceError && attempt < 4) {
+      const delayMs = attempt * 1000;
+      console.log(color.warning(`Reference index still catching up after a prior delete. Retrying in ${delayMs}ms (attempt ${attempt + 1}/4)...`));
+      await new Promise((resolve) => setTimeout(resolve, delayMs));
+      return mutateWithReferenceRetry(client, mutations, attempt + 1);
+    }
+
+    throw error;
   }
 }
 
@@ -1911,40 +2106,58 @@ function buildMediaPrompts(documents, options = {}) {
         }
       ]
     })),
-    pages: pages.map((page) => ({
-      seedKey: page.seedKey ?? page._id,
-      title: page.title,
-      outputDirectory: `sanity/seed/generated/media/pages/${page.seedKey ?? page._id}/images/`,
-      approvedDirectory: `sanity/seed/media/pages/${page.seedKey ?? page._id}/images/`,
-      imagePrompts: [
-        {
-          fileName: "hero.png",
-          prompt: `Create photorealistic banner background elements for a Pet Share page titled "${page.title}". This should be usable behind website hero text, not a finished poster or complete UI. Use loose pet-related objects, soft natural light, bright matte colors, airy negative space, subtle glassmorphism-friendly highlights, and playful satirical pet-share energy. Leave open space for overlaid text. No text, logo, watermark, border, frame, UI layout, caption area, or poster composition.`
-        }
-      ]
-    }))
+    pages: pages.map((page) => {
+      if (page._type === "homePage") {
+        return {
+          seedKey: page.seedKey ?? page._id,
+          title: page.title,
+          outputDirectory: `sanity/seed/generated/media/pages/home/images/`,
+          approvedDirectory: `sanity/seed/media/pages/home/images/`,
+          imagePrompts: (page.heroCarousel ?? []).map((slide) => {
+            const assetKey = slide.image?.seedAssetKey;
+            const details = heroSlideMediaDetails[assetKey];
+            // assetKeyFromApprovedMediaPath() derives "home-<fileBase>" from files under pages/home/images/,
+            // so the saved fileName must have the "home-" prefix stripped to round-trip back to the real assetKey.
+            const fileBase = assetKey ? assetKey.replace(/^home-/, "") : slugify(slide.headline ?? "slide");
+            return {
+              fileName: `${fileBase}.png`,
+              size: heroSlideImageSize,
+              prompt:
+                details?.prompt ??
+                `Create a photorealistic candid phone-camera snapshot depicting the scene for the homepage hero headline "${slide.headline}". ${heroSlideCompositionNote} The image must visually match the headline's joke, not a generic pet photo. Natural lighting, believable phone-camera perspective, warm playful household tone. No text, logo, watermark, border, frame, or poster styling.`
+            };
+          })
+        };
+      }
+
+      return {
+        seedKey: page.seedKey ?? page._id,
+        title: page.title,
+        outputDirectory: `sanity/seed/generated/media/pages/${page.seedKey ?? page._id}/images/`,
+        approvedDirectory: `sanity/seed/media/pages/${page.seedKey ?? page._id}/images/`,
+        imagePrompts: [
+          {
+            fileName: "hero.png",
+            prompt: `Create photorealistic banner background elements for a Pet Share page titled "${page.title}". This should be usable behind website hero text, not a finished poster or complete UI. Use loose pet-related objects, soft natural light, bright matte colors, airy negative space, subtle glassmorphism-friendly highlights, and playful satirical pet-share energy. Leave open space for overlaid text. No text, logo, watermark, border, frame, UI layout, caption area, or poster composition.`
+          }
+        ]
+      };
+    })
   };
 }
 
 function buildPetImagePrompt(pet, promptIndex) {
-  const sceneVariants = [
-    "three-quarter front angle in a lived-in living room with soft window light",
-    "clean side profile near a doorway, showing the full body shape",
-    "slight high-angle three-quarter view like the owner quickly snapped the photo from above",
-    "low-angle full-body standing shot with the pet turned slightly away from camera",
-    "off-center side angle during a candid household moment",
-    "relaxed side-lying pose on a couch, rug, blanket, or floor",
-    "full-body side angle near a simple blanket or leash",
-    "three-quarter seated pose looking just off camera",
-    "casual close-up from a slight side angle, not straight-on",
-    "wider candid environmental snapshot in a real home setting"
-  ];
+  const habitat = habitatForPetType(pet.petTypeSeedKey);
+  const sceneVariants = habitat.sceneVariants;
+  const habitatNote = habitat.negativePromptAddition ? ` ${habitat.negativePromptAddition}` : "";
 
-  return `Create a photorealistic full-bleed square candid phone-camera snapshot of ${pet.name} only, like the owner casually snapped a random everyday photo. The image should feel real, informal, slightly imperfect, and not professionally staged. Natural household lighting, believable phone-camera perspective, mild motion softness or imperfect framing is acceptable, but keep the pet clear and appealing. Use varied pet photography angles across the image set; this shot should be a ${sceneVariants[promptIndex % sceneVariants.length]}. Avoid making every image a straight-on headshot. The pet must clearly look like ${withArticle(pet.breed)} and should preserve that breed or variety's recognizable shape, coat, coloring, scale, body type, and species-specific traits. Keep this exact visual identity consistent across every image for this pet: primary color ${pet.visualIdentity.primaryColor}, secondary detail ${pet.visualIdentity.secondaryColor}, distinctive marking ${pet.visualIdentity.markings}, and ${pet.visualIdentity.eyeColor}. Do not change those colors or markings between shots. Bright, friendly, realistic home-photo style with natural textures, casual composition, and subtle silliness. Use a normal home environment with no handheld props, no flat rectangular props, no readable items, no printed items, and no office-like items. Do not use professional studio lighting, editorial portrait styling, animated, cartoon, illustration, 3D render, vector, mascot, toy, plush, fantasy, or painted styles. Do not create borders, frames, posters, stickers, product mockups, UI layouts, caption areas, labels, badges, text, logos, watermarks, drop shadow frames, or white mats. The output should be just the pet photo edge-to-edge.`;
+  return `Create a photorealistic full-bleed square candid phone-camera snapshot of ${pet.name} only, like the owner casually snapped a random everyday photo. The image should feel real, informal, slightly imperfect, and not professionally staged. Natural lighting, believable phone-camera perspective, mild motion softness or imperfect framing is acceptable, but keep the pet clear and appealing. Use varied pet photography angles across the image set; this shot should be a ${sceneVariants[promptIndex % sceneVariants.length]}. Avoid making every image a straight-on headshot. The pet must clearly look like ${withArticle(pet.breed)} and should preserve that breed or variety's recognizable shape, coat, coloring, scale, body type, and species-specific traits. Keep this exact visual identity consistent across every image for this pet: primary color ${pet.visualIdentity.primaryColor}, secondary detail ${pet.visualIdentity.secondaryColor}, distinctive marking ${pet.visualIdentity.markings}, and ${pet.visualIdentity.eyeColor}. Do not change those colors or markings between shots. Bright, friendly, realistic photo style with natural textures, casual composition, and subtle silliness. Show the pet in a habitat appropriate to how this species is actually kept: ${habitat.environment}.${habitatNote} Use no handheld props, no flat rectangular props, no readable items, no printed items, and no office-like items. Do not use professional studio lighting, editorial portrait styling, animated, cartoon, illustration, 3D render, vector, mascot, toy, plush, fantasy, or painted styles. Do not create borders, frames, posters, stickers, product mockups, UI layouts, caption areas, labels, badges, text, logos, watermarks, drop shadow frames, or white mats. The output should be just the pet photo edge-to-edge.`;
 }
 
 function buildVideoPrompt(pet) {
-  return `Short low-frame-rate looping clip concept for ${pet.name}, who must clearly look like ${withArticle(pet.breed)}: a full-bleed pet-only moment where the pet makes a tiny dramatic movement, the background stays airy and friendly, and the tone is playful but not chaotic. No card, border, frame, UI, text, logo, or watermark.`;
+  const habitat = habitatForPetType(pet.petTypeSeedKey);
+  const habitatNote = habitat.negativePromptAddition ? ` ${habitat.negativePromptAddition}` : "";
+  return `Short low-frame-rate looping clip concept for ${pet.name}, who must clearly look like ${withArticle(pet.breed)}: a full-bleed pet-only moment in a habitat appropriate to how this species is actually kept (${habitat.environment}), where the pet makes a tiny dramatic movement, the background stays airy and friendly, and the tone is playful but not chaotic.${habitatNote} No card, border, frame, UI, text, logo, or watermark.`;
 }
 
 function resolveReferences(value, context) {

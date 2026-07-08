@@ -67,7 +67,7 @@ export const formDefinition = defineType({
         list: [
           { title: "Contact", value: "contact" },
           { title: "Owner contact", value: "ownerContact" },
-          { title: "Warranty", value: "warranty" },
+          { title: "Guarantee", value: "guarantee" },
           { title: "Submit pet", value: "submitPet" }
         ],
         layout: "radio"

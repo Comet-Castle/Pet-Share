@@ -141,7 +141,7 @@ export function HomeHeroCarousel({ slides }: HomeHeroCarouselProps) {
             className="relative z-20 grid min-h-[520px] min-w-0 animate-pet-hero-content-swap items-center gap-8 p-7 text-center sm:min-h-[560px] sm:p-14 sm:text-left lg:grid-cols-[minmax(0,1.35fr)_minmax(0,0.65fr)] lg:p-16"
           >
             <div className="mx-auto min-w-0 max-w-5xl sm:mx-0">
-              <h1 className="animate-pet-hero-title text-wrap font-display text-4xl font-bold leading-[1.05] text-pet-ink sm:text-6xl lg:text-7xl xl:text-[5.25rem]">
+              <h1 className="animate-pet-hero-title whitespace-pre-line text-wrap font-display text-4xl font-bold leading-[1.05] text-pet-ink sm:text-6xl lg:text-7xl xl:text-[5.25rem]">
                 {activeSlide.headline}
               </h1>
               {activeSlide.body ? (
@@ -156,7 +156,7 @@ export function HomeHeroCarousel({ slides }: HomeHeroCarouselProps) {
                   </Button>
                 </span>
                 <span className="animate-pet-hero-cta-secondary">
-                  <Button href="/process" variant="secondary" icon={<Info aria-hidden="true" size={20} />}>
+                  <Button href="/how-it-works" variant="secondary" icon={<Info aria-hidden="true" size={20} />}>
                     Lend your pet
                   </Button>
                 </span>

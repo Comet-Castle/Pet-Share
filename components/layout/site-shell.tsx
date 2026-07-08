@@ -13,18 +13,18 @@ type SiteShellProps = Readonly<{
 
 const fallbackPrimaryNavigation: NavigationLink[] = [
   { label: "Pets", link: { type: "internalPath", path: "/pets", url: null, openInNewTab: null } },
-  { label: "About", link: { type: "internalPath", path: "/about", url: null, openInNewTab: null } },
-  { label: "Process", link: { type: "internalPath", path: "/process", url: null, openInNewTab: null } },
+  { label: "How It Works", link: { type: "internalPath", path: "/how-it-works", url: null, openInNewTab: null } },
   { label: "Pricing", link: { type: "internalPath", path: "/pricing", url: null, openInNewTab: null } },
   { label: "Contact", link: { type: "internalPath", path: "/contact", url: null, openInNewTab: null } },
-  { label: "Warranty", link: { type: "internalPath", path: "/warranty", url: null, openInNewTab: null } }
+  { label: "Guarantee", link: { type: "internalPath", path: "/guarantee", url: null, openInNewTab: null } }
 ];
 
 const fallbackFooterNavigation: NavigationLink[] = [
   { label: "Pets", link: { type: "internalPath", path: "/pets", url: null, openInNewTab: null } },
-  { label: "Process", link: { type: "internalPath", path: "/process", url: null, openInNewTab: null } },
+  { label: "How It Works", link: { type: "internalPath", path: "/how-it-works", url: null, openInNewTab: null } },
+  { label: "Pricing", link: { type: "internalPath", path: "/pricing", url: null, openInNewTab: null } },
   { label: "Contact", link: { type: "internalPath", path: "/contact", url: null, openInNewTab: null } },
-  { label: "Warranty", link: { type: "internalPath", path: "/warranty", url: null, openInNewTab: null } }
+  { label: "Guarantee", link: { type: "internalPath", path: "/guarantee", url: null, openInNewTab: null } }
 ];
 
 /**

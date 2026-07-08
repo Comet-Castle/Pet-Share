@@ -182,7 +182,7 @@ Frontend renderer:
 Seed example:
 
 - `sanity/seed/data/pages.json`
-- The seeded `/process` page uses two `processPathSection` blocks: one for owners and one for temporary hosts.
+- The seeded `/how-it-works` page uses two `processPathSection` blocks: one for owners and one for temporary hosts.
 
 Notes:
 
@@ -253,29 +253,29 @@ Schema:
 
 Purpose:
 
-Use these blocks for the approved warranty-page direction. They combine the cleaner marketing hero style from pricing/process with the selected warranty mockup details:
+Use these blocks for the approved guarantee-page direction. They combine the cleaner marketing hero style from pricing/process with the selected warranty mockup details:
 
 - `warrantyConditionGrid`: the three-card summary row for `Covered-ish`, `Not covered`, and `Please do not send`.
 - `warrantyNoticeSection`: the substantial legal-ish notice block with rich text and an optional anchor ID for hero CTA links.
-- `warrantyClaimPrep`: the lower claim guidance panel that leads users toward the warranty form.
+- `warrantyClaimPrep`: the lower claim guidance panel that leads users toward the guarantee form.
 
 Studio behavior:
 
 - Warranty condition and claim-prep icons use the shared `IconPickerInput`.
 - Warranty condition `tone` values are curated because they map to specific frontend color treatments.
 - The legal notice body uses rich text so future edits can become paragraphs instead of a single long plain-text field.
-- Optional `anchorId` fields should use lowercase letters, numbers, and hyphens so CTA links such as `/warranty#warranty-notice` remain stable.
+- Optional `anchorId` fields should use lowercase letters, numbers, and hyphens so CTA links such as `/guarantee#guarantee-notice` remain stable.
 
 Frontend renderer:
 
 - Rendered in `components/features/sections/page-sections.tsx`.
-- The seeded warranty page uses the shared generic `hero` block with `layoutHint: "centered"`.
+- The seeded guarantee page uses the shared generic `hero` block with `layoutHint: "centered"`.
 - The form remains controlled by the marketing page `showContactForm` and `formSeedId` fields, so the page-specific warranty blocks do not own form submission behavior.
 
 Seed example:
 
 - `sanity/seed/data/pages.json`
-- The seeded `/warranty` page uses the shared `hero`, then `warrantyConditionGrid`, `warrantyNoticeSection`, and `warrantyClaimPrep`.
+- The seeded `/guarantee` page uses the shared `hero`, then `warrantyConditionGrid`, `warrantyNoticeSection`, and `warrantyClaimPrep`.
 
 Seeder behavior:
 

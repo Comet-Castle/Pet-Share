@@ -171,7 +171,7 @@ function HomepageProcessSection({ section }: Readonly<{ section?: HomeProcessSec
 
         <div className="mt-10 flex flex-col items-center gap-3 text-center sm:flex-row sm:justify-center">
           <Button href="/pets">Find pets near you</Button>
-          <Button href={getCtaHref(primaryCta, "/process")} variant="secondary">
+          <Button href={getCtaHref(primaryCta, "/how-it-works")} variant="secondary">
             {primaryCta?.label ?? "Learn more about sharing your pet"}
           </Button>
         </div>

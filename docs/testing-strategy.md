@@ -82,8 +82,7 @@ Coverage:
 - Every `seedId` is unique within its file.
 - References resolve across seed files.
 - Every pet has `imageTargetCount` between `5` and `10`.
-- Every `assetKey` used by seed JSON exists in `media-manifest.json`.
-- Every approved manifest asset points to `sanity/seed/media/`, not `sanity/seed/generated/`.
+- Every `assetKey` used by seed JSON has a matching approved file under `sanity/seed/media/` at the conventional path (see `docs/seed-json-contract.md`'s "Media discovery" section) — not `sanity/seed/generated/`.
 - Planned videos have fallback image asset keys.
 - Public pets use approved statuses.
 - Marketing slugs avoid reserved route segments.

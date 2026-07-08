@@ -206,7 +206,7 @@ Media generation commands must be run by a human.
 The wizard can run media generation as part of the guided flow. Direct preview command:
 
 ```bash
-pnpm seed:media -- --mode preview --pet pet-sir-nibbles --confirm
+pnpm seed:media -- --mode preview --pet sir-nibbles --confirm
 ```
 
 Expected full inline command after preview approval:
@@ -221,7 +221,7 @@ Optional override example:
 pnpm seed:media -- --mode inline --provider gemini --model gemini-2.5-flash-image --count 5 --size 1024x1024 --confirm
 ```
 
-Inline generation is easier to monitor and resumes through smaller selected runs. Use `--count`, `--pet`, `--model`, and `--size` to keep cost and quota use controlled.
+Inline generation is easier to monitor and resumes through smaller selected runs. Use `--count`, `--pet <slug>`, `--owner <slug>`, `--page <seed-key>`, `--model`, and `--size` to keep cost and quota use controlled. `--pet`/`--owner`/`--page` each narrow the run to just that owner type's prompts — for example, `--page homePage` targets only the 5 homepage hero carousel images instead of the full prompt set. Some prompts (currently the homepage hero slides) carry their own built-in size override for their display context and ignore `--size`; the printed "Size hint" reflects whatever size will actually be used for the current selection.
 
 If a Gemini image model has no available quota, retry with a small preview first after changing quota/billing/model settings:
 

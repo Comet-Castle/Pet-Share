@@ -15,18 +15,17 @@ This document is a first-pass planning model for Pet Share's Sanity content. It 
 
 ```text
 /
-/about
-/process
+/how-it-works
 /pricing
 /pets
 /pets/[slug]
 /owners/[slug]
 /contact
-/warranty
+/guarantee
 /studio
 ```
 
-Route names can change, but these routes cover the main demo surfaces: generic marketing pages, marketplace-style pet listing pages, relationship-heavy detail pages, and form-driven contact and warranty flows.
+Route names can change, but these routes cover the main demo surfaces: generic marketing pages, marketplace-style pet listing pages, relationship-heavy detail pages, and form-driven contact and guarantee flows.
 
 There should not be a public owner directory. Owner detail pages can exist at direct URLs, but users should primarily reach them from pet listings or pet detail pages.
 
@@ -236,7 +235,7 @@ Suggested Sanity fields:
 - `summary`: short page summary.
 - `sections`: array of curated reusable page section objects.
 - `primaryCta`: reusable `cta` object.
-- `showContactForm`: toggle for pages that should render the default contact or warranty form.
+- `showContactForm`: toggle for pages that should render the default contact or guarantee form.
 
 Initial section types:
 
@@ -257,10 +256,10 @@ Initial section types:
 
 Likely documents:
 
-- About page
-- Process page
+- How It Works page
 - Pricing page
 - Contact page
+- Guarantee page
 
 Revalidation:
 
@@ -524,18 +523,18 @@ Suggested Sanity fields:
 - `successMessage`: reusable `formSuccessState` object.
 - `fields`: array of reusable `formField` objects.
 - `submitLabel`: button label.
-- `formType`: selector for frontend handling, such as contact, owner contact, warranty, or submit pet.
+- `formType`: selector for frontend handling, such as contact, owner contact, guarantee, or submit pet.
 
 Likely forms:
 
 - Contact us
 - Contact an owner
-- Warranty claim
+- Guarantee claim
 - Submit a pet
 
 Notes:
 
-- The site can include silly form framing, such as a pet warranty form or owner contact form.
+- The site can include silly form framing, such as a pet guarantee form or owner contact form.
 - Form submissions can be mocked or handled by a lightweight route later. Avoid paid form services unless the project direction changes.
 - Phase one forms send a branded do-not-reply acknowledgement email to the submitter through Mailgun. There is no internal notification email or master project inbox.
 - Form submissions are not routed to individual owners in phase one.
@@ -806,23 +805,7 @@ Hero carousel notes:
 - Carousel advances to the next Sanity-authored slide.
 - Motion must respect reduced-motion preferences.
 
-### About Page
-
-Purpose:
-
-- Explain the fictional company history and mission.
-- Provide room for stats, timeline, and satire.
-
-Likely sections:
-
-- Hero.
-- Company origin story.
-- Timeline or history block.
-- Stats.
-- Testimonials.
-- CTA.
-
-### Process Page
+### How It Works Page
 
 Purpose:
 
@@ -912,7 +895,7 @@ Navigation notes:
 - Do not add a public owner index page.
 - Owner pages should be linked from pet cards, pet detail pages, and owner references where contextually useful.
 
-### Contact Or Warranty Page
+### Contact Or Guarantee Page
 
 Purpose:
 
@@ -921,7 +904,7 @@ Purpose:
 Possible framing:
 
 - Contact us.
-- Pet warranty claim.
+- Pet guarantee claim.
 - Report a suspiciously charming borrower.
 - Ask whether your pet qualifies for temporary relocation.
 
@@ -1022,7 +1005,7 @@ Initial seed content:
 - Example owners with portraits, bios, locations, and satirical trust details.
 - Example pets connected to owners and pet types, with listing copy, one- or two-paragraph detail descriptions, structured category fields, galleries, warnings, care notes, borrow terms, and optional videos.
 - Testimonials connected to pets, owners, or general site sections.
-- Form definitions for contact, owner contact, and warranty-style contact.
+- Form definitions for contact, owner contact, and guarantee-style contact.
 
 Seed constraints:
 

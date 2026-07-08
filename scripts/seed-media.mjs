@@ -37,11 +37,13 @@ async function main() {
     key: buildPromptKey(prompt, index)
   }));
 
+  const distinctSizes = [...new Set(selectedPrompts.map((prompt) => prompt.size))];
+
   console.log(`${color.heading("Media generation plan")}: ${color.success(String(selectedPrompts.length))} image prompts selected.`);
   console.log(`Provider: ${color.path(args.provider)}`);
   console.log(`Model: ${color.path(args.model)}`);
   console.log(`Mode: ${color.path(args.mode)}`);
-  console.log(`Size hint: ${color.path(args.size)}`);
+  console.log(`Size hint: ${color.path(distinctSizes.join(", ") || args.size)}`);
 
   if (selectedPrompts.length === 0) {
     console.log(color.warning("No prompts matched the current selection."));
@@ -78,6 +80,8 @@ function parseArgs(rawArgs) {
     count: null,
     size: "1024x1024",
     pet: null,
+    page: null,
+    owner: null,
     confirm: false
   };
 
@@ -90,6 +94,8 @@ function parseArgs(rawArgs) {
     else if (arg === "--count") parsed.count = Number(rawArgs[++index]);
     else if (arg === "--size") parsed.size = rawArgs[++index] ?? parsed.size;
     else if (arg === "--pet") parsed.pet = rawArgs[++index] ?? parsed.pet;
+    else if (arg === "--page") parsed.page = rawArgs[++index] ?? parsed.page;
+    else if (arg === "--owner") parsed.owner = rawArgs[++index] ?? parsed.owner;
   }
 
   return parsed;
@@ -105,7 +111,8 @@ function flattenImagePrompts(manifest) {
         breed: pet.breed,
         outputDirectory: pet.outputDirectory,
         fileName: imagePrompt.fileName,
-        prompt: withSizeHint(imagePrompt.prompt)
+        size: imagePrompt.size ?? args.size,
+        prompt: imagePrompt.prompt
       }))
     ),
     ...manifest.owners.flatMap((owner) =>
@@ -115,7 +122,8 @@ function flattenImagePrompts(manifest) {
         ownerName: owner.name,
         outputDirectory: owner.outputDirectory,
         fileName: imagePrompt.fileName,
-        prompt: withSizeHint(imagePrompt.prompt)
+        size: imagePrompt.size ?? args.size,
+        prompt: imagePrompt.prompt
       }))
     ),
     ...manifest.pages.flatMap((page) =>
@@ -125,18 +133,59 @@ function flattenImagePrompts(manifest) {
         ownerName: page.title,
         outputDirectory: page.outputDirectory,
         fileName: imagePrompt.fileName,
-        prompt: withSizeHint(imagePrompt.prompt)
+        size: imagePrompt.size ?? args.size,
+        prompt: imagePrompt.prompt
       }))
     )
   ];
 }
 
-function withSizeHint(prompt) {
-  return `${prompt} Preferred output size/aspect: ${args.size}.`;
+// Prefer a per-prompt size hint (e.g. a landscape banner image) over the global --size flag,
+// which otherwise gets applied uniformly to every image regardless of how it's actually displayed.
+function withSizeHint(prompt, sizeOverride) {
+  return `${prompt} Preferred output size/aspect: ${sizeOverride ?? args.size}.`;
+}
+
+// gemini-2.5-flash-image only accepts a discrete aspectRatio enum, not arbitrary pixel sizes.
+// Map a "WIDTHxHEIGHT" size string to the nearest supported ratio so a landscape size like
+// 1600x900 actually produces a 16:9 image instead of the default 1:1 square.
+const GEMINI_ASPECT_RATIOS = {
+  "1:1": 1,
+  "2:3": 2 / 3,
+  "3:2": 3 / 2,
+  "3:4": 3 / 4,
+  "4:3": 4 / 3,
+  "4:5": 4 / 5,
+  "5:4": 5 / 4,
+  "9:16": 9 / 16,
+  "16:9": 16 / 9,
+  "21:9": 21 / 9
+};
+
+function aspectRatioFromSize(size) {
+  const match = /^(\d+)\s*x\s*(\d+)$/i.exec(size ?? "");
+  if (!match) return null;
+  const target = Number(match[1]) / Number(match[2]);
+  if (!Number.isFinite(target) || target <= 0) return null;
+
+  let bestLabel = null;
+  let bestDiff = Infinity;
+  for (const [label, value] of Object.entries(GEMINI_ASPECT_RATIOS)) {
+    const diff = Math.abs(value - target);
+    if (diff < bestDiff) {
+      bestDiff = diff;
+      bestLabel = label;
+    }
+  }
+  return bestLabel;
 }
 
 function selectPrompts(prompts) {
-  const filtered = args.pet ? prompts.filter((prompt) => prompt.ownerType === "pet" && prompt.ownerSlug === args.pet) : prompts;
+  let filtered = prompts;
+  if (args.pet) filtered = filtered.filter((prompt) => prompt.ownerType === "pet" && prompt.ownerSlug === args.pet);
+  if (args.page) filtered = filtered.filter((prompt) => prompt.ownerType === "page" && prompt.ownerSlug === args.page);
+  if (args.owner) filtered = filtered.filter((prompt) => prompt.ownerType === "owner" && prompt.ownerSlug === args.owner);
+
   const limit = args.count ?? (args.mode === "preview" ? 2 : filtered.length);
   return filtered.slice(0, limit);
 }
@@ -151,8 +200,13 @@ async function generateWithGemini(prompts) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt.prompt }] }],
-        generationConfig: { responseModalities: ["IMAGE", "TEXT"] }
+        contents: [{ parts: [{ text: withSizeHint(prompt.prompt, prompt.size) }] }],
+        generationConfig: {
+          responseModalities: ["IMAGE", "TEXT"],
+          // gemini-2.5-flash-image ignores any aspect ratio described in the prompt text and
+          // defaults to a square 1024x1024 unless imageConfig.aspectRatio is set explicitly.
+          ...(aspectRatioFromSize(prompt.size) ? { imageConfig: { aspectRatio: aspectRatioFromSize(prompt.size) } } : {})
+        }
       })
     });
     progress.note(`Provider returned HTTP ${response.status} for ${prompt.ownerName} after ${formatElapsed(requestStartedAt)}`);
