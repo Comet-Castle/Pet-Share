@@ -356,7 +356,7 @@ Exit criteria:
 - Asset upload and other previously fully-sequential network steps are batched or parallelized where it safely reduces run time.
 - No new AI provider calls are introduced, and no existing safety gate (approval, human-run media generation) is weakened.
 
-Working plan and detailed checklist: [`docs/plans/active/m13.md`](plans/active/m13.md).
+Working plan and detailed checklist: [`docs/plans/completed/m13.md`](plans/completed/m13.md).
 
 ## ⚪ Milestone 14: Final Seed Dataset
 

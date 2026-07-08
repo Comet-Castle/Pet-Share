@@ -193,7 +193,7 @@ For preview and review steps, the wizard requires `NEXT_PUBLIC_SANITY_PROJECT_ID
 
 The media generation step requires `GEMINI_API_KEY` when confirmed provider calls are requested.
 
-Sanity document writes and optional purges use chunked batch mutations where dependencies allow it. Approved media uploads are still individual asset uploads because Sanity asset ingestion is separate from document mutations. All write steps print progress in `processed / total` format with the remaining count.
+Sanity document writes and optional purges use chunked batch mutations where dependencies allow it. Approved media uploads run in small parallel batches (chunked `Promise.all`, no new dependency) because Sanity asset ingestion is separate from document mutations. All write steps print progress in `processed / total` format with the remaining count.
 
 Seed wizard and seed command output uses color-coded success, warning, and error states. Set `NO_COLOR=1` before running a seed command if you need plain output for logs or terminals that do not handle ANSI colors.
 
