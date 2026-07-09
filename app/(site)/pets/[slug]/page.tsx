@@ -19,7 +19,7 @@ import { RichText } from "@/components/ui/portable-text";
 import { SanityImage } from "@/components/ui/sanity-image";
 import { metadataFromSeo } from "@/lib/content/metadata";
 import { logger } from "@/lib/diagnostics/logger";
-import { loadFormDefinitionBySlug, loadPetBySlug, loadPetSlugs, loadRelatedPets } from "@/sanity/lib/loaders";
+import { loadFormDefinitionBySlug, loadPetBySlug, loadPetSlugs, loadRelatedPets, loadSiteDefaultSeo } from "@/sanity/lib/loaders";
 import { formatPetAge } from "@/components/features/pets/format";
 import { availabilityLabels } from "@/components/features/pets/status";
 
@@ -37,12 +37,14 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: PetSlugPageProps): Promise<Metadata> {
   const { slug } = await params;
+  const siteDefaultSeo = await loadSiteDefaultSeo().catch(() => null);
   let pet: Awaited<ReturnType<typeof loadPetBySlug>> | null = null;
 
   try {
     pet = await loadPetBySlug(slug);
   } catch {
     return metadataFromSeo({
+      siteDefaultSeo,
       fallbackTitle: "Pet listing",
       fallbackDescription: "This pet listing is temporarily unavailable."
     });
@@ -50,6 +52,7 @@ export async function generateMetadata({ params }: PetSlugPageProps): Promise<Me
 
   if (!pet) {
     return metadataFromSeo({
+      siteDefaultSeo,
       fallbackTitle: "Pet not found",
       fallbackDescription: "This pet listing is not available."
     });
@@ -57,9 +60,11 @@ export async function generateMetadata({ params }: PetSlugPageProps): Promise<Me
 
   return metadataFromSeo({
     seo: pet.seo,
+    siteDefaultSeo,
     fallbackTitle: pet.name,
     fallbackDescription: pet.listingSummary,
-    path: `/pets/${slug}`
+    path: `/pets/${slug}`,
+    dynamicImagePath: `/pets/${slug}/opengraph-image`
   });
 }
 

@@ -13,7 +13,7 @@ import { SystemMessage } from "@/components/features/system/system-message";
 import { availabilityLabels, urgencyLabels } from "@/components/features/pets/status";
 import { logger } from "@/lib/diagnostics/logger";
 import { metadataFromSeo } from "@/lib/content/metadata";
-import { loadPetIndexPage, loadPetsIndex, loadPetsIndexCount, loadPetTypes } from "@/sanity/lib/loaders";
+import { loadPetIndexPage, loadPetsIndex, loadPetsIndexCount, loadPetTypes, loadSiteDefaultSeo } from "@/sanity/lib/loaders";
 import {
   PET_PAGE_SIZE,
   countActiveFilters,
@@ -56,17 +56,21 @@ function normalizePetTypeSlugs(value: string | string[] | undefined) {
 }
 
 export async function generateMetadata(): Promise<Metadata> {
+  const siteDefaultSeo = await loadSiteDefaultSeo().catch(() => null);
+
   try {
     const page = await loadPetIndexPage();
 
     return metadataFromSeo({
       seo: page?.seo,
+      siteDefaultSeo,
       fallbackTitle: "Pets",
       fallbackDescription: "Find pets currently available for temporary stays.",
       path: "/pets"
     });
   } catch {
     return metadataFromSeo({
+      siteDefaultSeo,
       fallbackTitle: "Pets",
       fallbackDescription: "Find pets currently available for temporary stays.",
       path: "/pets"

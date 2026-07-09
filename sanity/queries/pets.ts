@@ -28,17 +28,16 @@ export const petIndexFilters = /* groq */ `
   (!defined($minEnergy) || energyLevel >= $minEnergy)
 `;
 
-// GROQ in this Sanity version does not support `select()`, so enum-based sorts
-// ("featured first" and "soonest pickup") rank values with descending boolean
-// comparisons instead. Each order clause falls back to a stable name/_id tiebreak.
+// GROQ in this Sanity version does not support `select()`, so the enum-based
+// "featured first" sort ranks values with descending boolean comparisons instead.
+// Each order clause falls back to a stable name/_id tiebreak. The distance sort
+// pushes pets without a distance to the end via `defined(...) desc`.
 export const petIndexSortOrders = {
   featured:
     '(listingPlan == "spotlight") desc, (listingPlan == "couchRecovery") desc, name asc, _id asc',
   newest: '_createdAt desc, name asc, _id asc',
-  chaosLow: 'chaosLevel asc, name asc, _id asc',
-  chaosHigh: 'chaosLevel desc, name asc, _id asc',
-  pickup:
-    '(pickupUrgency == "immediately") desc, (pickupUrgency == "withinSevenDays") desc, name asc, _id asc'
+  distance: 'defined(distanceKilometers) desc, distanceKilometers asc, name asc, _id asc',
+  alphabetical: 'name asc, _id asc'
 } as const;
 
 export type PetIndexSort = keyof typeof petIndexSortOrders;
@@ -251,7 +250,9 @@ export const PET_BY_ID_QUERY = defineQuery(/* groq */ `
 
 export const PET_SLUGS_QUERY = defineQuery(/* groq */ `
   *[_type == "pet" && defined(slug.current) && submissionStatus == "approved"] | order(slug.current asc){
-    "slug": slug.current
+    "slug": slug.current,
+    "noIndex": seo.noIndex,
+    _updatedAt
   }
 `);
 

@@ -7,7 +7,7 @@ import { PetCard } from "@/components/features/pets/pet-card";
 import { SystemMessage } from "@/components/features/system/system-message";
 import { portableTextToPlainText } from "@/lib/content/plain-text";
 import { metadataFromSeo } from "@/lib/content/metadata";
-import { loadOwnerBySlug, loadOwnerSlugs } from "@/sanity/lib/loaders";
+import { loadOwnerBySlug, loadOwnerSlugs, loadSiteDefaultSeo } from "@/sanity/lib/loaders";
 
 type OwnerSlugPageProps = Readonly<{
   params: Promise<{
@@ -32,12 +32,14 @@ function formatMemberSince(value: string | null | undefined) {
 
 export async function generateMetadata({ params }: OwnerSlugPageProps): Promise<Metadata> {
   const { slug } = await params;
+  const siteDefaultSeo = await loadSiteDefaultSeo().catch(() => null);
   let owner: Awaited<ReturnType<typeof loadOwnerBySlug>> | null = null;
 
   try {
     owner = await loadOwnerBySlug(slug);
   } catch {
     return metadataFromSeo({
+      siteDefaultSeo,
       fallbackTitle: "Owner profile",
       fallbackDescription: "This owner page is temporarily unavailable."
     });
@@ -45,6 +47,7 @@ export async function generateMetadata({ params }: OwnerSlugPageProps): Promise<
 
   if (!owner) {
     return metadataFromSeo({
+      siteDefaultSeo,
       fallbackTitle: "Owner not found",
       fallbackDescription: "This owner page is not available."
     });
@@ -52,9 +55,11 @@ export async function generateMetadata({ params }: OwnerSlugPageProps): Promise<
 
   return metadataFromSeo({
     seo: owner.seo,
+    siteDefaultSeo,
     fallbackTitle: owner.name,
     fallbackDescription: owner.tagline,
-    path: `/owners/${slug}`
+    path: `/owners/${slug}`,
+    dynamicImagePath: `/owners/${slug}/opengraph-image`
   });
 }
 

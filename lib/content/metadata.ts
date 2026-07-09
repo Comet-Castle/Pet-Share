@@ -26,6 +26,8 @@ type MetadataInput = Readonly<{
   siteDefaultSeo?: SeoLike;
   /** Root-relative path for this page, used for the canonical URL and og:url. */
   path?: string;
+  /** Optional stable ImageResponse route to use for composed social cards. */
+  dynamicImagePath?: string;
 }>;
 
 // Standard Open Graph image dimensions. Kept as constants so the forced-PNG URL
@@ -35,6 +37,8 @@ const OG_HEIGHT = 630;
 
 // Static branded fallback shipped in `public/`. Used when neither the page nor the
 // site default authored an OG image. Already a correctly-sized PNG.
+const SITE_NAME = "Pet Share";
+const SITE_TITLE_SUFFIX = ` | ${SITE_NAME}`;
 const STATIC_OG_FALLBACK = "/og-default.png";
 
 /**
@@ -50,6 +54,14 @@ function toOgPng(rawUrl: string): string {
 
   const separator = rawUrl.includes("?") ? "&" : "?";
   return `${rawUrl}${separator}w=${OG_WIDTH}&h=${OG_HEIGHT}&fit=crop&auto=format&fm=png`;
+}
+
+function toMetadataTitle(title: string): Metadata["title"] {
+  if (title === SITE_NAME || title.endsWith(SITE_TITLE_SUFFIX)) {
+    return { absolute: title };
+  }
+
+  return title;
 }
 
 /** Resolves a root-relative path to an absolute URL against the site URL. */
@@ -68,8 +80,8 @@ function toAbsoluteUrl(path?: string): string | undefined {
 /**
  * Builds Next.js route metadata from a Sanity SEO object with resilient fallbacks.
  *
- * OG image resolution order: page `seo` image → site `defaultSeo` image →
- * static `public/og-default.png`. Sanity-hosted images are forced to a 1200×630
+ * OG image resolution order: dynamic route image → page `seo` image → site
+ * `defaultSeo` image → static `public/og-default.png`. Sanity-hosted images are forced to a 1200×630
  * PNG (`fm=png`). Also emits a Twitter `summary_large_image` card and, when a
  * `path` is provided, a canonical URL and `og:url`. `metadataBase` (root layout)
  * makes the static fallback and any relative URLs absolute.
@@ -79,7 +91,8 @@ export function metadataFromSeo({
   fallbackTitle,
   fallbackDescription,
   siteDefaultSeo,
-  path
+  path,
+  dynamicImagePath
 }: MetadataInput): Metadata {
   const title = seo?.title ?? fallbackTitle;
   const description = seo?.description ?? fallbackDescription ?? undefined;
@@ -87,7 +100,7 @@ export function metadataFromSeo({
   const pageImageUrl = seo?.openGraphImage?.image?.asset?.url;
   const siteImageUrl = siteDefaultSeo?.openGraphImage?.image?.asset?.url;
   const rawImageUrl = pageImageUrl ?? siteImageUrl;
-  const imageUrl = rawImageUrl ? toOgPng(rawImageUrl) : STATIC_OG_FALLBACK;
+  const imageUrl = dynamicImagePath ?? (rawImageUrl ? toOgPng(rawImageUrl) : STATIC_OG_FALLBACK);
   const imageAlt =
     seo?.openGraphImage?.alt ?? siteDefaultSeo?.openGraphImage?.alt ?? title;
 
@@ -103,7 +116,7 @@ export function metadataFromSeo({
   ];
 
   return {
-    title,
+    title: toMetadataTitle(title),
     description,
     alternates: canonical ? { canonical } : undefined,
     robots: seo?.noIndex ? { index: false, follow: false } : undefined,
@@ -112,7 +125,7 @@ export function metadataFromSeo({
       description,
       url: canonical,
       type: "website",
-      siteName: "Pet Share",
+      siteName: SITE_NAME,
       images: ogImages
     },
     twitter: {

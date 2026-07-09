@@ -6,9 +6,8 @@ export const RATING_STEPS = [1, 2, 3, 4, 5] as const;
 export const petIndexSortOptions: ReadonlyArray<{ value: PetIndexSort; label: string }> = [
   { value: "featured", label: "Featured" },
   { value: "newest", label: "Newest" },
-  { value: "chaosLow", label: "Chaos: low to high" },
-  { value: "chaosHigh", label: "Chaos: high to low" },
-  { value: "pickup", label: "Soonest pickup" }
+  { value: "distance", label: "Distance" },
+  { value: "alphabetical", label: "Alphabetical" }
 ];
 
 export type PetFilterState = Readonly<{

@@ -12,7 +12,7 @@ import { Reveal } from "@/components/ui/reveal";
 import { RichText } from "@/components/ui/portable-text";
 import { logger } from "@/lib/diagnostics/logger";
 import { metadataFromSeo } from "@/lib/content/metadata";
-import { loadHomePage } from "@/sanity/lib/loaders";
+import { loadHomePage, loadSiteDefaultSeo } from "@/sanity/lib/loaders";
 
 const homepageLocationLabel = "Near you in Hamilton, ON";
 
@@ -268,17 +268,21 @@ function HomepageTestimonialsSection({ testimonials }: Readonly<{ testimonials: 
 }
 
 export async function generateMetadata(): Promise<Metadata> {
+  const siteDefaultSeo = await loadSiteDefaultSeo().catch(() => null);
+
   try {
     const page = await loadHomePage();
 
     return metadataFromSeo({
       seo: page?.seo,
+      siteDefaultSeo,
       fallbackTitle: "Pet Share",
       fallbackDescription: "A bright marketplace for temporary pet relief.",
       path: "/"
     });
   } catch {
     return metadataFromSeo({
+      siteDefaultSeo,
       fallbackTitle: "Pet Share",
       fallbackDescription: "A bright marketplace for temporary pet relief.",
       path: "/"

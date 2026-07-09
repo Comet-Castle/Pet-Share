@@ -381,7 +381,7 @@ Exit criteria:
 
 Working plan and detailed checklist: [`docs/plans/completed/m14.md`](plans/completed/m14.md).
 
-## ⚪ Milestone 15: Final Content And UI Review
+## ✅ Milestone 15: Final Content And UI Review
 
 Goal:
 
@@ -392,7 +392,7 @@ Scope:
 - Review all public pages with the final Sanity dataset.
 - Review copy for tone, clarity, satire, and consistency.
 - Review UI and content together, not only component states.
-- Confirm SEO metadata and social images are present where expected.
+- Finalize SEO: implement `sitemap.ts` and `robots.ts`, wire site-default SEO into every route, and confirm per-route metadata, canonical URLs, and Open Graph / Twitter social images are present and resolve where expected.
 - Confirm forms, preview, Visual Editing, media, seed content, and CMS relationships still work after final data loading.
 - Fix any final launch-blocking content or UI issues.
 
@@ -401,6 +401,8 @@ Exit criteria:
 - The final content and UI are approved for launch.
 - Known non-launch-blocking issues are documented in backlog.
 - No obvious placeholder copy, broken references, or missing critical images remain.
+
+Completed plan and detailed checklist: [`docs/plans/completed/m15.md`](plans/completed/m15.md).
 
 ## ⚪ Milestone 16: Deployment Readiness And Go Live
 

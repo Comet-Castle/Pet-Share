@@ -93,6 +93,8 @@ export const OWNER_BY_ID_QUERY = defineQuery(/* groq */ `
 
 export const OWNER_SLUGS_QUERY = defineQuery(/* groq */ `
   *[_type == "owner" && defined(slug.current)] | order(slug.current asc){
-    "slug": slug.current
+    "slug": slug.current,
+    "noIndex": seo.noIndex,
+    _updatedAt
   }
 `);

@@ -97,6 +97,17 @@ export function loadSiteSettings(options: LoadOptions = {}) {
 }
 
 /**
+ * Loads the site-wide default SEO object, used by `metadataFromSeo()` as the
+ * OG-image/description fallback when a route's own `seo` has no image of its own.
+ * Reuses `loadSiteSettings`, which Next's fetch memoization already dedupes
+ * against the identical call in `app/(site)/layout.tsx` within the same request.
+ */
+export async function loadSiteDefaultSeo(options: LoadOptions = {}) {
+  const settings = await loadSiteSettings(options);
+  return settings?.defaultSeo ?? null;
+}
+
+/**
  * Loads the CMS-authored homepage singleton.
  */
 export function loadHomePage(options: LoadOptions = {}) {

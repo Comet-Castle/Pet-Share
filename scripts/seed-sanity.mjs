@@ -1934,9 +1934,26 @@ function preserveImageWithAltFields(value, existingValue) {
 async function purgeSeedDocuments() {
   const client = getClient();
   const singletonIds = ["siteSettings", "homePage", "petIndexPage", "systemPage-notFound", "systemPage-serverError", "systemPage-genericError"];
+  const singletonDraftIds = singletonIds.map((id) => `drafts.${id}`);
   const purgeOrder = ["marketingPage", "systemPage", "homePage", "petIndexPage", "siteSettings", "formDefinition", "testimonial", "pet", "owner", "petType"];
-  const docs = await client.fetch(`*[(defined(seedKey) || _id in $singletonIds) && !(_id in path("drafts.**"))]{_id, _type, seedKey}`, { singletonIds });
-  const orderedDocs = docs.sort((a, b) => purgeOrder.indexOf(a._type) - purgeOrder.indexOf(b._type));
+
+  // A true seed purge must remove draft versions of seeded documents too. Sanity
+  // enforces references from drafts, so leaving `drafts.homePage` in place can
+  // block deleting featured pets/testimonials referenced only by that draft.
+  const rawClient = client.withConfig({ perspective: "raw" });
+  const docs = await rawClient.fetch(
+    `*[
+      defined(seedKey) ||
+      _id in $singletonIds ||
+      _id in $singletonDraftIds
+    ]{_id, _type, seedKey, "isDraft": _id in path("drafts.**")}`,
+    { singletonIds, singletonDraftIds }
+  );
+  const orderedDocs = docs.sort((a, b) => {
+    const typeDelta = purgeOrder.indexOf(a._type) - purgeOrder.indexOf(b._type);
+    if (typeDelta !== 0) return typeDelta;
+    return Number(b.isDraft) - Number(a.isDraft);
+  });
   const progress = createProgress("Purge seeded documents", orderedDocs.length);
 
   if (orderedDocs.length === 0) {
@@ -1957,7 +1974,8 @@ async function purgeSeedDocuments() {
       await mutateWithReferenceRetry(client, chunk.map((doc) => ({ delete: { id: doc._id } })));
 
       chunk.forEach((doc) => {
-        progress.tick(`Deleted ${doc._type}: ${doc.seedKey ?? doc._id}`);
+        const draftLabel = doc.isDraft ? "draft " : "";
+        progress.tick(`Deleted ${draftLabel}${doc._type}: ${doc.seedKey ?? doc._id}`);
       });
     }
   }
@@ -2215,8 +2233,18 @@ function resolveReferences(value, context) {
     delete value.seedAssetKey;
   }
 
+  // Sanity represents an absent field by omitting its key, never by storing null.
+  // A null on a typed field (e.g. an object field like `cta`) surfaces in Studio as
+  // an "Invalid property value" error, so drop any key that resolves to null/undefined.
+  // This covers literal nulls from the seed JSON, transform helpers that return null
+  // for absent objects, and reference fields whose seed key failed to resolve.
   for (const [keyName, child] of Object.entries(value)) {
-    value[keyName] = resolveReferences(child, context);
+    const resolved = resolveReferences(child, context);
+    if (resolved === null || resolved === undefined) {
+      delete value[keyName];
+    } else {
+      value[keyName] = resolved;
+    }
   }
 
   return value;

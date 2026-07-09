@@ -141,7 +141,9 @@ export const MARKETING_PAGE_BY_ID_QUERY = defineQuery(/* groq */ `
 
 export const MARKETING_PAGE_SLUGS_QUERY = defineQuery(/* groq */ `
   *[_type == "marketingPage" && defined(slug.current)] | order(slug.current asc){
-    "slug": slug.current
+    "slug": slug.current,
+    "noIndex": seo.noIndex,
+    _updatedAt
   }
 `);
 

@@ -330,7 +330,7 @@ function PricingValueSection(section: SectionByType<"pricingValueSection">) {
   return (
     <SectionFrame className="pb-16 pt-0 lg:pb-20">
       {section.valueItems?.length ? (
-        <div className="grid gap-5 rounded-[2rem] bg-white/72 p-5 shadow-soft backdrop-blur sm:grid-cols-3 sm:p-7">
+        <div className="grid gap-5 rounded-[2rem] bg-white/72 p-5 shadow-soft backdrop-blur sm:p-7 lg:grid-cols-3">
           {section.valueItems.map((item) => (
             <article key={item._key} className="flex min-w-0 gap-4 rounded-[1.5rem] bg-white/70 p-5">
               <IconBadge icon={item.icon} className="size-12 bg-pet-coral/12 text-pet-coral" />
@@ -530,7 +530,7 @@ function ProcessPathSection(section: SectionByType<"processPathSection">) {
           <div className="min-w-0">
             <SectionHeader header={header} className="mb-0" />
           </div>
-          <span className="flex size-14 shrink-0 items-center justify-center rounded-full bg-white/85 text-pet-ink shadow-sm">
+          <span className="hidden size-14 shrink-0 items-center justify-center rounded-full bg-white/85 text-pet-ink shadow-sm sm:flex">
             {section.icon ? <IconBadge icon={section.icon} className="size-14 bg-transparent" /> : <HeaderIcon aria-hidden="true" size={28} />}
           </span>
         </div>

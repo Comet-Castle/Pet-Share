@@ -6,13 +6,17 @@ import { PageSections } from "@/components/features/sections/page-sections";
 import { SystemMessage } from "@/components/features/system/system-message";
 import { metadataFromSeo } from "@/lib/content/metadata";
 import { logger } from "@/lib/diagnostics/logger";
-import { loadFormDefinitionBySlug, loadMarketingPageBySlug, loadMarketingPageSlugs } from "@/sanity/lib/loaders";
+import { loadFormDefinitionBySlug, loadMarketingPageBySlug, loadMarketingPageSlugs, loadSiteDefaultSeo } from "@/sanity/lib/loaders";
 
 type MarketingSlugPageProps = Readonly<{
   params: Promise<{
     slug: string;
   }>;
 }>;
+
+// Marketing pages are fully CMS-enumerated at build time. Unknown slugs (for
+// example the removed `/about` page) should be real 404s, not fallback shells.
+export const dynamicParams = false;
 
 export async function generateStaticParams() {
   const pages = await loadMarketingPageSlugs();
@@ -22,12 +26,14 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: MarketingSlugPageProps): Promise<Metadata> {
   const { slug } = await params;
+  const siteDefaultSeo = await loadSiteDefaultSeo().catch(() => null);
   let page: Awaited<ReturnType<typeof loadMarketingPageBySlug>> | null = null;
 
   try {
     page = await loadMarketingPageBySlug(slug);
   } catch {
     return metadataFromSeo({
+      siteDefaultSeo,
       fallbackTitle: "Pet Share",
       fallbackDescription: "This page is temporarily unavailable."
     });
@@ -35,6 +41,7 @@ export async function generateMetadata({ params }: MarketingSlugPageProps): Prom
 
   if (!page) {
     return metadataFromSeo({
+      siteDefaultSeo,
       fallbackTitle: "Page not found",
       fallbackDescription: "This marketing page is not available."
     });
@@ -42,6 +49,7 @@ export async function generateMetadata({ params }: MarketingSlugPageProps): Prom
 
   return metadataFromSeo({
     seo: page.seo,
+    siteDefaultSeo,
     fallbackTitle: page.title,
     fallbackDescription: `${page.title} from Pet Share.`,
     path: `/${slug}`

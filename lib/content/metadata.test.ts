@@ -57,6 +57,16 @@ describe("metadataFromSeo OG image", () => {
     expect(ogImage(meta).url).toContain("page-800x800.png");
   });
 
+  it("uses a stable dynamic route image before authored or site-default images", () => {
+    const meta = metadataFromSeo({
+      seo: sanityImageSeo,
+      fallbackTitle: "Pet",
+      dynamicImagePath: "/pets/beans/opengraph-image"
+    });
+    expect(ogImage(meta).url).toBe("/pets/beans/opengraph-image");
+    expect(meta.twitter?.images).toEqual(["/pets/beans/opengraph-image"]);
+  });
+
   it("leaves non-Sanity image URLs untouched (no fm=png)", () => {
     const meta = metadataFromSeo({
       seo: { openGraphImage: { image: { asset: { url: "https://example.com/pic.jpg" } } } },
@@ -76,5 +86,11 @@ describe("metadataFromSeo OG image", () => {
   it("marks noIndex SEO as non-indexable", () => {
     const meta = metadataFromSeo({ seo: { noIndex: true }, fallbackTitle: "Pet" });
     expect(meta.robots).toEqual({ index: false, follow: false });
+  });
+
+  it("uses absolute metadata titles when CMS titles already include the site name", () => {
+    const meta = metadataFromSeo({ seo: { title: "Pricing | Pet Share" }, fallbackTitle: "Pricing" });
+    expect(meta.title).toEqual({ absolute: "Pricing | Pet Share" });
+    expect(meta.openGraph?.title).toBe("Pricing | Pet Share");
   });
 });
