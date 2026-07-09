@@ -15,7 +15,7 @@ This document captures practical frontend verification lessons for Pet Share. Us
 
 ## Verification Ladder
 
-Use the smallest useful check for the change. Do not turn every visual adjustment into a full milestone QA pass.
+Use the smallest useful check for the change. Do not turn every visual adjustment into a full launch-readiness QA pass.
 
 1. **Text-only or tiny class tweak**
    - Inspect the diff.
@@ -41,7 +41,7 @@ Use the smallest useful check for the change. Do not turn every visual adjustmen
    - Verify Sanity document content directly if the rendered page appears stale.
    - Explain whether the rendered app may need a dev-server restart, cache refresh, or revalidation.
 
-5. **Milestone or broad page redesign**
+5. **Broad page redesign or launch-readiness pass**
    - Use desktop and mobile screenshots.
    - Check page identity, blank-page state, framework overlay absence, console health, responsive behavior, and at least one relevant interaction.
    - Summarize remaining visual differences against the accepted design reference.

@@ -4,9 +4,9 @@ Pet Share is a demo website built with a Next.js frontend and Sanity CMS for str
 
 ## Project Status
 
-The project has a scaffolded Next.js App Router application with embedded Sanity Studio routing, TypeScript, Tailwind CSS, ESLint, and Vitest. Public route skeletons are wired for the homepage, pet index, pet detail pages, direct owner pages, Standard Pages, and friendly system states. Page-builder section rendering is underway for CMS-authored standard content.
+The project has a Sanity-backed Next.js App Router application with embedded Sanity Studio routing, TypeScript, Tailwind CSS, ESLint, and Vitest. Public routes are implemented for the homepage, pet index, pet detail pages, direct owner pages, CMS-authored marketing pages, and friendly system states. Launch-readiness work should use `docs/launch-checklist.md`; future-scope ideas belong in `docs/backlog.md`.
 
-Implementation work should follow `docs/milestones.md` as the controlling scope. Supporting docs define standards and constraints, but they should not expand a milestone beyond its stated goal.
+Implementation work should follow the current product docs, launch checklist, and backlog. Supporting docs define standards and constraints; defer future-scope ideas to `docs/backlog.md` unless they are explicitly prioritized.
 
 ## Planned Stack
 
@@ -35,7 +35,7 @@ Implementation work should follow `docs/milestones.md` as the controlling scope.
 - Accessibility checklist: `docs/accessibility-checklist.md`
 - Content governance: `docs/content-governance.md`
 - Launch checklist: `docs/launch-checklist.md`
-- Implementation milestones: `docs/milestones.md`
+- Launch readiness checklist: `docs/launch-checklist.md`
 - Sanity Presentation and preview workflow: `docs/sanity-presentation-and-media.md`
 - Future work backlog: `docs/backlog.md`
 - Shared agent instructions: `AGENTS.md`

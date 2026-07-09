@@ -125,6 +125,151 @@ Options considered but not chosen:
 - Keep only a smaller representative media set in Git and document a full-media seed package as optional.
 - Use Git LFS.
 
+## Deferred Launch Scope
+
+These items were explicitly deferred out of the first public build. Keep them out of launch-readiness work unless priorities change.
+
+### Owner Dashboards
+
+Goal:
+
+- Give pet owners a protected dashboard to manage listings, messages, and account/profile details.
+
+Status:
+
+- Backlog candidate.
+- Depends on public user accounts and an authorization model.
+
+Notes:
+
+- Phase one owner pages are CMS-authored profiles, not self-serve accounts.
+- Do not add owner dashboard routes or dashboard navigation until authentication and direct owner workflows are intentionally scoped.
+
+### Pet Type Landing Pages
+
+Goal:
+
+- Add browseable landing pages for each pet type, such as `/pets/types/dogs` or a similar route pattern.
+
+Status:
+
+- Backlog candidate.
+- Useful for SEO and browsing once launch traffic or content strategy justifies it.
+
+Notes:
+
+- Phase one uses pet type filters on `/pets` instead of standalone pet type pages.
+- If added later, confirm route shape, sitemap behavior, canonical/filter interactions, and authored SEO needs before implementation.
+
+### Standalone Testimonials Page
+
+Goal:
+
+- Create a dedicated page for testimonial content beyond homepage/section embeds.
+
+Status:
+
+- Backlog candidate.
+
+Notes:
+
+- Phase one testimonials are reusable CMS content surfaced through homepage and page-builder sections.
+- A standalone page should wait until there is enough curated testimonial content to justify the route and navigation placement.
+
+### Generated Video Binaries
+
+Goal:
+
+- Support generated or hosted video assets as actual media files rather than only authored video URLs or lightweight card-loop references.
+
+Status:
+
+- Backlog candidate.
+
+Notes:
+
+- Phase one avoids committing or generating video binaries.
+- Future work should define storage, moderation/review, transcodes, posters, captions, file-size limits, and cost controls before adding video generation or uploads.
+
+### Framer Motion Or Heavier Animation Library
+
+Goal:
+
+- Add a dedicated animation dependency if CSS/Tailwind-level motion is no longer enough.
+
+Status:
+
+- Deferred dependency decision.
+
+Notes:
+
+- Current launch build uses lightweight CSS/reveal behavior instead of Framer Motion.
+- Reconsider only if staggered choreography, complex scroll-triggered animation, or gesture-heavy UI outgrows the existing approach.
+- Update `docs/dependency-decision-log.md` and `ATTRIBUTIONS.md` if a new animation library is added.
+
+### Heavier End-To-End Test Coverage
+
+Goal:
+
+- Add broader Playwright-style E2E coverage beyond critical launch smoke checks.
+
+Status:
+
+- Backlog candidate.
+
+Notes:
+
+- Phase one relies on lint, typecheck, unit/integration tests, build checks, sitemap/metadata crawls, and manual browser QA.
+- Future E2E coverage should prioritize critical flows first: pet browsing/filter URLs, form submissions with mocked email, draft preview, and deployment smoke checks.
+
+### Sanity Data Layer `defineLive` Migration
+
+Goal:
+
+- Revisit the Sanity data layer and evaluate migrating to the idiomatic `next-sanity` `defineLive` auto-resolve pattern, potentially with `strict: true`.
+
+Status:
+
+- Backlog candidate.
+- Broad architectural refactor; do not mix into deployment readiness.
+
+Context:
+
+- The current implementation uses manual `draftMode()` branching and separate published/preview fetch helpers.
+- A `defineLive` migration could reduce published-vs-draft blind spots and improve compile-time draft-safety.
+- The current manual pattern is functionally correct, and this project still needs explicit `draftMode()` checks for non-perspective behavior such as unapproved pet/owner preview filters and published-perspective metadata reads.
+
+Acceptance notes:
+
+- Treat this as a dedicated change with a full Studio-to-Presentation verification pass.
+- Audit all loaders and public/preview routes before implementation.
+- Confirm Visual Editing, preview routes, metadata reads, and unpublished document-ID previews still behave correctly.
+
+## On-Demand Sanity Webhook Revalidation
+
+Goal:
+
+- Add a server-only route that validates Sanity webhook requests and revalidates affected pages/tags immediately after publish events.
+
+Status:
+
+- Backlog candidate.
+- Not required for the current launch build unless immediate publish-to-production updates become a launch requirement.
+
+Current state:
+
+- The app has no custom `/api/revalidate` route.
+- Deployment verification should test the current Sanity fetching/cache behavior rather than assume webhook revalidation exists.
+
+Recommended direction:
+
+- Add a server-only webhook route under `app/api/revalidate/route.ts` or a similarly explicit path.
+- Require a server-only shared secret, such as `SANITY_REVALIDATE_SECRET`, only when the route is implemented.
+- Validate the webhook before any side effects.
+- Map Sanity document types to targeted paths or cache tags.
+- Log safe diagnostic context on failures without exposing secrets or payload bodies.
+- Add tests for secret validation and document-type-to-path/tag mapping.
+
 ## Prototyping Workflow Outline
 
 Goal:

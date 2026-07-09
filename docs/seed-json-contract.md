@@ -1,12 +1,12 @@
 # Seed JSON Contract
 
-This document defines the saved JSON shape for Pet Share demo seed data. It should be used before scaffolding so Sanity schemas, seed scripts, generated media workflows, GROQ queries, and frontend types all share the same assumptions.
+This document defines the local JSON shape used by Pet Share seed tooling. It keeps Sanity schemas, seed scripts, generated media workflows, GROQ queries, and frontend types aligned.
 
-The seed JSON files are the durable source of truth for demo content. Normal seed runs should replay these files into Sanity rather than regenerating content or media.
+The local seed JSON files are operational inputs for generating and writing demo content, not the repository's durable content source. `sanity/seed/` is gitignored; after a successful write, Sanity is the source of truth for the live demo dataset.
 
 ## Goals
 
-- Define stable seed file shapes before implementation.
+- Define and maintain stable seed file shapes for local seed tooling.
 - Keep relationships deterministic without relying on Sanity `_id` values for ordinary documents.
 - Make generated media reviewable, repeatable, and attributable.
 - Keep future video generation prompts available without generating video binaries in phase one.
@@ -80,7 +80,7 @@ Reference rule:
 
 Image references point to media through `assetKey`. The matching approved file is discovered by convention under `sanity/seed/media/` (see "Media discovery" below); there is no separate manifest file tracking generation status or Sanity upload state.
 
-During Milestone 1, manifest entries may use `status: "planned"` before the actual local image files exist. Final seed replay should use approved local media files under `sanity/seed/media/`.
+During early seed planning, manifest entries may use `status: "planned"` before the actual local image files exist. Final seed replay should use approved local media files under `sanity/seed/media/`.
 
 ```json
 {

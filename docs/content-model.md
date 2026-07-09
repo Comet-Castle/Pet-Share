@@ -1,6 +1,6 @@
 # Content Model
 
-This document is a first-pass planning model for Pet Share's Sanity content. It is not final. Use it to guide early schema, route, query, preview, and revalidation work, then update it as the product direction becomes clearer.
+This document captures Pet Share's Sanity content model and related frontend expectations. Use it to keep schemas, routes, queries, preview behavior, and seed workflows aligned as the project evolves.
 
 ## Modeling Goals
 
@@ -224,7 +224,7 @@ Revalidation:
 
 ### `marketingPage`
 
-Flexible page type for mostly static pages such as About, Process, Pricing, and Contact.
+Flexible page type for mostly static pages such as How It Works, Pricing, Contact, and Guarantee.
 
 Suggested Sanity fields:
 
@@ -502,7 +502,7 @@ Suggested Sanity fields:
 
 Notes:
 
-- Testimonials can appear on the homepage, pet pages, owner pages, pricing page, process page, and other marketing sections.
+- Testimonials can appear on the homepage, pet pages, owner pages, pricing page, How It Works page, and other marketing sections.
 - Do not build a standalone testimonials page in the first pass unless the site direction changes.
 - Keep them fictional and satirical, but formatted like believable customer proof.
 
@@ -1000,7 +1000,7 @@ Initial seed content:
 - Home page with multiple hero carousel slides, a process summary, featured pets, testimonials, stats, and CTA content.
 - Pet index page with hero copy, filter intro, empty-state copy, featured pets, and a CTA.
 - System pages for not found, server error, and generic error states with clear recovery CTAs.
-- Marketing pages for About, Process, Pricing, and Contact.
+- Marketing pages for How It Works, Pricing, Contact, and Guarantee.
 - Starter `petType` documents from the approved real pet type list.
 - Example owners with portraits, bios, locations, and satirical trust details.
 - Example pets connected to owners and pet types, with listing copy, one- or two-paragraph detail descriptions, structured category fields, galleries, warnings, care notes, borrow terms, and optional videos.

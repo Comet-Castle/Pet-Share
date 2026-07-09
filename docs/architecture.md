@@ -1,6 +1,6 @@
 # Architecture
 
-This document captures the intended technical shape for Pet Share before the app is scaffolded. Treat it as a planning baseline, not a rigid contract. If the implementation later proves a different approach is better, update this file with the new decision and rationale.
+This document captures the current intended technical shape for Pet Share. Treat it as a living architecture reference, not a rigid contract. If implementation proves a different approach is better, update this file with the new decision and rationale.
 
 ## Goals
 
@@ -30,10 +30,10 @@ This document captures the intended technical shape for Pet Share before the app
 - Animation: start with Tailwind CSS utilities and small custom CSS. Framer Motion can be added later if scroll-triggered or more choreographed animation needs exceed what Tailwind/CSS can handle cleanly.
 - Sanity Studio: embedded at `/studio`.
 - Deployment: Vercel free tier for the Next.js app, with Sanity CMS as the content backend.
-- Preview: basic Draft Mode first from Sanity Studio preview links only; Sanity Visual Editing is a strong post-launch goal.
-- Caching: use cached/static public pages with Sanity webhook-driven revalidation.
+- Preview: Draft Mode, Sanity Presentation, and Visual Editing overlays are supported from Studio-origin preview links.
+- Caching: use cached/static public pages and documented Sanity fetch behavior. No custom webhook-driven revalidation route exists yet; on-demand revalidation is backlog work.
 - Email: use Mailgun for phase-one form delivery. Submissions send a branded do-not-reply acknowledgement to the submitter, with an optional server-only `MAILGUN_CC_EMAIL` address CC'd for oversight. There is no separate internal notification email or master project inbox.
-- Testing: keep the stack light with linting, type checking, targeted Vitest tests, and optional Playwright smoke tests later.
+- Testing: keep the stack light with linting, type checking, targeted Vitest tests, and optional Playwright smoke checks when browser verification is useful.
 - Platform tooling: use the local Vercel plugin and `sanity-best-practices` skill when available for platform-specific implementation guidance; do not treat either as an app dependency.
 
 ## Application Boundaries
@@ -124,7 +124,7 @@ This structure should be adjusted once real product needs are clearer, but avoid
 - Use `app/(site)/` for public marketing and marketplace routes without adding `(site)` to URLs.
 - Use `/pets` for the pet index singleton content plus queried pet cards.
 - Use `/pets/[slug]` for pet detail pages and `/owners/[slug]` for owner detail pages.
-- Use `app/(site)/[slug]/page.tsx` for Sanity-authored marketing pages such as About, Process, Pricing, and Contact.
+- Use `app/(site)/[slug]/page.tsx` for Sanity-authored marketing pages such as How It Works, Pricing, Contact, and Guarantee.
 - Do not add a public owner directory route in phase one.
 - Mount Sanity Studio at `app/studio/[[...tool]]/`.
 - Use `app/api/` only for server-side endpoints such as revalidation, preview mode, webhooks, or integrations that must not run in the browser.
@@ -172,14 +172,9 @@ This structure should be adjusted once real product needs are clearer, but avoid
 
 - Use static rendering and cached Sanity fetches for stable public content when practical.
 - Use explicit revalidation settings for content that changes predictably.
-- Implement on-demand revalidation for Sanity publish events. This is important for cache busting when editors publish page or listing changes.
-- Document any `no-store`, draft-mode, live-preview, or webhook-driven cache behavior near the implementation.
-- Keep webhook secrets server-only and verify incoming webhook requests before revalidating content.
-- Prefer Sanity's webhook signature tooling over hand-rolled signature validation when possible.
-- Design webhook payloads with enough document type, slug, and route information to revalidate specific paths or tags instead of always revalidating the entire site.
-- Use the document-to-path mapping in `docs/content-model.md` as the starting revalidation contract.
-- Start with predictable cache tags such as `site-settings`, `home-page`, `pet-index`, `marketing-page:${slug}`, `pet:${slug}`, `owner:${slug}`, `pet-type:${slug}`, `testimonial:${id}`, and `form:${slug}`.
-- Prefer targeted path/tag revalidation. Full-site revalidation should be a fallback for unknown relationships, not the default.
+- Document any `no-store`, draft-mode, live-preview, or cache behavior near the implementation.
+- No custom on-demand Sanity webhook revalidation route is currently implemented. If immediate publish-to-production cache busting becomes necessary, add it as a dedicated backlog item with server-only secret validation, document-type-to-path/tag mapping, and tests.
+- If webhook revalidation is added later, prefer Sanity's webhook signature tooling over hand-rolled signature validation, design payloads with enough document type/slug/route information to revalidate specific paths or tags, and use full-site revalidation only as a fallback for unknown relationships.
 
 ## Preview And Draft Mode
 
@@ -187,10 +182,10 @@ This structure should be adjusted once real product needs are clearer, but avoid
 - Preview links should originate from Sanity Studio only. Do not add a public/manual preview URL unless the project direction changes.
 - Draft preview should support all content-backed pages.
 - Unpublished draft pages should be previewable before they have a public route, using a draft-safe preview path or document identifier fallback.
-- Draft mode route handlers should validate a shared secret before enabling preview behavior.
+- Draft Mode enablement should use Sanity's preview URL validation flow and the server-only read token before enabling preview behavior.
 - Preview helpers should not be imported into ordinary public data-fetching helpers unless the code explicitly branches by draft mode.
 - The UI should make preview state obvious when preview mode is active and include an exit preview button.
-- Keep the implementation compatible with a future Sanity Visual Editing or Presentation Tool phase. Treat Visual Editing as a strong post-launch goal, but do not implement that complexity until the core content model and pages exist.
+- Keep Sanity Presentation and Visual Editing overlays working across public and preview routes.
 
 Starting preview routes:
 
@@ -238,7 +233,7 @@ Slugged published preview links can target their eventual public route when the 
 
 - Keep `.env.example` updated as the source of truth for required variables.
 - Browser-safe variables must use the `NEXT_PUBLIC_` prefix.
-- Sanity write tokens, preview secrets, webhook secrets, and authenticated API credentials must remain server-only.
+- Sanity write tokens, preview read tokens, future preview/webhook shared secrets, and authenticated API credentials must remain server-only.
 - Mailgun credentials must remain server-only.
 - Use Vercel platform tooling when available to inspect or configure deployment environment variables, but never copy secret values into docs or chat.
 - Validate required env vars at startup or before first use.
@@ -246,9 +241,9 @@ Slugged published preview links can target their eventual public route when the 
 ## Testing Strategy
 
 - Add unit tests for utilities, query helpers, data normalization, and non-trivial business logic.
-- Add route or integration tests for API handlers, preview mode, and webhook revalidation once those exist.
+- Add route or integration tests for API handlers, preview mode, and future webhook revalidation if that route is introduced.
 - Add component tests for complex interactive Client Components when testing tooling is available.
-- Keep smoke checks around build, lint, typecheck, and critical page rendering once the app is scaffolded.
+- Keep smoke checks around build, lint, typecheck, and critical page rendering.
 - Use responsive browser checks or screenshots for meaningful frontend layout changes when browser tooling is available.
 - Avoid building a heavy test harness before the app needs it.
 

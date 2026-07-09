@@ -58,17 +58,18 @@ pnpm test:e2e
 pnpm test:seed
 ```
 
-## Milestone Workflow
+## Change Workflow
 
-Before user review:
+Before review:
 
 - Run cheap targeted checks when useful and available.
 - Do not delay review with broad checks unless the change is risky.
 
-After user approval:
+Before commit, deployment, or launch handoff:
 
-- Add or update tests proportional to the milestone.
+- Add or update tests proportional to the change.
 - Run relevant lint, typecheck, tests, and build checks.
+- For launch readiness, run the full `pnpm lint`, `pnpm typecheck`, `pnpm test`, and `pnpm build` sequence.
 - Report failures clearly and distinguish current-change failures from pre-existing project state.
 
 ## What To Test
@@ -117,7 +118,7 @@ Coverage:
 - API handlers return stable user-safe error responses.
 - Form failures show friendly messages without exposing internal details.
 - Debug logging includes useful non-sensitive context when `APP_DEBUG=true`.
-- Logs never include Sanity tokens, Mailgun keys, Gemini keys, preview secrets, webhook secrets, or full submitted message bodies.
+- Logs never include Sanity tokens, Mailgun keys, Gemini keys, future preview/webhook shared secrets, or full submitted message bodies.
 - Route-level `error.tsx` and `not-found.tsx` states render useful recovery paths when they exist.
 - Custom system pages render static fallback copy if CMS-backed error copy cannot be fetched.
 - Error pages do not expose stack traces, raw provider errors, or debug-only context to users.
@@ -161,7 +162,7 @@ Coverage:
 Recommended level:
 
 - Component or route-level tests for data normalization and state decisions.
-- Small Playwright smoke checks after major route milestones.
+- Small Playwright smoke checks after major route or interaction changes.
 
 ### Forms And Mailgun
 
@@ -181,22 +182,22 @@ Recommended level:
 - Unit tests for validation.
 - Route/action integration tests with Mailgun mocked.
 
-### Preview And Revalidation
+### Preview And Cache Behavior
 
-Test authorization and mapping.
+Test authorization, preview mapping, and the current cache/update behavior.
 
 Coverage:
 
-- Draft Mode enable/disable requires the correct secret.
+- Draft Mode enable/disable uses Sanity's preview URL validation flow and server-only read token.
 - Preview supports home, pet index, marketing pages, pet detail, and owner detail.
 - Unpublished drafts can be previewed by document ID.
-- Sanity webhook signature or shared secret validation rejects invalid requests.
-- Document types map to the correct revalidation paths or tags.
+- Current Sanity cache/update behavior is verified in deployed smoke checks.
+- If on-demand webhook revalidation is introduced later, signature/shared-secret validation rejects invalid requests and document types map to the correct revalidation paths or tags.
 
 Recommended level:
 
-- Route handler tests.
-- Unit tests for document-type to path/tag mapping.
+- Route handler tests where practical.
+- Unit tests for document-type to path/tag mapping if webhook revalidation is introduced.
 
 ### Responsive UI And Accessibility
 
@@ -224,22 +225,16 @@ Recommended level:
 - Do not test real Gemini generation in automated tests.
 - Do not test Vercel deployment behavior locally beyond documented build and env checks.
 
-## Initial Test Priorities By Milestone
+## Current Launch Test Priorities
 
-- Milestone 1: seed JSON validation script or tests once sample files exist.
-- Milestone 2: lint, typecheck, build, and a minimal smoke test if tooling supports it.
-- Milestone 3: schema shape checks and seed/schema alignment.
-- Milestone 4: query helper tests and published-vs-preview separation.
-- Milestone 5: route smoke tests, not-found/empty states, and basic custom error fallback behavior.
-- Milestone 6: section renderer tests for supported block types and key responsive interactions.
-- Milestone 7: seed replay validation and manifest consistency.
-- Milestone 8: schema/typegen checks, targeted renderer checks for process and pricing sections, and focused browser QA for `/process` and `/pricing`.
-- Milestone 9: preview secret, Draft Mode, Visual Editing, and Media Library checks.
-- Milestone 10: pet index filter/pagination checks, pet detail gallery/contact-surface checks, and focused browser QA for `/pets` plus representative pet detail pages.
-- Milestone 11: form validation and Mailgun adapter tests.
-- Milestone 12: responsive Playwright checks and accessibility-focused interaction checks.
-- Milestone 16: full lint, typecheck, test, and build before launch.
+- Keep unit and integration coverage focused on server boundaries, data normalization, metadata/sitemap helpers, forms, and provider adapters.
+- Run schema/typegen checks when Sanity schemas or GROQ projections change.
+- Run seed preview/replay validation when seed generation or Sanity write behavior changes.
+- Run focused browser QA for `/`, `/pets`, representative pet/owner detail pages, and marketing pages when UI, content, or responsive behavior changes.
+- Verify preview, Draft Mode, Visual Editing, and Media Library behavior when deployment URLs or Sanity configuration change.
+- Keep real Mailgun sending and provider-backed AI media generation out of automated tests; test those manually with explicit human approval.
+- Before launch, run full lint, typecheck, test, build, deployed smoke checks, and the launch checklist.
 
 ## Open Questions
 
-- None currently. Use Vitest for the initial test runner, and defer Playwright until public route skeletons exist.
+- None currently. Vitest is the standard test runner. Broader Playwright/E2E coverage remains deferred beyond critical smoke checks unless a future feature needs it.

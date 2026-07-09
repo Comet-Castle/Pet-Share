@@ -2,7 +2,7 @@
 
 This document defines how Pet Share demo content should be seeded into Sanity. It turns the content model into an operational plan for seed scripts, generated media, stable IDs, and demo-quality content.
 
-Seed data is expected to evolve as the site is designed and built. The preferred workflow is to do one strong generation pass for all content, review and curate that output, save it as project seed data, then replay the saved seed data into Sanity rather than regenerating everything from scratch on every run.
+Seed data is local operational scratch space for creating and refreshing the demo dataset. The final reviewed content has been written to Sanity, and Sanity is the source of truth after a successful seed write. Local `sanity/seed/` files are gitignored and may be regenerated or discarded per machine.
 
 **Storage policy:** `sanity/seed/` (data JSON, media manifest, and approved local media) is gitignored and not committed. Once content has been written to Sanity, Sanity is the source of truth and the local seed files are disposable, machine-local scratch space for regenerating or reseeding content. A fresh clone of this repo does not include a bootstrapped demo dataset and cannot reseed from scratch without first regenerating or otherwise obtaining these files locally. References below to seed files being "committed" describe the prior policy and are being phased out; treat any remaining mentions as local file conventions, not Git commit requirements.
 
@@ -35,7 +35,7 @@ Seed content in dependency order so references can be created reliably.
 5. Pet-related testimonials that reference pets and/or owners.
 6. `formDefinition` documents.
 7. Singleton documents: `siteSettings`, `homePage`, `petIndexPage`, and required `systemPage` documents.
-8. `marketingPage` documents for About, Process, Pricing, Contact, and Warranty.
+8. `marketingPage` documents for How It Works, Pricing, Contact, and Guarantee.
 9. Relationship patches for featured pets, featured owners, testimonials, and page sections if needed.
 
 Reasoning:
@@ -70,7 +70,7 @@ Recommended seed ID patterns:
 - Testimonials: `testimonial-sir-nibbles-neighbor`
 - Forms: `form-contact`, `form-owner-contact`, `form-guarantee`
 - System pages: `systemPage-notFound`, `systemPage-serverError`, `systemPage-genericError`
-- Marketing pages: `marketingPage-process` (How It Works), `marketingPage-pricing`, `marketingPage-contact`, `marketingPage-warranty` (Guarantee)
+- Marketing pages: `marketingPage-how-it-works`, `marketingPage-pricing`, `marketingPage-contact`, `marketingPage-guarantee`
 
 Reference rules:
 
@@ -562,7 +562,7 @@ Marketing pages:
 - About.
 - Process.
 - Pricing.
-- Contact or warranty.
+- Contact or guarantee.
 
 Page seeding rules:
 
@@ -665,7 +665,7 @@ Generation should not happen on every normal seed run for any content type. The 
 1. Generate a larger curated seed set once, including singletons, marketing pages, pet types, owners, pets, testimonials, forms, and page relationships.
 2. Review and revise the generated content.
 3. Save the approved seed data in the project.
-4. Use normal seed commands to replay the saved seed data into Sanity.
+4. Use normal seed commands to write the reviewed local seed output into Sanity. After a successful write, treat Sanity as the source of truth for the live demo dataset.
 5. Regenerate only when intentionally running a separate generation workflow.
 
 Recommended saved seed artifact layout:

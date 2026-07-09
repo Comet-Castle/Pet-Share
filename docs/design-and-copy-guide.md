@@ -10,9 +10,9 @@ Approved mockups live in `docs/design-references/`.
 
 - `homepage-clean-marketplace-reference.png`: use as the primary homepage and marketing-page direction. Marketing pages should feel clean, bright, airy, and polished, with fewer competing modules and more white space.
 - `catalog-browsing-reference.png`: use as the primary pet catalog/index direction. The catalog can be busier because filtering, sorting, and comparison benefit from a denser interface.
-- `process-clean-spacious-reference.png`: use as the primary process page direction. Keep the page calm and spacious, with a clear text-first hero, restrained timeline/checklist sections, and generous separation between navigation, hero, and content.
+- `process-clean-spacious-reference.png`: use as the primary How It Works page direction. Keep the page calm and spacious, with a clear text-first hero, restrained timeline/checklist sections, and generous separation between navigation, hero, and content.
 - `pricing-clean-spacious-reference.png`: use as the primary pricing page direction. Keep the page centered, airy, and calm, with compact pricing tiers, a simple FAQ preview, and restrained CTA sections.
-- `warranty-header-cards-reference.png` and `warranty-form-lower-reference.png`: use together as the warranty page direction. Use the second warranty reference for the header and the `Covered-ish`, `Not covered`, and `Please do not send` boxes; use the third warranty reference for the claim form and lower-page flow.
+- `warranty-header-cards-reference.png` and `warranty-form-lower-reference.png`: use together as the Guarantee page direction. Use the first guarantee/warranty reference for the header and the `Covered-ish`, `Not covered`, and `Please do not send` boxes; use the second reference for the claim form and lower-page flow.
 
 Generated mockups may include extra interface ideas that are not in scope. Do not implement favorites, saved items, messaging, account controls, notifications, or other unapproved features just because they appear in a reference image.
 
@@ -325,7 +325,7 @@ CTA labels:
 - "Find a temporary roommate"
 - "List your pet"
 - "Borrow responsibly"
-- "Start a warranty claim"
+- "Start a guarantee claim"
 - "Contact the owner"
 - "Meet the chaos"
 
@@ -410,7 +410,7 @@ Example:
 
 ### Process Page
 
-The process page should explain the fake workflow with too much confidence.
+The How It Works page should explain the fake workflow with too much confidence.
 
 Possible steps:
 
@@ -433,14 +433,14 @@ Possible tier names:
 
 Pricing copy should stay readable and structured like a normal pricing page.
 
-### Contact Or Warranty Page
+### Contact Or Guarantee Page
 
 Forms should be clear first and silly second.
 
 Useful framing:
 
 - Contact us.
-- Pet warranty claim.
+- Pet guarantee claim.
 - Report suspicious charm.
 - Ask whether your pet qualifies.
 

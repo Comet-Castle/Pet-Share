@@ -265,7 +265,7 @@ Implementation rule:
 Content:
 
 - A bottom CTA block from `petIndexPage.primaryCta` or a dedicated reusable CTA/callout section.
-- The first implementation should point to a contact or warranty-style compatibility inquiry, not a real public pet submission flow.
+- The first implementation should point to a contact or guarantee-style compatibility inquiry, not a real public pet submission flow.
 
 Recommended seed copy:
 
@@ -333,7 +333,7 @@ Preview behavior:
 - Cards should support image media first, with optional low-frame-rate video or animated media when available.
 - Low-frame-rate card video should be optional, lazy-loaded, and image-fallback first.
 - Availability should have a clear visual indicator, such as a green dot for available pets.
-- The final CTA should point to a contact or warranty-style compatibility inquiry in phase one.
+- The final CTA should point to a contact or guarantee-style compatibility inquiry in phase one.
 - Favorite/save actions and direct messaging are out of scope for phase one.
 
 ## `/pets/[slug]` Pet Detail Page

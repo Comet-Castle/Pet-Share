@@ -42,8 +42,6 @@ Be careful: `vercel env pull` replaces the target file. Keep local-only custom v
 | `SANITY_API_READ_TOKEN` | Server-only Sanity token | No | Required for preview/drafts | Required for preview/drafts | Required for preview/drafts | Use least privilege. Do not expose to Client Components. |
 | `SANITY_API_WRITE_TOKEN` | Server-only Sanity token | No | Required for seed/upload scripts | Usually not needed | Usually not needed | Needed for local seed scripts and media upload. Avoid adding to Vercel unless a server route genuinely writes to Sanity. |
 | `SANITY_API_BROWSER_READ_TOKEN` | Browser-readable Sanity viewer token | Yes, when Draft Mode includes live draft events | Optional | Optional | Optional | Enables draft-capable Sanity Live updates in Presentation. Use a least-privilege read token only; leave blank if click-to-edit can rely on route refreshes. |
-| `SANITY_PREVIEW_SECRET` | Server-only preview secret | No | Optional | Optional | Optional | Reserved for a future manual preview fallback. Current Sanity Presentation preview uses Sanity's generated preview URL secret validated with `SANITY_API_READ_TOKEN`. |
-| `SANITY_REVALIDATE_SECRET` | Server-only webhook secret | No | Optional | Required | Required | Used to validate Sanity webhook requests before cache revalidation. |
 | `SANITY_STUDIO_PREVIEW_ORIGIN` | Studio preview config | No | Required for Presentation | Required | Required | Origin loaded inside Sanity Presentation, such as local Next.js or a Vercel deployment URL. |
 | `SANITY_STUDIO_MEDIA_LIBRARY_ID` | Studio media config | No | Optional | Optional | Optional | Specific Sanity Media Library ID. Leave blank to let Sanity auto-detect the connected library. |
 | `MAILGUN_API_KEY` | Server-only Mailgun secret | No | Required for form testing | Required | Required | Sends the branded acknowledgement email to form submitters. |
@@ -84,7 +82,7 @@ Default behavior:
 - Increase server-side diagnostic detail for local development or temporary troubleshooting.
 - Include non-sensitive context such as route params, query params, Sanity document type, seed file name, validation issue counts, and provider operation names.
 - Never expose stack traces or internal details to end users in production UI.
-- Never log Sanity tokens, Mailgun keys, Gemini keys, preview secrets, webhook secrets, or full submitted message bodies.
+- Never log Sanity tokens, Mailgun keys, Gemini keys, future preview/webhook secrets, or full submitted message bodies.
 - Keep debug mode server-only; do not create a `NEXT_PUBLIC_` debug flag unless a separate safe client-debug feature is intentionally designed.
 
 Suggested error boundaries:
@@ -117,7 +115,7 @@ Sanity setup rules:
 - Keep Sanity tokens out of Client Components.
 - Configure Sanity CORS for local and deployed app origins.
 - Preview links should originate from Studio and use Sanity's preview URL validation flow through `/api/draft-mode/enable`.
-- Sanity webhooks should include `SANITY_REVALIDATE_SECRET` and should be validated before revalidating paths or tags.
+- No custom Sanity webhook revalidation route is currently implemented. Published content uses the app's current Sanity fetching/cache behavior; add a validated webhook route only when on-demand revalidation is intentionally scoped.
 
 Suggested CORS origins once URLs are known:
 
@@ -136,14 +134,14 @@ Use Vercel's environment scopes deliberately:
 Recommended scoping:
 
 - Public Sanity config: all environments.
-- Preview and revalidation secrets: Preview and Production, plus Development if preview is tested locally.
+- Preview read tokens: Preview and Production, plus Development if preview is tested locally.
 - Mailgun credentials: Preview and Production, plus Development if local form sending is tested. Preview deployments may send real emails to the configured master inbox.
 - `SANITY_API_WRITE_TOKEN`: Development by default. Add to Preview or Production only if a deployed server route must write to Sanity.
 - `GEMINI_API_KEY`: local `.env.local` only unless there is a later, explicit reason to run generation outside a human local workflow.
 
 ## Local Setup Flow
 
-After the app is scaffolded:
+For local setup:
 
 1. Copy `.env.example` to `.env.local`.
 2. Fill in public Sanity values.
@@ -168,7 +166,6 @@ Before the first Vercel deployment:
 - `NEXT_PUBLIC_SITE_URL` is set for each deployment environment before launch or preview-link testing.
 - Sanity CORS includes local and deployed app origins.
 - Sanity preview links point to the correct app origin.
-- Sanity webhook target points to the deployed revalidation route.
 - Mailgun sending domain and from address are verified.
 - No server-only secrets are prefixed with `NEXT_PUBLIC_`.
 - `.env.example` matches the variables expected by the app and scripts.

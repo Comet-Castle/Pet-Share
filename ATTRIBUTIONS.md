@@ -70,6 +70,12 @@ License: MIT
 Used for: Unit and lightweight integration tests.
 Notes: Installed with a minimal utility test during scaffolding.
 
+Name: Playwright
+Source: https://github.com/microsoft/playwright
+License: Apache-2.0
+Used for: Targeted browser smoke, responsive, and interaction checks.
+Notes: Installed as development tooling; broad E2E coverage remains deferred unless future work needs it.
+
 Name: Nunito Sans
 Source: https://fonts.google.com/specimen/Nunito+Sans
 License: SIL Open Font License 1.1

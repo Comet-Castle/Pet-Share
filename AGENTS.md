@@ -8,7 +8,7 @@ Treat this file as the shared source of truth for AI coding agents working in th
 
 Keep practical setup and usage instructions in `README.md`. Keep product concept, tone, visual direction, and content strategy in `docs/project-brief.md`.
 
-Use `docs/milestones.md` as the controlling implementation scope. Supporting planning docs define standards and constraints, but do not expand a milestone just because a related future idea appears elsewhere.
+Use `docs/launch-checklist.md` for launch-readiness verification and `docs/backlog.md` for future-scope ideas. Supporting planning docs define standards and constraints, but do not expand active work just because a related future idea appears elsewhere.
 
 Key planning references:
 
@@ -20,6 +20,7 @@ Key planning references:
 - `docs/dependency-decision-log.md`: dependency, service, and tooling decisions.
 - `docs/content-governance.md`: content review and publishing rules.
 - `docs/launch-checklist.md`: deployment and launch readiness.
+- `docs/backlog.md`: deferred and future-scope work.
 
 ## Expected Stack
 

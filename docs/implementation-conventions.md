@@ -218,7 +218,7 @@ Not every page section is owned by the generic page-builder renderer.
 - Add component tests for state-heavy client components such as drawers, carousels, filters, and complex form controls when testing tooling exists.
 - Add route or integration tests for API handlers, preview, and revalidation where practical.
 - Keep tests focused on user-visible behavior and stable contracts.
-- Use the testing scope in `docs/testing-strategy.md` for milestone-specific decisions.
+- Use the testing scope in `docs/testing-strategy.md` for change-specific decisions.
 
 ## Review Checklist
 

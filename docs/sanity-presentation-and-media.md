@@ -1,6 +1,6 @@
 # Sanity Presentation And Media Library
 
-This document captures the Milestone 9 editorial workflow for Sanity Presentation, Draft Mode, and Media Library usage.
+This document captures the editorial workflow for Sanity Presentation, Draft Mode, and Media Library usage.
 
 ## Environment
 

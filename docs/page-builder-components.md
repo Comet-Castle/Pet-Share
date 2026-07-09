@@ -244,7 +244,7 @@ Notes:
 - Do not add per-package layout fields such as column span or card width. The frontend owns responsive card layout.
 - Use the existing `pricingComparisonTable` for detailed plan comparison until it needs a dedicated redesign.
 
-## Warranty: Approved Page Blocks
+## Guarantee: Approved Page Blocks
 
 Schema:
 
@@ -253,7 +253,7 @@ Schema:
 
 Purpose:
 
-Use these blocks for the approved guarantee-page direction. They combine the cleaner marketing hero style from pricing/process with the selected warranty mockup details:
+Use these blocks for the approved Guarantee page direction. They combine the cleaner marketing hero style from pricing/How It Works with the selected guarantee/warranty mockup details. The internal schema object names still use the original `warranty*` names for compatibility, but the public page and copy use Guarantee:
 
 - `warrantyConditionGrid`: the three-card summary row for `Covered-ish`, `Not covered`, and `Please do not send`.
 - `warrantyNoticeSection`: the substantial legal-ish notice block with rich text and an optional anchor ID for hero CTA links.
@@ -261,8 +261,8 @@ Use these blocks for the approved guarantee-page direction. They combine the cle
 
 Studio behavior:
 
-- Warranty condition and claim-prep icons use the shared `IconPickerInput`.
-- Warranty condition `tone` values are curated because they map to specific frontend color treatments.
+- Guarantee condition and claim-prep icons use the shared `IconPickerInput`.
+- Guarantee condition `tone` values are curated because they map to specific frontend color treatments.
 - The legal notice body uses rich text so future edits can become paragraphs instead of a single long plain-text field.
 - Optional `anchorId` fields should use lowercase letters, numbers, and hyphens so CTA links such as `/guarantee#guarantee-notice` remain stable.
 
@@ -270,7 +270,7 @@ Frontend renderer:
 
 - Rendered in `components/features/sections/page-sections.tsx`.
 - The seeded guarantee page uses the shared generic `hero` block with `layoutHint: "centered"`.
-- The form remains controlled by the marketing page `showContactForm` and `formSeedId` fields, so the page-specific warranty blocks do not own form submission behavior.
+- The form remains controlled by the marketing page `showContactForm` and `formSeedId` fields, so the page-specific guarantee blocks do not own form submission behavior.
 
 Seed example:
 
@@ -279,16 +279,16 @@ Seed example:
 
 Seeder behavior:
 
-- `scripts/seed-sanity.mjs` normalizes warranty cards, rich legal notice content, prep items, and CTA groups before writing to Sanity.
-- Set `primaryCta` to `null` for the warranty page when the page already has a dedicated claim-prep CTA and form.
-- To update only the warranty page after local changes, run:
+- `scripts/seed-sanity.mjs` normalizes guarantee/warranty cards, rich legal notice content, prep items, and CTA groups before writing to Sanity.
+- Set `primaryCta` to `null` for the Guarantee page when the page already has a dedicated claim-prep CTA and form.
+- To update only the Guarantee page after local changes, run:
 
 ```bash
-node scripts/seed-sanity.mjs --confirm --skip-media-upload --only warranty
+node scripts/seed-sanity.mjs --confirm --skip-media-upload --only guarantee
 ```
 
 Notes:
 
-- Keep the three warranty condition cards together in one section. They are a matched editorial pattern, not independent reusable callouts.
+- Keep the three guarantee condition cards together in one section. They are a matched editorial pattern, not independent reusable callouts.
 - Do not put mailed-evidence warnings back into generic alert blocks unless the page needs a temporary editorial callout.
-- Keep claim-form behavior separate from this block set until the form system milestone.
+- Keep claim-form behavior separate from this block set.

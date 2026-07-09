@@ -1,8 +1,8 @@
 # Launch Checklist
 
-This checklist tracks readiness for a public Pet Share demo launch on Vercel with Sanity CMS. It should be applied near the end of the milestone plan, not used to expand early milestones.
+This checklist tracks readiness for a public Pet Share demo launch on Vercel with Sanity CMS. It should be applied during launch-readiness work and should not expand phase-one scope beyond explicitly prioritized launch needs.
 
-Use this with `docs/environment-and-deployment.md`, `docs/testing-strategy.md`, `docs/accessibility-checklist.md`, and `docs/milestones.md`.
+Use this with `docs/environment-and-deployment.md`, `docs/testing-strategy.md`, `docs/accessibility-checklist.md`, and `docs/backlog.md`.
 
 ## Scope Rule
 
@@ -19,13 +19,13 @@ Explicitly out of phase-one launch unless later reprioritized:
 - Owner directory.
 - Pet type landing pages.
 
-## Pre-Scaffold Readiness
+## Foundation Readiness
 
-- Planning docs are present and linked from `README.md`.
+- Project docs are present and linked from `README.md`.
 - `AGENTS.md`, `CLAUDE.md`, `CODEX.md`, and `GEMINI.md` share the same agent instructions through symlinks.
 - `.gitignore` excludes secrets, build outputs, dependency folders, generated review media, and local environment files.
 - `.env.example` lists planned public and server-only variables.
-- Milestones define the controlling implementation scope.
+- Launch scope is clear, and future-scope ideas are tracked in `docs/backlog.md`.
 - Dependency decision log captures accepted, likely, deferred, rejected, and tooling-only choices.
 - Seed JSON contract is clear enough to start schema and seed script implementation.
 
@@ -56,8 +56,6 @@ Explicitly out of phase-one launch unless later reprioritized:
   - `SANITY_API_READ_TOKEN`
 - Optional draft live-update variable is set where live draft streaming is required:
   - `SANITY_API_BROWSER_READ_TOKEN`
-- Required revalidation variables are set where webhooks are tested:
-  - `SANITY_REVALIDATE_SECRET`
 - Required seed/upload variables are available only where needed:
   - `SANITY_API_WRITE_TOKEN`
 - Required Mailgun variables are set for real form testing:
@@ -81,8 +79,7 @@ Explicitly out of phase-one launch unless later reprioritized:
 - Public and preview query helpers are separate.
 - Sanity CORS includes local and deployed app origins.
 - Sanity preview links point to the correct app origin.
-- Sanity webhook target points to the deployed revalidation route.
-- Webhook secret validation is implemented before revalidation logic runs.
+- Cache behavior is understood: no custom Sanity webhook revalidation route is currently implemented, so launch verification should account for the app's current Sanity fetching/cache behavior.
 - Sanity write token uses least privilege and is server-only.
 
 ## Seed Data Readiness
@@ -116,9 +113,9 @@ Explicitly out of phase-one launch unless later reprioritized:
 - Custom 404, 500, and generic error states render clear Pet Share copy.
 - Error pages have static fallback copy if Sanity is unavailable.
 - Route metadata is generated from Sanity content where applicable.
-- OG/Twitter tags render on all public pages with a branded `.png` OG image and canonical URLs (implemented in M12).
-- `robots.txt`/`robots.ts`, a `sitemap.xml`/`sitemap.ts`, and a branded favicon/app-icon set exist. (Deferred out of M12 — add during launch readiness.)
-- Structured data (JSON-LD: Organization on home, product-like markup on pet detail) considered. (Deferred out of M12.)
+- OG/Twitter tags render on all public pages with a branded `.png` OG image and canonical URLs.
+- `robots.txt`/`robots.ts`, a `sitemap.xml`/`sitemap.ts`, and a branded favicon/app-icon set exist.
+- Structured data (JSON-LD: Organization on home, product-like markup on pet detail) has been considered and either implemented or tracked in `docs/backlog.md`.
 
 ## Preview And Revalidation Readiness
 
@@ -131,13 +128,11 @@ Explicitly out of phase-one launch unless later reprioritized:
 - Exit preview action works.
 - Published content queries exclude drafts and pending content.
 - Preview queries can include authorized drafts and pending content.
-- Sanity publish events revalidate targeted paths or tags.
-- Invalid webhook requests are rejected.
-- Revalidation failures log safe diagnostic context.
+- If on-demand revalidation is added later, Sanity publish events revalidate targeted paths or tags, invalid webhook requests are rejected, and failures log safe diagnostic context.
 
 ## Forms And Email Readiness
 
-- Contact, owner contact, and warranty-style forms render from planned form definitions.
+- Contact, owner contact, and guarantee-style forms render from planned form definitions.
 - Owner contact drawer preserves pet and owner context.
 - Form validation prevents malformed payloads at the server boundary.
 - Mailgun sends real email to the master inbox in the intended environments.
@@ -182,9 +177,9 @@ Explicitly out of phase-one launch unless later reprioritized:
 
 - Sanity tokens are never exposed to Client Components.
 - Mailgun credentials are server-only.
-- Preview and webhook secrets are server-only.
+- Preview read tokens are server-only; any future preview/webhook shared secrets remain server-only.
 - Form inputs are validated and sanitized at the server boundary.
-- Webhooks are validated before side effects.
+- Future webhooks are validated before side effects.
 - Logs do not include secrets, raw provider errors, or full submitted message bodies.
 - Error pages do not expose stack traces.
 - `APP_DEBUG=true` is not enabled in production unless intentionally debugging.
@@ -212,7 +207,7 @@ Before launch:
 - `pnpm build` passes.
 - Seed replay has been tested against the intended dataset.
 - Preview has been tested from Studio.
-- Revalidation has been tested from a Sanity publish event or representative webhook request.
+- Current Sanity cache/update behavior has been tested in the deployed environment; if on-demand revalidation is later added, test it from a Sanity publish event or representative webhook request.
 - Mailgun sending has been tested manually in the intended environment.
 - Key pages have been checked at representative mobile and desktop widths.
 - Key forms, filters, drawers, and carousels have been checked with keyboard.
@@ -231,10 +226,10 @@ After launch:
 - Verify a marketing page.
 - Verify a missing route shows the custom 404.
 - Submit a test form and confirm the master inbox receives it.
-- Publish a small Sanity copy edit and confirm revalidation updates the page.
+- Publish a small Sanity copy edit and confirm the deployed page updates according to the current cache/update behavior.
 - Review Vercel logs for errors.
 - Review Sanity usage and Vercel usage against free-tier expectations.
-- Record any follow-up issues in `docs/backlog.md` or the active milestone notes.
+- Record any follow-up issues in `docs/backlog.md`.
 
 ## Open Questions
 

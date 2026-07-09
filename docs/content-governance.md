@@ -43,7 +43,7 @@ AI agents may draft content and seed data, but generated content should be treat
 - Normal `pnpm seed` should replay saved seed data and approved media only.
 - Normal seed runs must not call AI text, image, or video providers.
 - Full seed generation should be a deliberate workflow, not part of app startup or routine seeding.
-- The representative Milestone 1 seed set is not the final 50-pet seed set.
+- The early representative seed set is not the final 50-pet seed set.
 - The final seed pass should be generated once, reviewed, saved, and replayed from local seed artifacts (`sanity/seed/`, gitignored, not committed).
 - Do not delete editor-created Sanity content during normal seed runs.
 - Destructive seed reset commands, if implemented, must be explicitly named and limited to known seed documents.
