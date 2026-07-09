@@ -65,3 +65,4 @@ Desktop.ini
 
 # Claude Code local config
 .claude/
+.agents/
